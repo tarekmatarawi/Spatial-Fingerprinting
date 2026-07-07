@@ -1,0 +1,227 @@
+[
+  {
+    "id": "gendarmenmarkt-berlin",
+    "name": "Gendarmenmarkt",
+    "city": "Berlin",
+    "country": "Germany",
+    "center_lat": 52.5136,
+    "center_lng": 13.3919,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": {
+      "lat": 52.5136,
+      "lng": 13.3919
+    },
+    "street_view_image": "/images/gendarmenmarkt-berlin.jpg"
+  },
+  {
+    "id": "naschmarkt-vienna",
+    "name": "Naschmarkt",
+    "city": "Vienna",
+    "country": "Austria",
+    "center_lat": 48.1988,
+    "center_lng": 16.3634,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": {
+      "lat": 48.1988,
+      "lng": 16.3634
+    },
+    "street_view_image": "/images/naschmarkt-vienna.jpg"
+  },
+  {
+    "id": "koenigsplatz-munich",
+    "name": "Königsplatz",
+    "city": "Munich",
+    "country": "Germany",
+    "center_lat": 48.1456,
+    "center_lng": 11.5654,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": {
+      "lat": 48.1456,
+      "lng": 11.5654
+    },
+    "street_view_image": "/images/koenigsplatz-munich.jpg"
+  },
+  {
+    "id": "site-04",
+    "name": "Site 4 (rename me)",
+    "city": "",
+    "country": "",
+    "center_lat": null,
+    "center_lng": null,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": null,
+    "street_view_image": "/images/site-04.jpg"
+  },
+  {
+    "id": "site-05",
+    "name": "Site 5 (rename me)",
+    "city": "",
+    "country": "",
+    "center_lat": null,
+    "center_lng": null,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": null,
+    "street_view_image": "/images/site-05.jpg"
+  },
+  {
+    "id": "site-06",
+    "name": "Site 6 (rename me)",
+    "city": "",
+    "country": "",
+    "center_lat": null,
+    "center_lng": null,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": null,
+    "street_view_image": "/images/site-06.jpg"
+  },
+  {
+    "id": "site-07",
+    "name": "Site 7 (rename me)",
+    "city": "",
+    "country": "",
+    "center_lat": null,
+    "center_lng": null,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": null,
+    "street_view_image": "/images/site-07.jpg"
+  },
+  {
+    "id": "site-08",
+    "name": "Site 8 (rename me)",
+    "city": "",
+    "country": "",
+    "center_lat": null,
+    "center_lng": null,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": null,
+    "street_view_image": "/images/site-08.jpg"
+  },
+  {
+    "id": "site-09",
+    "name": "Site 9 (rename me)",
+    "city": "",
+    "country": "",
+    "center_lat": null,
+    "center_lng": null,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": null,
+    "street_view_image": "/images/site-09.jpg"
+  },
+  {
+    "id": "site-10",
+    "name": "Site 10 (rename me)",
+    "city": "",
+    "country": "",
+    "center_lat": null,
+    "center_lng": null,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": null,
+    "street_view_image": "/images/site-10.jpg"
+  },
+  {
+    "id": "site-11",
+    "name": "Site 11 (rename me)",
+    "city": "",
+    "country": "",
+    "center_lat": null,
+    "center_lng": null,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": null,
+    "street_view_image": "/images/site-11.jpg"
+  },
+  {
+    "id": "site-12",
+    "name": "Site 12 (rename me)",
+    "city": "",
+    "country": "",
+    "center_lat": null,
+    "center_lng": null,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": null,
+    "street_view_image": "/images/site-12.jpg"
+  },
+  {
+    "id": "site-13",
+    "name": "Site 13 (rename me)",
+    "city": "",
+    "country": "",
+    "center_lat": null,
+    "center_lng": null,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": null,
+    "street_view_image": "/images/site-13.jpg"
+  },
+  {
+    "id": "site-14",
+    "name": "Site 14 (rename me)",
+    "city": "",
+    "country": "",
+    "center_lat": null,
+    "center_lng": null,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": null,
+    "street_view_image": "/images/site-14.jpg"
+  },
+  {
+    "id": "site-15",
+    "name": "Site 15 (rename me)",
+    "city": "",
+    "country": "",
+    "center_lat": null,
+    "center_lng": null,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": null,
+    "street_view_image": "/images/site-15.jpg"
+  },
+  {
+    "id": "site-16",
+    "name": "Site 16 (rename me)",
+    "city": "",
+    "country": "",
+    "center_lat": null,
+    "center_lng": null,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": null,
+    "street_view_image": "/images/site-16.jpg"
+  },
+  {
+    "id": "site-17",
+    "name": "Site 17 (rename me)",
+    "city": "",
+    "country": "",
+    "center_lat": null,
+    "center_lng": null,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": null,
+    "street_view_image": "/images/site-17.jpg"
+  },
+  {
+    "id": "site-18",
+    "name": "Site 18 (rename me)",
+    "city": "",
+    "country": "",
+    "center_lat": null,
+    "center_lng": null,
+    "boundary": null,
+    "buildings": [],
+    "default_viewpoint": null,
+    "street_view_image": "/images/site-18.jpg"
+  }
+]
