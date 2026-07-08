@@ -13,11 +13,16 @@ export function AdminPage() {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [buildingText, setBuildingText] = useState('')
   const [boundaryText, setBoundaryText] = useState('')
-  const [defaultHeight, setDefaultHeight] = useState(DEFAULT_HEIGHT)
   const [message, setMessage] = useState(null)
   const [dirty, setDirty] = useState(false)
 
   const site = sites[selectedIndex]
+
+  // Each site carries its own default height, applied to pasted buildings that
+  // have no OSM height tag. Falls back to DEFAULT_HEIGHT for older data.
+  const siteDefaultHeight = site.default_height_m ?? DEFAULT_HEIGHT
+  const effectiveDefaultHeight =
+    Number(siteDefaultHeight) > 0 ? Number(siteDefaultHeight) : DEFAULT_HEIGHT
 
   function updateSite(patch) {
     setSites((prev) => prev.map((s, i) => (i === selectedIndex ? { ...s, ...patch } : s)))
@@ -36,7 +41,7 @@ export function AdminPage() {
       const parsed = parseBuildingGeoJSON(buildingText)
       const withHeights = parsed.map((b) => ({
         footprint: b.footprint,
-        height_m: b.height_m ?? Number(defaultHeight),
+        height_m: b.height_m ?? effectiveDefaultHeight,
       }))
       const fromTags = parsed.filter((b) => b.height_m != null).length
       updateSite({ buildings: [...site.buildings, ...withHeights] })
@@ -45,7 +50,7 @@ export function AdminPage() {
         kind: 'ok',
         text: `Added ${withHeights.length} building(s) — ${fromTags} height(s) from OSM tags, ${
           withHeights.length - fromTags
-        } using the default (${defaultHeight} m). Remember to Save.`,
+        } using this site's default (${effectiveDefaultHeight} m). Remember to Save.`,
       })
     } catch (err) {
       setMessage({ kind: 'error', text: err.message })
@@ -268,14 +273,18 @@ export function AdminPage() {
             />
             <div className="mt-2 flex items-center gap-3">
               <label className="flex items-center gap-2 text-sm text-slate-600">
-                Default height (m)
+                Default height for this site (m)
                 <input
                   className="input w-20"
                   type="number"
                   min="1"
                   step="0.1"
-                  value={defaultHeight}
-                  onChange={(e) => setDefaultHeight(e.target.value)}
+                  value={siteDefaultHeight}
+                  onChange={(e) =>
+                    updateSite({
+                      default_height_m: e.target.value === '' ? '' : Number(e.target.value),
+                    })
+                  }
                 />
               </label>
               <Button onClick={addBuildings} disabled={!buildingText.trim()}>
