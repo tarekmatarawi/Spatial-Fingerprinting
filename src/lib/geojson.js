@@ -15,9 +15,16 @@ export function parseBuildingGeoJSON(text) {
   }
 
   const polygons = []
-  collect(data, null, polygons)
+  const geometryTypesSeen = new Set()
+  collect(data, null, polygons, geometryTypesSeen)
 
   if (polygons.length === 0) {
+    if (geometryTypesSeen.size > 0 && !geometryTypesSeen.has('Polygon') && !geometryTypesSeen.has('MultiPolygon')) {
+      throw new Error(
+        `This export only contains ${[...geometryTypesSeen].join('/')} features, no building polygons. ` +
+          `In overpass-turbo, make sure your query is way["building"]({{bbox}}); out geom; — not a query for points/amenities.`
+      )
+    }
     throw new Error(
       'No polygons found. Expected a GeoJSON Polygon, MultiPolygon, Feature, or FeatureCollection containing polygons.'
     )
@@ -36,26 +43,28 @@ export function parseBoundaryGeoJSON(text) {
   return polygons[0].footprint
 }
 
-function collect(node, properties, out) {
+function collect(node, properties, out, geometryTypesSeen) {
   if (!node || typeof node !== 'object') return
 
   switch (node.type) {
     case 'FeatureCollection':
-      for (const feature of node.features ?? []) collect(feature, null, out)
+      for (const feature of node.features ?? []) collect(feature, null, out, geometryTypesSeen)
       break
     case 'Feature':
-      collect(node.geometry, node.properties ?? null, out)
+      collect(node.geometry, node.properties ?? null, out, geometryTypesSeen)
       break
     case 'GeometryCollection':
-      for (const geom of node.geometries ?? []) collect(geom, properties, out)
+      for (const geom of node.geometries ?? []) collect(geom, properties, out, geometryTypesSeen)
       break
     case 'Polygon':
+      geometryTypesSeen?.add('Polygon')
       out.push({
         footprint: { type: 'Polygon', coordinates: node.coordinates },
         height_m: heightFromProperties(properties),
       })
       break
     case 'MultiPolygon':
+      geometryTypesSeen?.add('MultiPolygon')
       for (const coords of node.coordinates ?? []) {
         out.push({
           footprint: { type: 'Polygon', coordinates: coords },
@@ -64,7 +73,8 @@ function collect(node, properties, out) {
       }
       break
     default:
-      break // points, lines etc. are silently skipped
+      geometryTypesSeen?.add(node.type) // points, lines etc. are recorded but skipped
+      break
   }
 }
 
