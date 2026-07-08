@@ -17,6 +17,13 @@ export function createProjector(centerLat, centerLon) {
     return { x, z }
   }
 
+  // Inverse of toLocal: local meters (x, z) -> geographic (lat, lon).
+  function toLatLon(x, z) {
+    const lon = centerLon + x / mPerLon
+    const lat = centerLat + z / METERS_PER_DEG_LAT
+    return { lat, lon }
+  }
+
   function bbox(halfMeters) {
     const dLat = halfMeters / METERS_PER_DEG_LAT
     const dLon = halfMeters / mPerLon
@@ -28,5 +35,5 @@ export function createProjector(centerLat, centerLon) {
     }
   }
 
-  return { toLocal, bbox }
+  return { toLocal, toLatLon, bbox }
 }

@@ -39,10 +39,10 @@ export function Buildings({ buildings }) {
   return (
     <group>
       <mesh geometry={fillGeometry}>
-        <meshStandardMaterial color="#ffffff" roughness={0.9} metalness={0} />
+        <meshStandardMaterial color="#dfe4ec" roughness={0.85} metalness={0} />
       </mesh>
       <lineSegments geometry={edgeGeometry}>
-        <lineBasicMaterial color="#9aa3b0" />
+        <lineBasicMaterial color="#475569" />
       </lineSegments>
     </group>
   )
