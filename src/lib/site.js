@@ -25,9 +25,9 @@ export function heightSource(building) {
   return 'default'
 }
 
-// Converts one raw site from sites.json into local-meter geometry that the
-// 3D viewer can render directly: buildings as { footprint:[{x,z}], height },
-// the plaza boundary as [{x,z}], plus framing metrics (centroid + radii) and
+// Converts one raw site from sites.json into local-metre geometry that the
+// 3D viewer can render directly: buildings as { footprint:[{x,y}], height },
+// the plaza boundary as [{x,y}], plus framing metrics (centroid + radii) and
 // a projector for turning clicked local points back into lat/lon.
 export function projectSite(site) {
   if (site.center_lat == null || site.center_lng == null) {
@@ -56,7 +56,7 @@ export function projectSite(site) {
   // Frame the camera on the plaza itself (its boundary), falling back to all
   // buildings if no boundary is set.
   const focusPoints = boundary ?? buildings.flatMap((b) => b.footprint)
-  const centroid = focusPoints.length ? averagePoint(focusPoints) : { x: 0, z: 0 }
+  const centroid = focusPoints.length ? averagePoint(focusPoints) : { x: 0, y: 0 }
   const boundaryRadius = maxDistance(centroid, focusPoints)
   const sceneRadius = Math.max(
     boundaryRadius,
@@ -73,17 +73,17 @@ export function projectSite(site) {
   }
 }
 
-// Ray-casting point-in-polygon test. point and polygon are in {x,z} local space.
+// Ray-casting point-in-polygon test. point and polygon are in {x,y} local space.
 export function pointInPolygon(point, polygon) {
   let inside = false
   for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
     const xi = polygon[i].x
-    const zi = polygon[i].z
+    const yi = polygon[i].y
     const xj = polygon[j].x
-    const zj = polygon[j].z
+    const yj = polygon[j].y
     const intersects =
-      zi > point.z !== zj > point.z &&
-      point.x < ((xj - xi) * (point.z - zi)) / (zj - zi) + xi
+      yi > point.y !== yj > point.y &&
+      point.x < ((xj - xi) * (point.y - yi)) / (yj - yi) + xi
     if (intersects) inside = !inside
   }
   return inside
@@ -93,24 +93,24 @@ function ringToLocal(projector, ring) {
   const pts = ring.map(([lng, lat]) => projector.toLocal(lat, lng))
   const first = pts[0]
   const last = pts[pts.length - 1]
-  if (pts.length > 2 && first.x === last.x && first.z === last.z) pts.pop()
+  if (pts.length > 2 && first.x === last.x && first.y === last.y) pts.pop()
   return pts
 }
 
 function averagePoint(points) {
   let sx = 0
-  let sz = 0
+  let sy = 0
   for (const p of points) {
     sx += p.x
-    sz += p.z
+    sy += p.y
   }
-  return { x: sx / points.length, z: sz / points.length }
+  return { x: sx / points.length, y: sy / points.length }
 }
 
 function maxDistance(center, points) {
   let max = 0
   for (const p of points) {
-    const d = Math.hypot(p.x - center.x, p.z - center.z)
+    const d = Math.hypot(p.x - center.x, p.y - center.y)
     if (d > max) max = d
   }
   return max

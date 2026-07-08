@@ -2,25 +2,25 @@ import { useMemo } from 'react'
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js'
 
-// Extrudes each building footprint into a solid, then merges every building
-// into a single mesh (and a single outline) so the whole city is drawn in
-// just two draw calls instead of thousands.
+// Extrudes each building footprint (in the X/Y ground plane) upward along +Z
+// by its height, then merges every building into a single mesh (and a single
+// outline) so the whole city is drawn in just two draw calls instead of
+// thousands. Footprint winding is normalised to counter-clockwise so extrusion
+// normals always face outward regardless of how the OSM polygon was wound.
 export function Buildings({ buildings }) {
   const { fillGeometry, edgeGeometry } = useMemo(() => {
     const fillGeoms = []
     const edgeGeoms = []
 
     for (const building of buildings) {
-      // The footprint's z is negated here, and undone again by rotateX below,
-      // so the final mesh lines up with streets/ground without a mirror flip.
-      const shape = new THREE.Shape(
-        building.footprint.map((p) => new THREE.Vector2(p.x, -p.z))
-      )
+      let ring = building.footprint
+      if (signedArea(ring) < 0) ring = ring.slice().reverse()
+
+      const shape = new THREE.Shape(ring.map((p) => new THREE.Vector2(p.x, p.y)))
       const geometry = new THREE.ExtrudeGeometry(shape, {
         depth: building.height,
         bevelEnabled: false,
       })
-      geometry.rotateX(-Math.PI / 2)
       fillGeoms.push(geometry)
       edgeGeoms.push(new THREE.EdgesGeometry(geometry, 25))
     }
@@ -46,4 +46,15 @@ export function Buildings({ buildings }) {
       </lineSegments>
     </group>
   )
+}
+
+// Signed area of a ring in the X/Y plane; positive = counter-clockwise.
+function signedArea(ring) {
+  let area = 0
+  for (let i = 0; i < ring.length; i++) {
+    const a = ring[i]
+    const b = ring[(i + 1) % ring.length]
+    area += a.x * b.y - b.x * a.y
+  }
+  return area / 2
 }
