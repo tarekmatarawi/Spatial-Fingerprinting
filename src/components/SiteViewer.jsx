@@ -4,7 +4,9 @@ import { OrbitControls, Grid, GizmoHelper, GizmoViewport } from '@react-three/dr
 import * as THREE from 'three'
 import sites from '@/data/sites.json'
 import { projectSite, pointInPolygon } from '@/lib/site'
+import { castIsovist, bearingTo } from '@/lib/isovist'
 import { Buildings } from './Buildings'
+import { IsovistOverlay } from './IsovistOverlay'
 
 // The whole scene uses a Z-up world (X = east/right, Y = north/front, Z = up),
 // matching CAD tools like Rhino. This also renders each site the correct way
@@ -12,9 +14,23 @@ import { Buildings } from './Buildings'
 // map: east right, north up.
 const UP = [0, 0, 1]
 
+// Reference metrics from the original Grasshopper/Decoding Spaces computation
+// for Gendarmenmarkt, used only as a rough sanity check on this site (see
+// spec Phase 3) — the exact original vantage point/direction weren't logged,
+// so this is a soft check, not a strict pass/fail gate.
+const GENDARMENMARKT_REFERENCE = {
+  siteId: 'Gendarmenmarkt-Berlin',
+  area: 12437.877366,
+  compactness: 0.269934,
+  occlusivity: 354.097561,
+  enclosureRatio: 0.330407,
+}
+
 export function SiteViewer() {
   const [selectedId, setSelectedId] = useState(sites[0]?.id)
   const [pick, setPick] = useState(null)
+  const [direction, setDirection] = useState(null) // compass bearing, radians (0 = north, clockwise)
+  const [stage, setStage] = useState('vantage') // 'vantage' = next click sets viewpoint, 'aim' = next click sets facing direction
   const [resetToken, setResetToken] = useState(0)
   const compassRef = useRef(null)
 
@@ -28,10 +44,26 @@ export function SiteViewer() {
     }
   }, [site])
 
-  useEffect(() => setPick(null), [selectedId])
+  useEffect(() => {
+    setPick(null)
+    setDirection(null)
+    setStage('vantage')
+  }, [selectedId])
 
   function handlePick(point) {
     const data = projected.data
+
+    if (stage === 'aim' && pick?.inside) {
+      const angle = bearingTo(pick.point, point)
+      setDirection(angle)
+      // eslint-disable-next-line no-console
+      console.log('[SiteViewer] direction set', {
+        site: site.id,
+        bearing_deg: +(((angle * 180) / Math.PI + 360) % 360).toFixed(1),
+      })
+      return
+    }
+
     const inside = data.boundary ? pointInPolygon(point, data.boundary) : true
     const { lat, lon } = data.toLatLon(point.x, point.y)
     if (inside) {
@@ -43,11 +75,18 @@ export function SiteViewer() {
         lat: +lat.toFixed(6),
         lng: +lon.toFixed(6),
       })
+      setDirection(bearingTo(point, data.centroid))
+      setStage('aim')
     }
     setPick({ point, inside, lat, lon })
   }
 
   const data = projected.data
+
+  const isovistResult = useMemo(() => {
+    if (!data || !pick?.inside || direction == null) return null
+    return castIsovist(pick.point, direction, data.buildings)
+  }, [data, pick, direction])
 
   return (
     <div className="relative h-full w-full">
@@ -92,7 +131,15 @@ export function SiteViewer() {
 
             <Buildings buildings={data.buildings} />
 
-            {pick && <Marker point={pick.point} inside={pick.inside} />}
+            {isovistResult && <IsovistOverlay result={isovistResult} />}
+
+            {pick && (
+              <Marker
+                point={pick.point}
+                inside={pick.inside}
+                direction={pick.inside ? direction : null}
+              />
+            )}
 
             <CompassUpdater arrowRef={compassRef} />
           </>
@@ -125,6 +172,10 @@ export function SiteViewer() {
         data={data}
         error={projected.error}
         pick={pick}
+        stage={stage}
+        direction={direction}
+        result={isovistResult}
+        onMoveViewpoint={() => setStage('vantage')}
       />
     </div>
   )
@@ -191,9 +242,22 @@ function PlazaFloor({ boundary }) {
   )
 }
 
-// The picked viewpoint: a sphere at ~eye height on a thin pole up the +Z axis.
-function Marker({ point, inside }) {
+const ARROW_SHAPE = new THREE.Shape([
+  new THREE.Vector2(0, 4.5),
+  new THREE.Vector2(1.1, 0),
+  new THREE.Vector2(-1.1, 0),
+])
+const ARROW_GEOMETRY = new THREE.ShapeGeometry(ARROW_SHAPE)
+
+// The picked viewpoint: a sphere at ~eye height on a thin pole up the +Z axis,
+// plus a flat arrow lying on the ground pointing along the chosen viewing
+// direction (bearing in radians, 0 = north/+Y, clockwise).
+function Marker({ point, inside, direction }) {
   const color = inside ? '#ef4444' : '#f59e0b'
+  // The arrow shape points +Y (north) by default; rotating around Z by
+  // -direction turns it to match a clockwise-from-north compass bearing.
+  const rotationZ = direction != null ? -direction : 0
+
   return (
     <group position={[point.x, point.y, 0]}>
       <mesh position={[0, 0, 0.8]} rotation={[Math.PI / 2, 0, 0]}>
@@ -204,6 +268,11 @@ function Marker({ point, inside }) {
         <sphereGeometry args={[0.9, 24, 24]} />
         <meshStandardMaterial color={color} />
       </mesh>
+      {direction != null && (
+        <mesh geometry={ARROW_GEOMETRY} position={[0, 0, 0.08]} rotation={[0, 0, rotationZ]}>
+          <meshBasicMaterial color="#0f172a" side={THREE.DoubleSide} />
+        </mesh>
+      )}
     </group>
   )
 }
@@ -249,7 +318,9 @@ function clamp(v, lo, hi) {
   return Math.max(lo, Math.min(hi, v))
 }
 
-function Panel({ sites, selectedId, onSelect, site, data, error, pick }) {
+function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, direction, result, onMoveViewpoint }) {
+  const bearingDeg = direction != null ? Math.round(((direction * 180) / Math.PI + 360) % 360) : null
+
   return (
     <div className="pointer-events-none absolute top-4 left-4 w-80 max-w-[calc(100%-2rem)] space-y-3">
       <div className="pointer-events-auto rounded-lg border border-slate-200 bg-white/95 p-4 shadow-sm backdrop-blur">
@@ -279,8 +350,17 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick }) {
 
       <div className="pointer-events-auto rounded-lg border border-slate-200 bg-white/95 p-4 text-sm shadow-sm backdrop-blur">
         <p className="text-slate-600">
-          <span className="font-medium text-slate-800">Click the ground</span> inside the plaza to
-          drop a viewpoint marker (Phase 3 will compute isovist metrics here).
+          {stage === 'vantage' ? (
+            <>
+              <span className="font-medium text-slate-800">Click the ground</span> inside the
+              plaza to drop a viewpoint.
+            </>
+          ) : (
+            <>
+              <span className="font-medium text-slate-800">Click anywhere</span> to aim the 120°
+              view cone.
+            </>
+          )}
         </p>
         {pick && (
           <div className="mt-2 rounded-md bg-slate-50 p-2 font-mono text-xs text-slate-700">
@@ -289,16 +369,83 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick }) {
                 lat {pick.lat.toFixed(6)}, lng {pick.lon.toFixed(6)}
                 <br />
                 local x {pick.point.x.toFixed(1)} m, y {pick.point.y.toFixed(1)} m
+                {bearingDeg != null && (
+                  <>
+                    <br />
+                    facing {bearingDeg}° {bearingLabel(bearingDeg)}
+                  </>
+                )}
               </>
             ) : (
               <span className="text-amber-600">That point is outside the plaza boundary.</span>
             )}
           </div>
         )}
+        {pick?.inside && (
+          <button
+            onClick={onMoveViewpoint}
+            className="mt-2 rounded-md border border-slate-300 bg-white px-2 py-1 text-xs text-slate-600 shadow-sm hover:bg-slate-100"
+          >
+            Move viewpoint
+          </button>
+        )}
         <p className="mt-3 text-xs text-slate-400">
           Left-drag orbit · right-drag pan · scroll zoom · gizmo snaps to views
         </p>
       </div>
+
+      {result && <MetricsPanel result={result} site={site} />}
+    </div>
+  )
+}
+
+function bearingLabel(deg) {
+  const dirs = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
+  return dirs[Math.round(deg / 45) % 8]
+}
+
+// Live Phase-3 metrics from the shared ray pass, plus a soft sanity check
+// against the Gendarmenmarkt Grasshopper reference values when that site is
+// selected (see GENDARMENMARKT_REFERENCE above — not a strict validation,
+// since the original vantage point/direction weren't recorded).
+function MetricsPanel({ result, site }) {
+  const ref = site.id === GENDARMENMARKT_REFERENCE.siteId ? GENDARMENMARKT_REFERENCE : null
+
+  return (
+    <div className="pointer-events-auto rounded-lg border border-slate-200 bg-white/95 p-4 text-sm shadow-sm backdrop-blur">
+      <p className="mb-2 text-xs font-medium text-slate-500">Isovist metrics (live)</p>
+      <dl className="space-y-1 font-mono text-xs text-slate-700">
+        <MetricRow label="Area" value={`${result.area.toFixed(1)} m²`} refValue={ref && `${ref.area.toFixed(1)} m²`} />
+        <MetricRow label="Compactness" value={result.compactness.toFixed(4)} refValue={ref && ref.compactness.toFixed(4)} />
+        <MetricRow
+          label="Occlusivity"
+          value={`${result.occlusivity.toFixed(1)} m`}
+          refValue={ref && `${ref.occlusivity.toFixed(1)} m`}
+        />
+        <MetricRow
+          label="Enclosure ratio"
+          value={result.enclosureRatio.toFixed(4)}
+          refValue={ref && ref.enclosureRatio.toFixed(4)}
+        />
+      </dl>
+      {ref && (
+        <p className="mt-2 text-xs text-slate-400">
+          Reference values are from the original Grasshopper run at an unrecorded vantage
+          point/direction — treat as a rough sanity check, not an exact match.
+        </p>
+      )}
+    </div>
+  )
+}
+
+function MetricRow({ label, value, refValue }) {
+  return (
+    <div className="flex items-baseline justify-between gap-2">
+      <dt className="text-slate-500">{label}</dt>
+      <dd className="text-right">
+        {value}
+        {refValue && <span className="ml-1.5 text-slate-400">(ref {refValue})</span>}
+      </dd>
     </div>
   )
 }

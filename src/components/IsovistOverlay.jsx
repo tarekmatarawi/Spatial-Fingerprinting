@@ -1,45 +1,79 @@
 import { useMemo } from 'react'
 import * as THREE from 'three'
 
-// Renders the isovist as a semi-transparent blue polygon: a triangle fan
-// from the click origin out to each ray's hit point.
-export function IsovistOverlay({ origin, points }) {
-  const geometry = useMemo(() => {
-    if (!origin || !points || points.length < 3) return null
+// Renders the live output of castIsovist(): a flat teal polygon for the
+// visible area (vantage point + ray endpoints, matching the fan used for the
+// Area/Perimeter/Compactness/Occlusivity formulas), plus an amber ribbon that
+// rises from the ground to each hit building's height along wall-hit rays,
+// breaking wherever a ray is "open" (reaches 200m with no obstacle).
+export function IsovistOverlay({ result }) {
+  const isovistGeometry = useMemo(() => {
+    if (!result || result.rays.length < 2) return null
+    const { vantage, rays } = result
 
-    const positions = [origin.x, 0.15, origin.z]
-    for (const p of points) positions.push(p.x, 0.15, p.z)
+    const positions = [vantage.x, vantage.y, 0.06]
+    for (const r of rays) positions.push(r.point.x, r.point.y, 0.06)
 
     const indices = []
-    for (let i = 1; i <= points.length; i++) {
-      const next = i === points.length ? 1 : i + 1
-      indices.push(0, i, next)
-    }
+    for (let i = 1; i < rays.length; i++) indices.push(0, i, i + 1)
 
     const geom = new THREE.BufferGeometry()
     geom.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
     geom.setIndex(indices)
-    geom.computeVertexNormals()
     return geom
-  }, [origin, points])
+  }, [result])
 
-  if (!geometry) return null
+  const ribbonGeometry = useMemo(() => {
+    if (!result) return null
+    const { rays } = result
+    const positions = []
+
+    for (let i = 0; i < rays.length - 1; i++) {
+      const a = rays[i]
+      const b = rays[i + 1]
+      if (!a.wall || !b.wall) continue
+
+      const aBot = [a.point.x, a.point.y, 0]
+      const aTop = [a.point.x, a.point.y, a.height]
+      const bBot = [b.point.x, b.point.y, 0]
+      const bTop = [b.point.x, b.point.y, b.height]
+
+      positions.push(...aBot, ...bBot, ...bTop)
+      positions.push(...aBot, ...bTop, ...aTop)
+    }
+
+    if (!positions.length) return null
+    const geom = new THREE.BufferGeometry()
+    geom.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
+    return geom
+  }, [result])
+
+  if (!result) return null
 
   return (
     <group>
-      <mesh geometry={geometry}>
-        <meshBasicMaterial
-          color="#3b82f6"
-          transparent
-          opacity={0.35}
-          side={THREE.DoubleSide}
-          depthWrite={false}
-        />
-      </mesh>
-      <mesh position={[origin.x, 0.2, origin.z]}>
-        <cylinderGeometry args={[1.5, 1.5, 2, 16]} />
-        <meshBasicMaterial color="#1d4ed8" />
-      </mesh>
+      {isovistGeometry && (
+        <mesh geometry={isovistGeometry}>
+          <meshBasicMaterial
+            color="#14b8a6"
+            transparent
+            opacity={0.35}
+            side={THREE.DoubleSide}
+            depthWrite={false}
+          />
+        </mesh>
+      )}
+      {ribbonGeometry && (
+        <mesh geometry={ribbonGeometry}>
+          <meshBasicMaterial
+            color="#f59e0b"
+            transparent
+            opacity={0.45}
+            side={THREE.DoubleSide}
+            depthWrite={false}
+          />
+        </mesh>
+      )}
     </group>
   )
 }
