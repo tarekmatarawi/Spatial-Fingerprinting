@@ -21,3 +21,7 @@ Backend (only if absolutely necessary):
 
 - **Hono** — API server
 - **SQLite (via better-sqlite3)** — database
+
+## Design Context
+
+See [PRODUCT.md](PRODUCT.md) for the full design brief. Quick summary: **product** register, **web** platform. Personality is architectural / drafting-plan / editorial — not a generic SaaS dashboard, not a consumer map app, not a spreadsheet-in-a-browser. The researcher's own surfaces (admin, viewer, dashboard) can be dense; the participant-facing survey (Phase 4) must stay to a single, unambiguous task. No DESIGN.md yet — run `/impeccable document` once the visual system is worth capturing.

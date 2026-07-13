@@ -1,4 +1,44 @@
+/* IBM Plex — one technical superfamily: Sans for UI, Mono for data/coordinates */
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
 @import "tailwindcss";
+
+/*
+ * Design tokens — "drafting instrument" system.
+ * White paper surfaces, violet-black ink, deep indigo as the technical-pen
+ * brand color, red reserved for redline markup (viewpoints, warnings, walls).
+ * All colors OKLCH; Tailwind v4 turns each --color-* into utilities
+ * (bg-surface, text-ink, border-line, …).
+ */
+@theme {
+  --color-bg: oklch(1 0 0);
+  --color-surface: oklch(0.973 0.004 285);
+  --color-ink: oklch(0.24 0.018 285);
+  --color-ink-muted: oklch(0.44 0.022 285);
+  --color-ink-faint: oklch(0.55 0.02 285);
+  --color-line: oklch(0.885 0.008 285);
+  --color-line-strong: oklch(0.76 0.014 285);
+
+  --color-primary: oklch(0.42 0.155 285);
+  --color-primary-deep: oklch(0.34 0.14 285);
+  --color-primary-wash: oklch(0.955 0.022 285);
+
+  --color-redline: oklch(0.5 0.185 27);
+  --color-redline-wash: oklch(0.96 0.02 27);
+
+  --color-ok: oklch(0.48 0.115 152);
+  --color-ok-wash: oklch(0.962 0.028 152);
+
+  --color-warn: oklch(0.5 0.105 65);
+  --color-warn-wash: oklch(0.965 0.03 80);
+
+  --font-sans: 'IBM Plex Sans', system-ui, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', monospace;
+}
 
 :root {
   color-scheme: light;
@@ -9,9 +49,23 @@ html, body, #root {
   height: 100%;
   width: 100%;
   overflow: hidden;
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: var(--color-bg);
+}
+
+::selection {
+  background: var(--color-primary-wash);
+  color: var(--color-primary-deep);
 }
 
 .input {
-  @apply rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-900 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100;
+  @apply rounded border border-line-strong bg-bg px-2 py-1.5 text-sm text-ink outline-none transition-colors duration-150 placeholder:text-ink-faint focus:border-primary focus:ring-2 focus:ring-primary-wash;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }

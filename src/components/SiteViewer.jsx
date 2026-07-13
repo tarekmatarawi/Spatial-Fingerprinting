@@ -14,6 +14,21 @@ import { IsovistOverlay } from './IsovistOverlay'
 // map: east right, north up.
 const UP = [0, 0, 1]
 
+// Scene palette — hex approximations of the OKLCH design tokens in index.css
+// (Three.js doesn't parse oklch() strings). The scene reads as a white
+// museum-board model: paper ground, ink lines, indigo isovist, redline marker.
+const SCENE = {
+  paper: '#ffffff',
+  gridCell: '#e6e6ee',
+  gridSection: '#cbcbd9',
+  plazaWash: '#6a5cc4',
+  isovist: '#5748b8',
+  wallRibbon: '#c04030',
+  markerInside: '#c04030',
+  markerOutside: '#8b8b9c',
+  arrowInk: '#22223a',
+}
+
 // Reference metrics from the original Grasshopper/Decoding Spaces computation
 // for Gendarmenmarkt, used only as a rough sanity check on this site (see
 // spec Phase 3) — the exact original vantage point/direction weren't logged,
@@ -93,9 +108,9 @@ export function SiteViewer() {
       <Canvas
         dpr={[1, 2]}
         camera={{ up: UP, position: [0, -120, 120], fov: 45, near: 0.5, far: 8000 }}
-        style={{ background: '#f8fafc' }}
+        style={{ background: SCENE.paper }}
       >
-        <hemisphereLight args={['#ffffff', '#e2e8f0', 1.0]} />
+        <hemisphereLight args={['#ffffff', '#e8e8ef', 1.0]} />
         <directionalLight position={[180, -160, 400]} intensity={1.3} />
         <directionalLight position={[-140, 120, 220]} intensity={0.35} />
 
@@ -115,10 +130,10 @@ export function SiteViewer() {
               args={[data.sceneRadius * 4, data.sceneRadius * 4]}
               cellSize={10}
               cellThickness={0.6}
-              cellColor="#cbd5e1"
+              cellColor={SCENE.gridCell}
               sectionSize={50}
               sectionThickness={1}
-              sectionColor="#94a3b8"
+              sectionColor={SCENE.gridSection}
               fadeDistance={data.sceneRadius * 4}
               fadeStrength={1.5}
               followCamera={false}
@@ -158,7 +173,7 @@ export function SiteViewer() {
         />
 
         <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
-          <GizmoViewport axisColors={['#ef4444', '#22c55e', '#3b82f6']} labelColor="#334155" />
+          <GizmoViewport axisColors={['#c04030', '#3f8a52', '#4b3daa']} labelColor="#3c3c52" />
         </GizmoHelper>
       </Canvas>
 
@@ -217,12 +232,12 @@ function ClickPlane({ centroid, radius, onPick }) {
     >
       <planeGeometry args={[size, size]} />
       {/* Matches the canvas background so the plane's far edge is invisible */}
-      <meshStandardMaterial color="#f8fafc" />
+      <meshStandardMaterial color={SCENE.paper} />
     </mesh>
   )
 }
 
-// The plaza's open area, drawn as a subtle tinted floor so its extent is clear.
+// The plaza's open area, drawn as a subtle indigo wash so its extent is clear.
 function PlazaFloor({ boundary }) {
   const geometry = useMemo(() => {
     const shape = new THREE.Shape(boundary.map((p) => new THREE.Vector2(p.x, p.y)))
@@ -232,9 +247,9 @@ function PlazaFloor({ boundary }) {
   return (
     <mesh geometry={geometry} position={[0, 0, 0.03]}>
       <meshStandardMaterial
-        color="#93c5fd"
+        color={SCENE.plazaWash}
         transparent
-        opacity={0.35}
+        opacity={0.14}
         side={THREE.DoubleSide}
         depthWrite={false}
       />
@@ -253,7 +268,7 @@ const ARROW_GEOMETRY = new THREE.ShapeGeometry(ARROW_SHAPE)
 // plus a flat arrow lying on the ground pointing along the chosen viewing
 // direction (bearing in radians, 0 = north/+Y, clockwise).
 function Marker({ point, inside, direction }) {
-  const color = inside ? '#ef4444' : '#f59e0b'
+  const color = inside ? SCENE.markerInside : SCENE.markerOutside
   // The arrow shape points +Y (north) by default; rotating around Z by
   // -direction turns it to match a clockwise-from-north compass bearing.
   const rotationZ = direction != null ? -direction : 0
@@ -270,7 +285,7 @@ function Marker({ point, inside, direction }) {
       </mesh>
       {direction != null && (
         <mesh geometry={ARROW_GEOMETRY} position={[0, 0, 0.08]} rotation={[0, 0, rotationZ]}>
-          <meshBasicMaterial color="#0f172a" side={THREE.DoubleSide} />
+          <meshBasicMaterial color={SCENE.arrowInk} side={THREE.DoubleSide} />
         </mesh>
       )}
     </group>
@@ -296,18 +311,18 @@ function CompassUpdater({ arrowRef }) {
 
 const Compass = ({ ref, onReorient }) => (
   <div className="absolute top-4 right-4 flex flex-col items-center gap-2">
-    <div className="relative h-16 w-16 rounded-full border border-slate-300 bg-white/95 shadow-sm">
+    <div className="relative h-16 w-16 rounded-full border border-line-strong bg-bg/95 shadow-sm">
       <div ref={ref} className="absolute inset-0">
-        <div className="absolute left-1/2 top-1 -translate-x-1/2 text-xs font-bold text-red-600">
+        <div className="absolute left-1/2 top-1 -translate-x-1/2 font-mono text-xs font-semibold text-redline">
           N
         </div>
-        <div className="absolute left-1/2 top-1/2 h-6 w-0.5 -translate-x-1/2 -translate-y-full bg-red-500" />
-        <div className="absolute left-1/2 top-1/2 h-6 w-0.5 -translate-x-1/2 bg-slate-300" />
+        <div className="absolute left-1/2 top-1/2 h-6 w-0.5 -translate-x-1/2 -translate-y-full bg-redline" />
+        <div className="absolute left-1/2 top-1/2 h-6 w-0.5 -translate-x-1/2 bg-line-strong" />
       </div>
     </div>
     <button
       onClick={onReorient}
-      className="rounded-md border border-slate-300 bg-white/95 px-2 py-1 text-xs text-slate-600 shadow-sm hover:bg-slate-100"
+      className="rounded border border-line-strong bg-bg/95 px-2 py-1 text-xs text-ink-muted shadow-sm transition-colors duration-150 hover:border-primary hover:text-primary outline-none focus-visible:ring-2 focus-visible:ring-primary-wash"
     >
       North-up view
     </button>
@@ -323,8 +338,8 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, di
 
   return (
     <div className="pointer-events-none absolute top-4 left-4 w-80 max-w-[calc(100%-2rem)] space-y-3">
-      <div className="pointer-events-auto rounded-lg border border-slate-200 bg-white/95 p-4 shadow-sm backdrop-blur">
-        <label className="mb-1 block text-xs font-medium text-slate-500">Plaza</label>
+      <div className="pointer-events-auto rounded border border-line bg-bg/95 p-4 shadow-sm backdrop-blur">
+        <label className="mb-1 block font-mono text-[11px] text-ink-muted">Plaza</label>
         <select
           className="input w-full"
           value={selectedId}
@@ -338,9 +353,9 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, di
         </select>
 
         {error ? (
-          <p className="mt-3 text-sm text-red-600">{error}</p>
+          <p className="mt-3 text-sm text-redline">{error}</p>
         ) : (
-          <p className="mt-3 text-sm text-slate-600">
+          <p className="mt-3 font-mono text-xs text-ink-muted">
             {site.city}
             {site.country ? `, ${site.country}` : ''} · {data?.buildings.length ?? 0} buildings
             {data?.boundary ? ' · boundary ✓' : ' · no boundary'}
@@ -348,22 +363,22 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, di
         )}
       </div>
 
-      <div className="pointer-events-auto rounded-lg border border-slate-200 bg-white/95 p-4 text-sm shadow-sm backdrop-blur">
-        <p className="text-slate-600">
+      <div className="pointer-events-auto rounded border border-line bg-bg/95 p-4 text-sm shadow-sm backdrop-blur">
+        <p className="text-ink-muted">
           {stage === 'vantage' ? (
             <>
-              <span className="font-medium text-slate-800">Click the ground</span> inside the
+              <span className="font-medium text-ink">Click the ground</span> inside the
               plaza to drop a viewpoint.
             </>
           ) : (
             <>
-              <span className="font-medium text-slate-800">Click anywhere</span> to aim the 120°
+              <span className="font-medium text-ink">Click anywhere</span> to aim the 120°
               view cone.
             </>
           )}
         </p>
         {pick && (
-          <div className="mt-2 rounded-md bg-slate-50 p-2 font-mono text-xs text-slate-700">
+          <div className="mt-2 rounded bg-surface p-2 font-mono text-xs text-ink">
             {pick.inside ? (
               <>
                 lat {pick.lat.toFixed(6)}, lng {pick.lon.toFixed(6)}
@@ -377,19 +392,19 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, di
                 )}
               </>
             ) : (
-              <span className="text-amber-600">That point is outside the plaza boundary.</span>
+              <span className="text-warn">That point is outside the plaza boundary.</span>
             )}
           </div>
         )}
         {pick?.inside && (
           <button
             onClick={onMoveViewpoint}
-            className="mt-2 rounded-md border border-slate-300 bg-white px-2 py-1 text-xs text-slate-600 shadow-sm hover:bg-slate-100"
+            className="mt-2 rounded border border-line-strong bg-bg px-2 py-1 text-xs text-ink-muted shadow-sm transition-colors duration-150 hover:border-primary hover:text-primary outline-none focus-visible:ring-2 focus-visible:ring-primary-wash"
           >
             Move viewpoint
           </button>
         )}
-        <p className="mt-3 text-xs text-slate-400">
+        <p className="mt-3 text-xs text-ink-faint">
           Left-drag orbit · right-drag pan · scroll zoom · gizmo snaps to views
         </p>
       </div>
@@ -412,9 +427,12 @@ function MetricsPanel({ result, site }) {
   const ref = site.id === GENDARMENMARKT_REFERENCE.siteId ? GENDARMENMARKT_REFERENCE : null
 
   return (
-    <div className="pointer-events-auto rounded-lg border border-slate-200 bg-white/95 p-4 text-sm shadow-sm backdrop-blur">
-      <p className="mb-2 text-xs font-medium text-slate-500">Isovist metrics (live)</p>
-      <dl className="space-y-1 font-mono text-xs text-slate-700">
+    <div className="pointer-events-auto rounded border border-line bg-bg/95 p-4 text-sm shadow-sm backdrop-blur">
+      <p className="mb-2 flex items-baseline justify-between border-b border-line pb-1.5">
+        <span className="text-sm font-semibold text-ink">Isovist metrics</span>
+        <span className="font-mono text-[11px] text-primary">live</span>
+      </p>
+      <dl className="divide-y divide-line/60 font-mono text-xs text-ink">
         <MetricRow label="Area" value={`${result.area.toFixed(1)} m²`} refValue={ref && `${ref.area.toFixed(1)} m²`} />
         <MetricRow label="Compactness" value={result.compactness.toFixed(4)} refValue={ref && ref.compactness.toFixed(4)} />
         <MetricRow
@@ -429,7 +447,7 @@ function MetricsPanel({ result, site }) {
         />
       </dl>
       {ref && (
-        <p className="mt-2 text-xs text-slate-400">
+        <p className="mt-2 text-xs text-ink-faint">
           Reference values are from the original Grasshopper run at an unrecorded vantage
           point/direction — treat as a rough sanity check, not an exact match.
         </p>
@@ -440,11 +458,11 @@ function MetricsPanel({ result, site }) {
 
 function MetricRow({ label, value, refValue }) {
   return (
-    <div className="flex items-baseline justify-between gap-2">
-      <dt className="text-slate-500">{label}</dt>
+    <div className="flex items-baseline justify-between gap-2 py-1">
+      <dt className="text-ink-muted">{label}</dt>
       <dd className="text-right">
         {value}
-        {refValue && <span className="ml-1.5 text-slate-400">(ref {refValue})</span>}
+        {refValue && <span className="ml-1.5 text-ink-faint">(ref {refValue})</span>}
       </dd>
     </div>
   )

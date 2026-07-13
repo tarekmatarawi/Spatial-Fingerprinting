@@ -38,11 +38,12 @@ export function Buildings({ buildings }) {
 
   return (
     <group>
+      {/* Museum-board model: near-white volumes with ink lineweight edges */}
       <mesh geometry={fillGeometry}>
-        <meshStandardMaterial color="#dfe4ec" roughness={0.85} metalness={0} />
+        <meshStandardMaterial color="#f2f2f6" roughness={0.9} metalness={0} />
       </mesh>
       <lineSegments geometry={edgeGeometry}>
-        <lineBasicMaterial color="#475569" />
+        <lineBasicMaterial color="#3c3c52" />
       </lineSegments>
     </group>
   )

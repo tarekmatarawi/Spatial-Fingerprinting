@@ -55,9 +55,9 @@ export function IsovistOverlay({ result }) {
       {isovistGeometry && (
         <mesh geometry={isovistGeometry}>
           <meshBasicMaterial
-            color="#14b8a6"
+            color="#5748b8"
             transparent
-            opacity={0.35}
+            opacity={0.28}
             side={THREE.DoubleSide}
             depthWrite={false}
           />
@@ -66,9 +66,9 @@ export function IsovistOverlay({ result }) {
       {ribbonGeometry && (
         <mesh geometry={ribbonGeometry}>
           <meshBasicMaterial
-            color="#f59e0b"
+            color="#c04030"
             transparent
-            opacity={0.45}
+            opacity={0.4}
             side={THREE.DoubleSide}
             depthWrite={false}
           />

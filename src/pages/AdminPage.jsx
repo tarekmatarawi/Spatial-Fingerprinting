@@ -113,13 +113,13 @@ export function AdminPage() {
   }
 
   return (
-    <div className="flex h-full overflow-hidden bg-slate-50 text-slate-900">
-      {/* Site list */}
-      <aside className="w-72 shrink-0 overflow-y-auto border-r border-slate-200 bg-white">
-        <div className="border-b border-slate-200 p-4">
-          <h2 className="font-semibold">Sites ({sites.length})</h2>
-          <p className="mt-1 text-xs text-slate-500">
-            ✓ = boundary set · n = buildings entered
+    <div className="flex h-full overflow-hidden bg-bg text-ink">
+      {/* Site register */}
+      <aside className="w-72 shrink-0 overflow-y-auto border-r border-line bg-surface">
+        <div className="border-b border-line px-4 py-3.5">
+          <h2 className="text-sm font-semibold">Site register</h2>
+          <p className="mt-0.5 font-mono text-[11px] text-ink-muted">
+            {sites.length} sites · ✓ boundary set
           </p>
         </div>
         <ul>
@@ -127,14 +127,22 @@ export function AdminPage() {
             <li key={s.id}>
               <button
                 onClick={() => selectSite(i)}
-                className={`w-full border-b border-slate-100 px-4 py-2.5 text-left text-sm hover:bg-slate-50 ${
-                  i === selectedIndex ? 'bg-blue-50 font-medium' : ''
+                className={`w-full border-b border-line/60 px-4 py-2.5 text-left text-sm transition-colors duration-150 outline-none focus-visible:ring-2 focus-visible:ring-primary-wash ${
+                  i === selectedIndex
+                    ? 'bg-primary-wash text-primary-deep'
+                    : 'hover:bg-bg'
                 }`}
               >
-                <span className="block truncate">{s.name || s.id}</span>
-                <span className="text-xs text-slate-500">
+                <span className={`block truncate ${i === selectedIndex ? 'font-medium' : ''}`}>
+                  {s.name || s.id}
+                </span>
+                <span
+                  className={`font-mono text-[11px] ${
+                    i === selectedIndex ? 'text-primary' : 'text-ink-muted'
+                  }`}
+                >
                   {s.city || '—'} · {s.buildings.length} bldg{s.buildings.length === 1 ? '' : 's'}
-                  {s.boundary ? ' · ✓ boundary' : ''}
+                  {s.boundary ? ' · ✓' : ''}
                 </span>
               </button>
             </li>
@@ -143,22 +151,30 @@ export function AdminPage() {
       </aside>
 
       {/* Editor */}
-      <main className="flex-1 overflow-y-auto p-6">
-        <div className="mx-auto max-w-3xl space-y-6">
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl font-semibold">{site.name || site.id}</h1>
+      <main className="flex-1 overflow-y-auto px-8 py-6">
+        <div className="mx-auto max-w-3xl space-y-8">
+          <div className="flex items-center justify-between border-b border-line-strong pb-4">
+            <div>
+              <h1 className="text-xl font-semibold tracking-tight">{site.name || site.id}</h1>
+              <p className="mt-0.5 font-mono text-[11px] text-ink-muted">
+                {site.city || '—'}
+                {site.country ? `, ${site.country}` : ''} · {site.buildings.length} building
+                {site.buildings.length === 1 ? '' : 's'}
+                {site.boundary ? ' · boundary ✓' : ' · no boundary'}
+              </p>
+            </div>
             <div className="flex items-center gap-3">
-              {dirty && <span className="text-sm text-amber-600">unsaved changes</span>}
+              {dirty && <span className="font-mono text-xs text-warn">unsaved changes</span>}
               <Button onClick={save}>Save to sites.json</Button>
             </div>
           </div>
 
           {message && (
             <div
-              className={`rounded-md border p-3 text-sm ${
+              className={`rounded border p-3 text-sm ${
                 message.kind === 'error'
-                  ? 'border-red-200 bg-red-50 text-red-700'
-                  : 'border-green-200 bg-green-50 text-green-700'
+                  ? 'border-redline/30 bg-redline-wash text-redline'
+                  : 'border-ok/30 bg-ok-wash text-ok'
               }`}
             >
               {message.text}
@@ -166,8 +182,8 @@ export function AdminPage() {
           )}
 
           {/* Metadata */}
-          <section className="rounded-lg border border-slate-200 bg-white p-4">
-            <h2 className="mb-3 font-medium">Site info</h2>
+          <section>
+            <SectionHeading>Site info</SectionHeading>
             <div className="grid grid-cols-2 gap-3">
               <Field label="ID (URL-safe, e.g. gendarmenmarkt-berlin)">
                 <input
@@ -199,7 +215,7 @@ export function AdminPage() {
               </Field>
               <Field label="Center latitude">
                 <input
-                  className="input"
+                  className="input font-mono"
                   type="number"
                   step="any"
                   value={site.center_lat ?? ''}
@@ -216,7 +232,7 @@ export function AdminPage() {
               </Field>
               <Field label="Center longitude">
                 <input
-                  className="input"
+                  className="input font-mono"
                   type="number"
                   step="any"
                   value={site.center_lng ?? ''}
@@ -242,11 +258,19 @@ export function AdminPage() {
           </section>
 
           {/* Boundary */}
-          <section className="rounded-lg border border-slate-200 bg-white p-4">
-            <h2 className="mb-1 font-medium">
-              Plaza boundary {site.boundary ? '✓' : '(not set)'}
-            </h2>
-            <p className="mb-3 text-sm text-slate-500">
+          <section>
+            <SectionHeading
+              trailing={
+                site.boundary ? (
+                  <span className="font-mono text-xs text-ok">✓ set</span>
+                ) : (
+                  <span className="font-mono text-xs text-ink-faint">not set</span>
+                )
+              }
+            >
+              Plaza boundary
+            </SectionHeading>
+            <p className="mb-3 text-sm text-ink-muted">
               Paste ONE GeoJSON polygon outlining the open plaza area.
             </p>
             <textarea
@@ -263,9 +287,15 @@ export function AdminPage() {
           </section>
 
           {/* Buildings */}
-          <section className="rounded-lg border border-slate-200 bg-white p-4">
-            <h2 className="mb-1 font-medium">Buildings ({site.buildings.length})</h2>
-            <p className="mb-3 text-sm text-slate-500">
+          <section>
+            <SectionHeading
+              trailing={
+                <span className="font-mono text-xs text-ink-muted">{site.buildings.length}</span>
+              }
+            >
+              Buildings
+            </SectionHeading>
+            <p className="mb-3 text-sm text-ink-muted">
               Paste GeoJSON from OSM — a single polygon, or a whole FeatureCollection from an
               overpass-turbo export. Heights are read from OSM tags (height / building:levels)
               when present; otherwise the default below is used. You can correct any height
@@ -278,10 +308,10 @@ export function AdminPage() {
               onChange={(e) => setBuildingText(e.target.value)}
             />
             <div className="mt-2 flex items-center gap-3">
-              <label className="flex items-center gap-2 text-sm text-slate-600">
+              <label className="flex items-center gap-2 text-sm text-ink-muted">
                 Default height for this site (m)
                 <input
-                  className="input w-20"
+                  className="input w-20 font-mono"
                   type="number"
                   min="1"
                   step="0.1"
@@ -299,19 +329,19 @@ export function AdminPage() {
             </div>
 
             {site.buildings.length > 0 && (
-              <ul className="mt-4 divide-y divide-slate-100 border-t border-slate-100">
+              <ul className="mt-4 divide-y divide-line/60 border-t border-line">
                 {site.buildings.map((b, i) => {
                   const source = heightSource(b)
                   return (
                     <li key={i} className="flex items-center gap-3 py-2 text-sm">
-                      <span className="w-8 text-slate-400">#{i + 1}</span>
-                      <span className="flex-1 text-slate-600">
+                      <span className="w-8 font-mono text-xs text-ink-faint">{i + 1}</span>
+                      <span className="flex-1 text-ink-muted">
                         {b.footprint.coordinates[0].length - 1} corner polygon
                       </span>
                       <HeightBadge source={source} />
-                      <label className="flex items-center gap-1 text-slate-600">
+                      <label className="flex items-center gap-1 text-ink-muted">
                         <input
-                          className="input w-20"
+                          className="input w-20 font-mono"
                           type="number"
                           step="0.1"
                           value={effectiveHeight(b, site)}
@@ -334,25 +364,35 @@ export function AdminPage() {
   )
 }
 
+// Section headings sit on a hairline rule, like annotations on a drawing sheet.
+function SectionHeading({ children, trailing }) {
+  return (
+    <div className="mb-3 flex items-baseline justify-between border-b border-line pb-1.5">
+      <h2 className="text-sm font-semibold">{children}</h2>
+      {trailing}
+    </div>
+  )
+}
+
 function Field({ label, children, className = '' }) {
   return (
     <label className={`block text-sm ${className}`}>
-      <span className="mb-1 block text-slate-600">{label}</span>
+      <span className="mb-1 block text-ink-muted">{label}</span>
       {children}
     </label>
   )
 }
 
 const HEIGHT_BADGES = {
-  osm: { label: 'OSM', className: 'bg-green-100 text-green-700' },
-  default: { label: 'default', className: 'bg-slate-100 text-slate-500' },
-  manual: { label: 'pinned', className: 'bg-blue-100 text-blue-700' },
+  osm: { label: 'OSM', className: 'bg-ok-wash text-ok' },
+  default: { label: 'default', className: 'bg-surface text-ink-muted' },
+  manual: { label: 'pinned', className: 'bg-primary-wash text-primary' },
 }
 
 function HeightBadge({ source }) {
   const badge = HEIGHT_BADGES[source] ?? HEIGHT_BADGES.default
   return (
-    <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium uppercase ${badge.className}`}>
+    <span className={`rounded px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase ${badge.className}`}>
       {badge.label}
     </span>
   )
