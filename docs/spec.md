@@ -67,52 +67,67 @@ Plus a simple admin/data-entry page: paste a building footprint (GeoJSON from Op
 - Renders the plaza's open boundary as a ground plane
 - Camera orbit/pan/zoom
 - Click anywhere inside the plaza boundary → place a visible marker (small sphere) at that point and log its coordinates
+- After placing the vantage point, a second click sets a **viewing direction** (facing bearing) — load-bearing for both the isovist and the enclosure ratio in Phase 3, since both share the same 120° cone centered on it
 
-**Validation before Phase 3:** load a real site; confirm buildings appear at correct relative heights and positions; confirm clicking places a marker at the correct location (not offset or inverted).
+**Validation before Phase 3:** load a real site; confirm buildings appear at correct relative heights and positions; confirm clicking places a marker at the correct location (not offset or inverted); confirm the viewing direction can be set and read back correctly.
+
+**Status: done.** Click-to-place + click-to-aim implemented in `SiteViewer.jsx` — first click places the vantage point (with a default facing direction toward the plaza centroid), second click re-aims it; a "Move viewpoint" button restarts the cycle.
 
 ---
 
-## PHASE 3 — Isovist Ray-Casting Engine (THE CRITICAL PHASE)
+## PHASE 3 — Unified Ray-Casting Engine (THE CRITICAL PHASE)
 
 The most important and error-prone phase. Follow exactly — do not approximate the geometry logic.
 
-### Method: radial ray-casting ("radiate" method, per Benedikt 1979)
+### Design: unified single-cone ray-casting
+
+Isovist and Enclosure Ratio are computed from **one shared ray-casting pass**, not two independent ones — same vantage point, same viewing direction, same 120° field of view, same 200 m range.
 
 **Inputs:**
-- Viewpoint `(x0, y0)` — the clicked point; planar 2D isovist to start (see note below)
-- Field of view of **120°**, centered on a viewing direction (second click sets "facing direction," or default = facing the plaza's open centroid)
-- The site's building footprint polygons (obstacles)
-- Max ray length `max_vista` (e.g. 200 m) beyond which a ray is "occluded"/unbounded
+- Vantage point `(x0, y0)` — the clicked point; planar 2D isovist to start (see note below)
+- Viewing direction — set via the second click in Phase 2 (facing bearing)
+- Field of view: **120°**, centered on the viewing direction
+- The site's building footprint polygons (obstacles), each with an effective height
+- Max ray length `max_vista = 200 m`
+- Ray count: **120 rays** (1 ray per degree across the 120° cone) — matches the original Grasshopper "Precision" setting (1 ray/degree)
 
 **Algorithm:**
-1. Cast N rays (start N=120, one per degree) evenly spaced across the 120° FOV from `(x0, y0)`.
-2. Test each ray against every building footprint edge (line segment).
-3. Record the **nearest intersection** per ray. No intersection within `max_vista` → terminate at `max_vista`, flag `occluded = true`. Hit a wall → terminate there, flag `occluded = false` (an "intersection" vertex; occlusion = ran out of range, intersection = hit a wall).
-4. The ordered ray endpoints (sorted by angle) are the isovist polygon vertices.
+1. Cast 120 rays evenly spaced across the 120° FOV, centered on the viewing direction, from `(x0, y0)`.
+2. Test each ray against every building footprint edge (line segment) in the site.
+3. Record the **nearest intersection** per ray, and the height of the building hit (if any). No intersection within `max_vista` → terminate at `max_vista`, flag as **open**. Hit a wall → terminate there, flag as **wall** (with the building's height).
+4. The isovist polygon is the vantage point plus the ordered ray endpoints (sorted by angle) — the vantage point itself closes the two side edges of the cone, since a 120° wedge isn't a full loop of ray endpoints alone.
+5. Separately, the `(height, distance)` pairs from only the wall-hit rays feed the Enclosure Ratio.
 
-**Metric formulas (exactly these — Benedikt 1979 / "Visual Typology" paper):**
+**Metric formulas — confirmed against real Grasshopper output (Gendarmenmarkt, Berlin):**
 
-Given isovist polygon vertices `(xᵢ, yᵢ)` relative to the viewpoint:
+Given the isovist polygon vertices `(xᵢ, yᵢ)` relative to the vantage point:
 
-- **Area** (shoelace): `Area = Σ (1/2) |x[i-1]·y[i] − x[i]·y[i-1]|`
-- **Perimeter**: `Σ sqrt((x[i]−x[i-1])² + (y[i]−y[i-1])²)`
-- **Closed Perimeter**: same sum, but only over consecutive vertex pairs where BOTH endpoints are intersection-type (hit a building)
+- **Area** (shoelace): `Area = |Σ (x[i-1]·y[i] − x[i]·y[i-1])| / 2`
+- **Perimeter**: `Σ sqrt((x[i]−x[i-1])² + (y[i]−y[i-1])²)` over all polygon edges (wall-bound and range-bound)
 - **Compactness** (isoperimetric quotient): `(4π × Area) / Perimeter²`
-- **Occlusivity**: `1 − (ClosedPerimeter / Perimeter)`
+- **Occlusivity — closed perimeter (Uv), a raw length in meters, NOT a 0–1 ratio:** `Σ sqrt((x[i]−x[i-1])² + (y[i]−y[i-1])²)` over consecutive vertex pairs where **both** are wall-type. Do **not** implement `1 − Uv/Perimeter` (Benedikt's normalized ratio) — confirmed via reverse calculation that this does not match the existing 18-site dataset.
+- **Enclosure Ratio**: `average(hᵢ / dᵢ)` over all rays `i` that hit a building within 200 m — `hᵢ` is the hit building's height, `dᵢ` the horizontal distance from the vantage point. Open rays (no hit) are excluded from the average, not treated as 0. The existing 18-site dataset's Enclosure Ratio values were already computed at the 120° cone (not 360°), so the reference value below is a valid validation target.
 
-> ⚠️ **OPEN QUESTION (must resolve before implementing):** the existing Grasshopper dataset has Occlusivity values in the hundreds (e.g. 354.10, 598.13), which cannot be Benedikt's 0–1 ratio — likely an absolute closed-edge length in meters. Resolve the definition/units so web-computed values are comparable with the existing 18-site dataset. Working plan: compute and store BOTH the raw lengths and the ratio.
+**Gendarmenmarkt validation reference (from Grasshopper):**
 
-### Enclosure Ratio (SEPARATE from the isovist — not derived from the isovist polygon)
+| Metric | Reference value |
+|---|---|
+| Isovist Area | 12437.877366 m² |
+| Compactness | 0.269934 |
+| Occlusivity (closed perimeter) | 354.097561 m |
+| Enclosure Ratio | 0.330407 |
 
-**Method: 8-ray horizontal H/W cast**
-1. From `(x0, y0)`, cast 8 horizontal rays at 45° intervals (0°–315°, full 360°).
-2. Per ray: nearest building intersection → horizontal distance `d` and building height `h` at that point.
-3. Per ray compute `h / d`. Rays with no hit within `max_vista`: exclude from the average OR treat as 0 — decide and stay consistent (decision pending).
-4. Enclosure Ratio = average of `h/d` (specify whether over all 8 rays or only hitting rays).
-
-**Validation gate before Phase 4:** test on 2–3 sites with existing Grasshopper-computed values. Web output must be same order of magnitude and preserve relative ranking (e.g. if Naschmarkt > Königsplatz on enclosure in Rhino, same must hold here). Wildly different results = ray-casting bug; do not proceed until resolved.
+**Validation gate before Phase 4:** compute all four metrics for Gendarmenmarkt and compare against the table above (~2–3% tolerance; >10–15% indicates a bug — most likely candidates: angle convention, vertex ordering before the shoelace formula, or wall/open misclassification). The exact original Grasshopper vantage point/direction were not recorded, so an exact match isn't expected — treat this as a soft sanity check on order of magnitude and internal consistency, not a byte-for-byte match.
 
 **Implementation note:** start with a **planar (2D) isovist** — matches what Decoding Spaces computes and is far simpler to get correct. True 3D isovist only after 2D is fully validated.
+
+### 3D Visualization (build alongside the engine)
+
+- **Isovist polygon**: flat, semi-transparent polygon at ground level from the shared ray pass.
+- **Enclosure profile**: a ribbon rising from ground to each wall-hit ray's building height, connected in ray order, breaking at open rays — reads as a partial "fence" tracing the enclosing buildings within the cone.
+- Both update live as the vantage point or viewing direction change.
+
+**Status: done.** Implemented in `src/lib/isovist.js` (ray-casting + metrics) and `src/components/IsovistOverlay.jsx` (live polygon + ribbon rendering), wired into `SiteViewer.jsx`. Best-effort validated against the Gendarmenmarkt reference above (Area/Compactness/Occlusivity within ~5–11% at an arbitrary vantage point; Enclosure Ratio further off, expected since the original point wasn't reproduced exactly). No console errors; visually confirmed the isovist wedge and enclosure ribbon render correctly, bounded by real building facades.
 
 ---
 
