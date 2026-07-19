@@ -88,5 +88,20 @@
     "occlusivity_m": 316.06,
     "enclosure_ratio": 0.2333,
     "saved_at": "2026-07-16T15:16:17.341Z"
+  },
+  {
+    "id": "21cd5a81-10b0-455b-8f2a-dc62ad17094a",
+    "site_id": "Marienplatz-Munich",
+    "site_name": "Marienplatz",
+    "lat": 48.13719,
+    "lng": 11.575512,
+    "local_x": 38.33,
+    "local_y": -16.23,
+    "direction_deg": 17.3,
+    "area_m2": 1405.88,
+    "compactness": 0.3553,
+    "occlusivity_m": 105.86,
+    "enclosure_ratio": 2.4472,
+    "saved_at": "2026-07-19T09:12:53.048Z"
   }
 ]

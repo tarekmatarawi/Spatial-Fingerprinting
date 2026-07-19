@@ -110,7 +110,41 @@ export function SiteViewer() {
   const pendingLoadRef = useRef(null) // a saved entry to restore after a site switch settles
   const prevSiteRef = useRef(null) // last selectedId the effect below acted on; lets it clear only on real site changes
 
-  const site = useMemo(() => sites.find((s) => s.id === selectedId) ?? sites[0], [selectedId])
+  // The sites list is held in state (seeded from the imported JSON) so a
+  // building drawn in the viewer can be added to the current site and take
+  // effect immediately — rendered and fed into the ray-casting metrics — the
+  // same pattern the admin page uses for edits.
+  const [sitesData, setSitesData] = useState(sites)
+  // In-progress hand-drawn building, or null when not drawing. `points` are the
+  // placed corners (local metres); `cursor` is the live pointer position for the
+  // rubber-band preview edge; `height` is the extrusion height in metres.
+  const [draw, setDraw] = useState(null)
+  const [buildingNote, setBuildingNote] = useState(null) // save feedback for a committed building
+  // Latest sitesData, so an onBlur handler can persist the current edits without
+  // capturing a stale value from an earlier render.
+  const sitesDataRef = useRef(sitesData)
+
+  const site = useMemo(() => sitesData.find((s) => s.id === selectedId) ?? sitesData[0], [sitesData, selectedId])
+
+  useEffect(() => {
+    sitesDataRef.current = sitesData
+  }, [sitesData])
+
+  // Hand-drawn buildings on the current site, with their array index (into the
+  // full buildings list) so each can be re-heighted or deleted after drawing.
+  const manualBuildings = useMemo(() => {
+    const out = []
+    ;(site.buildings ?? []).forEach((b, index) => {
+      if (b.manual) {
+        out.push({
+          index,
+          corners: (b.footprint?.coordinates?.[0]?.length ?? 1) - 1,
+          height: b.override_height_m ?? '',
+        })
+      }
+    })
+    return out
+  }, [site])
 
   const projected = useMemo(() => {
     try {
@@ -127,6 +161,9 @@ export function SiteViewer() {
     if (prevSiteRef.current === null) prevSiteRef.current = selectedId
     if (prevSiteRef.current === selectedId) return
     prevSiteRef.current = selectedId
+    // Any half-drawn building belongs to the old plaza — discard it on a switch.
+    setDraw(null)
+    setBuildingNote(null)
     // A pending Load survives the site switch: restore its viewpoint/direction
     // once the new site is selected, instead of clearing to a fresh vantage.
     const pending = pendingLoadRef.current
@@ -201,6 +238,110 @@ export function SiteViewer() {
       setStage('aim')
     }
     setPick({ point, inside, lat, lon })
+  }
+
+  const siteDefaultHeight = Number(site.default_height_m) > 0 ? Number(site.default_height_m) : 12
+
+  // Enters draw mode: subsequent ground clicks drop footprint corners instead of
+  // placing a viewpoint. Seeds the height with the site's default so a finished
+  // shape can be committed in one click.
+  function startDrawing() {
+    setBuildingNote(null)
+    setDraw({ points: [], cursor: null, height: siteDefaultHeight })
+  }
+
+  // Routes a ground click: a new footprint corner while drawing, otherwise the
+  // normal viewpoint/aim pick.
+  function handleGroundDown(point) {
+    if (draw) {
+      setDraw((d) => ({ ...d, points: [...d.points, point] }))
+    } else {
+      handlePick(point)
+    }
+  }
+
+  // Tracks the pointer over the ground for the rubber-band preview edge; only
+  // wired up while drawing so idle mouse moves don't trigger renders.
+  function handleGroundMove(point) {
+    setDraw((d) => (d ? { ...d, cursor: point } : d))
+  }
+
+  // Commits the drawn footprint as a real building on the current site: the
+  // local-metre corners are converted back to [lng, lat] GeoJSON (via the site's
+  // own projector) and appended to its buildings array with a `manual` flag and
+  // the height as a pinned override. Because the sites list is state, projectSite
+  // re-runs and the building appears in the scene and the metrics right away.
+  function commitDrawing() {
+    if (!draw || draw.points.length < 3 || !data) return
+    const ring = draw.points.map((p) => {
+      const { lat, lon } = data.toLatLon(p.x, p.y)
+      return [round(lon, 7), round(lat, 7)]
+    })
+    ring.push(ring[0]) // close the GeoJSON ring
+    const height = Number(draw.height) > 0 ? Number(draw.height) : siteDefaultHeight
+    const building = {
+      footprint: { type: 'Polygon', coordinates: [ring] },
+      osm_height_m: null,
+      override_height_m: round(height, 1),
+      manual: true,
+    }
+    const next = sitesData.map((s) =>
+      s.id === selectedId ? { ...s, buildings: [...s.buildings, building] } : s
+    )
+    setSitesData(next)
+    setDraw(null)
+    persistSites(next)
+  }
+
+  // Writes the whole sites array back to src/data/sites.json via the dev-only
+  // endpoint (same one the admin page uses). On the deployed static site the
+  // endpoint is absent, so the building stays for this session and we show a
+  // clear note rather than failing loudly.
+  async function persistSites(next) {
+    try {
+      const response = await fetch('/__save-sites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(next),
+      })
+      if (!response.ok) throw new Error(`save endpoint returned ${response.status}`)
+      setBuildingNote({ kind: 'ok', text: 'Building added and saved to sites.json.' })
+    } catch {
+      setBuildingNote({
+        kind: 'warn',
+        text: 'Building added for this session only — it persists to sites.json when running locally (npm run dev).',
+      })
+    }
+  }
+
+  // Live-edits a drawn building's height (metrics recompute as you type); the
+  // change is persisted on blur via commitManualEdits, not on every keystroke.
+  function setManualHeight(index, value) {
+    setSitesData((prev) =>
+      prev.map((s) =>
+        s.id === selectedId
+          ? {
+              ...s,
+              buildings: s.buildings.map((b, i) =>
+                i === index ? { ...b, override_height_m: value === '' ? null : Number(value) } : b
+              ),
+            }
+          : s
+      )
+    )
+  }
+
+  function commitManualEdits() {
+    persistSites(sitesDataRef.current)
+  }
+
+  // Removes a drawn building from the current site and persists immediately.
+  function deleteManualBuilding(index) {
+    const next = sitesData.map((s) =>
+      s.id === selectedId ? { ...s, buildings: s.buildings.filter((_, i) => i !== index) } : s
+    )
+    setSitesData(next)
+    persistSites(next)
   }
 
   const data = projected.data
@@ -323,11 +464,18 @@ export function SiteViewer() {
               infiniteGrid={false}
             />
 
-            <ClickPlane centroid={data.centroid} radius={data.sceneRadius} onPick={handlePick} />
+            <ClickPlane
+              centroid={data.centroid}
+              radius={data.sceneRadius}
+              onGroundDown={handleGroundDown}
+              onGroundMove={draw ? handleGroundMove : undefined}
+            />
 
             {data.boundary && <PlazaFloor boundary={data.boundary} />}
 
             <Buildings buildings={data.buildings} />
+
+            {draw && <DrawingOverlay points={draw.points} cursor={draw.cursor} onCloseVertex={commitDrawing} />}
 
             {savedProjections.map((p) => (
               <IsovistOverlay key={p.id} result={p.result} dim />
@@ -394,6 +542,17 @@ export function SiteViewer() {
         savedCount={savedForSite.length}
         showSavedProjections={showSavedProjections}
         onToggleSavedProjections={() => setShowSavedProjections((v) => !v)}
+        draw={draw}
+        buildingNote={buildingNote}
+        onStartDrawing={startDrawing}
+        onUndoPoint={() => setDraw((d) => (d ? { ...d, points: d.points.slice(0, -1) } : d))}
+        onSetDrawHeight={(v) => setDraw((d) => (d ? { ...d, height: v } : d))}
+        onFinishDrawing={commitDrawing}
+        onCancelDrawing={() => setDraw(null)}
+        manualBuildings={manualBuildings}
+        onSetManualHeight={setManualHeight}
+        onCommitManualEdits={commitManualEdits}
+        onDeleteManualBuilding={deleteManualBuilding}
       />
 
       <SavedResultsPanel
@@ -428,7 +587,9 @@ function CameraRig({ centroid, radius, far, resetToken }) {
 }
 
 // Large ground plane (in the X/Y plane already) that catches clicks anywhere.
-function ClickPlane({ centroid, radius, onPick }) {
+// onGroundDown fires on a left-click (viewpoint pick, or a footprint corner when
+// drawing); onGroundMove, wired only while drawing, feeds the rubber-band preview.
+function ClickPlane({ centroid, radius, onGroundDown, onGroundMove }) {
   const size = Math.max(radius * 6, 400)
   return (
     <mesh
@@ -436,13 +597,78 @@ function ClickPlane({ centroid, radius, onPick }) {
       onPointerDown={(e) => {
         if (e.button !== 0) return // left-click only; right/middle drive the camera
         e.stopPropagation()
-        onPick({ x: e.point.x, y: e.point.y })
+        onGroundDown({ x: e.point.x, y: e.point.y })
       }}
+      onPointerMove={onGroundMove ? (e) => onGroundMove({ x: e.point.x, y: e.point.y }) : undefined}
     >
       <planeGeometry args={[size, size]} />
       {/* Matches the canvas background so the plane's far edge is invisible */}
       <meshStandardMaterial color={SCENE.paper} />
     </mesh>
+  )
+}
+
+// Live preview of a building footprint being drawn: the placed corners as dots,
+// the edges between them, a rubber-band edge to the current cursor, and (once
+// three corners exist) a faint closing edge back to the first corner. The first
+// corner is a larger, clickable sphere — clicking it closes and commits the
+// shape, the same as the Finish button.
+function DrawingOverlay({ points, cursor, onCloseVertex }) {
+  const Z = 0.12 // sit just above the ground plane / grid to avoid z-fighting
+  const canClose = points.length >= 3
+
+  // Ordered vertices of the preview line: placed corners, then the live cursor,
+  // then back to the first corner once the shape has enough points to close.
+  const linePoints = useMemo(() => {
+    const pts = points.map((p) => new THREE.Vector3(p.x, p.y, Z))
+    if (cursor) pts.push(new THREE.Vector3(cursor.x, cursor.y, Z))
+    if (points.length >= 2) pts.push(new THREE.Vector3(points[0].x, points[0].y, Z))
+    return pts
+  }, [points, cursor])
+
+  const lineGeometry = useMemo(() => {
+    const g = new THREE.BufferGeometry()
+    g.setFromPoints(linePoints.length ? linePoints : [new THREE.Vector3()])
+    return g
+  }, [linePoints])
+
+  useEffect(() => () => lineGeometry.dispose(), [lineGeometry])
+
+  return (
+    <group>
+      {linePoints.length >= 2 && (
+        <line geometry={lineGeometry}>
+          <lineBasicMaterial color={SCENE.isovist} />
+        </line>
+      )}
+      {points.map((p, i) => {
+        const first = i === 0
+        return (
+          <mesh
+            key={i}
+            position={[p.x, p.y, Z]}
+            onPointerDown={
+              first && canClose
+                ? (e) => {
+                    if (e.button !== 0) return
+                    e.stopPropagation()
+                    onCloseVertex()
+                  }
+                : undefined
+            }
+            onPointerOver={
+              first && canClose
+                ? (e) => (e.stopPropagation(), (document.body.style.cursor = 'pointer'))
+                : undefined
+            }
+            onPointerOut={first && canClose ? () => (document.body.style.cursor = 'default') : undefined}
+          >
+            <sphereGeometry args={[first ? 1.5 : 1.0, 16, 16]} />
+            <meshBasicMaterial color={first ? SCENE.plazaWash : SCENE.isovist} />
+          </mesh>
+        )
+      })}
+    </group>
   )
 }
 
@@ -560,7 +786,7 @@ function clamp(v, lo, hi) {
   return Math.max(lo, Math.min(hi, v))
 }
 
-function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, direction, result, onMoveViewpoint, onSaveResult, saveError, savedCount, showSavedProjections, onToggleSavedProjections }) {
+function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, direction, result, onMoveViewpoint, onSaveResult, saveError, savedCount, showSavedProjections, onToggleSavedProjections, draw, buildingNote, onStartDrawing, onUndoPoint, onSetDrawHeight, onFinishDrawing, onCancelDrawing, manualBuildings, onSetManualHeight, onCommitManualEdits, onDeleteManualBuilding }) {
   const bearingDeg = direction != null ? Math.round(((direction * 180) / Math.PI + 360) % 360) : null
 
   return (
@@ -592,7 +818,12 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, di
 
       <div className="pointer-events-auto rounded-xl border border-line bg-paper/95 p-4 text-sm shadow-sm backdrop-blur">
         <p className="text-ink-muted">
-          {stage === 'vantage' ? (
+          {draw ? (
+            <>
+              <span className="font-medium text-ink">Drawing a building.</span> Click each
+              corner on the ground — see the panel below.
+            </>
+          ) : stage === 'vantage' ? (
             <>
               <span className="font-medium text-ink">Click the ground</span> inside the
               plaza to drop a viewpoint.
@@ -636,6 +867,25 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, di
         </p>
       </div>
 
+      <BuildingTool
+        draw={draw}
+        note={buildingNote}
+        onStart={onStartDrawing}
+        onUndo={onUndoPoint}
+        onSetHeight={onSetDrawHeight}
+        onFinish={onFinishDrawing}
+        onCancel={onCancelDrawing}
+      />
+
+      {manualBuildings.length > 0 && (
+        <DrawnBuildingList
+          buildings={manualBuildings}
+          onSetHeight={onSetManualHeight}
+          onCommit={onCommitManualEdits}
+          onDelete={onDeleteManualBuilding}
+        />
+      )}
+
       {result && <MetricsPanel result={result} />}
 
       {result && pick?.inside && direction != null && (
@@ -673,6 +923,126 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, di
           </button>
         </label>
       )}
+    </div>
+  )
+}
+
+// Add-a-building tool. Collapsed to a single button until drawing starts; while
+// drawing it becomes a small workbench — corner count, height field, and
+// Undo / Finish / Cancel. For plazas with a landmark missing from OSM (e.g. the
+// Neues Rathaus on Marienplatz) whose absence badly distorts the isovist.
+function BuildingTool({ draw, note, onStart, onUndo, onSetHeight, onFinish, onCancel }) {
+  if (!draw) {
+    return (
+      <div className="pointer-events-auto rounded-xl border border-line bg-paper/95 p-4 shadow-sm backdrop-blur">
+        <button
+          onClick={onStart}
+          className="w-full rounded-full border border-line-strong bg-paper px-3 py-2 text-sm font-medium text-ink shadow-sm transition-colors duration-150 hover:border-primary hover:text-primary-deep outline-none focus-visible:ring-2 focus-visible:ring-primary-wash"
+        >
+          + Add a missing building
+        </button>
+        <p className="mt-2 text-xs text-ink-faint">
+          Draw a footprint for a building absent from OSM, set its height, and it joins the model
+          and the isovist calculation.
+        </p>
+        {note && (
+          <p className={`mt-2 text-xs ${note.kind === 'warn' ? 'text-warn' : 'text-ok'}`}>{note.text}</p>
+        )}
+      </div>
+    )
+  }
+
+  const corners = draw.points.length
+  const canFinish = corners >= 3
+
+  return (
+    <div className="pointer-events-auto rounded-xl border border-primary/40 bg-paper/95 p-4 shadow-sm backdrop-blur">
+      <p className="flex items-baseline justify-between border-b border-line pb-1.5">
+        <span className="text-sm font-semibold text-ink">Drawing a building</span>
+        <span className="font-mono text-xs text-primary">
+          {corners} corner{corners === 1 ? '' : 's'}
+        </span>
+      </p>
+      <p className="mt-2 text-xs text-ink-muted">
+        Click each corner on the ground. Click the first corner again — or “Finish” — to close the
+        shape. Needs at least 3 corners.
+      </p>
+
+      <label className="mt-3 flex items-center gap-2 text-sm text-ink-muted">
+        Height (m)
+        <input
+          className="input w-24 font-mono"
+          type="number"
+          min="1"
+          step="0.5"
+          value={draw.height}
+          onChange={(e) => onSetHeight(e.target.value)}
+        />
+      </label>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <button
+          onClick={onFinish}
+          disabled={!canFinish}
+          className="rounded-full border border-primary bg-primary-wash px-3 py-1.5 text-xs font-medium text-primary-deep shadow-sm transition-colors duration-150 hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-primary-wash disabled:hover:text-primary-deep outline-none focus-visible:ring-2 focus-visible:ring-primary-wash"
+        >
+          Finish &amp; add
+        </button>
+        <button
+          onClick={onUndo}
+          disabled={corners === 0}
+          className="rounded-full border border-line-strong bg-paper px-3 py-1.5 text-xs text-ink-muted shadow-sm transition-colors duration-150 hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-40 outline-none focus-visible:ring-2 focus-visible:ring-primary-wash"
+        >
+          Undo corner
+        </button>
+        <button
+          onClick={onCancel}
+          className="rounded-full border border-line-strong bg-paper px-3 py-1.5 text-xs text-redline shadow-sm transition-colors duration-150 hover:border-redline hover:bg-redline-wash outline-none focus-visible:ring-2 focus-visible:ring-redline-wash"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  )
+}
+
+// Lists the hand-drawn buildings on the current plaza so each can be re-heighted
+// (metrics recompute live; the value persists on blur) or deleted after drawing.
+function DrawnBuildingList({ buildings, onSetHeight, onCommit, onDelete }) {
+  return (
+    <div className="pointer-events-auto rounded-xl border border-line bg-paper/95 p-4 shadow-sm backdrop-blur">
+      <p className="mb-2 flex items-baseline justify-between border-b border-line pb-1.5">
+        <span className="text-sm font-semibold text-ink">Drawn buildings</span>
+        <span className="font-mono text-xs text-primary">{buildings.length}</span>
+      </p>
+      <ul className="divide-y divide-line/60">
+        {buildings.map((b, n) => (
+          <li key={b.index} className="flex items-center gap-2 py-2 text-sm">
+            <span className="flex-1 text-ink-muted">
+              #{n + 1}
+              <span className="ml-1 font-mono text-xs text-ink-faint">{b.corners}-corner</span>
+            </span>
+            <label className="flex items-center gap-1 text-ink-muted">
+              <input
+                className="input w-20 font-mono"
+                type="number"
+                min="1"
+                step="0.5"
+                value={b.height}
+                onChange={(e) => onSetHeight(b.index, e.target.value)}
+                onBlur={onCommit}
+              />
+              m
+            </label>
+            <button
+              onClick={() => onDelete(b.index)}
+              className="rounded-full border border-line-strong bg-paper px-2.5 py-1 text-xs text-redline shadow-sm transition-colors duration-150 hover:border-redline hover:bg-redline-wash outline-none focus-visible:ring-2 focus-visible:ring-redline-wash"
+            >
+              Delete
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

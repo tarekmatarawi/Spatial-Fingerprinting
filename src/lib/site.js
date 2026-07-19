@@ -44,7 +44,10 @@ export function projectSite(site) {
     if (!ring || ring.length < 4) continue
     const footprint = ringToLocal(projector, ring)
     if (footprint.length < 3) continue
-    buildings.push({ footprint, height: effectiveHeight(b, site) })
+    // `manual` marks a footprint hand-drawn in the viewer (a building missing
+    // from OSM), so the renderer can tint it and the thesis can report which
+    // geometry was reconstructed by hand. The ray-caster ignores the flag.
+    buildings.push({ footprint, height: effectiveHeight(b, site), manual: b.manual === true })
   }
 
   let boundary = null

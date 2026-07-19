@@ -426,6 +426,11 @@ export function AdminPage() {
                       <span className="min-w-32 flex-1 text-ink-muted">
                         {b.footprint.coordinates[0].length - 1} corner polygon
                       </span>
+                      {b.manual && (
+                        <span className="rounded-full bg-primary-wash px-2 py-0.5 font-mono text-[11px] font-medium uppercase text-primary-deep">
+                          drawn
+                        </span>
+                      )}
                       <HeightBadge source={source} />
                       <label className="flex items-center gap-1 text-ink-muted">
                         <input
