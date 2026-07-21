@@ -22,10 +22,12 @@ export function Buildings({ buildings }) {
 
   return (
     <group>
-      {/* Museum-board model: warm near-white volumes with ink lineweight edges */}
+      {/* Museum-board model: warm near-white volumes with ink lineweight edges.
+          The merged mass casts and receives the scene's soft key-light shadow,
+          which is what makes the model read as physical board, not flat CAD. */}
       {osm.fillGeometry && (
-        <mesh geometry={osm.fillGeometry}>
-          <meshStandardMaterial color="#faf8f2" roughness={0.9} metalness={0} />
+        <mesh geometry={osm.fillGeometry} castShadow receiveShadow>
+          <meshStandardMaterial color="#faf8f2" roughness={0.92} metalness={0} />
         </mesh>
       )}
       {osm.edgeGeometry && (
@@ -37,8 +39,8 @@ export function Buildings({ buildings }) {
       {/* Hand-drawn fill-ins: a warm orange-tinted board so they read as
           reconstructed geometry, with the same ink lineweight edges. */}
       {manual.fillGeometry && (
-        <mesh geometry={manual.fillGeometry}>
-          <meshStandardMaterial color="#f6e2cf" roughness={0.9} metalness={0} />
+        <mesh geometry={manual.fillGeometry} castShadow receiveShadow>
+          <meshStandardMaterial color="#f6e2cf" roughness={0.92} metalness={0} />
         </mesh>
       )}
       {manual.edgeGeometry && (

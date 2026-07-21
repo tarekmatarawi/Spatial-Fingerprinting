@@ -2,6 +2,16 @@ import { useMemo, useState, useEffect, useRef } from 'react'
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import { OrbitControls, Grid, GizmoHelper, GizmoViewport } from '@react-three/drei'
 import * as THREE from 'three'
+import {
+  LuClipboardList,
+  LuCompass,
+  LuCrosshair,
+  LuDownload,
+  LuNavigation,
+  LuPencilRuler,
+  LuRadar,
+  LuSave,
+} from 'react-icons/lu'
 import sites from '@/data/sites.json'
 import savedResults from '@/data/results.json'
 import storedViewerState from '@/data/viewer-state.json'
@@ -21,6 +31,10 @@ const UP = [0, 0, 1]
 // museum-board model: cream ground, ink lines, orange isovist, redline marker.
 const SCENE = {
   paper: '#f4f2ec',
+  // Sky treatment: a quiet cool-to-warm vertical gradient behind the model
+  // (the canvas renders with a transparent background so this shows through),
+  // ending on the paper tone so the ground plane meets the horizon invisibly.
+  sky: 'linear-gradient(to bottom, #e7ebe8 0%, #f1eee4 55%, #f4f2ec 100%)',
   gridCell: '#e4e0d3',
   gridSection: '#cbc5b5',
   plazaWash: '#f97316',
@@ -90,7 +104,7 @@ function readInitialState() {
   return readUrlState() ?? readStoredState() ?? { ...DEFAULT_STATE }
 }
 
-export function SiteViewer() {
+export function SiteViewer({ active = true }) {
   // Restore the last viewer state once (URL query first, then the persisted
   // viewer-state.json), so a shared link, a refresh, or a brand-new tab all
   // reopen on the same plaza/viewpoint. Computed once, reused as lazy state below.
@@ -429,17 +443,21 @@ export function SiteViewer() {
 
   return (
     <div className="relative h-full w-full">
+      {/* frameloop pauses while another phase is open — the WebGL scene (and
+          all viewer state) stays alive at zero render cost, resuming instantly
+          on return. shadows="soft" = PCFSoft for board-model shadow edges. */}
       <Canvas
         dpr={[1, 2]}
+        frameloop={active ? 'always' : 'never'}
+        shadows="soft"
         camera={{ up: UP, position: [0, -120, 120], fov: 45, near: 0.5, far: 8000 }}
-        style={{ background: SCENE.paper }}
+        style={{ background: SCENE.sky }}
       >
-        <hemisphereLight args={['#ffffff', '#eae6db', 1.0]} />
-        <directionalLight position={[180, -160, 400]} intensity={1.3} />
-        <directionalLight position={[-140, 120, 220]} intensity={0.35} />
+        <hemisphereLight args={['#fdfcf6', '#e2dccd', 0.85]} />
 
         {data && (
           <>
+            <SceneLighting centroid={data.centroid} radius={data.sceneRadius} />
             <CameraRig
               centroid={data.centroid}
               radius={data.boundaryRadius}
@@ -564,6 +582,40 @@ export function SiteViewer() {
   )
 }
 
+// Key light + fill, scaled to the selected site so the shadow camera always
+// covers the whole model at useful resolution. The sun sits south-west and
+// high (Z-up world), throwing long soft shadows to the north-east — the
+// museum-board look — while the fill keeps shaded faces readable.
+function SceneLighting({ centroid, radius }) {
+  const target = useMemo(() => new THREE.Object3D(), [])
+  const d = Math.max(radius * 1.25, 220)
+
+  return (
+    <group>
+      <primitive object={target} position={[centroid.x, centroid.y, 0]} />
+      <directionalLight
+        position={[centroid.x + d * 0.55, centroid.y - d * 0.7, d * 1.05]}
+        target={target}
+        intensity={1.2}
+        castShadow
+        shadow-mapSize={[2048, 2048]}
+        shadow-bias={-0.0004}
+        shadow-normalBias={0.5}
+        shadow-camera-left={-d}
+        shadow-camera-right={d}
+        shadow-camera-top={d}
+        shadow-camera-bottom={-d}
+        shadow-camera-near={0.5}
+        shadow-camera-far={d * 3.5}
+      />
+      <directionalLight
+        position={[centroid.x - d * 0.5, centroid.y + d * 0.45, d * 0.7]}
+        intensity={0.3}
+      />
+    </group>
+  )
+}
+
 // Frames the selected plaza in a north-up view (camera south of and above the
 // plaza, looking north) whenever the site changes or the reorient button is
 // pressed. North (+Y) ends up pointing away/up, east (+X) to the right.
@@ -594,6 +646,7 @@ function ClickPlane({ centroid, radius, onGroundDown, onGroundMove }) {
   return (
     <mesh
       position={[centroid.x, centroid.y, -0.05]}
+      receiveShadow
       onPointerDown={(e) => {
         if (e.button !== 0) return // left-click only; right/middle drive the camera
         e.stopPropagation()
@@ -602,8 +655,9 @@ function ClickPlane({ centroid, radius, onGroundDown, onGroundMove }) {
       onPointerMove={onGroundMove ? (e) => onGroundMove({ x: e.point.x, y: e.point.y }) : undefined}
     >
       <planeGeometry args={[size, size]} />
-      {/* Matches the canvas background so the plane's far edge is invisible */}
-      <meshStandardMaterial color={SCENE.paper} />
+      {/* Matches the sky gradient's horizon tone so the plane's far edge
+          dissolves instead of ending in a visible seam */}
+      <meshStandardMaterial color={SCENE.paper} roughness={1} />
     </mesh>
   )
 }
@@ -672,23 +726,45 @@ function DrawingOverlay({ points, cursor, onCloseVertex }) {
   )
 }
 
-// The plaza's open area, drawn as a subtle indigo wash so its extent is clear.
+// The plaza's open area: a subtle orange wash plus a crisp boundary line, so
+// the studied extent reads like a redlined figure on the board.
 function PlazaFloor({ boundary }) {
   const geometry = useMemo(() => {
     const shape = new THREE.Shape(boundary.map((p) => new THREE.Vector2(p.x, p.y)))
     return new THREE.ShapeGeometry(shape)
   }, [boundary])
 
+  const outline = useMemo(() => {
+    const pts = boundary.map((p) => new THREE.Vector3(p.x, p.y, 0.05))
+    pts.push(new THREE.Vector3(boundary[0].x, boundary[0].y, 0.05))
+    const g = new THREE.BufferGeometry()
+    g.setFromPoints(pts)
+    return g
+  }, [boundary])
+
+  useEffect(
+    () => () => {
+      geometry.dispose()
+      outline.dispose()
+    },
+    [geometry, outline]
+  )
+
   return (
-    <mesh geometry={geometry} position={[0, 0, 0.03]}>
-      <meshStandardMaterial
-        color={SCENE.plazaWash}
-        transparent
-        opacity={0.14}
-        side={THREE.DoubleSide}
-        depthWrite={false}
-      />
-    </mesh>
+    <group>
+      <mesh geometry={geometry} position={[0, 0, 0.03]} receiveShadow>
+        <meshStandardMaterial
+          color={SCENE.plazaWash}
+          transparent
+          opacity={0.13}
+          side={THREE.DoubleSide}
+          depthWrite={false}
+        />
+      </mesh>
+      <line geometry={outline}>
+        <lineBasicMaterial color={SCENE.plazaWash} transparent opacity={0.55} depthWrite={false} />
+      </line>
+    </group>
   )
 }
 
@@ -775,8 +851,9 @@ const Compass = ({ ref, onReorient }) => (
     </div>
     <button
       onClick={onReorient}
-      className="rounded-full border border-line-strong bg-paper/95 px-2.5 py-1 text-xs text-ink-muted shadow-sm transition-colors duration-150 hover:border-primary hover:text-primary outline-none focus-visible:ring-2 focus-visible:ring-primary-wash"
+      className="flex items-center gap-1.5 rounded-full border border-line-strong bg-paper/95 px-2.5 py-1 text-xs text-ink-muted shadow-sm transition-colors duration-150 hover:border-primary hover:text-primary outline-none focus-visible:ring-2 focus-visible:ring-primary-wash"
     >
+      <LuCompass aria-hidden className="h-3.5 w-3.5" />
       North-up view
     </button>
   </div>
@@ -790,8 +867,13 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, di
   const bearingDeg = direction != null ? Math.round(((direction * 180) / Math.PI + 360) % 360) : null
 
   return (
-    <div className="pointer-events-none absolute top-4 left-4 w-80 max-w-[calc(100%-2rem)] space-y-3">
-      <div className="pointer-events-auto rounded-xl border border-line bg-paper/95 p-4 shadow-sm backdrop-blur">
+    // The panel column caps just above the Saved-results bar and scrolls its
+    // own content when the stack outgrows the viewport (small screens, or a
+    // long drawn-buildings list) — the outer div stays pointer-transparent so
+    // the canvas still receives clicks beside/below the panels.
+    <div className="pointer-events-none absolute top-4 bottom-20 left-4 w-80 max-w-[calc(100%-2rem)]">
+      <div className="pointer-events-auto -mr-2 max-h-full space-y-3 overflow-y-auto overscroll-contain pr-2 pb-1">
+      <div className="rounded-xl border border-line bg-paper/95 p-4 shadow-sm backdrop-blur">
         <label className="mb-1 block font-mono text-xs text-ink-muted">Plaza</label>
         <select
           className="input w-full"
@@ -817,23 +899,32 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, di
       </div>
 
       <div className="pointer-events-auto rounded-xl border border-line bg-paper/95 p-4 text-sm shadow-sm backdrop-blur">
-        <p className="text-ink-muted">
+        <p className="flex items-start gap-2.5 text-ink-muted">
           {draw ? (
-            <>
-              <span className="font-medium text-ink">Drawing a building.</span> Click each
-              corner on the ground — see the panel below.
-            </>
+            <LuPencilRuler aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
           ) : stage === 'vantage' ? (
-            <>
-              <span className="font-medium text-ink">Click the ground</span> inside the
-              plaza to drop a viewpoint.
-            </>
+            <LuCrosshair aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
           ) : (
-            <>
-              <span className="font-medium text-ink">Click anywhere</span> to aim the 120°
-              view cone.
-            </>
+            <LuNavigation aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
           )}
+          <span>
+            {draw ? (
+              <>
+                <span className="font-medium text-ink">Drawing a building.</span> Click each
+                corner on the ground — see the panel below.
+              </>
+            ) : stage === 'vantage' ? (
+              <>
+                <span className="font-medium text-ink">Click the ground</span> inside the
+                plaza to drop a viewpoint.
+              </>
+            ) : (
+              <>
+                <span className="font-medium text-ink">Click anywhere</span> to aim the 120°
+                view cone.
+              </>
+            )}
+          </span>
         </p>
         {pick && (
           <div className="mt-2 rounded-lg bg-surface p-2.5 font-mono text-xs text-ink">
@@ -892,8 +983,9 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, di
         <div className="pointer-events-auto rounded-xl border border-line bg-paper/95 p-4 shadow-sm backdrop-blur">
           <button
             onClick={onSaveResult}
-            className="w-full rounded-full border border-primary bg-primary-wash px-3 py-2 text-sm font-medium text-primary-deep shadow-sm transition-colors duration-150 hover:bg-primary hover:text-white outline-none focus-visible:ring-2 focus-visible:ring-primary-wash"
+            className="flex w-full items-center justify-center gap-2 rounded-full border border-primary bg-primary-wash px-3 py-2 text-sm font-medium text-primary-deep shadow-sm transition-all duration-150 hover:bg-primary hover:text-white active:scale-[0.98] outline-none focus-visible:ring-2 focus-visible:ring-primary-wash"
           >
+            <LuSave aria-hidden className="h-4 w-4" />
             Save result
           </button>
           {saveError && <p className="mt-2 text-xs text-warn">{saveError}</p>}
@@ -923,6 +1015,7 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, di
           </button>
         </label>
       )}
+      </div>
     </div>
   )
 }
@@ -937,9 +1030,10 @@ function BuildingTool({ draw, note, onStart, onUndo, onSetHeight, onFinish, onCa
       <div className="pointer-events-auto rounded-xl border border-line bg-paper/95 p-4 shadow-sm backdrop-blur">
         <button
           onClick={onStart}
-          className="w-full rounded-full border border-line-strong bg-paper px-3 py-2 text-sm font-medium text-ink shadow-sm transition-colors duration-150 hover:border-primary hover:text-primary-deep outline-none focus-visible:ring-2 focus-visible:ring-primary-wash"
+          className="flex w-full items-center justify-center gap-2 rounded-full border border-line-strong bg-paper px-3 py-2 text-sm font-medium text-ink shadow-sm transition-all duration-150 hover:border-primary hover:text-primary-deep active:scale-[0.98] outline-none focus-visible:ring-2 focus-visible:ring-primary-wash"
         >
-          + Add a missing building
+          <LuPencilRuler aria-hidden className="h-4 w-4" />
+          Add a missing building
         </button>
         <p className="mt-2 text-xs text-ink-faint">
           Draw a footprint for a building absent from OSM, set its height, and it joins the model
@@ -1056,8 +1150,11 @@ function bearingLabel(deg) {
 function MetricsPanel({ result }) {
   return (
     <div className="pointer-events-auto rounded-xl border border-line bg-paper/95 p-4 text-sm shadow-sm backdrop-blur">
-      <p className="mb-2 flex items-baseline justify-between border-b border-line pb-1.5">
-        <span className="text-sm font-semibold text-ink">Isovist metrics</span>
+      <p className="mb-2 flex items-center justify-between border-b border-line pb-1.5">
+        <span className="flex items-center gap-2 text-sm font-semibold text-ink">
+          <LuRadar aria-hidden className="h-4 w-4 text-primary" />
+          Isovist metrics
+        </span>
         <span className="font-mono text-xs text-primary">live</span>
       </p>
       <dl className="divide-y divide-line/60 font-mono text-xs text-ink">
@@ -1145,9 +1242,10 @@ function SavedResultsPanel({ results, onDelete, onLoad }) {
         <div className="flex items-center justify-between gap-2 px-4 py-2.5">
           <button
             onClick={() => setOpen((v) => !v)}
-            className="flex items-baseline gap-2 outline-none focus-visible:ring-2 focus-visible:ring-primary-wash"
+            className="flex items-center gap-2 outline-none focus-visible:ring-2 focus-visible:ring-primary-wash"
           >
             <span className="font-mono text-xs text-ink-muted">{open ? '▾' : '▸'}</span>
+            <LuClipboardList aria-hidden className="h-4 w-4 text-primary" />
             <span className="text-sm font-semibold text-ink">Saved results</span>
             <span className="font-mono text-xs text-ink-faint">{results.length}</span>
           </button>
@@ -1167,8 +1265,9 @@ function SavedResultsPanel({ results, onDelete, onLoad }) {
               </select>
               <button
                 onClick={() => exportResultsCsv(results)}
-                className="rounded-full border border-line-strong bg-paper px-2.5 py-1 text-xs text-ink-muted shadow-sm transition-colors duration-150 hover:border-primary hover:text-primary outline-none focus-visible:ring-2 focus-visible:ring-primary-wash"
+                className="flex items-center gap-1.5 rounded-full border border-line-strong bg-paper px-2.5 py-1 text-xs text-ink-muted shadow-sm transition-colors duration-150 hover:border-primary hover:text-primary outline-none focus-visible:ring-2 focus-visible:ring-primary-wash"
               >
+                <LuDownload aria-hidden className="h-3.5 w-3.5" />
                 Export CSV
               </button>
             </div>

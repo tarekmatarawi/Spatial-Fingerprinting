@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect, useRef, useCallback } from 'react'
+import { LuCheck, LuListChecks, LuShieldCheck, LuTimer } from 'react-icons/lu'
 import sites from '@/data/sites.json'
 import { assembleSurvey, SURVEY_LENGTH } from '@/lib/triplets'
 
@@ -12,11 +13,13 @@ import { assembleSurvey, SURVEY_LENGTH } from '@/lib/triplets'
 const INSTRUCTION =
   'Which two of these three spaces feel most similar in terms of how open, enclosed, or spatially complex they feel? Judge by the sense of space — not architectural style or surface materials.'
 
+const AGE_GROUPS = ['18–24', '25–34', '35–44', '45–54', '55–64', '65+']
+
 const siteById = new Map(sites.map((s) => [s.id, s]))
 const ALL_SITE_IDS = sites.map((s) => s.id)
 
 export function SurveyPage() {
-  const [stage, setStage] = useState('intro') // intro | survey | background | done
+  const [stage, setStage] = useState('intro') // intro | survey | about | done
   const [index, setIndex] = useState(0)
   const [responses, setResponses] = useState([])
   const [submitState, setSubmitState] = useState('idle') // idle | saving | saved | failed
@@ -27,13 +30,14 @@ export function SurveyPage() {
   const survey = useMemo(() => assembleSurvey(ALL_SITE_IDS, participantId), [participantId])
 
   const submit = useCallback(
-    async (background) => {
+    async (background, ageGroup) => {
       setSubmitState('saving')
       const payload = {
         participant_id: participantId,
         started_at: startedAt,
         finished_at: new Date().toISOString(),
         background, // 'yes' | 'no' | 'undisclosed'
+        age_group: ageGroup ?? null, // optional bracket, e.g. '25–34'
         responses,
       }
       try {
@@ -70,7 +74,7 @@ export function SurveyPage() {
       },
     ])
     if (index + 1 < survey.length) setIndex((i) => i + 1)
-    else setStage('background')
+    else setStage('about')
   }
 
   return (
@@ -85,7 +89,7 @@ export function SurveyPage() {
           onChoice={handleChoice}
         />
       )}
-      {stage === 'background' && <Background onAnswer={submit} pending={submitState === 'saving'} />}
+      {stage === 'about' && <About onSubmit={submit} pending={submitState === 'saving'} />}
       {stage === 'done' && <Done submitState={submitState} />}
     </div>
   )
@@ -96,7 +100,7 @@ export function SurveyPage() {
 function Intro({ onBegin }) {
   return (
     <Frame>
-      <div className="mx-auto w-full max-w-xl">
+      <div className="mx-auto w-full max-w-xl animate-page-in">
         <p className="font-mono text-xs font-medium tracking-wide text-primary">
           Spatial perception study
         </p>
@@ -115,15 +119,24 @@ function Intro({ onBegin }) {
 
         <dl className="mt-7 flex flex-wrap gap-x-10 gap-y-3 font-mono text-xs text-ink-faint">
           <div>
-            <dt className="text-ink-muted">Rounds</dt>
+            <dt className="flex items-center gap-1.5 text-ink-muted">
+              <LuListChecks aria-hidden className="h-3.5 w-3.5" />
+              Rounds
+            </dt>
             <dd className="mt-0.5 text-sm text-ink">{SURVEY_LENGTH} comparisons</dd>
           </div>
           <div>
-            <dt className="text-ink-muted">Time</dt>
+            <dt className="flex items-center gap-1.5 text-ink-muted">
+              <LuTimer aria-hidden className="h-3.5 w-3.5" />
+              Time
+            </dt>
             <dd className="mt-0.5 text-sm text-ink">about 5 minutes</dd>
           </div>
           <div>
-            <dt className="text-ink-muted">Sign-in</dt>
+            <dt className="flex items-center gap-1.5 text-ink-muted">
+              <LuShieldCheck aria-hidden className="h-3.5 w-3.5" />
+              Sign-in
+            </dt>
             <dd className="mt-0.5 text-sm text-ink">none — fully anonymous</dd>
           </div>
         </dl>
@@ -131,7 +144,7 @@ function Intro({ onBegin }) {
         <div className="mt-9">
           <button
             onClick={onBegin}
-            className="w-full rounded-full bg-primary px-8 py-3 text-base font-medium text-white shadow-sm outline-none transition-colors duration-150 hover:bg-primary-deep focus-visible:ring-2 focus-visible:ring-primary-wash focus-visible:ring-offset-2 focus-visible:ring-offset-bg sm:w-auto"
+            className="w-full rounded-full bg-primary px-8 py-3 text-base font-medium text-white shadow-sm outline-none transition-all duration-150 hover:bg-primary-deep active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary-wash focus-visible:ring-offset-2 focus-visible:ring-offset-bg sm:w-auto"
           >
             Begin
           </button>
@@ -183,8 +196,10 @@ function Round({ triplet, position, total, onChoice }) {
   return (
     <Frame>
       {/* Wide container so the three street views dominate the screen on any
-          monitor; on phones they stack full-width instead of shrinking. */}
-      <div className="mx-auto flex w-full max-w-6xl flex-col 2xl:max-w-[88rem]" ref={containerRef}>
+          monitor; on phones they stack full-width instead of shrinking. Each
+          round is keyed, so this animates in as one unit — a soft page turn
+          rather than a hard cut. */}
+      <div className="mx-auto flex w-full max-w-6xl animate-page-in flex-col 2xl:max-w-[88rem]" ref={containerRef}>
         {/* Progress */}
         <div className="flex items-center gap-4">
           <div className="h-1 flex-1 overflow-hidden rounded-full bg-line">
@@ -213,7 +228,6 @@ function Round({ triplet, position, total, onChoice }) {
             <PlazaCard
               key={i}
               site={siteById.get(id)}
-              panelIndex={i}
               selected={selected.includes(i)}
               order={selected.indexOf(i)}
               onToggle={() => toggle(i)}
@@ -231,7 +245,7 @@ function Round({ triplet, position, total, onChoice }) {
           <button
             onClick={confirm}
             disabled={!ready}
-            className="w-full rounded-full bg-primary px-8 py-3 text-base font-medium text-white shadow-sm outline-none transition-colors duration-150 enabled:hover:bg-primary-deep disabled:cursor-not-allowed disabled:bg-line-strong disabled:text-ink-faint focus-visible:ring-2 focus-visible:ring-primary-wash focus-visible:ring-offset-2 focus-visible:ring-offset-bg sm:w-auto"
+            className="w-full rounded-full bg-primary px-8 py-3 text-base font-medium text-white shadow-sm outline-none transition-all duration-150 enabled:hover:bg-primary-deep enabled:active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-line-strong disabled:text-ink-faint focus-visible:ring-2 focus-visible:ring-primary-wash focus-visible:ring-offset-2 focus-visible:ring-offset-bg sm:w-auto"
           >
             {position === total ? 'Finish' : 'Next'}
           </button>
@@ -241,13 +255,13 @@ function Round({ triplet, position, total, onChoice }) {
   )
 }
 
-function PlazaCard({ site, panelIndex, selected, order, onToggle }) {
+function PlazaCard({ site, selected, order, onToggle }) {
   return (
     <button
       type="button"
       aria-pressed={selected}
       onClick={onToggle}
-      className={`group relative overflow-hidden rounded-2xl border text-left outline-none transition-all duration-150 focus-visible:ring-2 focus-visible:ring-primary-wash focus-visible:ring-offset-2 focus-visible:ring-offset-bg ${
+      className={`group relative overflow-hidden rounded-2xl border text-left outline-none transition-all duration-150 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-primary-wash focus-visible:ring-offset-2 focus-visible:ring-offset-bg ${
         selected
           ? 'border-accent ring-2 ring-accent'
           : 'border-line hover:border-line-strong'
@@ -262,7 +276,7 @@ function PlazaCard({ site, panelIndex, selected, order, onToggle }) {
       />
       <span
         aria-hidden
-        className={`absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full font-mono text-sm font-medium shadow-sm transition-all duration-150 ${
+        className={`absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full font-mono text-sm font-medium shadow-sm transition-all duration-200 ease-out ${
           selected ? 'scale-100 bg-primary text-white' : 'scale-0 bg-primary text-white'
         }`}
       >
@@ -280,7 +294,7 @@ function PlazaCard({ site, panelIndex, selected, order, onToggle }) {
 
 // A Street View photo when present; otherwise a dignified plan-view placeholder
 // (plaza name over a faint drafting glyph) instead of a broken-image icon, so
-// the survey is fully usable before the 18 photos are added.
+// the survey is fully usable before all site photos are added.
 function PlazaImage({ site }) {
   const [failed, setFailed] = useState(false)
   const src = site?.street_view_image
@@ -327,48 +341,94 @@ function PlanGlyph() {
   )
 }
 
-// ---- Background -------------------------------------------------------------
+// ---- About you --------------------------------------------------------------
 
-function Background({ onAnswer, pending }) {
+// Two quick demographic questions after the triplets: professional background
+// (as before) and an optional age bracket — optional so it never costs a
+// completed survey.
+function About({ onSubmit, pending }) {
+  const [background, setBackground] = useState(null) // 'yes' | 'no' | 'undisclosed'
+  const [ageGroup, setAgeGroup] = useState(null) // bracket string or null
+
   return (
     <Frame>
-      <div className="mx-auto w-full max-w-lg">
-        <p className="font-mono text-xs font-medium tracking-wide text-primary">One last question</p>
+      <div className="mx-auto w-full max-w-lg animate-page-in">
+        <p className="font-mono text-xs font-medium tracking-wide text-primary">Almost done</p>
         <h2 className="mt-3 text-pretty text-2xl font-semibold tracking-tight text-ink">
-          Do you have a background in architecture, urban design, or planning?
+          Two quick questions about you
         </h2>
         <p className="mt-3 text-base text-ink-muted">
-          Optional. It helps us understand how training shapes spatial judgement.
+          They help us understand how training and age shape spatial judgement.
         </p>
 
-        <div className="mt-8 flex flex-wrap gap-3">
-          <BackgroundButton disabled={pending} onClick={() => onAnswer('yes')}>
-            Yes
-          </BackgroundButton>
-          <BackgroundButton disabled={pending} onClick={() => onAnswer('no')}>
-            No
-          </BackgroundButton>
-        </div>
+        <fieldset className="mt-8">
+          <legend className="text-sm font-medium text-ink">
+            Do you have a background in architecture, urban design, or planning?
+          </legend>
+          <div className="mt-3 flex flex-wrap gap-2.5">
+            <Chip selected={background === 'yes'} disabled={pending} onClick={() => setBackground('yes')}>
+              Yes
+            </Chip>
+            <Chip selected={background === 'no'} disabled={pending} onClick={() => setBackground('no')}>
+              No
+            </Chip>
+            <Chip
+              selected={background === 'undisclosed'}
+              disabled={pending}
+              onClick={() => setBackground('undisclosed')}
+            >
+              Prefer not to say
+            </Chip>
+          </div>
+        </fieldset>
 
-        <button
-          disabled={pending}
-          onClick={() => onAnswer('undisclosed')}
-          className="mt-6 self-start text-sm text-ink-faint underline-offset-4 outline-none transition-colors duration-150 hover:text-ink-muted hover:underline focus-visible:ring-2 focus-visible:ring-primary-wash disabled:opacity-50"
-        >
-          Prefer not to say
-        </button>
+        <fieldset className="mt-7">
+          <legend className="text-sm font-medium text-ink">
+            Age group <span className="font-normal text-ink-faint">(optional)</span>
+          </legend>
+          <div className="mt-3 flex flex-wrap gap-2.5">
+            {AGE_GROUPS.map((g) => (
+              <Chip
+                key={g}
+                selected={ageGroup === g}
+                disabled={pending}
+                onClick={() => setAgeGroup((prev) => (prev === g ? null : g))}
+              >
+                {g}
+              </Chip>
+            ))}
+          </div>
+        </fieldset>
+
+        <div className="mt-9 flex items-center gap-4">
+          <button
+            disabled={!background || pending}
+            onClick={() => onSubmit(background, ageGroup)}
+            className="w-full rounded-full bg-primary px-8 py-3 text-base font-medium text-white shadow-sm outline-none transition-all duration-150 enabled:hover:bg-primary-deep enabled:active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-line-strong disabled:text-ink-faint focus-visible:ring-2 focus-visible:ring-primary-wash focus-visible:ring-offset-2 focus-visible:ring-offset-bg sm:w-auto"
+          >
+            {pending ? 'Saving…' : 'Finish'}
+          </button>
+        </div>
       </div>
     </Frame>
   )
 }
 
-function BackgroundButton({ children, onClick, disabled }) {
+// Selectable answer chip with a clear selected state (filled, with a check).
+function Chip({ children, selected, disabled, onClick }) {
   return (
     <button
-      onClick={onClick}
+      type="button"
+      aria-pressed={selected}
       disabled={disabled}
-      className="min-w-28 rounded-full border border-line-strong bg-paper px-7 py-3 text-base font-medium text-ink shadow-sm outline-none transition-colors duration-150 hover:border-primary hover:bg-primary-wash hover:text-primary-deep focus-visible:ring-2 focus-visible:ring-primary-wash disabled:opacity-50"
+      onClick={onClick}
+      className={`inline-flex min-w-16 items-center justify-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium shadow-sm outline-none transition-all duration-150 active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-primary-wash disabled:opacity-50 ${
+        selected
+          ? 'border-primary bg-primary text-white'
+          : 'border-line-strong bg-paper text-ink hover:border-primary hover:text-primary-deep'
+      }`}
     >
+      {selected && <LuCheck aria-hidden className="h-4 w-4" />}
       {children}
     </button>
   )
@@ -379,8 +439,8 @@ function BackgroundButton({ children, onClick, disabled }) {
 function Done({ submitState }) {
   return (
     <Frame>
-      <div className="mx-auto w-full max-w-md text-center">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary-wash">
+      <div className="mx-auto w-full max-w-md animate-page-in text-center">
+        <div className="animate-pop-in mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary-wash">
           <svg viewBox="0 0 24 24" className="h-6 w-6 text-primary" fill="none" stroke="currentColor">
             <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
