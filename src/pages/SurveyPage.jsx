@@ -3,6 +3,7 @@ import { LuCheck, LuListChecks, LuShieldCheck, LuTimer } from 'react-icons/lu'
 import sites from '@/data/sites.json'
 import { activeSites } from '@/lib/site'
 import { assembleSurvey, SURVEY_LENGTH } from '@/lib/triplets'
+import { SURVEY_ENDPOINT_URL } from '@/lib/surveyEndpoint'
 
 // Phase 4 — the participant-facing triplet survey. This is the one surface in
 // the platform that is NOT instrument-grade: it strips down to a single,
@@ -27,7 +28,7 @@ export function SurveyPage() {
   const [stage, setStage] = useState('intro') // intro | survey | about | done
   const [index, setIndex] = useState(0)
   const [responses, setResponses] = useState([])
-  const [submitState, setSubmitState] = useState('idle') // idle | saving | saved | failed
+  const [submitState, setSubmitState] = useState('idle') // idle | saving | saved | failed | unconfigured
 
   // One stable participant id + survey plan for the whole session.
   const participantId = useMemo(() => crypto.randomUUID(), [])
@@ -46,13 +47,33 @@ export function SurveyPage() {
         responses,
       }
       try {
-        const res = await fetch('/__save-survey', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        })
-        if (!res.ok) throw new Error(String(res.status))
-        setSubmitState('saved')
+        if (import.meta.env.DEV) {
+          // Local dev keeps writing straight to src/data/survey-responses.json
+          // via the Vite-only endpoint, so testing never touches the real
+          // Google Sheet participants' answers land in once deployed.
+          const res = await fetch('/__save-survey', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          })
+          if (!res.ok) throw new Error(String(res.status))
+          setSubmitState('saved')
+        } else if (SURVEY_ENDPOINT_URL) {
+          // GitHub Pages serves static files only, so the deployed survey posts
+          // to a Google Apps Script Web App instead (see
+          // docs/survey-storage-setup.md). text/plain sidesteps a CORS
+          // preflight that Apps Script doesn't handle — the script still reads
+          // the body as JSON regardless of this header.
+          const res = await fetch(SURVEY_ENDPOINT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload),
+          })
+          if (!res.ok) throw new Error(String(res.status))
+          setSubmitState('saved')
+        } else {
+          setSubmitState('unconfigured')
+        }
       } catch {
         setSubmitState('failed')
       }
@@ -476,8 +497,8 @@ function Done({ submitState }) {
         </div>
         <h2 className="mt-6 text-2xl font-semibold tracking-tight text-ink">Thank you.</h2>
         <p className="mt-3 text-base leading-relaxed text-ink-muted">
-          {submitState === 'failed'
-            ? 'Your answers were recorded on this device, but couldn’t reach the server. If you’re testing locally, that’s expected.'
+          {submitState === 'failed' || submitState === 'unconfigured'
+            ? 'Something went wrong and your answers could not be saved. Please let the researcher know before closing this tab.'
             : 'Your responses have been recorded. They’ll help test how the geometry of a public square shapes the way it feels.'}
         </p>
         <p className="mt-8 font-mono text-xs text-ink-faint">You can close this tab.</p>
