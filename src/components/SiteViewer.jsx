@@ -15,7 +15,7 @@ import {
 import sites from '@/data/sites.json'
 import savedResults from '@/data/results.json'
 import storedViewerState from '@/data/viewer-state.json'
-import { projectSite, pointInPolygon } from '@/lib/site'
+import { projectSite, pointInPolygon, isSiteActive } from '@/lib/site'
 import { castIsovist, bearingTo } from '@/lib/isovist'
 import { Buildings } from './Buildings'
 import { IsovistOverlay } from './IsovistOverlay'
@@ -880,9 +880,13 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, di
           value={selectedId}
           onChange={(e) => onSelect(e.target.value)}
         >
+          {/* Excluded sites stay measurable here — this is the researcher's own
+              instrument — but are labelled so a reading is never taken for part
+              of the study by mistake. */}
           {sites.map((s) => (
             <option key={s.id} value={s.id}>
               {s.name} — {s.city}
+              {isSiteActive(s) ? '' : ' (excluded)'}
             </option>
           ))}
         </select>

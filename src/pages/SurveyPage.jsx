@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect, useRef, useCallback } from 'react'
 import { LuCheck, LuListChecks, LuShieldCheck, LuTimer } from 'react-icons/lu'
 import sites from '@/data/sites.json'
+import { activeSites } from '@/lib/site'
 import { assembleSurvey, SURVEY_LENGTH } from '@/lib/triplets'
 
 // Phase 4 — the participant-facing triplet survey. This is the one surface in
@@ -16,7 +17,11 @@ const INSTRUCTION =
 const AGE_GROUPS = ['18–24', '25–34', '35–44', '45–54', '55–64', '65+']
 
 const siteById = new Map(sites.map((s) => [s.id, s]))
-const ALL_SITE_IDS = sites.map((s) => s.id)
+// Only sites still in the study are eligible for triplets. A plaza switched to
+// "excluded" in the register keeps its geometry and photo but never reaches a
+// participant. Three is the floor — a triplet needs three distinct plazas.
+const ALL_SITE_IDS = activeSites(sites).map((s) => s.id)
+const ENOUGH_SITES = ALL_SITE_IDS.length >= 3
 
 export function SurveyPage() {
   const [stage, setStage] = useState('intro') // intro | survey | about | done
@@ -75,6 +80,30 @@ export function SurveyPage() {
     ])
     if (index + 1 < survey.length) setIndex((i) => i + 1)
     else setStage('about')
+  }
+
+  // Every hook above runs unconditionally; this bail-out is safe here. Without
+  // three active plazas there is no triplet to show, so the participant sees a
+  // plain "not open yet" rather than a broken round.
+  if (!ENOUGH_SITES) {
+    return (
+      <div className="h-full w-full overflow-y-auto bg-bg text-ink">
+        <Frame>
+          <div className="mx-auto w-full max-w-xl animate-page-in">
+            <p className="font-mono text-xs font-medium tracking-wide text-primary">
+              Spatial perception study
+            </p>
+            <h1 className="mt-3 text-pretty text-2xl font-semibold tracking-tight text-ink">
+              This study isn’t open yet
+            </h1>
+            <p className="mt-3 leading-relaxed text-ink-muted">
+              The comparison needs at least three squares available before it can run. Please check
+              back later.
+            </p>
+          </div>
+        </Frame>
+      </div>
+    )
   }
 
   return (

@@ -3,6 +3,7 @@ import sites from '@/data/sites.json'
 import results from '@/data/results.json'
 import responses from '@/data/survey-responses.json'
 import { PHASES } from '@/lib/phases'
+import { activeSites } from '@/lib/site'
 import { FigureGround } from '@/components/FigureGround'
 
 // Researcher-facing landing: the platform's name, its one-line claim, a live
@@ -15,12 +16,18 @@ const HERO_SITE =
   sites[0]
 
 export function HomePage() {
-  const buildingCount = sites.reduce((sum, s) => sum + s.buildings.length, 0)
+  // Headline counts describe the study, so they follow the active sites only —
+  // a plaza excluded in the register still has data but isn't part of the work.
+  const studySites = activeSites(sites)
+  const buildingCount = studySites.reduce((sum, s) => sum + s.buildings.length, 0)
+  const excludedCount = sites.length - studySites.length
 
   // Live status per station, from the same JSON the tools read — the landing
   // reports the actual state of the study, not marketing copy.
   const status = {
-    sites: `${sites.length} sites · ${buildingCount.toLocaleString()} buildings entered`,
+    sites: `${studySites.length} sites · ${buildingCount.toLocaleString()} buildings entered${
+      excludedCount > 0 ? ` · ${excludedCount} excluded` : ''
+    }`,
     viewer: `${results.length} saved isovist ${results.length === 1 ? 'reading' : 'readings'}`,
     survey: `${responses.length} ${responses.length === 1 ? 'response' : 'responses'} collected`,
     results: 'weight fitting unlocks after the survey',
@@ -81,7 +88,7 @@ export function HomePage() {
                 of Public Plazas.
               </p>
               <p className="mt-2 font-mono text-xs text-ink-faint">
-                {sites.length} European plazas · 4 isovist metrics · triplet survey ·
+                {studySites.length} European plazas · 4 isovist metrics · triplet survey ·
                 maximum-likelihood weighting
               </p>
             </div>

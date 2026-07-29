@@ -3,6 +3,8 @@ import {
   LuCamera,
   LuCircleAlert,
   LuCircleCheck,
+  LuEye,
+  LuEyeOff,
   LuLandPlot,
   LuPlus,
   LuSave,
@@ -10,7 +12,7 @@ import {
 } from 'react-icons/lu'
 import initialSites from '@/data/sites.json'
 import { parseBuildingGeoJSON, parseBoundaryGeoJSON } from '@/lib/geojson'
-import { effectiveHeight, heightSource } from '@/lib/site'
+import { effectiveHeight, heightSource, isSiteActive } from '@/lib/site'
 import { PHASES, phaseById } from '@/lib/phases'
 import { Button } from '@/components/ui/button'
 
@@ -46,6 +48,7 @@ function blankSite(existing) {
     default_viewpoint: null,
     street_view_image: null,
     default_height_m: DEFAULT_HEIGHT,
+    excluded: false,
   }
 }
 
@@ -60,6 +63,9 @@ export function AdminPage() {
   const [message, setMessage] = useState(null)
   const [dirty, setDirty] = useState(false)
   const [imageUpload, setImageUpload] = useState({ status: 'idle', error: null }) // idle | uploading | error
+  // Changes on every successful upload so the preview <img> re-fetches instead
+  // of showing the browser-cached copy at the (unchanged) filename.
+  const [imageBust, setImageBust] = useState(0)
   const [confirmingDelete, setConfirmingDelete] = useState(false)
 
   const site = sites[selectedIndex]
@@ -122,6 +128,7 @@ export function AdminPage() {
       const result = await response.json()
       if (!response.ok || !result.ok) throw new Error(result.error || `Upload failed (${response.status})`)
       updateSite({ street_view_image: result.path })
+      setImageBust(Date.now())
       setImageUpload({ status: 'idle', error: null })
     } catch (err) {
       setImageUpload({
@@ -210,6 +217,7 @@ export function AdminPage() {
   }
 
   const boundaryCount = sites.filter((s) => s.boundary).length
+  const excludedCount = sites.filter((s) => !isSiteActive(s)).length
   const isNewSite = site && site.buildings.length === 0 && site.center_lat == null
 
   return (
@@ -224,6 +232,7 @@ export function AdminPage() {
               <p className="truncate font-mono text-xs text-ink-muted">
                 {sites.length} {sites.length === 1 ? 'site' : 'sites'} · {boundaryCount} with
                 boundary
+                {excludedCount > 0 ? ` · ${excludedCount} excluded` : ''}
               </p>
             </div>
           </div>
@@ -241,8 +250,8 @@ export function AdminPage() {
                   i === selectedIndex ? 'bg-primary-wash text-primary-deep' : 'hover:bg-bg'
                 }`}
               >
-                <SiteThumb site={s} />
-                <span className="min-w-0 flex-1">
+                <SiteThumb site={s} bust={i === selectedIndex ? imageBust : 0} />
+                <span className={`min-w-0 flex-1 ${isSiteActive(s) ? '' : 'opacity-55'}`}>
                   <span className={`block truncate ${i === selectedIndex ? 'font-medium' : ''}`}>
                     {s.name || s.id || 'Untitled site'}
                   </span>
@@ -253,6 +262,7 @@ export function AdminPage() {
                   >
                     {s.city || '—'} · {s.buildings.length} bldg{s.buildings.length === 1 ? '' : 's'}
                     {s.boundary ? ' · ✓' : ''}
+                    {isSiteActive(s) ? '' : ' · excluded'}
                   </span>
                 </span>
               </button>
@@ -286,6 +296,27 @@ export function AdminPage() {
                     unsaved
                   </span>
                 )}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`gap-1.5 ${
+                    isSiteActive(site) ? 'text-ink-faint hover:text-ink' : 'text-warn hover:text-warn'
+                  }`}
+                  aria-pressed={!isSiteActive(site)}
+                  title={
+                    isSiteActive(site)
+                      ? 'Exclude this site from the survey and later stages'
+                      : 'Put this site back into the study'
+                  }
+                  onClick={() => updateSite({ excluded: isSiteActive(site) })}
+                >
+                  {isSiteActive(site) ? (
+                    <LuEye aria-hidden className="h-3.5 w-3.5" />
+                  ) : (
+                    <LuEyeOff aria-hidden className="h-3.5 w-3.5" />
+                  )}
+                  {isSiteActive(site) ? 'In study' : 'Excluded'}
+                </Button>
                 {confirmingDelete ? (
                   <span className="flex items-center gap-1.5">
                     <Button
@@ -317,6 +348,16 @@ export function AdminPage() {
                 </Button>
               </div>
             </div>
+
+            {!isSiteActive(site) && (
+              <div className="flex items-start gap-2.5 rounded-lg border border-warn/30 bg-warn-wash p-3 text-sm text-warn">
+                <LuEyeOff aria-hidden className="mt-0.5 h-4 w-4 shrink-0" />
+                <p>
+                  Excluded from the study. Its geometry and photo stay on file, but it is left out
+                  of the survey triplets and the site counts. Use “Excluded” above to put it back.
+                </p>
+              </div>
+            )}
 
             {message && (
               <div
@@ -417,8 +458,8 @@ export function AdminPage() {
                   <div className="flex items-start gap-3">
                     {site.street_view_image ? (
                       <img
-                        key={site.street_view_image}
-                        src={`${import.meta.env.BASE_URL}${site.street_view_image.replace(/^\//, '')}`}
+                        key={`${site.street_view_image}:${imageBust}`}
+                        src={`${import.meta.env.BASE_URL}${site.street_view_image.replace(/^\//, '')}${imageBust ? `?v=${imageBust}` : ''}`}
                         alt=""
                         className="h-16 w-24 shrink-0 rounded border border-line-strong object-cover"
                         onError={(e) => (e.currentTarget.style.visibility = 'hidden')}
@@ -582,26 +623,54 @@ export function AdminPage() {
 }
 
 // Register thumbnail: the site's Street View photo, or a small drafting glyph
-// placeholder for sites without one yet.
-function SiteThumb({ site }) {
+// placeholder for sites without one yet. An excluded site keeps its picture but
+// is greyed back and struck corner-to-corner — the register's shorthand for
+// "still on file, not in the study".
+function SiteThumb({ site, bust = 0 }) {
+  const excluded = !isSiteActive(site)
   const src = site.street_view_image
-    ? import.meta.env.BASE_URL + site.street_view_image.replace(/^\//, '')
+    ? import.meta.env.BASE_URL +
+      site.street_view_image.replace(/^\//, '') +
+      (bust ? `?v=${bust}` : '')
     : null
-  if (!src) {
-    return (
-      <span className="flex h-11 w-14 shrink-0 items-center justify-center rounded border border-dashed border-line-strong bg-paper text-ink-faint">
-        <LuCamera aria-hidden className="h-3.5 w-3.5" />
-      </span>
-    )
-  }
+
   return (
-    <img
-      src={src}
-      alt=""
-      loading="lazy"
-      onError={(e) => (e.currentTarget.style.visibility = 'hidden')}
-      className="h-11 w-14 shrink-0 rounded border border-line-strong object-cover"
-    />
+    <span className="relative block h-11 w-14 shrink-0">
+      <span className={`block h-full w-full ${excluded ? 'opacity-35 grayscale' : ''}`}>
+        {src ? (
+          <img
+            key={src}
+            src={src}
+            alt=""
+            loading="lazy"
+            onError={(e) => (e.currentTarget.style.visibility = 'hidden')}
+            className="h-full w-full rounded border border-line-strong object-cover"
+          />
+        ) : (
+          <span className="flex h-full w-full items-center justify-center rounded border border-dashed border-line-strong bg-paper text-ink-faint">
+            <LuCamera aria-hidden className="h-3.5 w-3.5" />
+          </span>
+        )}
+      </span>
+      {excluded && (
+        <svg
+          viewBox="0 0 56 44"
+          preserveAspectRatio="none"
+          aria-hidden
+          className="pointer-events-none absolute inset-0 h-full w-full text-redline"
+        >
+          <line
+            x1="0"
+            y1="44"
+            x2="56"
+            y2="0"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+      )}
+    </span>
   )
 }
 

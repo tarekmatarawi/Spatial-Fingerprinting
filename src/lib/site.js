@@ -16,6 +16,18 @@ export function effectiveHeight(building, site, fallback = FALLBACK_HEIGHT) {
   return fallback
 }
 
+// A site can be parked in the register without being deleted: `excluded: true`
+// keeps its geometry and photo on file but drops it from every later stage —
+// survey triplets and the headline counts. A missing flag means active, so
+// existing sites.json files keep working untouched.
+export function isSiteActive(site) {
+  return site?.excluded !== true
+}
+
+export function activeSites(sites) {
+  return (sites ?? []).filter(isSiteActive)
+}
+
 // Where the effective height came from — used to label rows in the admin list.
 export function heightSource(building) {
   const override = building.override_height_m
