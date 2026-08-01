@@ -353,7 +353,7 @@ function PlazaImage({ site }) {
 
   if (!src || failed) {
     return (
-      <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-surface">
+      <div className="relative flex aspect-[3/2] items-center justify-center overflow-hidden bg-surface">
         <PlanGlyph />
         <span className="relative px-4 text-center text-sm font-medium text-ink-muted">
           {site?.name ?? 'Unknown square'}
@@ -363,13 +363,17 @@ function PlazaImage({ site }) {
   }
 
   return (
-    <div className="aspect-[4/3] overflow-hidden bg-surface">
+    <div className="aspect-[3/2] overflow-hidden bg-surface">
+      {/* object-bottom pins the photo's base to the frame's lower edge, so a
+          crop always eats sky rather than the plaza floor — the ground plane
+          and building bases carry the spatial cues participants judge by. The
+          hover scale grows from that same edge to keep the base planted. */}
       <img
         src={src}
         alt={`View across ${site?.name}, ${site?.city}`}
         loading="lazy"
         onError={() => setFailed(true)}
-        className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
+        className="h-full w-full origin-bottom object-cover object-bottom transition-transform duration-300 ease-out group-hover:scale-[1.03]"
       />
     </div>
   )

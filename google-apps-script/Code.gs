@@ -8,6 +8,22 @@
 
 const SHEET_NAME = 'Responses'
 
+// The readable date columns are written in the researcher's own timezone so the
+// Sheet can be scanned at a glance. Utilities.formatDate resolves DST for the
+// actual date, so summer rows read +02:00 and winter rows +01:00 automatically.
+// The untouched UTC originals stay inside payload_json — that is what the app
+// and the thesis analysis read, so comparisons and durations remain on one
+// absolute scale regardless of where a participant sat.
+const DISPLAY_TIMEZONE = 'Europe/Berlin'
+const DISPLAY_FORMAT = 'yyyy-MM-dd HH:mm:ss'
+
+function toLocal(isoString) {
+  if (!isoString) return ''
+  const date = new Date(isoString)
+  if (isNaN(date.getTime())) return ''
+  return Utilities.formatDate(date, DISPLAY_TIMEZONE, DISPLAY_FORMAT)
+}
+
 // A long random string only you and the sync script know. Protects doGet
 // (which returns every participant's data) from being readable by anyone who
 // finds the URL. Generate one yourself — do not reuse this placeholder.
@@ -22,10 +38,10 @@ function doPost(e) {
   const responseCount = Array.isArray(payload.responses) ? payload.responses.length : 0
 
   sheet.appendRow([
-    new Date().toISOString(),
+    toLocal(new Date().toISOString()),
     payload.participant_id || '',
-    payload.started_at || '',
-    payload.finished_at || '',
+    toLocal(payload.started_at),
+    toLocal(payload.finished_at),
     payload.background || '',
     payload.age_group || '',
     responseCount,

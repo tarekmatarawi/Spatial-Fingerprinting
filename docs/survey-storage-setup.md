@@ -21,6 +21,8 @@ GitHub Pages deployment changes.
 
 That's it for the spreadsheet itself — the script fills in every row below automatically.
 
+> **On times:** the three date columns are written in Berlin time (`Europe/Berlin`, DST handled automatically) so the Sheet reads naturally at a glance. The original UTC values are preserved untouched inside `payload_json` — that's what the app and your analysis read, keeping every participant on one absolute scale. To use a different timezone, change `DISPLAY_TIMEZONE` at the top of `Code.gs`.
+
 ---
 
 ### Step 2: Add the script
