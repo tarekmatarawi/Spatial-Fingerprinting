@@ -12,6 +12,14 @@ import {
 import responses from '@/data/survey-responses.json'
 import isovistReadings from '@/data/results.json'
 import { phaseById } from '@/lib/phases'
+import { SURVEY_LENGTH } from '@/lib/triplets'
+import {
+  recordAttentionCheckPassed,
+  sessionStatus,
+  STATUS_ABANDONED,
+  STATUS_COMPLETED,
+  STATUS_LABELS,
+} from '@/lib/session'
 
 // The researcher's command center: survey response quality today, with clearly
 // labeled berths for the Phase 5/6 analyses (fitted weights, hypothesis tests,
@@ -19,11 +27,11 @@ import { phaseById } from '@/lib/phases'
 // Reads src/data/survey-responses.json — the same file the dev-server endpoint
 // appends to — so it's current on every reload while collecting locally.
 
-// An attention check repeats one plaza twice; a pass is choosing that pair,
-// which stores as a chosen_pair of two identical ids.
+// Sessions are saved after every answer, so a record here may be a survey still
+// being taken, one someone walked away from, or a finished one — sessionStatus
+// tells them apart (see src/lib/session.js). Partial records are kept and shown,
+// never discarded; they're just labelled.
 function participantStats(record) {
-  const checks = (record.responses ?? []).filter((r) => r.is_attention_check)
-  const passed = checks.filter((r) => r.chosen_pair?.[0] === r.chosen_pair?.[1]).length
   const started = new Date(record.started_at).getTime()
   const finished = new Date(record.finished_at).getTime()
   const durationS =
@@ -33,8 +41,9 @@ function participantStats(record) {
   return {
     id: record.participant_id,
     answered: (record.responses ?? []).length,
-    checks: checks.length,
-    passed,
+    // true / false / null — null while the mid-survey check is still ahead.
+    attentionPassed: recordAttentionCheckPassed(record),
+    status: sessionStatus(record),
     durationS,
     background: record.background ?? 'undisclosed',
     ageGroup: record.age_group ?? null,
@@ -66,22 +75,33 @@ export function ResultsPage() {
   const participants = responses.map(participantStats)
 
   const totalAnswers = participants.reduce((s, p) => s + p.answered, 0)
-  const totalChecks = participants.reduce((s, p) => s + p.checks, 0)
-  const totalPassed = participants.reduce((s, p) => s + p.passed, 0)
-  const passRate = totalChecks ? Math.round((totalPassed / totalChecks) * 100) : null
-  const medianDuration = median(participants.map((p) => p.durationS))
+  const completed = participants.filter((p) => p.status === STATUS_COMPLETED)
+  const abandoned = participants.filter((p) => p.status === STATUS_ABANDONED)
 
+  // One attention check per session now, so the pass rate counts sessions, not
+  // checks. Sessions that stopped before reaching the check are left out of
+  // both sides — they neither passed nor failed it.
+  const checked = participants.filter((p) => p.attentionPassed != null)
+  const passedCheck = checked.filter((p) => p.attentionPassed)
+  const passRate = checked.length
+    ? Math.round((passedCheck.length / checked.length) * 100)
+    : null
+  // Only finished sessions have a meaningful start-to-submit duration.
+  const medianDuration = median(completed.map((p) => p.durationS))
+
+  // Demographics are asked at the very end, so only completed sessions can
+  // answer them — counting abandoned ones would inflate "not disclosed".
   const backgroundSplit = ['yes', 'no', 'undisclosed'].map((key) => ({
     label: BACKGROUND_LABELS[key],
-    count: participants.filter((p) => p.background === key).length,
+    count: completed.filter((p) => p.background === key).length,
   }))
-  const ageLabels = [...new Set(participants.map((p) => p.ageGroup).filter(Boolean))].sort()
+  const ageLabels = [...new Set(completed.map((p) => p.ageGroup).filter(Boolean))].sort()
   const ageSplit = [
     ...ageLabels.map((label) => ({
       label,
-      count: participants.filter((p) => p.ageGroup === label).length,
+      count: completed.filter((p) => p.ageGroup === label).length,
     })),
-    { label: 'Not given', count: participants.filter((p) => !p.ageGroup).length },
+    { label: 'Not given', count: completed.filter((p) => !p.ageGroup).length },
   ]
 
   return (
@@ -111,21 +131,25 @@ export function ResultsPage() {
             <dl className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
               <Stat
                 icon={LuUsersRound}
-                label="Participants"
+                label="Sessions"
                 value={participants.length}
-                detail={`${totalAnswers} triplet judgements`}
+                detail={`${completed.length} completed · ${totalAnswers} triplet judgements`}
               />
               <Stat
                 icon={LuShieldCheck}
-                label="Attention checks passed"
+                label="Attention check passed"
                 value={passRate == null ? '—' : `${passRate}%`}
-                detail={`${totalPassed} of ${totalChecks} checks`}
+                detail={`${passedCheck.length} of ${checked.length} who reached it`}
               />
               <Stat
                 icon={LuTimer}
                 label="Median completion"
                 value={formatDuration(medianDuration)}
-                detail="from first screen to submit"
+                detail={
+                  abandoned.length
+                    ? `${abandoned.length} abandoned, partials kept`
+                    : 'from first screen to submit'
+                }
               />
               <Stat
                 icon={LuRadar}
@@ -151,8 +175,9 @@ export function ResultsPage() {
                     <thead>
                       <tr className="border-b border-line text-ink-muted">
                         <th className="px-3 py-2 font-medium">Participant</th>
+                        <th className="px-3 py-2 font-medium">Status</th>
                         <th className="px-3 py-2 text-right font-medium">Answers</th>
-                        <th className="px-3 py-2 text-right font-medium">Checks</th>
+                        <th className="px-3 py-2 text-right font-medium">Check</th>
                         <th className="px-3 py-2 text-right font-medium">Duration</th>
                         <th className="px-3 py-2 font-medium">Background</th>
                         <th className="px-3 py-2 font-medium">Age</th>
@@ -164,13 +189,31 @@ export function ResultsPage() {
                           <td className="px-3 py-2 text-ink-muted" title={p.id}>
                             {p.id.slice(0, 8)}
                           </td>
-                          <td className="px-3 py-2 text-right">{p.answered}</td>
                           <td
-                            className={`px-3 py-2 text-right ${
-                              p.checks > 0 && p.passed < p.checks ? 'text-redline' : 'text-ok'
+                            className={`px-3 py-2 ${
+                              p.status === STATUS_COMPLETED ? 'text-ink' : 'text-ink-faint'
                             }`}
                           >
-                            {p.passed}/{p.checks}
+                            {STATUS_LABELS[p.status]}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {p.answered}
+                            <span className="text-ink-faint">/{SURVEY_LENGTH}</span>
+                          </td>
+                          <td
+                            className={`px-3 py-2 text-right ${
+                              p.attentionPassed === false
+                                ? 'text-redline'
+                                : p.attentionPassed
+                                  ? 'text-ok'
+                                  : 'text-ink-faint'
+                            }`}
+                          >
+                            {p.attentionPassed == null
+                              ? 'not reached'
+                              : p.attentionPassed
+                                ? 'passed'
+                                : 'failed'}
                           </td>
                           <td className="px-3 py-2 text-right">{formatDuration(p.durationS)}</td>
                           <td className="px-3 py-2">{BACKGROUND_LABELS[p.background] ?? '—'}</td>
@@ -181,19 +224,23 @@ export function ResultsPage() {
                   </table>
                 </div>
                 <p className="mt-2 font-mono text-xs text-ink-faint">
-                  A failed check (red) flags a submission for exclusion from the perceptual fit.
+                  A failed check (red) flags a session for exclusion from the perceptual fit.
+                  Abandoned sessions keep every answer given before the participant left.
                 </p>
               </section>
 
               <aside className="space-y-6">
                 <section>
                   <SectionHeading>Background</SectionHeading>
-                  <BreakdownBars rows={backgroundSplit} total={participants.length} />
+                  <BreakdownBars rows={backgroundSplit} total={completed.length} />
                 </section>
                 <section>
                   <SectionHeading>Age group</SectionHeading>
-                  <BreakdownBars rows={ageSplit} total={participants.length} />
+                  <BreakdownBars rows={ageSplit} total={completed.length} />
                 </section>
+                <p className="font-mono text-xs text-ink-faint">
+                  Asked after the last comparison — completed sessions only.
+                </p>
               </aside>
             </div>
           </>

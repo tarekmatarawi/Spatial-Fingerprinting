@@ -16,10 +16,14 @@ GitHub Pages deployment changes.
 3. In row 1, add these column headers exactly, one per cell, left to right:
 
    ```
-   timestamp | participant_id | started_at | finished_at | background | age_group | response_count | payload_json
+   timestamp | participant_id | started_at | finished_at | status | attention_check_passed | background | age_group | response_count | payload_json
    ```
 
 That's it for the spreadsheet itself — the script fills in every row below automatically.
+
+> **Already have a Sheet from before?** Add the two new headers — `status` and `attention_check_passed` — to the first empty cells in row 1. The script matches columns by their header name, not their position, so they can go anywhere and existing rows keep working. Rows written before you added them simply stay blank in those two columns.
+
+> **One row per participant.** The survey now saves after *every* answer rather than once at the end, and the script updates that participant's existing row in place. So a row appears as soon as someone answers their first comparison, and grows as they go — if they close the tab halfway, their partial answers are already safely in the Sheet. `status` reads `in_progress` until they reach the thank-you screen, where it becomes `completed`; a row still on `in_progress` long after its `timestamp` is an abandoned session (the app treats 30 minutes of silence as abandoned). `attention_check_passed` is `TRUE`/`FALSE` for the single mid-survey attention check, and blank for anyone who left before reaching it.
 
 > **On times:** the three date columns are written in Berlin time (`Europe/Berlin`, DST handled automatically) so the Sheet reads naturally at a glance. The original UTC values are preserved untouched inside `payload_json` — that's what the app and your analysis read, keeping every participant on one absolute scale. To use a different timezone, change `DISPLAY_TIMEZONE` at the top of `Code.gs`.
 

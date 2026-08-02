@@ -117,11 +117,14 @@ function viewerStateSaveEndpoint() {
   }
 }
 
-// Dev-only endpoint: appends one participant's survey submission to
-// src/data/survey-responses.json. Unlike the endpoints above (which replace the
-// whole file), survey participants are independent, so this reads the current
-// array and pushes the new record. On the deployed site this endpoint is absent;
-// a serverless function takes its place at deploy time.
+// Dev-only endpoint: stores one participant's survey session in
+// src/data/survey-responses.json. The survey saves after every answer rather
+// than once at the end, so this is an upsert keyed on participant_id — the
+// first answer creates the record and each later save replaces it in place,
+// leaving exactly one row per participant however far they got. A save whose
+// `revision` is older than the stored one is ignored, so an out-of-order
+// arrival can't roll a session backwards. On the deployed site this endpoint is
+// absent; the Google Apps Script Web App takes its place (same upsert rules).
 function surveySaveEndpoint() {
   return {
     name: 'survey-save-endpoint',
@@ -139,9 +142,21 @@ function surveySaveEndpoint() {
             if (!submission || typeof submission !== 'object' || Array.isArray(submission)) {
               throw new Error('Expected a submission object')
             }
+            if (!submission.participant_id) throw new Error('Submission has no participant_id')
+
             const file = path.resolve(dirname, 'src/data/survey-responses.json')
             const existing = JSON.parse(fs.readFileSync(file, 'utf8') || '[]')
-            existing.push(submission)
+            const at = existing.findIndex((r) => r.participant_id === submission.participant_id)
+
+            if (at === -1) {
+              existing.push(submission)
+            } else if ((submission.revision ?? 0) >= (existing[at].revision ?? 0)) {
+              existing[at] = submission
+            } else {
+              res.setHeader('Content-Type', 'application/json')
+              return res.end(JSON.stringify({ ok: true, stale: true, total: existing.length }))
+            }
+
             fs.writeFileSync(file, JSON.stringify(existing, null, 2))
             res.setHeader('Content-Type', 'application/json')
             res.end(JSON.stringify({ ok: true, total: existing.length }))

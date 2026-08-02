@@ -133,14 +133,16 @@ Given the isovist polygon vertices `(xᵢ, yᵢ)` relative to the vantage point:
 
 ## PHASE 4 — Survey Module
 
-- Participant lands on a survey URL, no login, gets a randomly assigned / pre-balanced set of 28 triplets
+- Participant lands on a survey URL, no login, gets a randomly assigned / pre-balanced set of 27 triplets
 - Each triplet: 3 site images (pre-uploaded Street View, not live API) side by side
 - Instruction: "Which two of these three spaces feel most similar in terms of how open, enclosed, or spatially complex they feel? Please judge based on the sense of space, not architectural style or surface materials."
 - Participant picks a pair; stored as `{ participant_id, triplet_id, site_a, site_b, site_c, chosen_pair, timestamp }`
-- 2 attention-check triplets with an obvious extreme pair, flagged separately
+- 1 attention-check triplet with an obvious extreme pair, flagged separately, placed around question 13–14 so it isn't clustered with the closing questions
 - Thank-you screen; only optional self-report field: "Do you have a background in architecture, urban design, or planning? Yes/No" (for the rater-expertise limitations analysis)
 
-**Balanced triplet sampling:** with 18 sites, generate a pool where every pair of sites appears together at least 2–3 times; randomly assign 28-triplet subsets per participant, tracked so participants don't see heavily overlapping sets (some overlap fine).
+**Balanced triplet sampling:** with 18 sites, generate a pool where every pair of sites appears together at least 2–3 times; randomly assign 27-triplet subsets per participant, tracked so participants don't see heavily overlapping sets (some overlap fine).
+
+**Session records:** each participant's session is one record, saved again after every answer (upserted on `participant_id`) rather than once at the end, so an abandoned survey still retains everything answered up to the point the participant left. Alongside the responses each record carries `status` (`in_progress` → `completed` on reaching the thank-you screen; read as `abandoned` after 30 minutes of inactivity without completion — derived, never destructive) and `attention_check_passed`, a top-level boolean so submissions can be filtered for the Phase 5 fit without parsing the nested response list. See `src/lib/session.js`.
 
 ---
 

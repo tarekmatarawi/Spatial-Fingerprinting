@@ -4,6 +4,7 @@ import sites from '@/data/sites.json'
 import { activeSites } from '@/lib/site'
 import { assembleSurvey, SURVEY_LENGTH } from '@/lib/triplets'
 import { SURVEY_ENDPOINT_URL } from '@/lib/surveyEndpoint'
+import { attentionCheckPassed, STATUS_COMPLETED, STATUS_IN_PROGRESS } from '@/lib/session'
 
 // Phase 4 — the participant-facing triplet survey. This is the one surface in
 // the platform that is NOT instrument-grade: it strips down to a single,
@@ -35,70 +36,111 @@ export function SurveyPage() {
   const startedAt = useMemo(() => new Date().toISOString(), [])
   const survey = useMemo(() => assembleSurvey(ALL_SITE_IDS, participantId), [participantId])
 
-  const submit = useCallback(
-    async (background, ageGroup) => {
-      setSubmitState('saving')
+  // Every save rewrites the participant's whole record, so writes must land in
+  // the order they were made. `revision` lets the storage side drop a stale
+  // write outright, and the promise chain keeps only one request in flight.
+  const revision = useRef(0)
+  const saveChain = useRef(Promise.resolve())
+
+  // Sends one snapshot of the session. Resolves to a submitState — it never
+  // throws, so a failed mid-survey save can't break the round the participant
+  // is on. Returns 'saved' | 'failed' | 'unconfigured'.
+  const postSession = useCallback(async (payload) => {
+    try {
+      if (import.meta.env.DEV) {
+        // Local dev keeps writing straight to src/data/survey-responses.json
+        // via the Vite-only endpoint, so testing never touches the real
+        // Google Sheet participants' answers land in once deployed.
+        const res = await fetch('/__save-survey', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        })
+        if (!res.ok) throw new Error(String(res.status))
+        return 'saved'
+      }
+      if (SURVEY_ENDPOINT_URL) {
+        // GitHub Pages serves static files only, so the deployed survey posts
+        // to a Google Apps Script Web App instead (see
+        // docs/survey-storage-setup.md). text/plain sidesteps a CORS
+        // preflight that Apps Script doesn't handle — the script still reads
+        // the body as JSON regardless of this header.
+        const res = await fetch(SURVEY_ENDPOINT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
+        })
+        if (!res.ok) throw new Error(String(res.status))
+        return 'saved'
+      }
+      return 'unconfigured'
+    } catch {
+      return 'failed'
+    }
+  }, [])
+
+  // Persists the session as it stands. Called after every single answer, not
+  // just at the end: if a participant closes the tab at question 9, the nine
+  // answers they did give are already on file, marked in_progress. The storage
+  // side keys on participant_id, so each save replaces the previous snapshot
+  // rather than piling up rows.
+  const saveSession = useCallback(
+    (answers, { completed = false, background = null, ageGroup = null } = {}) => {
+      const now = new Date().toISOString()
       const payload = {
         participant_id: participantId,
         started_at: startedAt,
-        finished_at: new Date().toISOString(),
-        background, // 'yes' | 'no' | 'undisclosed'
-        age_group: ageGroup ?? null, // optional bracket, e.g. '25–34'
-        responses,
+        updated_at: now,
+        finished_at: completed ? now : null,
+        status: completed ? STATUS_COMPLETED : STATUS_IN_PROGRESS,
+        revision: ++revision.current,
+        // Top-level so the researcher can filter on it without reading into
+        // the nested responses. Null until the check itself is answered.
+        attention_check_passed: attentionCheckPassed(answers),
+        background, // 'yes' | 'no' | 'undisclosed' — only known at the end
+        age_group: ageGroup, // optional bracket, e.g. '25–34'
+        responses: answers,
       }
-      try {
-        if (import.meta.env.DEV) {
-          // Local dev keeps writing straight to src/data/survey-responses.json
-          // via the Vite-only endpoint, so testing never touches the real
-          // Google Sheet participants' answers land in once deployed.
-          const res = await fetch('/__save-survey', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-          })
-          if (!res.ok) throw new Error(String(res.status))
-          setSubmitState('saved')
-        } else if (SURVEY_ENDPOINT_URL) {
-          // GitHub Pages serves static files only, so the deployed survey posts
-          // to a Google Apps Script Web App instead (see
-          // docs/survey-storage-setup.md). text/plain sidesteps a CORS
-          // preflight that Apps Script doesn't handle — the script still reads
-          // the body as JSON regardless of this header.
-          const res = await fetch(SURVEY_ENDPOINT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload),
-          })
-          if (!res.ok) throw new Error(String(res.status))
-          setSubmitState('saved')
-        } else {
-          setSubmitState('unconfigured')
-        }
-      } catch {
-        setSubmitState('failed')
-      }
+      const run = saveChain.current.then(() => postSession(payload))
+      saveChain.current = run.catch(() => {})
+      return run
+    },
+    [participantId, startedAt, postSession]
+  )
+
+  const submit = useCallback(
+    async (background, ageGroup) => {
+      setSubmitState('saving')
+      // Only this final save flips the record to 'completed' — reaching the
+      // thank-you screen is what completion means.
+      const state = await saveSession(responses, { completed: true, background, ageGroup })
+      setSubmitState(state)
       setStage('done')
     },
-    [participantId, startedAt, responses]
+    [saveSession, responses]
   )
 
   function handleChoice(chosenPair) {
     const triplet = survey[index]
     const [a, b, c] = triplet.site_ids
-    setResponses((prev) => [
-      ...prev,
-      {
-        participant_id: participantId,
-        triplet_id: triplet.triplet_id,
-        order: triplet.order,
-        site_a: a,
-        site_b: b,
-        site_c: c,
-        chosen_pair: chosenPair,
-        is_attention_check: triplet.is_attention_check,
-        timestamp: new Date().toISOString(),
-      },
-    ])
+    const answer = {
+      participant_id: participantId,
+      triplet_id: triplet.triplet_id,
+      order: triplet.order,
+      site_a: a,
+      site_b: b,
+      site_c: c,
+      chosen_pair: chosenPair,
+      is_attention_check: triplet.is_attention_check,
+      timestamp: new Date().toISOString(),
+    }
+    const next = [...responses, answer]
+    setResponses(next)
+    // Deliberately not awaited: the next triplet appears immediately and the
+    // save settles in the background. A mid-survey failure stays silent —
+    // there is nothing a participant could usefully do about it, and the final
+    // submit reports honestly either way.
+    saveSession(next)
     if (index + 1 < survey.length) setIndex((i) => i + 1)
     else setStage('about')
   }
@@ -353,7 +395,7 @@ function PlazaImage({ site }) {
 
   if (!src || failed) {
     return (
-      <div className="relative flex aspect-[3/2] items-center justify-center overflow-hidden bg-surface">
+      <div className="relative flex aspect-[8/5] items-center justify-center overflow-hidden bg-surface">
         <PlanGlyph />
         <span className="relative px-4 text-center text-sm font-medium text-ink-muted">
           {site?.name ?? 'Unknown square'}
@@ -363,8 +405,14 @@ function PlazaImage({ site }) {
   }
 
   return (
-    <div className="aspect-[3/2] overflow-hidden bg-surface">
-      {/* object-bottom pins the photo's base to the frame's lower edge, so a
+    <div className="aspect-[8/5] overflow-hidden bg-surface">
+      {/* 8/5 (1.60) is the widest frame the current photo set tolerates. The
+          set is bimodal — eight plazas shot near 4:3 (~1.32) and the rest
+          between 1.6 and 2.15 — so no single frame fits all: the narrow ones
+          lose height off the top, the wide ones lose width off the sides.
+          Past ~1.67 the narrow group crosses 20% vertical loss and starts
+          clipping roof lines, which is exactly the cue that carries enclosure.
+          object-bottom pins the photo's base to the frame's lower edge, so a
           crop always eats sky rather than the plaza floor — the ground plane
           and building bases carry the spatial cues participants judge by. The
           hover scale grows from that same edge to keep the base planted. */}

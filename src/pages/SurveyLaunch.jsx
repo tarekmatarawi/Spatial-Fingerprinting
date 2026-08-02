@@ -33,7 +33,12 @@ export function SurveyLaunch() {
         <p className="mt-3 text-base leading-relaxed text-ink-muted">
           A triplet-comparison study: each participant sees {SURVEY_LENGTH} rounds of three squares
           and marks the two that feel most similar, then answers two optional demographic
-          questions. {ATTENTION_CHECKS} of the rounds are attention checks. Responses save to{' '}
+          questions.{' '}
+          {ATTENTION_CHECKS === 1
+            ? 'One round, near the middle, is an attention check'
+            : `${ATTENTION_CHECKS} of the rounds are attention checks`}
+          . Each answer saves as it&rsquo;s given, so an abandoned session keeps whatever the
+          participant got through. Responses save to{' '}
           <code className="rounded bg-surface px-1 py-0.5 font-mono text-[13px] text-ink">
             src/data/survey-responses.json
           </code>{' '}
@@ -87,8 +92,8 @@ export function SurveyLaunch() {
             href="#/results"
             className="inline-flex items-center gap-1.5 font-mono text-xs text-ink-muted underline-offset-4 outline-none transition-colors duration-150 hover:text-primary hover:underline focus-visible:ring-2 focus-visible:ring-primary-wash"
           >
-            {responses.length} {responses.length === 1 ? 'submission' : 'submissions'} collected —
-            review in Results
+            {responses.length} {responses.length === 1 ? 'session' : 'sessions'} recorded — review
+            in Results
             <LuArrowRight aria-hidden className="h-3.5 w-3.5" />
           </a>
         </div>
