@@ -327,8 +327,15 @@ function Round({ triplet, position, total, onChoice }) {
           ))}
         </fieldset>
 
-        {/* Action */}
-        <div className="mt-6 flex flex-col-reverse gap-3 sm:mt-7 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        {/* Action — pinned to the bottom of the screen on phones so Next/Finish
+            is always one thumb-reach away. Three stacked photos at their
+            required crop run tall on a narrow screen (see the aspect-ratio
+            note in PlazaImage — that ratio is a research constraint, not
+            negotiable), so scrolling within a round is unavoidable; re-scrolling
+            all the way down after every single choice is what this removes.
+            Reverts to normal in-flow placement at sm — the three-column layout
+            there already fits without scrolling. */}
+        <div className="sticky bottom-0 z-10 -mx-5 mt-6 flex flex-col-reverse gap-3 border-t border-line bg-bg/95 px-5 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 shadow-[0_-4px_16px_-6px_rgb(0_0_0_/_0.12)] backdrop-blur sm:static sm:mx-0 sm:mt-7 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:border-0 sm:bg-transparent sm:px-0 sm:pb-0 sm:pt-0 sm:shadow-none sm:backdrop-blur-none">
           <p className="text-center text-sm text-ink-muted sm:text-left" aria-live="polite">
             {selected.length === 0 && 'Tap two squares to compare.'}
             {selected.length === 1 && 'One more — pick its closest match.'}

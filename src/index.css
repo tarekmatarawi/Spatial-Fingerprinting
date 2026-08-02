@@ -83,6 +83,12 @@
 html, body, #root {
   margin: 0;
   height: 100%;
+  /* iOS Safari resolves 100% against a stale viewport before the address bar
+     collapses on scroll, leaving real content below that line unreachable —
+     there's no native page scroll to fall back on (html/body are hidden on
+     purpose, each page scrolls itself). dvh tracks the actual visible area and
+     is layered on as an override; browsers without it keep the 100% above. */
+  height: 100dvh;
   width: 100%;
   overflow: hidden;
   font-family: var(--font-sans);
