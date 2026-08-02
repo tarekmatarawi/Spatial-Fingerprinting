@@ -288,12 +288,13 @@ function Round({ triplet, position, total, onChoice }) {
   return (
     <Frame>
       {/* Wide container so the three street views dominate the screen on any
-          monitor. The three-up grid is the same at every breakpoint — phones
-          get narrower, shorter copies of the identical crop, not a different
-          rule — so a round always fits one screen with no scrolling, and
-          nothing can end up scrolled in under the action bar below. Each round
-          is keyed, so this animates in as one unit — a soft page turn rather
-          than a hard cut. */}
+          monitor; on phones they stack in the original top-to-bottom order,
+          each card capped narrower than full-bleed (see PlazaCard) so three of
+          them plus the action bar have a real shot at one screen — without
+          touching the crop itself, which is a research constraint (see the
+          aspect-ratio note in PlazaImage), not a layout choice. Each round is
+          keyed, so this animates in as one unit — a soft page turn rather than
+          a hard cut. */}
       <div className="mx-auto flex w-full max-w-6xl animate-page-in flex-col 2xl:max-w-[88rem]" ref={containerRef}>
         {/* Progress */}
         <div className="flex items-center gap-4">
@@ -309,15 +310,15 @@ function Round({ triplet, position, total, onChoice }) {
         </div>
 
         {/* Task */}
-        <h2 className="mt-6 text-pretty text-lg font-medium text-ink sm:mt-8 sm:text-xl">
+        <h2 className="mt-4 text-pretty text-lg font-medium text-ink sm:mt-8 sm:text-xl">
           Select the <span className="text-primary">two</span> squares that feel most similar.
         </h2>
-        <p className="mt-1.5 text-sm text-ink-muted sm:text-base">
+        <p className="mt-1 text-sm text-ink-muted sm:mt-1.5 sm:text-base">
           By the sense of space — how open, enclosed, or complex — not style or materials.
         </p>
 
         {/* Choices */}
-        <fieldset className="mt-5 grid grid-cols-3 gap-2 sm:mt-6 sm:gap-5 xl:gap-6">
+        <fieldset className="mt-4 grid grid-cols-1 gap-3 sm:mt-6 sm:grid-cols-3 sm:gap-5 xl:gap-6">
           <legend className="sr-only">Choose the two most similar squares</legend>
           {triplet.site_ids.map((id, i) => (
             <PlazaCard
@@ -330,14 +331,10 @@ function Round({ triplet, position, total, onChoice }) {
           ))}
         </fieldset>
 
-        {/* Action — pinned to the bottom of the screen on phones. With the
-            three-up grid above, a round already fits one screen on an
-            ordinary phone, so this mostly guards the edge cases (a small
-            phone, a participant with larger system text) where it doesn't
-            quite — Next/Finish stays reachable either way, and pinning it
-            can't cover a photo the way it could when this sat below a much
-            taller single-column stack. Reverts to normal in-flow placement at
-            sm, where there was never any scrolling to begin with. */}
+        {/* Action — pinned to the bottom of the screen on phones so Next/Finish
+            is always one thumb-reach away, whatever's left to scroll after the
+            three cards above. Reverts to normal in-flow placement at sm, where
+            the three-column layout already fits without scrolling. */}
         <div className="sticky bottom-0 z-10 -mx-5 mt-6 flex flex-col-reverse gap-3 border-t border-line bg-bg/95 px-5 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 shadow-[0_-4px_16px_-6px_rgb(0_0_0_/_0.12)] backdrop-blur sm:static sm:mx-0 sm:mt-7 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:border-0 sm:bg-transparent sm:px-0 sm:pb-0 sm:pt-0 sm:shadow-none sm:backdrop-blur-none">
           <p className="text-center text-sm text-ink-muted sm:text-left" aria-live="polite">
             {selected.length === 0 && 'Tap two squares to compare.'}
@@ -363,7 +360,7 @@ function PlazaCard({ site, selected, order, onToggle }) {
       type="button"
       aria-pressed={selected}
       onClick={onToggle}
-      className={`group relative overflow-hidden rounded-2xl border text-left outline-none transition-all duration-150 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-primary-wash focus-visible:ring-offset-2 focus-visible:ring-offset-bg ${
+      className={`group relative mx-auto w-full max-w-[14rem] overflow-hidden rounded-2xl border text-left outline-none transition-all duration-150 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-primary-wash focus-visible:ring-offset-2 focus-visible:ring-offset-bg sm:max-w-none ${
         selected
           ? 'border-accent ring-2 ring-accent'
           : 'border-line hover:border-line-strong'
@@ -378,24 +375,20 @@ function PlazaCard({ site, selected, order, onToggle }) {
       />
       <span
         aria-hidden
-        className={`absolute right-1.5 top-1.5 flex h-5 w-5 items-center justify-center rounded-full font-mono text-xs font-medium shadow-sm transition-all duration-200 ease-out sm:right-3 sm:top-3 sm:h-7 sm:w-7 sm:text-sm ${
+        className={`absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full font-mono text-sm font-medium shadow-sm transition-all duration-200 ease-out ${
           selected ? 'scale-100 bg-primary text-white' : 'scale-0 bg-primary text-white'
         }`}
       >
         {order === 0 ? '1' : '2'}
       </span>
-      {/* Name over city on phones — a three-up row at phone width has no room
-          to spread them side by side the way the wider desktop card does. */}
       <div
-        className="flex flex-col gap-0 border-t border-line bg-paper px-1.5 py-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-2 sm:px-3.5 sm:py-3"
+        className="flex items-baseline justify-between gap-2 border-t border-line bg-paper px-3.5 py-3"
         title={site?.name ? `${site.name}, ${site.city ?? ''}` : undefined}
       >
-        <span className="truncate text-[11px] font-medium leading-tight text-ink sm:text-sm sm:leading-normal sm:text-base">
+        <span className="truncate text-sm font-medium text-ink sm:text-base">
           {site?.name ?? 'Unknown'}
         </span>
-        <span className="truncate font-mono text-[9px] leading-tight text-ink-faint sm:shrink-0 sm:text-xs sm:leading-normal">
-          {site?.city}
-        </span>
+        <span className="shrink-0 font-mono text-xs text-ink-faint">{site?.city}</span>
       </div>
     </button>
   )
