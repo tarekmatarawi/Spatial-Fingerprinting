@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   LuCamera,
   LuCircleAlert,
@@ -17,6 +17,21 @@ import { PHASES, phaseById } from '@/lib/phases'
 import { Button } from '@/components/ui/button'
 
 const DEFAULT_HEIGHT = 12
+
+// The register sidebar is drag-resizable so long plaza names and city labels —
+// which otherwise truncate at the default width — can be read in full. The
+// chosen width persists, so the register stays how the researcher left it.
+const REGISTER_WIDTH_KEY = 'sf:register-width'
+const REGISTER_MIN_W = 240
+const REGISTER_MAX_W = 640
+const REGISTER_DEFAULT_W = 320 // matches the previous fixed md:w-80
+
+function storedRegisterWidth() {
+  if (typeof window === 'undefined') return REGISTER_DEFAULT_W
+  const stored = Number(window.localStorage?.getItem(REGISTER_WIDTH_KEY))
+  if (!Number.isFinite(stored) || stored <= 0) return REGISTER_DEFAULT_W
+  return Math.min(REGISTER_MAX_W, Math.max(REGISTER_MIN_W, stored))
+}
 
 // German-aware transliteration (ö→oe, ü→ue, ä→ae, ß→ss) so umlauts survive as
 // readable ASCII instead of silently vanishing — several site ids (e.g.
@@ -67,6 +82,50 @@ export function AdminPage() {
   // of showing the browser-cached copy at the (unchanged) filename.
   const [imageBust, setImageBust] = useState(0)
   const [confirmingDelete, setConfirmingDelete] = useState(false)
+  const [registerWidth, setRegisterWidth] = useState(storedRegisterWidth)
+
+  // Remember the width across sessions, but only once the drag settles.
+  useEffect(() => {
+    window.localStorage?.setItem(REGISTER_WIDTH_KEY, String(registerWidth))
+  }, [registerWidth])
+
+  // Pointer events (not mouse) so a trackpad, pen, or touch drag all work.
+  // The listeners live on window so the pointer can leave the 4px handle
+  // mid-drag without the resize sticking or stopping.
+  function startResize(e) {
+    e.preventDefault()
+    const startX = e.clientX
+    const startWidth = registerWidth
+    const onMove = (ev) => {
+      const next = startWidth + (ev.clientX - startX)
+      setRegisterWidth(Math.min(REGISTER_MAX_W, Math.max(REGISTER_MIN_W, next)))
+    }
+    const onUp = () => {
+      window.removeEventListener('pointermove', onMove)
+      window.removeEventListener('pointerup', onUp)
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+    }
+    // Hold the resize cursor for the whole drag, and stop the list text from
+    // being selected as the pointer sweeps across it.
+    document.body.style.cursor = 'col-resize'
+    document.body.style.userSelect = 'none'
+    window.addEventListener('pointermove', onMove)
+    window.addEventListener('pointerup', onUp)
+  }
+
+  // Keyboard equivalent, so the width isn't mouse-only.
+  function resizeByKey(e) {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      e.preventDefault()
+      const step = e.shiftKey ? 48 : 16
+      const delta = e.key === 'ArrowRight' ? step : -step
+      setRegisterWidth((w) => Math.min(REGISTER_MAX_W, Math.max(REGISTER_MIN_W, w + delta)))
+    } else if (e.key === 'Home') {
+      e.preventDefault()
+      setRegisterWidth(REGISTER_DEFAULT_W)
+    }
+  }
 
   const site = sites[selectedIndex]
   const phase = phaseById.get('sites') ?? PHASES[0]
@@ -223,7 +282,12 @@ export function AdminPage() {
   return (
     <div className="flex h-full flex-col overflow-hidden bg-bg text-ink md:flex-row">
       {/* Site register — full sidebar on desktop, a capped scrollable strip on phones */}
-      <aside className="max-h-52 w-full shrink-0 overflow-y-auto border-b border-line bg-surface md:max-h-none md:w-80 md:border-b-0 md:border-r">
+      {/* Width rides a CSS variable so the drag only applies from md up — on
+          phones the register stays a full-width strip above the editor. */}
+      <aside
+        style={{ '--register-w': `${registerWidth}px` }}
+        className="relative max-h-52 w-full shrink-0 overflow-y-auto border-b border-line bg-surface md:max-h-none md:w-[var(--register-w)] md:border-b-0"
+      >
         <div className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-line bg-surface px-4 py-3">
           <div className="flex min-w-0 items-center gap-2.5">
             <phase.icon aria-hidden className="h-4 w-4 shrink-0 text-primary" />
@@ -270,6 +334,29 @@ export function AdminPage() {
           ))}
         </ul>
       </aside>
+
+      {/* Drag handle. Sits in the flex row between register and editor rather
+          than inside the scrolling aside, so it stays put as the list scrolls.
+          A hairline until hovered, then it picks up the primary colour. */}
+      <div
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize site register"
+        aria-valuenow={registerWidth}
+        aria-valuemin={REGISTER_MIN_W}
+        aria-valuemax={REGISTER_MAX_W}
+        tabIndex={0}
+        title="Drag to resize · double-click to reset"
+        onPointerDown={startResize}
+        onKeyDown={resizeByKey}
+        onDoubleClick={() => setRegisterWidth(REGISTER_DEFAULT_W)}
+        className="group hidden w-1.5 shrink-0 cursor-col-resize touch-none items-center justify-center bg-line/40 outline-none transition-colors duration-150 hover:bg-primary/40 focus-visible:bg-primary/60 md:flex"
+      >
+        <span
+          aria-hidden
+          className="h-8 w-px bg-line-strong transition-colors duration-150 group-hover:bg-primary"
+        />
+      </div>
 
       {/* Editor */}
       <main className="min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6 sm:py-6 lg:px-8">
