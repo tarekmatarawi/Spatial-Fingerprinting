@@ -11,6 +11,13 @@ export const ATTENTION_CHECKS = 1
 export const SURVEY_LENGTH = GENUINE_TRIPLETS + ATTENTION_CHECKS
 export const MIN_PAIR_COVERAGE = 2
 
+// Target recruitment for the study. This number is the reason the sampler can
+// stay uncoordinated: at this many participants, independently drawn subsets are
+// expected to cover every site pair several times over without any tracking
+// between participants. It is an assumption, not a guarantee — the pooled
+// coverage panel on the Results page is what checks it against real responses.
+export const TARGET_PARTICIPANTS = { min: 30, max: 50, label: '30–50' }
+
 // 0-based index the (single) attention check is spliced in at, so it surfaces
 // around question 13–14 of 27 — the middle of the session. Deliberately not
 // near the end: late checks sit next to the demographic questions and read as a

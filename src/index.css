@@ -78,6 +78,23 @@
 
 :root {
   color-scheme: light;
+
+  /* Sequential ramp for the pooled-coverage matrix: one hue (the brand orange
+     at h≈41), monotone light→dark, four steps. Validated against the paper
+     surface — lightness is monotone, every adjacent gap clears ΔL 0.06, and the
+     lightest step holds 2.05:1 on paper so an isolated low cell stays visible.
+     Steps 1–3 take ink labels, step 4 takes white (all ≥4.5:1). Four is the
+     ceiling: a fifth step would have to sit above L 0.77 to stay in order, and
+     it would wash out against the paper.
+
+     Deliberately here and not in @theme — the matrix picks its step at runtime
+     and applies it as an inline `var(--color-cover-N)`, which Tailwind can't
+     see when it scans source for used utilities. In @theme these would be
+     tree-shaken out of the build and the cells would render blank. */
+  --color-cover-1: oklch(0.77 0.070 41);
+  --color-cover-2: oklch(0.70 0.130 41);
+  --color-cover-3: oklch(0.63 0.180 41);
+  --color-cover-4: oklch(0.56 0.185 41);
 }
 
 html, body, #root {

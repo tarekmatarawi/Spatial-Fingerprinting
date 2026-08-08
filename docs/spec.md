@@ -133,14 +133,24 @@ Given the isovist polygon vertices `(xᵢ, yᵢ)` relative to the vantage point:
 
 ## PHASE 4 — Survey Module
 
-- Participant lands on a survey URL, no login, gets a randomly assigned / pre-balanced set of 27 triplets
+- Participant lands on a survey URL, no login, gets an independently generated random set of 27 triplets (see "Triplet sampling — as built" below)
 - Each triplet: 3 site images (pre-uploaded Street View, not live API) side by side
 - Instruction: "Which two of these three spaces feel most similar in terms of how open, enclosed, or spatially complex they feel? Please judge based on the sense of space, not architectural style or surface materials."
 - Participant picks a pair; stored as `{ participant_id, triplet_id, site_a, site_b, site_c, chosen_pair, timestamp }`
 - 1 attention-check triplet with an obvious extreme pair, flagged separately, placed around question 13–14 so it isn't clustered with the closing questions
 - Thank-you screen; only optional self-report field: "Do you have a background in architecture, urban design, or planning? Yes/No" (for the rater-expertise limitations analysis)
 
-**Balanced triplet sampling:** with 18 sites, generate a pool where every pair of sites appears together at least 2–3 times; randomly assign 27-triplet subsets per participant, tracked so participants don't see heavily overlapping sets (some overlap fine).
+**Target sample:** 30–50 participants. This figure is not decoration — it is the assumption the sampling design rests on (see below), and it is defined once in code as `TARGET_PARTICIPANTS` in `src/lib/triplets.js`.
+
+**Triplet sampling — as built.** Each participant is served an independently generated set of triplets, and **nothing is coordinated or tracked across participants**:
+
+- On opening the survey, a participant gets a fresh id, which seeds a private pool of triplets built so that within *that pool* every pair of the active sites co-occurs at least `MIN_PAIR_COVERAGE` (2) times.
+- Their 27 questions are a seeded slice of that pool — 26 genuine triplets plus one attention check. The pool runs to ~120 triplets for 18 sites, so a participant sees roughly a fifth of it.
+- Two participants therefore never negotiate: their sets are drawn blind to one another and may overlap freely. Nor does any individual participant get a guarantee about their own 26 — a given site may appear only once, or not at all, in one person's set.
+
+**Why no cross-participant coordination.** An earlier draft of this spec called for subsets "tracked so participants don't see heavily overlapping sets." That mechanism was never built, and after review it is deliberately **out of scope**: at the 30–50 participant target, independent random sampling is expected to accumulate ample pooled coverage of all 153 site pairs on its own, which is the level the Phase 5 fit actually consumes. Real-time coordination would require server-side assignment state for a benefit the scale already provides. Simulating the shipped sampler supports this: all 153 pairs reach ≥2 co-occurrences at around 20 participants, and by 30–50 the per-pair minimum sits near 6–13 with a mean of 15–25. That is a simulation of the assumption, not evidence about real recruitment — which is exactly why the coverage panel below exists.
+
+**How the assumption is checked.** Because pooled balance is now an expectation rather than an enforced property, it is verified empirically instead of assumed: the **Pooled coverage** panel on the Results page (P5·6) computes, live from the stored responses, how many times each site and each of the 153 pairs has actually been shown — with the per-pair minimum, maximum, and mean, and any pair still at zero flagged explicitly. Attention checks are excluded (they repeat a site against itself), and the panel can be restricted to fit-eligible sessions. If coverage has not converged by the time recruitment nears the target, the assumption is wrong and the sampling design — not the analysis — is what needs revisiting. Implementation: `src/lib/coverage.js` and `src/components/CoveragePanel.jsx`.
 
 **Session records:** each participant's session is one record, saved again after every answer (upserted on `participant_id`) rather than once at the end, so an abandoned survey still retains everything answered up to the point the participant left. Alongside the responses each record carries `status` (`in_progress` → `completed` on reaching the thank-you screen; read as `abandoned` after 30 minutes of inactivity without completion — derived, never destructive) and `attention_check_passed`, a top-level boolean so submissions can be filtered for the Phase 5 fit without parsing the nested response list. See `src/lib/session.js`.
 

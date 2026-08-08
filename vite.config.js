@@ -171,6 +171,36 @@ function surveySaveEndpoint() {
   }
 }
 
+// Dev-only endpoint: reads src/data/survey-responses.json back out. The Results
+// page imports that file at build time, so without this a researcher watching
+// coverage build up would have to reload the whole page after every participant
+// (or after `npm run sync:survey`) to see it move. Absent on the deployed static
+// site, where the bundled snapshot is all there is — the Refresh button says so
+// rather than silently doing nothing.
+function surveyReadEndpoint() {
+  return {
+    name: 'survey-read-endpoint',
+    configureServer(server) {
+      server.middlewares.use('/__survey-responses', (req, res) => {
+        if (req.method !== 'GET') {
+          res.statusCode = 405
+          return res.end()
+        }
+        try {
+          const file = path.resolve(dirname, 'src/data/survey-responses.json')
+          res.setHeader('Content-Type', 'application/json')
+          res.setHeader('Cache-Control', 'no-store')
+          res.end(fs.readFileSync(file, 'utf8') || '[]')
+        } catch (err) {
+          res.statusCode = 500
+          res.setHeader('Content-Type', 'application/json')
+          res.end(JSON.stringify({ ok: false, error: String(err.message || err) }))
+        }
+      })
+    },
+  }
+}
+
 const IMAGES_DIR = path.resolve(dirname, 'public/images')
 const SAFE_IMAGE_NAME = /^[a-z0-9][a-z0-9-]*\.(jpg|jpeg|png|webp)$/
 
@@ -230,6 +260,7 @@ export default defineConfig({
     resultsSaveEndpoint(),
     viewerStateSaveEndpoint(),
     surveySaveEndpoint(),
+    surveyReadEndpoint(),
     uploadImageEndpoint(),
   ],
   resolve: {

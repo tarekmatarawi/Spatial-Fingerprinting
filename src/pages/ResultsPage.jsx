@@ -4,15 +4,19 @@ import {
   LuLink2,
   LuNetwork,
   LuRadar,
+  LuRefreshCw,
   LuShieldCheck,
   LuSlidersHorizontal,
   LuTimer,
   LuUsersRound,
 } from 'react-icons/lu'
-import responses from '@/data/survey-responses.json'
 import isovistReadings from '@/data/results.json'
+import sites from '@/data/sites.json'
+import { CoveragePanel } from '@/components/CoveragePanel'
 import { phaseById } from '@/lib/phases'
-import { SURVEY_LENGTH } from '@/lib/triplets'
+import { activeSites } from '@/lib/site'
+import { SURVEY_LENGTH, TARGET_PARTICIPANTS } from '@/lib/triplets'
+import { useSurveyResponses } from '@/lib/surveyData'
 import {
   recordAttentionCheckPassed,
   sessionStatus,
@@ -64,6 +68,10 @@ function median(values) {
   return v.length % 2 ? v[mid] : Math.round((v[mid - 1] + v[mid]) / 2)
 }
 
+// Coverage is only meaningful over the sites still in the study — an excluded
+// plaza never reaches a participant again, so its pairs can't fill in.
+const ACTIVE_SITES = activeSites(sites)
+
 const BACKGROUND_LABELS = {
   yes: 'Design background',
   no: 'No design background',
@@ -72,6 +80,9 @@ const BACKGROUND_LABELS = {
 
 export function ResultsPage() {
   const phase = phaseById.get('results')
+  // One read feeds both the session table and the coverage panel, so the two
+  // can never disagree about how much data has come in.
+  const { records: responses, refresh, loading, source, readAt } = useSurveyResponses()
   const participants = responses.map(participantStats)
 
   const totalAnswers = participants.reduce((s, p) => s + p.answered, 0)
@@ -120,7 +131,24 @@ export function ResultsPage() {
               their places here as Phases 5–6 unlock.
             </p>
           </div>
-          <p className="font-mono text-xs text-ink-faint">reads src/data/survey-responses.json</p>
+          <div className="flex flex-col items-end gap-1.5">
+            <button
+              onClick={refresh}
+              disabled={loading}
+              className="inline-flex items-center gap-1.5 rounded-full border border-line-strong bg-paper px-3 py-1.5 text-xs font-medium text-ink shadow-sm outline-none transition-all duration-150 hover:border-primary hover:text-primary-deep active:scale-[0.97] disabled:opacity-60 focus-visible:ring-2 focus-visible:ring-primary-wash"
+            >
+              <LuRefreshCw
+                aria-hidden
+                className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`}
+              />
+              {loading ? 'Reading…' : 'Refresh'}
+            </button>
+            <p className="font-mono text-xs text-ink-faint">
+              {source === 'live'
+                ? `src/data/survey-responses.json · read ${readAt?.toLocaleTimeString() ?? 'just now'}`
+                : 'build-time snapshot — run npm run dev for live reads'}
+            </p>
+          </div>
         </div>
 
         {participants.length === 0 ? (
@@ -243,6 +271,29 @@ export function ResultsPage() {
                 </p>
               </aside>
             </div>
+
+            {/* Pooled coverage — the empirical check on the sampling assumption */}
+            <section className="mt-10">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-line-strong pb-2">
+                <h2 className="text-base font-semibold tracking-tight text-ink">
+                  Pooled coverage
+                </h2>
+                <p className="font-mono text-xs text-ink-faint">
+                  across all sessions · attention checks excluded
+                </p>
+              </div>
+              <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink-muted">
+                Each participant&rsquo;s triplets are drawn independently, with no coordination
+                between participants — so even coverage of all {ACTIVE_SITES.length} plazas and
+                the {(ACTIVE_SITES.length * (ACTIVE_SITES.length - 1)) / 2} pairs between them is
+                expected to emerge across the target {TARGET_PARTICIPANTS.label} participants
+                rather than being enforced per session. This is where that expectation gets
+                checked against the responses actually collected.
+              </p>
+              <div className="mt-5">
+                <CoveragePanel records={responses} sites={ACTIVE_SITES} />
+              </div>
+            </section>
           </>
         )}
 
