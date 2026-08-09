@@ -12,6 +12,7 @@ import {
 } from 'react-icons/lu'
 import initialSites from '@/data/sites.json'
 import { parseBuildingGeoJSON, parseBoundaryGeoJSON } from '@/lib/geojson'
+import { saveSitesMerged } from '@/lib/sitesSync'
 import { effectiveHeight, heightSource, isSiteActive } from '@/lib/site'
 import { PHASES, phaseById } from '@/lib/phases'
 import { Button } from '@/components/ui/button'
@@ -72,6 +73,10 @@ function blankSite(existing) {
 // dev server; on the deployed static site it falls back to downloading the file.
 export function AdminPage() {
   const [sites, setSites] = useState(initialSites)
+  // Sites as last synced with the server (mount, or after a successful save)
+  // — the reference point save() diffs against to tell "did I actually
+  // change this field" from "this is just what the file already had".
+  const [sitesBaseline, setSitesBaseline] = useState(initialSites)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [buildingText, setBuildingText] = useState('')
   const [boundaryText, setBoundaryText] = useState('')
@@ -250,13 +255,13 @@ export function AdminPage() {
   }
 
   async function save() {
+    const currentId = sites[selectedIndex]?.id
     try {
-      const response = await fetch('/__save-sites', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(sites),
-      })
-      if (!response.ok) throw new Error(`save endpoint returned ${response.status}`)
+      const merged = await saveSitesMerged(sites, sitesBaseline)
+      setSites(merged)
+      setSitesBaseline(merged)
+      const newIndex = merged.findIndex((s) => s.id === currentId)
+      if (newIndex !== -1) setSelectedIndex(newIndex)
       setDirty(false)
       setMessage({ kind: 'ok', text: 'Saved to src/data/sites.json.' })
     } catch {

@@ -7,14 +7,22 @@ import { fileURLToPath } from 'node:url'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
-// Dev-only endpoint: lets the admin page save site data back into
-// src/data/sites.json while running `npm run dev`. It does not exist on the
-// deployed static site, so the published admin page can't modify anything.
+// Dev-only endpoint: lets the admin page and the 3D viewer save site data
+// back into src/data/sites.json while running `npm run dev`. It does not
+// exist on the deployed static site, so the published admin page can't
+// modify anything. GET returns the current file straight from disk — both
+// pages read it right before saving to merge in whatever the other one wrote
+// since they last synced, instead of overwriting it with a stale copy.
 function sitesSaveEndpoint() {
   return {
     name: 'sites-save-endpoint',
     configureServer(server) {
       server.middlewares.use('/__save-sites', (req, res) => {
+        if (req.method === 'GET') {
+          res.setHeader('Content-Type', 'application/json')
+          res.setHeader('Cache-Control', 'no-store')
+          return res.end(fs.readFileSync(path.resolve(dirname, 'src/data/sites.json'), 'utf8'))
+        }
         if (req.method !== 'POST') {
           res.statusCode = 405
           return res.end()

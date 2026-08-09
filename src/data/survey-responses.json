@@ -1,1 +1,29 @@
-[]
+[
+  {
+    "participant_id": "289e4da8-6b7d-4962-8324-c5862837602d",
+    "started_at": "2026-08-09T17:20:08.409Z",
+    "updated_at": "2026-08-09T17:20:16.567Z",
+    "finished_at": null,
+    "status": "in_progress",
+    "revision": 1,
+    "attention_check_passed": null,
+    "background": null,
+    "age_group": null,
+    "responses": [
+      {
+        "participant_id": "289e4da8-6b7d-4962-8324-c5862837602d",
+        "triplet_id": "289e4da8-6b7d-4962-8324-c5862837602d:0",
+        "order": 0,
+        "site_a": "Gendarmenmarkt-Berlin",
+        "site_b": "Rathausmarkt-Hamburg",
+        "site_c": "Alexanderplatz-Berlin",
+        "chosen_pair": [
+          "Rathausmarkt-Hamburg",
+          "Alexanderplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-09T17:20:16.567Z"
+      }
+    ]
+  }
+]

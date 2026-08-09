@@ -16,6 +16,7 @@ import sites from '@/data/sites.json'
 import savedResults from '@/data/results.json'
 import storedViewerState from '@/data/viewer-state.json'
 import { projectSite, pointInPolygon, isSiteActive } from '@/lib/site'
+import { saveSitesMerged } from '@/lib/sitesSync'
 import { castIsovist, bearingTo } from '@/lib/isovist'
 import { Buildings } from './Buildings'
 import { IsovistOverlay } from './IsovistOverlay'
@@ -129,20 +130,29 @@ export function SiteViewer({ active = true }) {
   // effect immediately — rendered and fed into the ray-casting metrics — the
   // same pattern the admin page uses for edits.
   const [sitesData, setSitesData] = useState(sites)
+  // sitesData as last synced with the server (mount, or after a successful
+  // save) — the reference point persistSites() diffs against so a change
+  // saved from the admin page in the meantime doesn't get overwritten.
+  const [sitesBaseline, setSitesBaseline] = useState(sites)
   // In-progress hand-drawn building, or null when not drawing. `points` are the
   // placed corners (local metres); `cursor` is the live pointer position for the
   // rubber-band preview edge; `height` is the extrusion height in metres.
   const [draw, setDraw] = useState(null)
   const [buildingNote, setBuildingNote] = useState(null) // save feedback for a committed building
-  // Latest sitesData, so an onBlur handler can persist the current edits without
-  // capturing a stale value from an earlier render.
+  // Latest sitesData/sitesBaseline, so an onBlur handler can persist the
+  // current edits without capturing a stale value from an earlier render.
   const sitesDataRef = useRef(sitesData)
+  const sitesBaselineRef = useRef(sitesBaseline)
 
   const site = useMemo(() => sitesData.find((s) => s.id === selectedId) ?? sitesData[0], [sitesData, selectedId])
 
   useEffect(() => {
     sitesDataRef.current = sitesData
   }, [sitesData])
+
+  useEffect(() => {
+    sitesBaselineRef.current = sitesBaseline
+  }, [sitesBaseline])
 
   // Hand-drawn buildings on the current site, with their array index (into the
   // full buildings list) so each can be re-heighted or deleted after drawing.
@@ -307,18 +317,16 @@ export function SiteViewer({ active = true }) {
     persistSites(next)
   }
 
-  // Writes the whole sites array back to src/data/sites.json via the dev-only
-  // endpoint (same one the admin page uses). On the deployed static site the
-  // endpoint is absent, so the building stays for this session and we show a
-  // clear note rather than failing loudly.
+  // Merges this edit onto the live file (via the dev-only endpoint, same one
+  // the admin page uses) instead of blindly overwriting it, so a change saved
+  // from the admin page since this tab loaded isn't erased. On the deployed
+  // static site the endpoint is absent, so the building stays for this
+  // session and we show a clear note rather than failing loudly.
   async function persistSites(next) {
     try {
-      const response = await fetch('/__save-sites', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(next),
-      })
-      if (!response.ok) throw new Error(`save endpoint returned ${response.status}`)
+      const merged = await saveSitesMerged(next, sitesBaselineRef.current)
+      setSitesData(merged)
+      setSitesBaseline(merged)
       setBuildingNote({ kind: 'ok', text: 'Building added and saved to sites.json.' })
     } catch {
       setBuildingNote({
