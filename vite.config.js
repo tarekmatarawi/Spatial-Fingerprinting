@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'node:path'
 import fs from 'node:fs'
 import { fileURLToPath } from 'node:url'
+import { writeJsonAtomic } from './scripts/writeJsonAtomic.js'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -33,10 +34,7 @@ function sitesSaveEndpoint() {
           try {
             const sites = JSON.parse(body)
             if (!Array.isArray(sites)) throw new Error('Expected an array of sites')
-            fs.writeFileSync(
-              path.resolve(dirname, 'src/data/sites.json'),
-              JSON.stringify(sites, null, 2)
-            )
+            writeJsonAtomic(path.resolve(dirname, 'src/data/sites.json'), sites)
             res.setHeader('Content-Type', 'application/json')
             res.end(JSON.stringify({ ok: true }))
           } catch (err) {
@@ -69,10 +67,7 @@ function resultsSaveEndpoint() {
           try {
             const results = JSON.parse(body)
             if (!Array.isArray(results)) throw new Error('Expected an array of results')
-            fs.writeFileSync(
-              path.resolve(dirname, 'src/data/results.json'),
-              JSON.stringify(results, null, 2)
-            )
+            writeJsonAtomic(path.resolve(dirname, 'src/data/results.json'), results)
             res.setHeader('Content-Type', 'application/json')
             res.end(JSON.stringify({ ok: true }))
           } catch (err) {
@@ -108,10 +103,7 @@ function viewerStateSaveEndpoint() {
             if (state === null || typeof state !== 'object' || Array.isArray(state)) {
               throw new Error('Expected a viewer-state object')
             }
-            fs.writeFileSync(
-              path.resolve(dirname, 'src/data/viewer-state.json'),
-              JSON.stringify(state, null, 2)
-            )
+            writeJsonAtomic(path.resolve(dirname, 'src/data/viewer-state.json'), state)
             res.setHeader('Content-Type', 'application/json')
             res.end(JSON.stringify({ ok: true }))
           } catch (err) {
@@ -165,7 +157,7 @@ function surveySaveEndpoint() {
               return res.end(JSON.stringify({ ok: true, stale: true, total: existing.length }))
             }
 
-            fs.writeFileSync(file, JSON.stringify(existing, null, 2))
+            writeJsonAtomic(file, existing)
             res.setHeader('Content-Type', 'application/json')
             res.end(JSON.stringify({ ok: true, total: existing.length }))
           } catch (err) {

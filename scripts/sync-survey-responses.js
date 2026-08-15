@@ -11,9 +11,10 @@
 // shell or placed in a git-ignored .env.local file (KEY=value per line) —
 // see docs/survey-storage-setup.md.
 
-import { writeFileSync, readFileSync, existsSync } from 'node:fs'
+import { readFileSync, existsSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { writeJsonAtomic } from './writeJsonAtomic.js'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(dirname, '..')
@@ -61,7 +62,7 @@ async function main() {
   }
 
   const dest = path.join(root, 'src/data/survey-responses.json')
-  writeFileSync(dest, JSON.stringify(records, null, 2))
+  writeJsonAtomic(dest, records)
   console.log(`Synced ${records.length} response${records.length === 1 ? '' : 's'} to ${dest}`)
 }
 
