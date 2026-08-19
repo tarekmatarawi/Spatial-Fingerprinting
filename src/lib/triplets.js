@@ -1,4 +1,4 @@
-// Triplet-comparison survey sampling (Phase 4).
+// Triplet-comparison survey sampling (P3 — Perceptual Survey).
 //
 // A "triplet" shows three plazas; the participant marks the two that feel most
 // spatially similar. Across the whole pool every pair of sites should co-appear

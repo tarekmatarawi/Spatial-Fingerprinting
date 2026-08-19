@@ -1,10 +1,19 @@
 import { useState } from 'react'
-import { LuArrowRight, LuCheck, LuCopy, LuExternalLink, LuLink2 } from 'react-icons/lu'
+import {
+  LuArrowRight,
+  LuCheck,
+  LuCopy,
+  LuExternalLink,
+  LuLink2,
+  LuRotate3D,
+} from 'react-icons/lu'
 import responses from '@/data/survey-responses.json'
+import pilotResponses from '@/data/pilot-360-responses.json'
 import { SURVEY_LENGTH, ATTENTION_CHECKS } from '@/lib/triplets'
+import { PILOT_SURVEY_LENGTH } from '@/lib/pilot360'
 import { phaseById } from '@/lib/phases'
 
-// Researcher-side launch panel for Phase 4 (the P4 tab). The survey itself is
+// Researcher-side launch panel for P3 (the P3 tab). The survey itself is
 // participant-facing and lives at ?survey; here the researcher copies that link
 // and opens a preview. Instrument-grade to match the admin/viewer surfaces.
 export function SurveyLaunch() {
@@ -98,11 +107,93 @@ export function SurveyLaunch() {
           </a>
         </div>
 
+        <PilotPanel />
+
         <p className="mt-8 border-t border-line pt-5 text-xs leading-relaxed text-ink-faint">
           Deploy note: on the static/hosted build the local save endpoint isn&rsquo;t present —
           swap in a serverless function (e.g. a Vercel route) at <code className="font-mono">/__save-survey</code>{' '}
           to collect responses from remote participants.
         </p>
+      </div>
+    </div>
+  )
+}
+
+// Entry point for the panoramic (360°) pilot.
+//
+// The pilot deliberately has no nav station — it is a feasibility side-study,
+// not a stage of the nine-phase workflow. But "not in the nav" should not mean
+// "unreachable", so its two surfaces are surfaced here, next to the survey link
+// they are a variant of.
+function PilotPanel() {
+  const [copied, setCopied] = useState(false)
+  const link = `${window.location.origin}${import.meta.env.BASE_URL}?pilot-360`
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(link)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1800)
+    } catch {
+      setCopied(false)
+    }
+  }
+
+  return (
+    <div className="mt-8 rounded-2xl border border-dashed border-line-strong bg-paper/60 p-5">
+      <p className="flex items-center gap-2 font-mono text-xs font-medium tracking-wide text-primary">
+        <LuRotate3D aria-hidden className="h-4 w-4" />
+        PILOT · 360° PANORAMAS
+      </p>
+      <h2 className="mt-2 text-base font-semibold tracking-tight text-ink">
+        Panoramic pilot survey
+      </h2>
+      <p className="mt-2 max-w-prose text-sm leading-relaxed text-ink-muted">
+        The same triplet task with navigable 360° panoramas instead of static photographs —{' '}
+        {PILOT_SURVEY_LENGTH} comparisons, no attention check. A 10-participant feasibility run:
+        responses are stored separately and never merge with the main dataset.
+      </p>
+
+      <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+        <input
+          readOnly
+          value={link}
+          onFocus={(e) => e.target.select()}
+          className="input min-w-0 flex-1 font-mono text-[13px]"
+        />
+        <button
+          onClick={copy}
+          className={`flex shrink-0 items-center justify-center gap-1.5 rounded-full border px-4 py-1.5 text-sm font-medium shadow-sm outline-none transition-all duration-150 active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-primary-wash ${
+            copied
+              ? 'border-ok/40 bg-ok-wash text-ok'
+              : 'border-line-strong bg-paper text-ink hover:border-primary hover:text-primary-deep'
+          }`}
+        >
+          {copied ? (
+            <LuCheck aria-hidden className="h-4 w-4" />
+          ) : (
+            <LuCopy aria-hidden className="h-4 w-4" />
+          )}
+          {copied ? 'Copied' : 'Copy'}
+        </button>
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-center gap-4">
+        <a
+          href={link}
+          className="inline-flex items-center gap-2 rounded-full border border-line-strong bg-paper px-5 py-2 text-sm font-medium text-ink shadow-sm outline-none transition-all duration-150 hover:border-primary hover:text-primary-deep active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary-wash"
+        >
+          <LuExternalLink aria-hidden className="h-4 w-4" />
+          Open pilot preview
+        </a>
+        <a
+          href="#/pilot-360-review"
+          className="inline-flex items-center gap-1.5 font-mono text-xs text-ink-muted underline-offset-4 outline-none transition-colors duration-150 hover:text-primary hover:underline focus-visible:ring-2 focus-visible:ring-primary-wash"
+        >
+          {pilotResponses.length} pilot {pilotResponses.length === 1 ? 'session' : 'sessions'} —
+          timings &amp; drop-off
+          <LuArrowRight aria-hidden className="h-3.5 w-3.5" />
+        </a>
       </div>
     </div>
   )

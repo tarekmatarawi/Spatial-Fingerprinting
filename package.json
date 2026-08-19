@@ -8,7 +8,12 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "sync:survey": "node scripts/sync-survey-responses.js"
+    "test": "node --test \"test/**/*.test.js\"",
+    "analyze": "node scripts/analyze.mjs",
+    "analyze:selftest": "node scripts/analyze.mjs --selftest",
+    "sync:survey": "node scripts/sync-survey-responses.js",
+    "compute:360": "node scripts/compute-360.mjs",
+    "sync:pilot360": "node scripts/sync-pilot-360.js"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",

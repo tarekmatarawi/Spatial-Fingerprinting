@@ -1,6 +1,6 @@
 # Project Guidelines
 
-**This project is the "Spatial Fingerprinting" master's thesis platform — see [docs/spec.md](docs/spec.md) for the phased build plan. Work strictly phase by phase and respect the validation gates between phases. Current phase: 4 (survey module) — Phases 1–3 (data entry, 3D viewer, ray-casting engine) are complete.**
+**This project is the "Spatial Fingerprinting" master's thesis platform — see [docs/spec.md](docs/spec.md) for the phased build plan. Work strictly phase by phase and respect the validation gates between phases. Current phase: P5 (weight fitting) — P1–P4 (site register, 3D viewer + ray-casting engine, perceptual survey, survey results dashboard) are complete.**
 
 You are helping a student from an urban design university studio build a simple web app. They are not professional developers. Explain each step in simple terms as you go. Make development experience as simple and enjoyable as possible.
 
@@ -24,4 +24,4 @@ Backend (only if absolutely necessary):
 
 ## Design Context
 
-See [PRODUCT.md](PRODUCT.md) for the full design brief. Quick summary: **product** register, **web** platform. Personality is architectural / drafting-plan / editorial — not a generic SaaS dashboard, not a consumer map app, not a spreadsheet-in-a-browser. The researcher's own surfaces (admin, viewer, dashboard) can be dense; the participant-facing survey (Phase 4) must stay to a single, unambiguous task. No DESIGN.md yet — run `/impeccable document` once the visual system is worth capturing.
+See [PRODUCT.md](PRODUCT.md) for the full design brief. Quick summary: **product** register, **web** platform. Personality is architectural / drafting-plan / editorial — not a generic SaaS dashboard, not a consumer map app, not a spreadsheet-in-a-browser. The researcher's own surfaces (admin, viewer, dashboard) can be dense; the participant-facing surveys (P3, and later P8) must stay to a single, unambiguous task. No DESIGN.md yet — run `/impeccable document` once the visual system is worth capturing.

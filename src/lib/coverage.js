@@ -2,7 +2,7 @@
 // far cover the 18 sites and the pairs between them.
 //
 // Why this exists: each participant's triplets are drawn independently, with no
-// coordination between participants (see src/lib/triplets.js and the Phase 4
+// coordination between participants (see src/lib/triplets.js and the P3
 // section of docs/spec.md). Balanced pooled coverage is therefore an
 // *expectation* about independent random sampling at the target scale, not
 // something the sampler enforces. These functions turn that expectation into a
@@ -13,7 +13,7 @@
 // the sampler. A coverage report that re-ran the sampler would only ever confirm
 // its own assumptions.
 
-import { recordAttentionCheckPassed } from './session'
+import { recordAttentionCheckPassed } from './session.js'
 
 // Order-independent key for a pair. Site ids contain spaces, so the key is never
 // parsed back apart — each entry carries its own `a`/`b` instead.
@@ -30,7 +30,7 @@ export function possiblePairs(siteIds) {
 
 // Counts one participant session's genuine triplets into the running tallies.
 // Attention checks are skipped: they repeat a site against itself, so they carry
-// no pair information and are excluded from the Phase 5 fit anyway.
+// no pair information and are excluded from the P5 weight fit anyway.
 function tallySession(record, active, siteCounts, pairs, stats) {
   for (const response of record?.responses ?? []) {
     if (response.is_attention_check) continue
@@ -62,7 +62,7 @@ function tallySession(record, active, siteCounts, pairs, stats) {
 // Pooled coverage across every session, computed live from stored responses.
 //
 // `fitEligibleOnly` drops sessions that failed their attention check — those are
-// excluded from the Phase 5 weight fit, so their triplets don't count toward the
+// excluded from the P5 weight fit, so their triplets don't count toward the
 // coverage the fit will actually see. Sessions that haven't reached the check yet
 // are kept either way: "not answered" is not "failed".
 export function pooledCoverage(records, siteIds, { fitEligibleOnly = false } = {}) {

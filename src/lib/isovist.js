@@ -1,4 +1,4 @@
-// Unified ray-casting engine (Phase 3): one shared ray pass produces both the
+// Unified ray-casting engine (P2 — Spatial Analysis): one shared ray pass produces both the
 // isovist polygon and the enclosure ratio, per the "radiate" method (Benedikt
 // 1979) matching the Decoding Spaces Grasshopper component.
 //
@@ -17,7 +17,19 @@ export function bearingTo(from, to) {
 
 // Casts RAY_COUNT rays evenly across the FOV_DEG cone centered on
 // `directionRad`, from `vantage`, against every building footprint edge.
-// Returns the ray results plus the four Phase-3 metrics computed from them.
+// Returns the ray results plus the four metrics computed from them.
+//
+// Two shapes of isovist come out of this, and they are geometrically different
+// objects (see `closed` below), not the same thing at two settings:
+//
+//   - an open wedge (fov < 360) — the perceptual layer's directional view. Its
+//     polygon has to be closed back through the vantage point, because a wedge
+//     of ray endpoints alone is not a loop.
+//   - a closed ring (fov === 360) — the field layer's omnidirectional isovist.
+//     Its ray endpoints already form the full loop, so the vantage point is
+//     *not* a vertex; including it would add a zero-area spoke out to the first
+//     ray and back, leaving area untouched but inflating the perimeter by twice
+//     a ray length and thereby corrupting compactness.
 export function castIsovist(
   vantage,
   directionRad,
@@ -25,12 +37,19 @@ export function castIsovist(
   { fov = FOV_DEG, range = MAX_RANGE_M, rayCount = RAY_COUNT } = {}
 ) {
   const edges = buildingEdges(buildings)
-  const halfFov = ((fov * Math.PI) / 180) / 2
+  const span = (fov * Math.PI) / 180
+  const halfFov = span / 2
+
+  // A full circle wraps onto itself, so its last ray must stop one step short
+  // of its first (i / rayCount) rather than landing on top of it — otherwise
+  // 360 rays sample only 359 distinct bearings, one of them twice.
+  const closed = fov >= 360 - 1e-9
+  const steps = closed ? rayCount : Math.max(rayCount - 1, 1)
 
   const rays = []
   for (let i = 0; i < rayCount; i++) {
-    const t = rayCount === 1 ? 0.5 : i / (rayCount - 1)
-    const angle = directionRad - halfFov + t * (2 * halfFov)
+    const t = !closed && rayCount === 1 ? 0.5 : i / steps
+    const angle = directionRad - halfFov + t * span
     const dx = Math.sin(angle)
     const dy = Math.cos(angle)
 
@@ -48,7 +67,7 @@ export function castIsovist(
     )
   }
 
-  return { vantage, direction: directionRad, rays, ...computeMetrics(vantage, rays) }
+  return { vantage, direction: directionRad, fov, rays, ...computeMetrics(vantage, rays, closed) }
 }
 
 function buildingEdges(buildings) {
@@ -94,16 +113,23 @@ function raySegmentDistance(ox, oy, dx, dy, x1, y1, x2, y2) {
   return t
 }
 
-// Builds the closed polygon (vantage point + ray endpoints), then computes
-// Area (shoelace), Perimeter, Compactness, and Occlusivity (closed perimeter:
-// the sum of edges whose both endpoints are wall hits — this excludes the two
-// side edges that close the cone back to the vantage point, since the vantage
-// vertex is never a wall hit).
-function computeMetrics(vantage, rays) {
-  const verts = [
-    { x: 0, y: 0, wall: false },
-    ...rays.map((r) => ({ x: r.point.x - vantage.x, y: r.point.y - vantage.y, wall: r.wall })),
-  ]
+// Builds the polygon, then computes Area (shoelace), Perimeter, Compactness,
+// and Occlusivity (closed perimeter: the sum of edges whose both endpoints are
+// wall hits).
+//
+// For a wedge the vantage point leads the vertex list, closing the two side
+// edges of the cone; because that vertex is never a wall hit, those two closing
+// edges drop out of the occlusivity sum on their own. For a full 360° ring the
+// ray endpoints already close the loop and the vantage point is omitted — there
+// the wrap-around edge from the last ray back to the first is a genuine
+// neighbouring pair and counts towards occlusivity like any other.
+function computeMetrics(vantage, rays, closed = false) {
+  const endpoints = rays.map((r) => ({
+    x: r.point.x - vantage.x,
+    y: r.point.y - vantage.y,
+    wall: r.wall,
+  }))
+  const verts = closed ? endpoints : [{ x: 0, y: 0, wall: false }, ...endpoints]
 
   const n = verts.length
   let shoelace = 0

@@ -1,0 +1,207 @@
+{
+  "_comment": "Golden snapshot of the 120 deg engine output for the 18 canonical vantage points, captured after the 360 deg fix and byte-verified identical to the pre-fix engine. Regenerate ONLY with a deliberate, reviewed engine change: npm run test:golden",
+  "captured_at": "2026-08-17T00:42:03.755Z",
+  "fov": 120,
+  "rayCount": 120,
+  "rangeM": 200,
+  "readings": [
+    {
+      "site_id": "Gendarmenmarkt-Berlin",
+      "local_x": 71.82,
+      "local_y": 12.68,
+      "direction_deg": 234.5,
+      "area": 12524.004564346944,
+      "perimeter": 1116.6495179903434,
+      "compactness": 0.12621742497046534,
+      "occlusivity": 296.9523695650249,
+      "enclosureRatio": 0.21273146152188951
+    },
+    {
+      "site_id": "Hauptwache-Frankfurt am Main",
+      "local_x": 101.51,
+      "local_y": 25.29,
+      "direction_deg": 232.4,
+      "area": 10180.947372099105,
+      "perimeter": 784.8969796685011,
+      "compactness": 0.20766951120874713,
+      "occlusivity": 388.41396010589483,
+      "enclosureRatio": 0.3354494194036518
+    },
+    {
+      "site_id": "Römerberg-Frankfurt am Main",
+      "local_x": -15.93,
+      "local_y": 23.62,
+      "direction_deg": 112.7,
+      "area": 2939.9416368856896,
+      "perimeter": 385.08322785245804,
+      "compactness": 0.24913765134320323,
+      "occlusivity": 275.15243613335673,
+      "enclosureRatio": 0.29295038130255746
+    },
+    {
+      "site_id": "Zeil-Frankfurt am Main",
+      "local_x": 35.92,
+      "local_y": -2.86,
+      "direction_deg": 261.9,
+      "area": 6625.385682142418,
+      "perimeter": 519.5142236516594,
+      "compactness": 0.30847938320326207,
+      "occlusivity": 202.38987618655014,
+      "enclosureRatio": 0.5171540794416226
+    },
+    {
+      "site_id": "Bebelplatz-Berlin",
+      "local_x": 357.31,
+      "local_y": -65.17,
+      "direction_deg": 175.3,
+      "area": 8645.748696691855,
+      "perimeter": 532.1089335420162,
+      "compactness": 0.3837172923296483,
+      "occlusivity": 287.9736538362754,
+      "enclosureRatio": 0.3314869797013791
+    },
+    {
+      "site_id": "Alexanderplatz-Berlin",
+      "local_x": 112.96,
+      "local_y": -45.72,
+      "direction_deg": 299,
+      "area": 8815.276301538917,
+      "perimeter": 502.97504296956856,
+      "compactness": 0.43787779287914796,
+      "occlusivity": 390.64629182401075,
+      "enclosureRatio": 0.3288707138904859
+    },
+    {
+      "site_id": "Marienplatz-Munich",
+      "local_x": -0.08,
+      "local_y": -0.36,
+      "direction_deg": 121.2,
+      "area": 5639.887329033405,
+      "perimeter": 558.2872094761011,
+      "compactness": 0.2273866354661081,
+      "occlusivity": 496.92986185142354,
+      "enclosureRatio": 0.59509174124913
+    },
+    {
+      "site_id": "Odeonsplatz-Munich",
+      "local_x": 63.15,
+      "local_y": 45.39,
+      "direction_deg": 195.3,
+      "area": 6903.187902504836,
+      "perimeter": 702.4309090359421,
+      "compactness": 0.1758135453767785,
+      "occlusivity": 382.78958021969675,
+      "enclosureRatio": 0.3884191007978122
+    },
+    {
+      "site_id": "Konstablerwache-Frankfurt am Main",
+      "local_x": -48.7,
+      "local_y": 13.08,
+      "direction_deg": 120.1,
+      "area": 8798.211298028114,
+      "perimeter": 798.1526708155694,
+      "compactness": 0.17355307358671962,
+      "occlusivity": 541.7119299537846,
+      "enclosureRatio": 0.21989301027996708
+    },
+    {
+      "site_id": "Alter Markt-Cologne",
+      "local_x": 72.7,
+      "local_y": -36.13,
+      "direction_deg": 7.6,
+      "area": 3752.0685981536826,
+      "perimeter": 485.27796359583436,
+      "compactness": 0.20021632836803566,
+      "occlusivity": 423.2583068900624,
+      "enclosureRatio": 0.2984111638854997
+    },
+    {
+      "site_id": "Rathausmarkt-Hamburg",
+      "local_x": 101.06,
+      "local_y": -28.45,
+      "direction_deg": 297.5,
+      "area": 10151.246769191872,
+      "perimeter": 563.429956255196,
+      "compactness": 0.40183649950568634,
+      "occlusivity": 393.8872810628958,
+      "enclosureRatio": 1.027490800576064
+    },
+    {
+      "site_id": "Naschmarkt-Leipzig",
+      "local_x": 36.05,
+      "local_y": -39.95,
+      "direction_deg": 4.4,
+      "area": 1759.0219144744065,
+      "perimeter": 341.53147785990166,
+      "compactness": 0.18950454890301355,
+      "occlusivity": 314.23560274425205,
+      "enclosureRatio": 0.5708277287944863
+    },
+    {
+      "site_id": "Burgplatz-Düsseldorf",
+      "local_x": 85.07,
+      "local_y": 2.27,
+      "direction_deg": 31.1,
+      "area": 9753.229545832804,
+      "perimeter": 948.2755158751729,
+      "compactness": 0.1362979220790565,
+      "occlusivity": 307.08621317323815,
+      "enclosureRatio": 0.3240217952587447
+    },
+    {
+      "site_id": "Marktplatz-Heidelberg",
+      "local_x": 45.57,
+      "local_y": -39.66,
+      "direction_deg": 19.3,
+      "area": 2357.167165175688,
+      "perimeter": 213.2057457252773,
+      "compactness": 0.6516320521996383,
+      "occlusivity": 147.56946672641277,
+      "enclosureRatio": 0.7438939964843772
+    },
+    {
+      "site_id": "Augustusplatz-Leipzig",
+      "local_x": 134.1,
+      "local_y": -6.48,
+      "direction_deg": 170.6,
+      "area": 7923.9975599279505,
+      "perimeter": 704.8012647551868,
+      "compactness": 0.2004568251440465,
+      "occlusivity": 540.4071704312903,
+      "enclosureRatio": 0.2905896248230516
+    },
+    {
+      "site_id": "Hauptmarkt-Trier",
+      "local_x": 22.81,
+      "local_y": -52.67,
+      "direction_deg": 6.4,
+      "area": 4517.82715052627,
+      "perimeter": 568.3481346955863,
+      "compactness": 0.17575617688946144,
+      "occlusivity": 325.5955135642505,
+      "enclosureRatio": 0.4997030692914494
+    },
+    {
+      "site_id": "Herderplatz-Weimar",
+      "local_x": 5.8,
+      "local_y": -4.15,
+      "direction_deg": 89.6,
+      "area": 2778.988105500949,
+      "perimeter": 379.2164567882493,
+      "compactness": 0.2428411046820178,
+      "occlusivity": 342.68367722756767,
+      "enclosureRatio": 0.3264915546805996
+    },
+    {
+      "site_id": "Theaterplatz-Weimar",
+      "local_x": 42.68,
+      "local_y": 4.47,
+      "direction_deg": 251.6,
+      "area": 2693.4061548067466,
+      "perimeter": 452.4383617763145,
+      "compactness": 0.16534568658661428,
+      "occlusivity": 370.7284666469061,
+      "enclosureRatio": 0.27748846765771495
+    }
+  ]
+}

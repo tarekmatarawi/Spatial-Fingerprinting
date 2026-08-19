@@ -100,7 +100,7 @@ Commit and push this change. The next GitHub Pages deploy will carry it, and fro
 
 ### Step 6: Bring responses back into the app
 
-Whenever you want the site's Results page (and later Phases 5/6) to reflect the latest submissions:
+Whenever you want the P4 Survey Results Dashboard (and later the P5 weight fit) to reflect the latest submissions:
 
 ```
 npm run sync:survey

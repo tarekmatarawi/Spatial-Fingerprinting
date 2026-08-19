@@ -1,16 +1,13 @@
 import {
   LuChartColumn,
-  LuFlaskConical,
   LuLink2,
-  LuNetwork,
   LuRadar,
   LuRefreshCw,
   LuShieldCheck,
-  LuSlidersHorizontal,
   LuTimer,
   LuUsersRound,
 } from 'react-icons/lu'
-import isovistReadings from '@/data/results.json'
+import allReadings from '@/data/results.json'
 import sites from '@/data/sites.json'
 import { CoveragePanel } from '@/components/CoveragePanel'
 import { phaseById } from '@/lib/phases'
@@ -25,9 +22,11 @@ import {
   STATUS_LABELS,
 } from '@/lib/session'
 
-// The researcher's command center: survey response quality today, with clearly
-// labeled berths for the Phase 5/6 analyses (fitted weights, hypothesis tests,
-// clustering) so the page grows into the study instead of being rebuilt for it.
+// P4 — Survey Results Dashboard. The researcher's read on response quality:
+// who answered, how completely, whether the attention check discriminated, and
+// whether pooled pair coverage supports the sampling assumption. Everything
+// derived FROM the responses (fitted weights, hypothesis tests, zone typology)
+// lives in P5 onward, not here.
 // Reads src/data/survey-responses.json — the same file the dev-server endpoint
 // appends to — so it's current on every reload while collecting locally.
 
@@ -71,6 +70,11 @@ function median(values) {
 // Coverage is only meaningful over the sites still in the study — an excluded
 // plaza never reaches a participant again, so its pairs can't fill in.
 const ACTIVE_SITES = activeSites(sites)
+
+// results.json carries every FOV layer. This dashboard reports the perceptual
+// (120°) layer the survey was built on; the panoramic pilot's 360° readings are
+// a separate layer and are counted on the pilot's own page.
+const isovistReadings = allReadings.filter((r) => r.fov_mode === 'perceptual_120')
 
 const BACKGROUND_LABELS = {
   yes: 'Design background',
@@ -125,10 +129,12 @@ export function ResultsPage() {
               <phase.icon aria-hidden className="h-4 w-4" />
               {phase.code}
             </p>
-            <h1 className="mt-2 text-2xl font-semibold tracking-tight text-ink">Results</h1>
+            <h1 className="mt-2 text-2xl font-semibold tracking-tight text-ink">
+              Survey Results Dashboard
+            </h1>
             <p className="mt-1.5 max-w-prose text-sm leading-relaxed text-ink-muted">
-              Survey response quality today; fitted weights, hypothesis tests, and clustering take
-              their places here as Phases 5–6 unlock.
+              Who answered, how completely, and whether pooled pair coverage supports the sampling
+              assumption. The analyses built on these responses begin at P5.
             </p>
           </div>
           <div className="flex flex-col items-end gap-1.5">
@@ -297,33 +303,6 @@ export function ResultsPage() {
           </>
         )}
 
-        {/* Berths for the analyses to come — labeled, honest, phase-gated */}
-        <section className="mt-10">
-          <div className="flex items-baseline justify-between gap-4 border-b border-line-strong pb-2">
-            <h2 className="text-base font-semibold tracking-tight text-ink">As the study matures</h2>
-            <p className="font-mono text-xs text-ink-faint">phase-gated · not yet computed</p>
-          </div>
-          <div className="mt-4 grid gap-4 sm:grid-cols-3">
-            <Upcoming
-              icon={LuSlidersHorizontal}
-              phase="Phase 5"
-              title="Fitted metric weights"
-              text="Maximum-likelihood weights for area, compactness, occlusivity, and enclosure — fitted against the triplet responses."
-            />
-            <Upcoming
-              icon={LuFlaskConical}
-              phase="Phase 6"
-              title="Hypothesis tests H1–H3"
-              text="Does the weighted metric predict perceived similarity better than chance, than equal weights, than area alone?"
-            />
-            <Upcoming
-              icon={LuNetwork}
-              phase="Phase 6"
-              title="Perceptual clustering"
-              text="The plaza taxonomy, re-clustered with perceptually calibrated distances."
-            />
-          </div>
-        </section>
       </div>
     </div>
   )
@@ -367,21 +346,6 @@ function BreakdownBars({ rows, total }) {
         )
       })}
     </ul>
-  )
-}
-
-function Upcoming({ icon: Icon, phase, title, text }) {
-  return (
-    <div className="rounded-xl border border-dashed border-line-strong p-4">
-      <div className="flex items-center justify-between gap-2">
-        <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-line bg-bg text-ink-faint">
-          <Icon aria-hidden className="h-4 w-4" />
-        </span>
-        <span className="font-mono text-xs text-ink-faint">{phase}</span>
-      </div>
-      <h3 className="mt-3 text-sm font-medium text-ink">{title}</h3>
-      <p className="mt-1 text-xs leading-relaxed text-ink-muted">{text}</p>
-    </div>
   )
 }
 

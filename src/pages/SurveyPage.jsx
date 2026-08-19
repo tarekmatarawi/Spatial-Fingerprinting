@@ -6,12 +6,12 @@ import { assembleSurvey, SURVEY_LENGTH } from '@/lib/triplets'
 import { SURVEY_ENDPOINT_URL } from '@/lib/surveyEndpoint'
 import { attentionCheckPassed, STATUS_COMPLETED, STATUS_IN_PROGRESS } from '@/lib/session'
 
-// Phase 4 — the participant-facing triplet survey. This is the one surface in
+// P3 — the participant-facing triplet survey. This is the one surface in
 // the platform that is NOT instrument-grade: it strips down to a single,
 // unambiguous task (pick the two squares that feel most similar) with no
 // researcher chrome, per the "one tool, two densities" product principle.
 //
-// Reached bare at ?survey; the researcher previews/links it from the P4 tab.
+// Reached bare at ?survey; the researcher previews/links it from the P3 tab.
 
 const INSTRUCTION =
   'Which two of these three spaces feel most similar in terms of how open, enclosed, or spatially complex they feel? Judge by the sense of space — not architectural style or surface materials.'

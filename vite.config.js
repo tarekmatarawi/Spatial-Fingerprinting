@@ -201,6 +201,74 @@ function surveyReadEndpoint() {
   }
 }
 
+// Dev-only endpoints for the panoramic pilot. Deliberately a SEPARATE file from
+// survey-responses.json: the pilot must never merge into the primary dataset,
+// and separate storage is a stronger guarantee of that than a filter applied
+// later. Same upsert-on-participant_id and stale-revision rules as the main
+// survey.
+function pilot360Endpoints() {
+  const FILE = 'src/data/pilot-360-responses.json'
+  return {
+    name: 'pilot-360-endpoints',
+    configureServer(server) {
+      server.middlewares.use('/__save-pilot-360', (req, res) => {
+        if (req.method !== 'POST') {
+          res.statusCode = 405
+          return res.end()
+        }
+        let body = ''
+        req.on('data', (chunk) => (body += chunk))
+        req.on('end', () => {
+          try {
+            const submission = JSON.parse(body)
+            if (!submission || typeof submission !== 'object' || Array.isArray(submission)) {
+              throw new Error('Expected a submission object')
+            }
+            if (!submission.participant_id) throw new Error('Submission has no participant_id')
+
+            const file = path.resolve(dirname, FILE)
+            const existing = JSON.parse(fs.readFileSync(file, 'utf8') || '[]')
+            const at = existing.findIndex((r) => r.participant_id === submission.participant_id)
+
+            if (at === -1) {
+              existing.push(submission)
+            } else if ((submission.revision ?? 0) >= (existing[at].revision ?? 0)) {
+              existing[at] = submission
+            } else {
+              res.setHeader('Content-Type', 'application/json')
+              return res.end(JSON.stringify({ ok: true, stale: true, total: existing.length }))
+            }
+
+            writeJsonAtomic(file, existing)
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ ok: true, total: existing.length }))
+          } catch (err) {
+            res.statusCode = 400
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ ok: false, error: String(err.message || err) }))
+          }
+        })
+      })
+
+      server.middlewares.use('/__pilot-360-responses', (req, res) => {
+        if (req.method !== 'GET') {
+          res.statusCode = 405
+          return res.end()
+        }
+        try {
+          res.setHeader('Content-Type', 'application/json')
+          res.setHeader('Cache-Control', 'no-store')
+          res.end(fs.readFileSync(path.resolve(dirname, FILE), 'utf8') || '[]')
+        } catch (err) {
+          res.statusCode = 500
+          res.setHeader('Content-Type', 'application/json')
+          res.end(JSON.stringify({ ok: false, error: String(err.message || err) }))
+        }
+      })
+    },
+  }
+}
+
 const IMAGES_DIR = path.resolve(dirname, 'public/images')
 const SAFE_IMAGE_NAME = /^[a-z0-9][a-z0-9-]*\.(jpg|jpeg|png|webp)$/
 
@@ -261,6 +329,7 @@ export default defineConfig({
     viewerStateSaveEndpoint(),
     surveySaveEndpoint(),
     surveyReadEndpoint(),
+    pilot360Endpoints(),
     uploadImageEndpoint(),
   ],
   resolve: {

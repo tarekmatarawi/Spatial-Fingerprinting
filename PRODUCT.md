@@ -12,7 +12,7 @@ web
 
 The primary user is the researcher building this platform for their own master's thesis: the person entering the 18 sites' geometry, driving the 3D viewer, running the isovist engine, and eventually reading the results dashboard. This is a working instrument used repeatedly by one expert operator, not a general audience — density and precision can outrank hand-holding on these surfaces.
 
-Two secondary audiences exist on very different surfaces. Anonymous survey participants (Phase 4) land on a single triplet-comparison task with zero context and no login — a one-shot, public-facing experience that needs to feel effortless rather than instrument-grade. Thesis reviewers or committee members may view the results dashboard (Phase 6) or watch the tool demoed, so that surface should read as credible and legible to someone seeing it for the first time.
+Two secondary audiences exist on very different surfaces. Anonymous survey participants (P3) land on a single triplet-comparison task with zero context and no login — a one-shot, public-facing experience that needs to feel effortless rather than instrument-grade. Thesis reviewers or committee members may view the analysis pages (P5–P7) or watch the tool demoed, so that surface should read as credible and legible to someone seeing it for the first time.
 
 ## Product Purpose
 
@@ -40,7 +40,7 @@ Plan-view sensibility, not app-generic: draw from architectural drafting convent
 
 Show the data, don't decorate it: metrics, coordinates, and geometry states (OSM / default / pinned height, boundary set or not) must stay legible and directly visible, never buried behind icons or ornament standing in for information.
 
-Design only the current phase: the build is gated phase-by-phase with validation checkpoints; don't pre-design surfaces for phases that haven't been reached yet (e.g. no survey or dashboard visual work before Phase 4/6 are unblocked).
+Design only the current phase: the build is gated phase-by-phase with validation checkpoints; don't pre-design surfaces for phases that haven't been reached yet (e.g. no analysis visual work before P5 onward are unblocked).
 
 ## Accessibility & Inclusion
 

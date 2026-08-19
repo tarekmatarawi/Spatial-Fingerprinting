@@ -1,4 +1,4 @@
-import { createProjector } from './geo'
+import { createProjector } from './geo.js'
 
 const FALLBACK_HEIGHT = 9
 

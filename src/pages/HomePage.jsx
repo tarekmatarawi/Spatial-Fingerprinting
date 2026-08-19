@@ -2,13 +2,17 @@ import { LuArrowRight, LuChevronRight } from 'react-icons/lu'
 import sites from '@/data/sites.json'
 import results from '@/data/results.json'
 import responses from '@/data/survey-responses.json'
-import { PHASES } from '@/lib/phases'
+import { groupedPhases } from '@/lib/phases'
 import { activeSites } from '@/lib/site'
 import { FigureGround } from '@/components/FigureGround'
 
 // Researcher-facing landing: the platform's name, its one-line claim, a live
-// figure-ground drawing computed from the thesis's own data, and the four-phase
-// journey. Participants never see this — their link goes straight to ?survey.
+// figure-ground drawing computed from the thesis's own data, and the nine-phase
+// journey grouped into setup, analysis, and design application. Participants never see this — their link goes straight to ?survey.
+
+// Only the perceptual (120°) layer — results.json also holds the panoramic
+// pilot's 360° readings, which are not what this line is reporting.
+const perceptualReadings = results.filter((r) => r.fov_mode === 'perceptual_120')
 
 const HERO_SITE =
   sites.find((s) => s.id === 'Gendarmenmarkt-Berlin') ??
@@ -28,9 +32,9 @@ export function HomePage() {
     sites: `${studySites.length} sites · ${buildingCount.toLocaleString()} buildings entered${
       excludedCount > 0 ? ` · ${excludedCount} excluded` : ''
     }`,
-    viewer: `${results.length} saved isovist ${results.length === 1 ? 'reading' : 'readings'}`,
+    viewer: `${perceptualReadings.length} saved isovist ${perceptualReadings.length === 1 ? 'reading' : 'readings'}`,
     survey: `${responses.length} ${responses.length === 1 ? 'response' : 'responses'} collected`,
-    results: 'weight fitting unlocks after the survey',
+    results: `${responses.length} ${responses.length === 1 ? 'session' : 'sessions'} to review`,
   }
 
   return (
@@ -108,45 +112,63 @@ export function HomePage() {
           </figure>
         </section>
 
-        {/* ---- The four-phase journey ----------------------------------- */}
+        {/* ---- The nine-phase journey, in three movements ---------------- */}
         <section className="mt-16 sm:mt-20">
           <div className="flex items-baseline justify-between gap-4 border-b border-line-strong pb-3">
             <h2 className="text-xl font-semibold tracking-tight text-ink">
-              One pipeline, four phases
+              One pipeline, nine phases
             </h2>
             <p className="hidden font-mono text-xs text-ink-faint sm:block">
               validation-gated · built in order
             </p>
           </div>
 
-          <ol className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
-            {PHASES.map((p, i) => (
-              <li key={p.id} className="animate-rise-in" style={{ animationDelay: `${280 + i * 80}ms` }}>
-                <a
-                  href={`#/${p.id}`}
-                  className="group flex h-full flex-col rounded-xl border border-line bg-paper p-5 outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-primary hover:shadow-sm focus-visible:ring-2 focus-visible:ring-primary-wash"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-lg border border-line bg-bg text-ink-muted transition-colors duration-200 group-hover:border-primary/40 group-hover:text-primary">
-                      <p.icon aria-hidden className="h-5 w-5" />
-                    </span>
-                    <span className="font-mono text-xs text-ink-faint">{p.code}</span>
-                  </div>
-                  <h3 className="mt-4 flex items-center gap-1 font-medium text-ink">
-                    {p.journey}
-                    <LuChevronRight
-                      aria-hidden
-                      className="h-4 w-4 text-ink-faint transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-primary"
-                    />
-                  </h3>
-                  <p className="mt-1.5 flex-1 text-sm leading-relaxed text-ink-muted">{p.blurb}</p>
-                  <p className="mt-4 border-t border-line pt-2.5 font-mono text-xs text-ink-faint">
-                    {status[p.id]}
-                  </p>
-                </a>
-              </li>
-            ))}
-          </ol>
+          {groupedPhases.map((group, gi) => (
+            <div key={group.id} className={gi === 0 ? 'mt-6' : 'mt-8'}>
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <h3 className="font-mono text-xs font-medium tracking-wide text-primary">
+                  {group.name.toUpperCase()}
+                </h3>
+                <p className="text-xs text-ink-faint">{group.blurb}</p>
+              </div>
+              <ol className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+                {group.phases.map((p, i) => (
+                  <li
+                    key={p.id}
+                    className="animate-rise-in"
+                    style={{ animationDelay: `${280 + (gi * 4 + i) * 60}ms` }}
+                  >
+                    <a
+                      href={`#/${p.id}`}
+                      className={`group flex h-full flex-col rounded-xl border bg-paper p-5 outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-primary hover:shadow-sm focus-visible:ring-2 focus-visible:ring-primary-wash ${
+                        p.status === 'planned' ? 'border-dashed border-line-strong' : 'border-line'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="flex h-10 w-10 items-center justify-center rounded-lg border border-line bg-bg text-ink-muted transition-colors duration-200 group-hover:border-primary/40 group-hover:text-primary">
+                          <p.icon aria-hidden className="h-5 w-5" />
+                        </span>
+                        <span className="font-mono text-xs text-ink-faint">{p.code}</span>
+                      </div>
+                      <h3 className="mt-4 flex items-center gap-1 font-medium text-ink">
+                        {p.journey}
+                        <LuChevronRight
+                          aria-hidden
+                          className="h-4 w-4 text-ink-faint transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-primary"
+                        />
+                      </h3>
+                      <p className="mt-1.5 flex-1 text-sm leading-relaxed text-ink-muted">
+                        {p.blurb}
+                      </p>
+                      <p className="mt-4 border-t border-line pt-2.5 font-mono text-xs text-ink-faint">
+                        {status[p.id] ?? 'not built yet'}
+                      </p>
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))}
         </section>
 
         {/* ---- Record strip -------------------------------------------- */}

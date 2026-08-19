@@ -21,6 +21,12 @@ import { castIsovist, bearingTo } from '@/lib/isovist'
 import { Buildings } from './Buildings'
 import { IsovistOverlay } from './IsovistOverlay'
 
+// results.json holds every FOV layer side by side. The viewer casts and saves
+// 120° readings only; everything else is passed through untouched.
+const PERCEPTUAL_READINGS = savedResults.filter((r) => r.fov_mode !== 'perceptual_360' && r.fov_mode !== 'field_360')
+const OTHER_LAYER_READINGS = savedResults.filter((r) => r.fov_mode === 'perceptual_360' || r.fov_mode === 'field_360')
+
+
 // The whole scene uses a Z-up world (X = east/right, Y = north/front, Z = up),
 // matching CAD tools like Rhino. This also renders each site the correct way
 // round (no mirroring), since a top-down view of the X/Y plane is a standard
@@ -118,7 +124,11 @@ export function SiteViewer({ active = true }) {
   const [direction, setDirection] = useState(initial.direction) // compass bearing, radians (0 = north, clockwise)
   const [stage, setStage] = useState(initial.stage) // 'vantage' = next click sets viewpoint, 'aim' = next click sets facing direction
   const [resetToken, setResetToken] = useState(0)
-  const [results, setResults] = useState(savedResults) // saved isovist readings, seeded from src/data/results.json
+  // The viewer works in the perceptual (120°) layer, so its readings list shows
+  // only those rows. results.json also holds the panoramic pilot's 360° layer;
+  // those are held aside in OTHER_LAYER_READINGS and re-attached on every save
+  // so writing a new 120° reading can never drop them.
+  const [results, setResults] = useState(PERCEPTUAL_READINGS)
   const [saveError, setSaveError] = useState(null)
   const [showSavedProjections, setShowSavedProjections] = useState(false) // overlay saved points' isovists faintly
   const compassRef = useRef(null)
@@ -218,7 +228,10 @@ export function SiteViewer({ active = true }) {
       payload.x = x
       payload.y = y
       if (direction != null) {
-        const dir = round(((direction * 180) / Math.PI + 360) % 360, 1)
+        // Matches the 2 dp stored on a saved reading: this is the pose a shared
+        // link or a reopened tab restores, and if it rounded harder than the
+        // reading does, saving after a reload would quietly lose the precision.
+        const dir = round(((direction * 180) / Math.PI + 360) % 360, 2)
         params.push(`dir=${dir}`)
         payload.dir_deg = dir
       }
@@ -402,7 +415,8 @@ export function SiteViewer({ active = true }) {
       const response = await fetch('/__save-results', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(next),
+        // Re-attach the layers this viewer does not edit, so the file keeps them.
+        body: JSON.stringify([...OTHER_LAYER_READINGS, ...next]),
       })
       if (!response.ok) throw new Error(`save endpoint returned ${response.status}`)
       setSaveError(null)
@@ -421,7 +435,12 @@ export function SiteViewer({ active = true }) {
       lng: round(pick.lon, 6),
       local_x: round(pick.point.x, 2),
       local_y: round(pick.point.y, 2),
-      direction_deg: round(((direction * 180) / Math.PI + 360) % 360, 1),
+      // 2 dp (~0.01°). Heading is the one field where stored precision matters:
+      // at 1 dp a reading cannot be recomputed from its own record, because at
+      // sites with street openings a sub-degree rotation flips a ray between a
+      // near facade and a 200 m escape — worth ~2% of area and ~12% of
+      // occlusivity. Position at 2 dp is already 1 cm and needs no widening.
+      direction_deg: round(((direction * 180) / Math.PI + 360) % 360, 2),
       area_m2: round(isovistResult.area, 2),
       compactness: round(isovistResult.compactness, 4),
       occlusivity_m: round(isovistResult.occlusivity, 2),
