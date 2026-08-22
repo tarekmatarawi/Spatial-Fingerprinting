@@ -1,11 +1,11 @@
-// Google Apps Script "Web App" acting as a free API in front of a Google
-// Sheet, so the GitHub Pages survey (which cannot run its own server) has
-// somewhere to send participant responses. See docs/survey-storage-setup.md
-// for the full setup walkthrough — this file is not run automatically; it is
-// meant to be copied into the Sheet's Extensions > Apps Script editor.
+// Google Apps Script for the perceptual survey (?survey).
 //
-// This is not part of the Vite build — it never ships to the browser.
-
+// Bound to the live survey's spreadsheet. The earlier static-photo study wrote
+// to a different Sheet, which is now a closed archive — the two instruments are
+// not comparable and must not share a tab.
+//
+// Columns: the triplet task plus the semantic-differential rating block.
+// columns are written — survey_version and median_seconds.
 const SHEET_NAME = 'Responses'
 
 // The readable date columns are written in the researcher's own timezone so the
@@ -72,6 +72,19 @@ function doPost(e) {
       background: payload.background || '',
       age_group: payload.age_group || '',
       response_count: Array.isArray(payload.responses) ? payload.responses.length : 0,
+      survey_version: payload.survey_version || '',
+      // Median seconds per comparison, so burden is visible in the Sheet
+      // without opening payload_json. Blank until the first answer lands.
+      median_seconds: medianSeconds(payload.responses),
+      // The semantic-differential block. Kept in its own columns so a row is
+      // readable at a glance without opening payload_json, and so a session that
+      // ended before the ratings is visibly empty rather than ambiguous.
+      rating_count: Array.isArray(payload.rating_responses) ? payload.rating_responses.length : 0,
+      rated_sites: Array.isArray(payload.rated_site_ids) ? payload.rated_site_ids.length : 0,
+      rated_site_ids: Array.isArray(payload.rated_site_ids) ? payload.rated_site_ids.join(' ') : '',
+      anchor_directions: payload.anchor_directions
+        ? JSON.stringify(payload.anchor_directions)
+        : '',
       payload_json: JSON.stringify(payload),
     }
 
@@ -93,6 +106,19 @@ function doPost(e) {
   } finally {
     lock.releaseLock()
   }
+}
+
+// Median of duration_ms across a session's answers, in seconds to one decimal.
+function medianSeconds(responses) {
+  if (!Array.isArray(responses)) return ''
+  const ds = responses
+    .map(function (r) { return r && r.duration_ms })
+    .filter(function (d) { return typeof d === 'number' && isFinite(d) })
+    .sort(function (a, b) { return a - b })
+  if (!ds.length) return ''
+  const mid = Math.floor(ds.length / 2)
+  const ms = ds.length % 2 ? ds[mid] : (ds[mid - 1] + ds[mid]) / 2
+  return Math.round(ms / 100) / 10
 }
 
 function jsonOut(obj) {

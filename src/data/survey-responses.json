@@ -18580,5 +18580,1569 @@
         "timestamp": "2026-08-12T18:41:40.380Z"
       }
     ]
+  },
+  {
+    "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+    "started_at": "2026-08-19T09:08:31.433Z",
+    "updated_at": "2026-08-19T09:10:33.139Z",
+    "finished_at": "2026-08-19T09:10:33.139Z",
+    "status": "completed",
+    "revision": 28,
+    "attention_check_passed": true,
+    "background": "yes",
+    "age_group": "25–34",
+    "responses": [
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:0",
+        "order": 0,
+        "site_a": "Alexanderplatz-Berlin",
+        "site_b": "Naschmarkt-Leipzig",
+        "site_c": "Hauptmarkt-Trier",
+        "chosen_pair": [
+          "Naschmarkt-Leipzig",
+          "Hauptmarkt-Trier"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:08:36.660Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:1",
+        "order": 1,
+        "site_a": "Marktplatz-Heidelberg",
+        "site_b": "Theaterplatz-Weimar",
+        "site_c": "Zeil-Frankfurt am Main",
+        "chosen_pair": [
+          "Marktplatz-Heidelberg",
+          "Zeil-Frankfurt am Main"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:08:39.712Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:2",
+        "order": 2,
+        "site_a": "Burgplatz-Düsseldorf",
+        "site_b": "Augustusplatz-Leipzig",
+        "site_c": "Naschmarkt-Leipzig",
+        "chosen_pair": [
+          "Augustusplatz-Leipzig",
+          "Burgplatz-Düsseldorf"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:08:50.493Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:3",
+        "order": 3,
+        "site_a": "Hauptmarkt-Trier",
+        "site_b": "Herderplatz-Weimar",
+        "site_c": "Odeonsplatz-Munich",
+        "chosen_pair": [
+          "Herderplatz-Weimar",
+          "Odeonsplatz-Munich"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:09:23.545Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:4",
+        "order": 4,
+        "site_a": "Zeil-Frankfurt am Main",
+        "site_b": "Hauptmarkt-Trier",
+        "site_c": "Gendarmenmarkt-Berlin",
+        "chosen_pair": [
+          "Gendarmenmarkt-Berlin",
+          "Hauptmarkt-Trier"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:09:27.199Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:5",
+        "order": 5,
+        "site_a": "Theaterplatz-Weimar",
+        "site_b": "Marienplatz-Munich",
+        "site_c": "Hauptmarkt-Trier",
+        "chosen_pair": [
+          "Hauptmarkt-Trier",
+          "Marienplatz-Munich"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:09:31.808Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:6",
+        "order": 6,
+        "site_a": "Augustusplatz-Leipzig",
+        "site_b": "Alexanderplatz-Berlin",
+        "site_c": "Hauptwache-Frankfurt am Main",
+        "chosen_pair": [
+          "Augustusplatz-Leipzig",
+          "Alexanderplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:09:34.618Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:7",
+        "order": 7,
+        "site_a": "Theaterplatz-Weimar",
+        "site_b": "Augustusplatz-Leipzig",
+        "site_c": "Marienplatz-Munich",
+        "chosen_pair": [
+          "Theaterplatz-Weimar",
+          "Augustusplatz-Leipzig"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:09:38.376Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:8",
+        "order": 8,
+        "site_a": "Herderplatz-Weimar",
+        "site_b": "Hauptmarkt-Trier",
+        "site_c": "Burgplatz-Düsseldorf",
+        "chosen_pair": [
+          "Herderplatz-Weimar",
+          "Hauptmarkt-Trier"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:09:40.727Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:9",
+        "order": 9,
+        "site_a": "Alter Markt-Cologne",
+        "site_b": "Odeonsplatz-Munich",
+        "site_c": "Bebelplatz-Berlin",
+        "chosen_pair": [
+          "Odeonsplatz-Munich",
+          "Bebelplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:09:43.242Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:10",
+        "order": 10,
+        "site_a": "Hauptmarkt-Trier",
+        "site_b": "Naschmarkt-Leipzig",
+        "site_c": "Römerberg-Frankfurt am Main",
+        "chosen_pair": [
+          "Naschmarkt-Leipzig",
+          "Hauptmarkt-Trier"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:09:46.586Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:11",
+        "order": 11,
+        "site_a": "Naschmarkt-Leipzig",
+        "site_b": "Bebelplatz-Berlin",
+        "site_c": "Zeil-Frankfurt am Main",
+        "chosen_pair": [
+          "Naschmarkt-Leipzig",
+          "Bebelplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:09:49.368Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:12",
+        "order": 12,
+        "site_a": "Herderplatz-Weimar",
+        "site_b": "Naschmarkt-Leipzig",
+        "site_c": "Augustusplatz-Leipzig",
+        "chosen_pair": [
+          "Herderplatz-Weimar",
+          "Naschmarkt-Leipzig"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:09:52.002Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:13",
+        "order": 13,
+        "site_a": "Gendarmenmarkt-Berlin",
+        "site_b": "Gendarmenmarkt-Berlin",
+        "site_c": "Alexanderplatz-Berlin",
+        "chosen_pair": [
+          "Gendarmenmarkt-Berlin",
+          "Gendarmenmarkt-Berlin"
+        ],
+        "is_attention_check": true,
+        "timestamp": "2026-08-19T09:09:54.662Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:14",
+        "order": 14,
+        "site_a": "Rathausmarkt-Hamburg",
+        "site_b": "Bebelplatz-Berlin",
+        "site_c": "Alexanderplatz-Berlin",
+        "chosen_pair": [
+          "Rathausmarkt-Hamburg",
+          "Alexanderplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:09:57.136Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:15",
+        "order": 15,
+        "site_a": "Herderplatz-Weimar",
+        "site_b": "Römerberg-Frankfurt am Main",
+        "site_c": "Burgplatz-Düsseldorf",
+        "chosen_pair": [
+          "Herderplatz-Weimar",
+          "Römerberg-Frankfurt am Main"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:09:59.461Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:16",
+        "order": 16,
+        "site_a": "Römerberg-Frankfurt am Main",
+        "site_b": "Theaterplatz-Weimar",
+        "site_c": "Rathausmarkt-Hamburg",
+        "chosen_pair": [
+          "Römerberg-Frankfurt am Main",
+          "Rathausmarkt-Hamburg"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:10:01.336Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:17",
+        "order": 17,
+        "site_a": "Konstablerwache-Frankfurt am Main",
+        "site_b": "Bebelplatz-Berlin",
+        "site_c": "Theaterplatz-Weimar",
+        "chosen_pair": [
+          "Konstablerwache-Frankfurt am Main",
+          "Bebelplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:10:03.204Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:18",
+        "order": 18,
+        "site_a": "Hauptwache-Frankfurt am Main",
+        "site_b": "Marktplatz-Heidelberg",
+        "site_c": "Zeil-Frankfurt am Main",
+        "chosen_pair": [
+          "Hauptwache-Frankfurt am Main",
+          "Marktplatz-Heidelberg"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:10:04.995Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:19",
+        "order": 19,
+        "site_a": "Augustusplatz-Leipzig",
+        "site_b": "Marktplatz-Heidelberg",
+        "site_c": "Rathausmarkt-Hamburg",
+        "chosen_pair": [
+          "Augustusplatz-Leipzig",
+          "Rathausmarkt-Hamburg"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:10:07.245Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:20",
+        "order": 20,
+        "site_a": "Herderplatz-Weimar",
+        "site_b": "Marienplatz-Munich",
+        "site_c": "Gendarmenmarkt-Berlin",
+        "chosen_pair": [
+          "Gendarmenmarkt-Berlin",
+          "Herderplatz-Weimar"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:10:10.095Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:21",
+        "order": 21,
+        "site_a": "Naschmarkt-Leipzig",
+        "site_b": "Alexanderplatz-Berlin",
+        "site_c": "Theaterplatz-Weimar",
+        "chosen_pair": [
+          "Theaterplatz-Weimar",
+          "Naschmarkt-Leipzig"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:10:14.517Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:22",
+        "order": 22,
+        "site_a": "Marktplatz-Heidelberg",
+        "site_b": "Alexanderplatz-Berlin",
+        "site_c": "Konstablerwache-Frankfurt am Main",
+        "chosen_pair": [
+          "Konstablerwache-Frankfurt am Main",
+          "Alexanderplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:10:17.366Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:23",
+        "order": 23,
+        "site_a": "Alexanderplatz-Berlin",
+        "site_b": "Hauptwache-Frankfurt am Main",
+        "site_c": "Rathausmarkt-Hamburg",
+        "chosen_pair": [
+          "Rathausmarkt-Hamburg",
+          "Alexanderplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:10:19.892Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:24",
+        "order": 24,
+        "site_a": "Theaterplatz-Weimar",
+        "site_b": "Bebelplatz-Berlin",
+        "site_c": "Alexanderplatz-Berlin",
+        "chosen_pair": [
+          "Alexanderplatz-Berlin",
+          "Bebelplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:10:22.798Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:25",
+        "order": 25,
+        "site_a": "Gendarmenmarkt-Berlin",
+        "site_b": "Alexanderplatz-Berlin",
+        "site_c": "Alter Markt-Cologne",
+        "chosen_pair": [
+          "Alter Markt-Cologne",
+          "Alexanderplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:10:25.940Z"
+      },
+      {
+        "participant_id": "6fcb4990-4559-4b6f-949c-7306a5a69539",
+        "triplet_id": "6fcb4990-4559-4b6f-949c-7306a5a69539:26",
+        "order": 26,
+        "site_a": "Alexanderplatz-Berlin",
+        "site_b": "Theaterplatz-Weimar",
+        "site_c": "Odeonsplatz-Munich",
+        "chosen_pair": [
+          "Alexanderplatz-Berlin",
+          "Odeonsplatz-Munich"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:10:28.118Z"
+      }
+    ]
+  },
+  {
+    "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+    "started_at": "2026-08-19T09:20:59.728Z",
+    "updated_at": "2026-08-19T09:22:14.970Z",
+    "finished_at": "2026-08-19T09:22:14.970Z",
+    "status": "completed",
+    "revision": 28,
+    "attention_check_passed": true,
+    "background": "no",
+    "age_group": "18–24",
+    "responses": [
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:0",
+        "order": 0,
+        "site_a": "Hauptwache-Frankfurt am Main",
+        "site_b": "Alter Markt-Cologne",
+        "site_c": "Burgplatz-Düsseldorf",
+        "chosen_pair": [
+          "Burgplatz-Düsseldorf",
+          "Alter Markt-Cologne"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:04.347Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:1",
+        "order": 1,
+        "site_a": "Hauptmarkt-Trier",
+        "site_b": "Alexanderplatz-Berlin",
+        "site_c": "Gendarmenmarkt-Berlin",
+        "chosen_pair": [
+          "Alexanderplatz-Berlin",
+          "Hauptmarkt-Trier"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:07.175Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:2",
+        "order": 2,
+        "site_a": "Hauptmarkt-Trier",
+        "site_b": "Gendarmenmarkt-Berlin",
+        "site_c": "Marienplatz-Munich",
+        "chosen_pair": [
+          "Gendarmenmarkt-Berlin",
+          "Hauptmarkt-Trier"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:11.368Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:3",
+        "order": 3,
+        "site_a": "Odeonsplatz-Munich",
+        "site_b": "Gendarmenmarkt-Berlin",
+        "site_c": "Augustusplatz-Leipzig",
+        "chosen_pair": [
+          "Augustusplatz-Leipzig",
+          "Gendarmenmarkt-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:14.373Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:4",
+        "order": 4,
+        "site_a": "Herderplatz-Weimar",
+        "site_b": "Hauptmarkt-Trier",
+        "site_c": "Konstablerwache-Frankfurt am Main",
+        "chosen_pair": [
+          "Herderplatz-Weimar",
+          "Hauptmarkt-Trier"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:18.121Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:5",
+        "order": 5,
+        "site_a": "Hauptmarkt-Trier",
+        "site_b": "Rathausmarkt-Hamburg",
+        "site_c": "Bebelplatz-Berlin",
+        "chosen_pair": [
+          "Rathausmarkt-Hamburg",
+          "Bebelplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:20.575Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:6",
+        "order": 6,
+        "site_a": "Herderplatz-Weimar",
+        "site_b": "Konstablerwache-Frankfurt am Main",
+        "site_c": "Naschmarkt-Leipzig",
+        "chosen_pair": [
+          "Konstablerwache-Frankfurt am Main",
+          "Herderplatz-Weimar"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:23.607Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:7",
+        "order": 7,
+        "site_a": "Rathausmarkt-Hamburg",
+        "site_b": "Konstablerwache-Frankfurt am Main",
+        "site_c": "Bebelplatz-Berlin",
+        "chosen_pair": [
+          "Bebelplatz-Berlin",
+          "Konstablerwache-Frankfurt am Main"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:26.559Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:8",
+        "order": 8,
+        "site_a": "Burgplatz-Düsseldorf",
+        "site_b": "Marktplatz-Heidelberg",
+        "site_c": "Hauptmarkt-Trier",
+        "chosen_pair": [
+          "Marktplatz-Heidelberg",
+          "Hauptmarkt-Trier"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:28.382Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:9",
+        "order": 9,
+        "site_a": "Herderplatz-Weimar",
+        "site_b": "Alter Markt-Cologne",
+        "site_c": "Marktplatz-Heidelberg",
+        "chosen_pair": [
+          "Alter Markt-Cologne",
+          "Herderplatz-Weimar"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:30.535Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:10",
+        "order": 10,
+        "site_a": "Alter Markt-Cologne",
+        "site_b": "Bebelplatz-Berlin",
+        "site_c": "Zeil-Frankfurt am Main",
+        "chosen_pair": [
+          "Zeil-Frankfurt am Main",
+          "Alter Markt-Cologne"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:33.497Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:11",
+        "order": 11,
+        "site_a": "Naschmarkt-Leipzig",
+        "site_b": "Marienplatz-Munich",
+        "site_c": "Alexanderplatz-Berlin",
+        "chosen_pair": [
+          "Alexanderplatz-Berlin",
+          "Naschmarkt-Leipzig"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:36.214Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:12",
+        "order": 12,
+        "site_a": "Naschmarkt-Leipzig",
+        "site_b": "Alexanderplatz-Berlin",
+        "site_c": "Theaterplatz-Weimar",
+        "chosen_pair": [
+          "Naschmarkt-Leipzig",
+          "Theaterplatz-Weimar"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:38.683Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:13",
+        "order": 13,
+        "site_a": "Herderplatz-Weimar",
+        "site_b": "Herderplatz-Weimar",
+        "site_c": "Augustusplatz-Leipzig",
+        "chosen_pair": [
+          "Herderplatz-Weimar",
+          "Herderplatz-Weimar"
+        ],
+        "is_attention_check": true,
+        "timestamp": "2026-08-19T09:21:40.433Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:14",
+        "order": 14,
+        "site_a": "Rathausmarkt-Hamburg",
+        "site_b": "Marienplatz-Munich",
+        "site_c": "Augustusplatz-Leipzig",
+        "chosen_pair": [
+          "Marienplatz-Munich",
+          "Rathausmarkt-Hamburg"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:42.606Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:15",
+        "order": 15,
+        "site_a": "Burgplatz-Düsseldorf",
+        "site_b": "Alexanderplatz-Berlin",
+        "site_c": "Bebelplatz-Berlin",
+        "chosen_pair": [
+          "Bebelplatz-Berlin",
+          "Alexanderplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:46.154Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:16",
+        "order": 16,
+        "site_a": "Theaterplatz-Weimar",
+        "site_b": "Marienplatz-Munich",
+        "site_c": "Burgplatz-Düsseldorf",
+        "chosen_pair": [
+          "Burgplatz-Düsseldorf",
+          "Marienplatz-Munich"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:48.540Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:17",
+        "order": 17,
+        "site_a": "Rathausmarkt-Hamburg",
+        "site_b": "Marienplatz-Munich",
+        "site_c": "Römerberg-Frankfurt am Main",
+        "chosen_pair": [
+          "Marienplatz-Munich",
+          "Rathausmarkt-Hamburg"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:50.680Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:18",
+        "order": 18,
+        "site_a": "Konstablerwache-Frankfurt am Main",
+        "site_b": "Alexanderplatz-Berlin",
+        "site_c": "Rathausmarkt-Hamburg",
+        "chosen_pair": [
+          "Alexanderplatz-Berlin",
+          "Konstablerwache-Frankfurt am Main"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:53.176Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:19",
+        "order": 19,
+        "site_a": "Zeil-Frankfurt am Main",
+        "site_b": "Bebelplatz-Berlin",
+        "site_c": "Augustusplatz-Leipzig",
+        "chosen_pair": [
+          "Bebelplatz-Berlin",
+          "Augustusplatz-Leipzig"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:54.997Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:20",
+        "order": 20,
+        "site_a": "Marienplatz-Munich",
+        "site_b": "Herderplatz-Weimar",
+        "site_c": "Konstablerwache-Frankfurt am Main",
+        "chosen_pair": [
+          "Herderplatz-Weimar",
+          "Konstablerwache-Frankfurt am Main"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:56.873Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:21",
+        "order": 21,
+        "site_a": "Alexanderplatz-Berlin",
+        "site_b": "Odeonsplatz-Munich",
+        "site_c": "Rathausmarkt-Hamburg",
+        "chosen_pair": [
+          "Odeonsplatz-Munich",
+          "Alexanderplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:21:58.980Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:22",
+        "order": 22,
+        "site_a": "Gendarmenmarkt-Berlin",
+        "site_b": "Naschmarkt-Leipzig",
+        "site_c": "Zeil-Frankfurt am Main",
+        "chosen_pair": [
+          "Naschmarkt-Leipzig",
+          "Zeil-Frankfurt am Main"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:22:01.043Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:23",
+        "order": 23,
+        "site_a": "Hauptwache-Frankfurt am Main",
+        "site_b": "Herderplatz-Weimar",
+        "site_c": "Alter Markt-Cologne",
+        "chosen_pair": [
+          "Herderplatz-Weimar",
+          "Alter Markt-Cologne"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:22:03.386Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:24",
+        "order": 24,
+        "site_a": "Gendarmenmarkt-Berlin",
+        "site_b": "Naschmarkt-Leipzig",
+        "site_c": "Theaterplatz-Weimar",
+        "chosen_pair": [
+          "Naschmarkt-Leipzig",
+          "Theaterplatz-Weimar"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:22:05.423Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:25",
+        "order": 25,
+        "site_a": "Herderplatz-Weimar",
+        "site_b": "Bebelplatz-Berlin",
+        "site_c": "Alexanderplatz-Berlin",
+        "chosen_pair": [
+          "Bebelplatz-Berlin",
+          "Herderplatz-Weimar"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:22:07.266Z"
+      },
+      {
+        "participant_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1",
+        "triplet_id": "096d3ebd-7a2d-4e07-92e2-ebe1008569f1:26",
+        "order": 26,
+        "site_a": "Augustusplatz-Leipzig",
+        "site_b": "Burgplatz-Düsseldorf",
+        "site_c": "Bebelplatz-Berlin",
+        "chosen_pair": [
+          "Augustusplatz-Leipzig",
+          "Bebelplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T09:22:09.616Z"
+      }
+    ]
+  },
+  {
+    "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+    "started_at": "2026-08-19T13:13:50.160Z",
+    "updated_at": "2026-08-19T13:16:22.293Z",
+    "finished_at": "2026-08-19T13:16:22.293Z",
+    "status": "completed",
+    "revision": 28,
+    "attention_check_passed": true,
+    "background": "no",
+    "age_group": "35–44",
+    "responses": [
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:0",
+        "order": 0,
+        "site_a": "Rathausmarkt-Hamburg",
+        "site_b": "Hauptwache-Frankfurt am Main",
+        "site_c": "Alter Markt-Cologne",
+        "chosen_pair": [
+          "Alter Markt-Cologne",
+          "Hauptwache-Frankfurt am Main"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:13:59.203Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:1",
+        "order": 1,
+        "site_a": "Herderplatz-Weimar",
+        "site_b": "Alter Markt-Cologne",
+        "site_c": "Odeonsplatz-Munich",
+        "chosen_pair": [
+          "Herderplatz-Weimar",
+          "Alter Markt-Cologne"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:14:03.886Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:2",
+        "order": 2,
+        "site_a": "Bebelplatz-Berlin",
+        "site_b": "Naschmarkt-Leipzig",
+        "site_c": "Hauptmarkt-Trier",
+        "chosen_pair": [
+          "Naschmarkt-Leipzig",
+          "Hauptmarkt-Trier"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:14:09.589Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:3",
+        "order": 3,
+        "site_a": "Theaterplatz-Weimar",
+        "site_b": "Alter Markt-Cologne",
+        "site_c": "Bebelplatz-Berlin",
+        "chosen_pair": [
+          "Bebelplatz-Berlin",
+          "Alter Markt-Cologne"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:14:25.483Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:4",
+        "order": 4,
+        "site_a": "Bebelplatz-Berlin",
+        "site_b": "Zeil-Frankfurt am Main",
+        "site_c": "Konstablerwache-Frankfurt am Main",
+        "chosen_pair": [
+          "Bebelplatz-Berlin",
+          "Konstablerwache-Frankfurt am Main"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:14:30.096Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:5",
+        "order": 5,
+        "site_a": "Marienplatz-Munich",
+        "site_b": "Gendarmenmarkt-Berlin",
+        "site_c": "Bebelplatz-Berlin",
+        "chosen_pair": [
+          "Bebelplatz-Berlin",
+          "Gendarmenmarkt-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:14:44.679Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:6",
+        "order": 6,
+        "site_a": "Rathausmarkt-Hamburg",
+        "site_b": "Naschmarkt-Leipzig",
+        "site_c": "Burgplatz-Düsseldorf",
+        "chosen_pair": [
+          "Rathausmarkt-Hamburg",
+          "Naschmarkt-Leipzig"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:14:49.280Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:7",
+        "order": 7,
+        "site_a": "Römerberg-Frankfurt am Main",
+        "site_b": "Herderplatz-Weimar",
+        "site_c": "Marktplatz-Heidelberg",
+        "chosen_pair": [
+          "Römerberg-Frankfurt am Main",
+          "Herderplatz-Weimar"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:14:53.787Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:8",
+        "order": 8,
+        "site_a": "Zeil-Frankfurt am Main",
+        "site_b": "Alexanderplatz-Berlin",
+        "site_c": "Hauptwache-Frankfurt am Main",
+        "chosen_pair": [
+          "Alexanderplatz-Berlin",
+          "Hauptwache-Frankfurt am Main"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:14:59.647Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:9",
+        "order": 9,
+        "site_a": "Marienplatz-Munich",
+        "site_b": "Burgplatz-Düsseldorf",
+        "site_c": "Hauptmarkt-Trier",
+        "chosen_pair": [
+          "Burgplatz-Düsseldorf",
+          "Hauptmarkt-Trier"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:15:04.732Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:10",
+        "order": 10,
+        "site_a": "Gendarmenmarkt-Berlin",
+        "site_b": "Römerberg-Frankfurt am Main",
+        "site_c": "Naschmarkt-Leipzig",
+        "chosen_pair": [
+          "Römerberg-Frankfurt am Main",
+          "Gendarmenmarkt-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:15:17.442Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:11",
+        "order": 11,
+        "site_a": "Herderplatz-Weimar",
+        "site_b": "Rathausmarkt-Hamburg",
+        "site_c": "Marienplatz-Munich",
+        "chosen_pair": [
+          "Rathausmarkt-Hamburg",
+          "Herderplatz-Weimar"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:15:22.262Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:12",
+        "order": 12,
+        "site_a": "Augustusplatz-Leipzig",
+        "site_b": "Odeonsplatz-Munich",
+        "site_c": "Marktplatz-Heidelberg",
+        "chosen_pair": [
+          "Odeonsplatz-Munich",
+          "Marktplatz-Heidelberg"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:15:27.908Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:13",
+        "order": 13,
+        "site_a": "Römerberg-Frankfurt am Main",
+        "site_b": "Naschmarkt-Leipzig",
+        "site_c": "Naschmarkt-Leipzig",
+        "chosen_pair": [
+          "Naschmarkt-Leipzig",
+          "Naschmarkt-Leipzig"
+        ],
+        "is_attention_check": true,
+        "timestamp": "2026-08-19T13:15:32.472Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:14",
+        "order": 14,
+        "site_a": "Theaterplatz-Weimar",
+        "site_b": "Naschmarkt-Leipzig",
+        "site_c": "Marktplatz-Heidelberg",
+        "chosen_pair": [
+          "Naschmarkt-Leipzig",
+          "Marktplatz-Heidelberg"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:15:36.225Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:15",
+        "order": 15,
+        "site_a": "Hauptwache-Frankfurt am Main",
+        "site_b": "Römerberg-Frankfurt am Main",
+        "site_c": "Gendarmenmarkt-Berlin",
+        "chosen_pair": [
+          "Hauptwache-Frankfurt am Main",
+          "Römerberg-Frankfurt am Main"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:15:44.538Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:16",
+        "order": 16,
+        "site_a": "Marienplatz-Munich",
+        "site_b": "Herderplatz-Weimar",
+        "site_c": "Naschmarkt-Leipzig",
+        "chosen_pair": [
+          "Herderplatz-Weimar",
+          "Naschmarkt-Leipzig"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:15:52.755Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:17",
+        "order": 17,
+        "site_a": "Alexanderplatz-Berlin",
+        "site_b": "Zeil-Frankfurt am Main",
+        "site_c": "Burgplatz-Düsseldorf",
+        "chosen_pair": [
+          "Zeil-Frankfurt am Main",
+          "Burgplatz-Düsseldorf"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:15:54.314Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:18",
+        "order": 18,
+        "site_a": "Alexanderplatz-Berlin",
+        "site_b": "Rathausmarkt-Hamburg",
+        "site_c": "Augustusplatz-Leipzig",
+        "chosen_pair": [
+          "Alexanderplatz-Berlin",
+          "Rathausmarkt-Hamburg"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:15:55.877Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:19",
+        "order": 19,
+        "site_a": "Rathausmarkt-Hamburg",
+        "site_b": "Odeonsplatz-Munich",
+        "site_c": "Bebelplatz-Berlin",
+        "chosen_pair": [
+          "Rathausmarkt-Hamburg",
+          "Bebelplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:15:57.938Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:20",
+        "order": 20,
+        "site_a": "Naschmarkt-Leipzig",
+        "site_b": "Augustusplatz-Leipzig",
+        "site_c": "Burgplatz-Düsseldorf",
+        "chosen_pair": [
+          "Augustusplatz-Leipzig",
+          "Burgplatz-Düsseldorf"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:16:06.294Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:21",
+        "order": 21,
+        "site_a": "Herderplatz-Weimar",
+        "site_b": "Bebelplatz-Berlin",
+        "site_c": "Zeil-Frankfurt am Main",
+        "chosen_pair": [
+          "Bebelplatz-Berlin",
+          "Zeil-Frankfurt am Main"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:16:08.806Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:22",
+        "order": 22,
+        "site_a": "Konstablerwache-Frankfurt am Main",
+        "site_b": "Alter Markt-Cologne",
+        "site_c": "Naschmarkt-Leipzig",
+        "chosen_pair": [
+          "Naschmarkt-Leipzig",
+          "Alter Markt-Cologne"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:16:10.361Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:23",
+        "order": 23,
+        "site_a": "Gendarmenmarkt-Berlin",
+        "site_b": "Rathausmarkt-Hamburg",
+        "site_c": "Burgplatz-Düsseldorf",
+        "chosen_pair": [
+          "Rathausmarkt-Hamburg",
+          "Burgplatz-Düsseldorf"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:16:11.691Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:24",
+        "order": 24,
+        "site_a": "Alexanderplatz-Berlin",
+        "site_b": "Marktplatz-Heidelberg",
+        "site_c": "Rathausmarkt-Hamburg",
+        "chosen_pair": [
+          "Marktplatz-Heidelberg",
+          "Rathausmarkt-Hamburg"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:16:13.961Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:25",
+        "order": 25,
+        "site_a": "Konstablerwache-Frankfurt am Main",
+        "site_b": "Bebelplatz-Berlin",
+        "site_c": "Naschmarkt-Leipzig",
+        "chosen_pair": [
+          "Konstablerwache-Frankfurt am Main",
+          "Bebelplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:16:15.445Z"
+      },
+      {
+        "participant_id": "a6643301-3838-4302-a0c8-11e8e1173308",
+        "triplet_id": "a6643301-3838-4302-a0c8-11e8e1173308:26",
+        "order": 26,
+        "site_a": "Marktplatz-Heidelberg",
+        "site_b": "Marienplatz-Munich",
+        "site_c": "Konstablerwache-Frankfurt am Main",
+        "chosen_pair": [
+          "Marienplatz-Munich",
+          "Konstablerwache-Frankfurt am Main"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:16:17.278Z"
+      }
+    ]
+  },
+  {
+    "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+    "started_at": "2026-08-19T13:16:45.086Z",
+    "updated_at": "2026-08-19T13:18:05.877Z",
+    "finished_at": "2026-08-19T13:18:05.877Z",
+    "status": "completed",
+    "revision": 28,
+    "attention_check_passed": true,
+    "background": "undisclosed",
+    "age_group": "45–54",
+    "responses": [
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:0",
+        "order": 0,
+        "site_a": "Alexanderplatz-Berlin",
+        "site_b": "Römerberg-Frankfurt am Main",
+        "site_c": "Theaterplatz-Weimar",
+        "chosen_pair": [
+          "Römerberg-Frankfurt am Main",
+          "Alexanderplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:16:51.002Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:1",
+        "order": 1,
+        "site_a": "Hauptwache-Frankfurt am Main",
+        "site_b": "Herderplatz-Weimar",
+        "site_c": "Hauptmarkt-Trier",
+        "chosen_pair": [
+          "Herderplatz-Weimar",
+          "Hauptmarkt-Trier"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:16:54.174Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:2",
+        "order": 2,
+        "site_a": "Naschmarkt-Leipzig",
+        "site_b": "Hauptwache-Frankfurt am Main",
+        "site_c": "Hauptmarkt-Trier",
+        "chosen_pair": [
+          "Naschmarkt-Leipzig",
+          "Hauptwache-Frankfurt am Main"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:16:58.063Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:3",
+        "order": 3,
+        "site_a": "Römerberg-Frankfurt am Main",
+        "site_b": "Hauptmarkt-Trier",
+        "site_c": "Hauptwache-Frankfurt am Main",
+        "chosen_pair": [
+          "Hauptmarkt-Trier",
+          "Römerberg-Frankfurt am Main"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:04.547Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:4",
+        "order": 4,
+        "site_a": "Alter Markt-Cologne",
+        "site_b": "Konstablerwache-Frankfurt am Main",
+        "site_c": "Burgplatz-Düsseldorf",
+        "chosen_pair": [
+          "Konstablerwache-Frankfurt am Main",
+          "Alter Markt-Cologne"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:14.195Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:5",
+        "order": 5,
+        "site_a": "Gendarmenmarkt-Berlin",
+        "site_b": "Augustusplatz-Leipzig",
+        "site_c": "Burgplatz-Düsseldorf",
+        "chosen_pair": [
+          "Burgplatz-Düsseldorf",
+          "Augustusplatz-Leipzig"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:19.939Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:6",
+        "order": 6,
+        "site_a": "Zeil-Frankfurt am Main",
+        "site_b": "Hauptwache-Frankfurt am Main",
+        "site_c": "Augustusplatz-Leipzig",
+        "chosen_pair": [
+          "Hauptwache-Frankfurt am Main",
+          "Augustusplatz-Leipzig"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:26.551Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:7",
+        "order": 7,
+        "site_a": "Hauptwache-Frankfurt am Main",
+        "site_b": "Rathausmarkt-Hamburg",
+        "site_c": "Gendarmenmarkt-Berlin",
+        "chosen_pair": [
+          "Gendarmenmarkt-Berlin",
+          "Rathausmarkt-Hamburg"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:29.710Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:8",
+        "order": 8,
+        "site_a": "Herderplatz-Weimar",
+        "site_b": "Hauptmarkt-Trier",
+        "site_c": "Marienplatz-Munich",
+        "chosen_pair": [
+          "Hauptmarkt-Trier",
+          "Marienplatz-Munich"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:32.240Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:9",
+        "order": 9,
+        "site_a": "Hauptwache-Frankfurt am Main",
+        "site_b": "Augustusplatz-Leipzig",
+        "site_c": "Theaterplatz-Weimar",
+        "chosen_pair": [
+          "Augustusplatz-Leipzig",
+          "Theaterplatz-Weimar"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:34.104Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:10",
+        "order": 10,
+        "site_a": "Burgplatz-Düsseldorf",
+        "site_b": "Herderplatz-Weimar",
+        "site_c": "Gendarmenmarkt-Berlin",
+        "chosen_pair": [
+          "Burgplatz-Düsseldorf",
+          "Herderplatz-Weimar"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:36.328Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:11",
+        "order": 11,
+        "site_a": "Alter Markt-Cologne",
+        "site_b": "Gendarmenmarkt-Berlin",
+        "site_c": "Theaterplatz-Weimar",
+        "chosen_pair": [
+          "Gendarmenmarkt-Berlin",
+          "Alter Markt-Cologne"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:39.096Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:12",
+        "order": 12,
+        "site_a": "Theaterplatz-Weimar",
+        "site_b": "Rathausmarkt-Hamburg",
+        "site_c": "Theaterplatz-Weimar",
+        "chosen_pair": [
+          "Theaterplatz-Weimar",
+          "Theaterplatz-Weimar"
+        ],
+        "is_attention_check": true,
+        "timestamp": "2026-08-19T13:17:42.071Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:13",
+        "order": 13,
+        "site_a": "Hauptwache-Frankfurt am Main",
+        "site_b": "Marienplatz-Munich",
+        "site_c": "Alter Markt-Cologne",
+        "chosen_pair": [
+          "Marienplatz-Munich",
+          "Alter Markt-Cologne"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:43.508Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:14",
+        "order": 14,
+        "site_a": "Odeonsplatz-Munich",
+        "site_b": "Burgplatz-Düsseldorf",
+        "site_c": "Theaterplatz-Weimar",
+        "chosen_pair": [
+          "Odeonsplatz-Munich",
+          "Burgplatz-Düsseldorf"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:44.566Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:15",
+        "order": 15,
+        "site_a": "Römerberg-Frankfurt am Main",
+        "site_b": "Rathausmarkt-Hamburg",
+        "site_c": "Odeonsplatz-Munich",
+        "chosen_pair": [
+          "Rathausmarkt-Hamburg",
+          "Odeonsplatz-Munich"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:45.817Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:16",
+        "order": 16,
+        "site_a": "Marktplatz-Heidelberg",
+        "site_b": "Hauptmarkt-Trier",
+        "site_c": "Odeonsplatz-Munich",
+        "chosen_pair": [
+          "Marktplatz-Heidelberg",
+          "Odeonsplatz-Munich"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:46.892Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:17",
+        "order": 17,
+        "site_a": "Augustusplatz-Leipzig",
+        "site_b": "Marienplatz-Munich",
+        "site_c": "Alexanderplatz-Berlin",
+        "chosen_pair": [
+          "Marienplatz-Munich",
+          "Alexanderplatz-Berlin"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:48.188Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:18",
+        "order": 18,
+        "site_a": "Alter Markt-Cologne",
+        "site_b": "Alexanderplatz-Berlin",
+        "site_c": "Odeonsplatz-Munich",
+        "chosen_pair": [
+          "Alter Markt-Cologne",
+          "Odeonsplatz-Munich"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:50.574Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:19",
+        "order": 19,
+        "site_a": "Alter Markt-Cologne",
+        "site_b": "Theaterplatz-Weimar",
+        "site_c": "Naschmarkt-Leipzig",
+        "chosen_pair": [
+          "Theaterplatz-Weimar",
+          "Naschmarkt-Leipzig"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:51.768Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:20",
+        "order": 20,
+        "site_a": "Zeil-Frankfurt am Main",
+        "site_b": "Bebelplatz-Berlin",
+        "site_c": "Römerberg-Frankfurt am Main",
+        "chosen_pair": [
+          "Bebelplatz-Berlin",
+          "Zeil-Frankfurt am Main"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:53.060Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:21",
+        "order": 21,
+        "site_a": "Odeonsplatz-Munich",
+        "site_b": "Alter Markt-Cologne",
+        "site_c": "Herderplatz-Weimar",
+        "chosen_pair": [
+          "Alter Markt-Cologne",
+          "Herderplatz-Weimar"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:54.222Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:22",
+        "order": 22,
+        "site_a": "Augustusplatz-Leipzig",
+        "site_b": "Theaterplatz-Weimar",
+        "site_c": "Bebelplatz-Berlin",
+        "chosen_pair": [
+          "Bebelplatz-Berlin",
+          "Augustusplatz-Leipzig"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:55.515Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:23",
+        "order": 23,
+        "site_a": "Augustusplatz-Leipzig",
+        "site_b": "Burgplatz-Düsseldorf",
+        "site_c": "Theaterplatz-Weimar",
+        "chosen_pair": [
+          "Burgplatz-Düsseldorf",
+          "Augustusplatz-Leipzig"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:56.597Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:24",
+        "order": 24,
+        "site_a": "Rathausmarkt-Hamburg",
+        "site_b": "Marktplatz-Heidelberg",
+        "site_c": "Konstablerwache-Frankfurt am Main",
+        "chosen_pair": [
+          "Marktplatz-Heidelberg",
+          "Konstablerwache-Frankfurt am Main"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:57.647Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:25",
+        "order": 25,
+        "site_a": "Theaterplatz-Weimar",
+        "site_b": "Augustusplatz-Leipzig",
+        "site_c": "Herderplatz-Weimar",
+        "chosen_pair": [
+          "Herderplatz-Weimar",
+          "Theaterplatz-Weimar"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:17:59.105Z"
+      },
+      {
+        "participant_id": "991482f9-b421-48d7-8ab6-6c97d6913495",
+        "triplet_id": "991482f9-b421-48d7-8ab6-6c97d6913495:26",
+        "order": 26,
+        "site_a": "Rathausmarkt-Hamburg",
+        "site_b": "Herderplatz-Weimar",
+        "site_c": "Zeil-Frankfurt am Main",
+        "chosen_pair": [
+          "Rathausmarkt-Hamburg",
+          "Zeil-Frankfurt am Main"
+        ],
+        "is_attention_check": false,
+        "timestamp": "2026-08-19T13:18:01.747Z"
+      }
+    ]
   }
 ]

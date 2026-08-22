@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import {
   LuCamera,
+  LuRotate3D,
   LuCircleAlert,
   LuCircleCheck,
   LuEye,
@@ -83,6 +84,7 @@ export function AdminPage() {
   const [message, setMessage] = useState(null)
   const [dirty, setDirty] = useState(false)
   const [imageUpload, setImageUpload] = useState({ status: 'idle', error: null }) // idle | uploading | error
+  const [panoUpload, setPanoUpload] = useState({ status: 'idle', error: null })
   // Changes on every successful upload so the preview <img> re-fetches instead
   // of showing the browser-cached copy at the (unchanged) filename.
   const [imageBust, setImageBust] = useState(0)
@@ -152,6 +154,7 @@ export function AdminPage() {
     setBoundaryText('')
     setMessage(null)
     setImageUpload({ status: 'idle', error: null })
+    setPanoUpload({ status: 'idle', error: null })
     setConfirmingDelete(false)
   }
 
@@ -546,7 +549,7 @@ export function AdminPage() {
                     }
                   />
                 </Field>
-                <Field label="Street view image" className="sm:col-span-2">
+                <Field label="Street view photo" className="sm:col-span-1">
                   <div className="flex items-start gap-3">
                     {site.street_view_image ? (
                       <img
@@ -575,7 +578,7 @@ export function AdminPage() {
                             onChange={(e) => {
                               const file = e.target.files?.[0]
                               e.target.value = ''
-                              if (file) uploadImage(file)
+                              if (file) uploadImage(file, 'photo')
                             }}
                           />
                         </label>
@@ -592,6 +595,51 @@ export function AdminPage() {
                         value={site.street_view_image ?? ''}
                         onChange={(e) => updateSite({ street_view_image: e.target.value })}
                       />
+                    </div>
+                  </div>
+                </Field>
+                <Field label="360° panorama (survey stimulus)" className="sm:col-span-1">
+                  <div className="flex items-start gap-3">
+                    <img
+                      key={`pano:${site.id}:${imageBust}`}
+                      src={`${import.meta.env.BASE_URL}panoramas/${slugify(site.id)}.jpg${imageBust ? `?v=${imageBust}` : ''}`}
+                      alt=""
+                      className="h-16 w-24 shrink-0 rounded border border-line-strong object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none'
+                        const ph = e.currentTarget.nextElementSibling
+                        if (ph) ph.style.display = 'flex'
+                      }}
+                    />
+                    <div
+                      style={{ display: 'none' }}
+                      className="h-16 w-24 shrink-0 flex-col items-center justify-center gap-1 rounded border border-dashed border-line-strong text-ink-faint"
+                    >
+                      <LuRotate3D aria-hidden className="h-4 w-4" />
+                      <span className="text-[10px]">No panorama</span>
+                    </div>
+
+                    <div className="min-w-0 flex-1 space-y-1.5">
+                      <label className="inline-block cursor-pointer rounded-full border border-line-strong bg-paper px-3 py-1.5 text-xs font-medium text-ink shadow-sm transition-colors duration-150 hover:border-primary hover:text-primary-deep">
+                        {panoUpload.status === 'uploading' ? 'Uploading…' : 'Choose file…'}
+                        <input
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp"
+                          className="sr-only"
+                          disabled={panoUpload.status === 'uploading'}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0]
+                            e.target.value = ''
+                            if (file) uploadImage(file, 'panorama')
+                          }}
+                        />
+                      </label>
+                      {panoUpload.error && (
+                        <p className="text-xs text-warn">{panoUpload.error}</p>
+                      )}
+                      <p className="font-mono text-xs text-ink-faint">
+                        equirectangular 2:1 · saved as panoramas/{slugify(site.id)}.jpg
+                      </p>
                     </div>
                   </div>
                 </Field>

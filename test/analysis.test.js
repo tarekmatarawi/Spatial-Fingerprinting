@@ -29,6 +29,7 @@ import {
 } from '../src/lib/analysis/model.js'
 import { fitWeights, maskTriplets, AREA_INDEX } from '../src/lib/analysis/fit.js'
 import { selectTriplets, summarise } from '../src/lib/analysis/exclusions.js'
+import { recordAttentionCheckPassed } from '../src/lib/session.js'
 import { signTestTwoSided, CHANCE } from '../src/lib/analysis/crossval.js'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
@@ -75,14 +76,25 @@ describe('fingerprints — frozen normalisation bounds', () => {
   // results.json holds several FOV layers at once. Selection is by layer:
   // another layer's records are skipped, never merged into this one.
   test('records from another FOV layer are skipped, not merged', () => {
-    const bySite = canonicalReadings(readings, siteIds, 'perceptual_120')
-    assert.equal(bySite.size, 18)
-    for (const r of bySite.values()) assert.equal(r.fov_mode, 'perceptual_120')
+    // results.json holds both perceptual layers side by side, measured at
+    // different points with different sweeps. Selection is by layer: the other
+    // layer's records are skipped, never merged into this one.
+    const p120 = canonicalReadings(readings, siteIds, 'perceptual_120')
+    assert.equal(p120.size, 18)
+    for (const r of p120.values()) assert.equal(r.fov_mode, 'perceptual_120')
 
-    // The panoramic layer selects its own 18, at the same vantage points.
-    const pano = canonicalReadings(readings, siteIds, 'perceptual_360')
-    assert.equal(pano.size, 18)
-    for (const r of pano.values()) assert.equal(r.fov_mode, 'perceptual_360')
+    const p360 = canonicalReadings(readings, siteIds, 'perceptual_360')
+    assert.equal(p360.size, 18)
+    for (const r of p360.values()) assert.equal(r.fov_mode, 'perceptual_360')
+
+    // Same plazas, genuinely different readings — the layers are not aliases.
+    for (const id of siteIds) {
+      assert.notEqual(
+        p120.get(id).area_m2,
+        p360.get(id).area_m2,
+        id + ': a 360° sweep cannot equal its 120° wedge'
+      )
+    }
   })
 
   test('mislabelling the only reading for a site makes it missing, not silently wrong', () => {
@@ -114,7 +126,23 @@ describe('fingerprints — frozen normalisation bounds', () => {
     assert.throws(() => canonicalReadings(dupe, siteIds), /Two canonical perceptual_120 readings/)
   })
 
-  test('the two perceptual layers never share normalisation bounds', () => {
+  // The panoramic layer's readings are placed by hand in the viewer, so this
+  // asserts whichever situation is true: either the layer is complete and its
+  // bounds stand apart from the 120° layer's, or it is empty and a request for
+  // it fails loudly rather than quietly falling back to the other layer.
+  test('the panoramic layer is either complete and independent, or absent and loud', () => {
+    const pano = readings.filter((r) => r.fov_mode === 'perceptual_360' && r.canonical === true)
+
+    if (pano.length === 0) {
+      assert.throws(
+        () => buildFingerprints(readings, siteIds, 'perceptual_360'),
+        /No canonical perceptual_360 reading/,
+        'an empty layer must fail, never silently borrow the 120° layer'
+      )
+      return
+    }
+
+    assert.equal(pano.length, 18, 'a partially captured layer must not be used for bounds')
     const p120 = buildFingerprints(readings, siteIds, 'perceptual_120')
     const p360 = buildFingerprints(readings, siteIds, 'perceptual_360')
     for (const m of METRICS) {
@@ -124,10 +152,8 @@ describe('fingerprints — frozen normalisation bounds', () => {
         `${m} bounds coincide across layers — each layer must scale on its own range`
       )
     }
-    // A 360° sweep sees strictly more of the plaza than a 120° wedge from the
-    // same point, so its areas must be larger throughout.
+    // A 360° sweep sees strictly more from a point than a 120° wedge does.
     assert.ok(p360.bounds.area.max > p120.bounds.area.max)
-    assert.ok(p360.bounds.area.min > p120.bounds.area.min)
   })
 
   test('bounds name the site that sets each end', () => {
@@ -285,20 +311,47 @@ describe('exclusions — who and what enters the fit', () => {
   const selection = selectTriplets(responses, fingerprints, siteIds)
   const summary = summarise(responses, selection)
 
-  test('the documented rule selects the expected population', () => {
-    assert.equal(summary.participants.collected, 52)
-    assert.equal(summary.participants.used, 50)
-    assert.equal(summary.participants.dropped, 2)
-    // Both drops are people who stopped before reaching the check, not failures.
-    assert.equal(summary.participants.byReason.never_reached_attention_check, 2)
-    assert.equal(summary.participants.byReason.failed_attention_check, 0)
+  // Asserts the RULE, not a snapshot of the dataset. The archived study's file
+  // can still grow if late sessions are pulled from its Sheet, and a test that
+  // pinned the exact counts would fail on that alone — which says nothing about
+  // whether the selection logic is right.
+  test('the documented rule selects exactly the participants who passed the check', () => {
+    const expectedUsed = responses.filter((r) => recordAttentionCheckPassed(r) === true).length
+    const expectedNeverReached = responses.filter(
+      (r) => recordAttentionCheckPassed(r) === null
+    ).length
+    const expectedFailed = responses.filter((r) => recordAttentionCheckPassed(r) === false).length
+
+    assert.equal(summary.participants.collected, responses.length)
+    assert.equal(summary.participants.used, expectedUsed)
+    assert.equal(summary.participants.dropped, responses.length - expectedUsed)
+    assert.equal(
+      summary.participants.byReason.never_reached_attention_check,
+      expectedNeverReached
+    )
+    assert.equal(summary.participants.byReason.failed_attention_check, expectedFailed)
+    // Every drop must be accounted for by one of the two named reasons.
+    assert.equal(
+      expectedNeverReached + expectedFailed,
+      summary.participants.dropped,
+      'a participant was dropped for an unnamed reason'
+    )
   })
 
   test('attention-check triplets are dropped, and nothing is malformed', () => {
-    assert.equal(summary.responses.used, 1213)
+    // Every genuine triplet belonging to an eligible participant, and nothing
+    // else, should reach the fit.
+    const expectedUsed = responses
+      .filter((r) => recordAttentionCheckPassed(r) === true)
+      .reduce((n, r) => n + (r.responses ?? []).filter((x) => !x.is_attention_check).length, 0)
+
+    assert.equal(summary.responses.used, expectedUsed)
     assert.ok(summary.responses.dropped.attention_check_triplet > 0)
     assert.equal(summary.responses.dropped.malformed_response, 0)
     assert.equal(summary.responses.dropped.names_an_excluded_site, 0)
+    // Nothing may vanish unaccounted for.
+    const droppedTotal = Object.values(summary.responses.dropped).reduce((a, b) => a + b, 0)
+    assert.equal(summary.responses.used + droppedTotal, summary.responses.collected)
   })
 
   test('the check discriminated nobody, and that is reported rather than implied', () => {

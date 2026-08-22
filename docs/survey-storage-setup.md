@@ -1,84 +1,88 @@
 # Survey storage setup (Google Sheets)
 
-GitHub Pages only serves files — it can't run a server to receive survey
-submissions. This wires the deployed survey (`?survey`) to a free Google
-Sheet instead, using a small script Google runs for you. Nothing about the
-GitHub Pages deployment changes.
+The perceptual survey (`?survey`) stores its responses **in its own spreadsheet**,
+separate from the main survey. That separation is deliberate: the survey must
+never merge into the primary dataset, and two different Sheets guarantee that in
+a way a filter applied afterwards does not.
 
-**Time needed:** ~15 minutes, done once.
+This mirrors [survey-storage-setup.md](survey-storage-setup.md) exactly. If you
+have already done that once, this is the same 15 minutes again with three
+things changed — a new spreadsheet, a different tab name, and two extra columns.
+
+**You do not need this to test locally.** Running `npm run dev` saves survey
+responses straight to `src/data/survey-responses-360.json` through Vite's dev-only
+endpoint. You only need a Sheet for participants who are **not** at your machine.
 
 ---
 
-### Step 1: Create the Sheet
+### Step 1: Create a NEW Sheet
+
+Do not reuse the main survey's spreadsheet.
 
 1. Go to [sheets.google.com](https://sheets.google.com) and create a new, blank sheet.
-2. Rename the sheet tab at the bottom from "Sheet1" to `Responses` (exact spelling, capital R).
-3. In row 1, add these column headers exactly, one per cell, left to right:
+   Name the file something like `Spatial Fingerprinting — 360 Survey`.
+2. Rename the tab at the bottom from "Sheet1" to `Responses`
+   (exact spelling, capital P and R).
+3. In row 1, add these headers, one per cell, left to right:
 
    ```
-   timestamp | participant_id | started_at | finished_at | status | attention_check_passed | background | age_group | response_count | payload_json
+   timestamp | participant_id | started_at | finished_at | status | survey_version | response_count | median_seconds | background | age_group | payload_json
    ```
 
-That's it for the spreadsheet itself — the script fills in every row below automatically.
+Two of these do not exist in the main survey's Sheet:
 
-> **Already have a Sheet from before?** Add the two new headers — `status` and `attention_check_passed` — to the first empty cells in row 1. The script matches columns by their header name, not their position, so they can go anywhere and existing rows keep working. Rows written before you added them simply stay blank in those two columns.
+- **`survey_version`** — `panoramic_v1`, so a row is self-identifying
+  even if the file is ever exported and mixed with other data.
+- **`median_seconds`** — the participant's median time per comparison. The whole
+  point of the survey is measuring burden, so it is worth having in the Sheet at
+  a glance rather than buried in `payload_json`.
 
-> **One row per participant.** The survey now saves after *every* answer rather than once at the end, and the script updates that participant's existing row in place. So a row appears as soon as someone answers their first comparison, and grows as they go — if they close the tab halfway, their partial answers are already safely in the Sheet. `status` reads `in_progress` until they reach the thank-you screen, where it becomes `completed`; a row still on `in_progress` long after its `timestamp` is an abandoned session (the app treats 30 minutes of silence as abandoned). `attention_check_passed` is `TRUE`/`FALSE` for the single mid-survey attention check, and blank for anyone who left before reaching it.
-
-> **On times:** the three date columns are written in Berlin time (`Europe/Berlin`, DST handled automatically) so the Sheet reads naturally at a glance. The original UTC values are preserved untouched inside `payload_json` — that's what the app and your analysis read, keeping every participant on one absolute scale. To use a different timezone, change `DISPLAY_TIMEZONE` at the top of `Code.gs`.
+There is no `attention_check_passed` column, because the survey has no attention
+check. Add it if you like — the script simply leaves unknown columns blank.
 
 ---
 
 ### Step 2: Add the script
 
-1. In the Sheet, go to **Extensions → Apps Script**. A new tab opens with an empty `Code.gs`.
-2. Delete anything in the editor and paste in the full contents of [google-apps-script/Code.gs](../google-apps-script/Code.gs) from this repo.
-3. Near the top, replace:
-
-   ```js
-   const READ_TOKEN = 'REPLACE_WITH_A_LONG_RANDOM_SECRET'
-   ```
-
-   with a long random string of your own — this is a password that protects your participants' data from being read by anyone who guesses the URL. Anything long and hard to guess works (e.g. mash the keyboard for 30 characters). Keep it somewhere safe; you'll need it again in Step 4.
-
-4. Save the project (the disk icon, or Ctrl/Cmd+S). Any name is fine.
+1. In the new Sheet, go to **Extensions → Apps Script**.
+2. Delete whatever is in `Code.gs` and paste the full contents of
+   [google-apps-script/Code.gs](../google-apps-script/Code.gs).
+   (This is the survey version — *not* the main `Code.gs`.)
+3. Replace `READ_TOKEN` with a long random string. Use a **different** one from
+   the main survey's, so a leak of one does not expose the other. Keep it safe;
+   you need it again in Step 4.
+4. Save the project.
 
 ---
 
 ### Step 3: Publish it as a Web App
 
-1. Click **Deploy → New deployment**.
-2. Click the gear icon next to "Select type" and choose **Web app**.
-3. Set:
-   - **Execute as:** Me
-   - **Who has access:** Anyone
-   
-   ("Anyone" is required — participants filling out the survey aren't logged into Google, so a more restrictive setting would reject their submissions.)
-4. Click **Deploy**. Google will ask you to authorize the script — approve it (it's your own script, running under your own account).
-5. Copy the **Web app URL** shown after deploying. It looks like:
+1. **Deploy → New deployment**.
+2. Gear icon next to "Select type" → **Web app**.
+3. Set **Execute as: Me** and **Who has access: Anyone**.
+   ("Anyone" is required — participants are not logged into Google.)
+4. **Deploy**, then authorize when prompted.
+5. Copy the **Web app URL** (ends in `/exec`). You need it twice, in Steps 4 and 5.
 
-   ```
-   https://script.google.com/macros/s/AKfycb.../exec
-   ```
-
-   Keep this tab open — you need this URL twice, in Steps 4 and 5.
+> This URL is different from your main survey's. Keep them straight — pasting the
+> main survey's URL here would write survey responses into your primary dataset,
+> which is the one thing this whole arrangement exists to prevent.
 
 ---
 
-### Step 4: Point the sync script at it (for pulling data back)
+### Step 4: Point the sync script at it
 
-In the project root, create a file named `.env.local` (this file is already git-ignored — it will never be committed) with:
+Add to `.env.local` in the project root (already git-ignored), **alongside** your
+existing survey variables — don't replace them:
 
 ```
 SURVEY_SHEET_URL=https://script.google.com/macros/s/AKfycb.../exec
-SURVEY_SHEET_TOKEN=the-same-long-random-string-from-step-2
+SURVEY_SHEET_TOKEN=the-long-random-string-from-step-2
 ```
-
-This lets `npm run sync:survey` (see Step 6) fetch responses back into the app.
 
 ---
 
-### Step 5: Point the live survey at it (for saving submissions)
+### Step 5: Point the live survey at it
 
 Open [src/lib/surveyEndpoint.js](../src/lib/surveyEndpoint.js) and change:
 
@@ -86,32 +90,43 @@ Open [src/lib/surveyEndpoint.js](../src/lib/surveyEndpoint.js) and change:
 export const SURVEY_ENDPOINT_URL = null
 ```
 
-to:
+to your URL from Step 3:
 
 ```js
 export const SURVEY_ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycb.../exec'
 ```
 
-(Same URL as Step 3 — no token here, since submitting a survey doesn't need one; only reading everyone's data back does.)
-
-Commit and push this change. The next GitHub Pages deploy will carry it, and from then on every finished survey at your published link is appended as a new row in the Sheet.
+Commit and push. Until you do this, a participant opening the deployed survey link
+is told plainly that storage is not configured rather than having their answers
+silently dropped.
 
 ---
 
-### Step 6: Bring responses back into the app
-
-Whenever you want the P4 Survey Results Dashboard (and later the P5 weight fit) to reflect the latest submissions:
+### Step 6: Bring survey responses back
 
 ```
 npm run sync:survey
 ```
 
-This overwrites `src/data/survey-responses.json` with everything currently in the Sheet. Review the diff, then commit and push as usual — that push triggers the normal GitHub Pages rebuild, same as any other data change in this project.
+This overwrites `src/data/survey-responses-360.json` — and only that file. The
+main survey's `npm run sync:survey` is untouched and writes only
+`src/data/survey-responses.json`. The two never cross.
+
+Then open `#/survey-360-review` to see timings and drop-off.
 
 ---
 
 ## Notes
 
-- **Local testing is unaffected.** Running `npm run dev` still saves survey submissions straight to `src/data/survey-responses.json` via Vite's own dev-only endpoint — it never touches the real Sheet, so you can test the survey freely without polluting participant data.
-- **The Sheet is the source of truth once real participants start.** After your first `sync:survey`, don't hand-edit `survey-responses.json` directly — edits will be overwritten by the next sync. Fix mistakes in the Sheet, then re-sync.
-- **Data isn't live on the published site.** A submission lands in the Sheet immediately, but the researcher-facing Results page only sees it after you run `sync:survey` and push. That's a deliberate trade-off: it keeps this in step with how every other page in the app reads its data (a plain, build-time `import` of a JSON file) instead of adding a live network fetch just for this one page.
+- **One row per participant, growing as they answer.** The survey saves after
+  every comparison and the script updates that participant's row in place, so
+  someone who stops halfway has already left their answers — and their timings —
+  in the Sheet.
+- **`status`** reads `in_progress` until the thank-you screen, then `completed`.
+  A row still on `in_progress` long after its `timestamp` is a drop-off, which is
+  exactly what a feasibility survey is trying to observe.
+- **Times in the Sheet are Berlin time** for readability; the original UTC values
+  are preserved inside `payload_json`, and `duration_ms` per answer is there too.
+- **Ten participants is a feasibility sample, not a powered one.** The review page
+  deliberately reports only timing and drop-off. Don't read weights or accuracy
+  out of this data.

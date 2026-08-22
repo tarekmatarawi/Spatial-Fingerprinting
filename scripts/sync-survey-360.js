@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 // Pulls every participant submission out of the Google Sheet (via the Apps
 // Script Web App in google-apps-script/Code.gs) and overwrites
-// src/data/pilot-360-responses.json with it — the same file the dev-only
+// src/data/survey-responses-360.json with it — the same file the dev-only
 // /__save-survey endpoint appends to locally. Run after any batch of
 // participants, then commit + push like any other data update:
 //
 //   npm run sync:survey
 //
-// Needs PILOT_360_SHEET_URL and PILOT_360_SHEET_TOKEN, either exported in your
+// Needs SURVEY_SHEET_URL and SURVEY_SHEET_TOKEN, either exported in your
 // shell or placed in a git-ignored .env.local file (KEY=value per line) —
 // see docs/survey-storage-setup.md.
 
@@ -38,11 +38,11 @@ function loadEnvLocal() {
 async function main() {
   loadEnvLocal()
 
-  const url = process.env.PILOT_360_SHEET_URL
-  const token = process.env.PILOT_360_SHEET_TOKEN
+  const url = process.env.SURVEY_SHEET_URL
+  const token = process.env.SURVEY_SHEET_TOKEN
   if (!url || !token) {
     console.error(
-      'Missing PILOT_360_SHEET_URL and/or PILOT_360_SHEET_TOKEN.\n' +
+      'Missing SURVEY_SHEET_URL and/or SURVEY_SHEET_TOKEN.\n' +
         'Set them in a .env.local file at the project root — see docs/survey-storage-setup.md.'
     )
     process.exit(1)
@@ -61,7 +61,7 @@ async function main() {
     process.exit(1)
   }
 
-  const dest = path.join(root, 'src/data/pilot-360-responses.json')
+  const dest = path.join(root, 'src/data/survey-responses-360.json')
   writeJsonAtomic(dest, records)
   console.log(`Synced ${records.length} response${records.length === 1 ? '' : 's'} to ${dest}`)
 }

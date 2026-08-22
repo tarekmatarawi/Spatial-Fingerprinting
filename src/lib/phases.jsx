@@ -72,10 +72,10 @@ export const PHASES = [
     status: 'built',
     icon: LuUsersRound,
     name: 'Perceptual Survey',
-    longName: 'Perceptual Survey — Views',
+    longName: 'Perceptual Survey — Panoramic',
     journey: 'Perceptual survey',
     blurb:
-      'Anonymous participants compare triplets of plazas by feel — the perceptual ground truth for the metrics.',
+      'Anonymous participants compare triplets of 360° panoramas by feel, then rate each plaza on four plain-language scales.',
   },
   {
     id: 'results',

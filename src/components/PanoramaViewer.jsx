@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { LuMove, LuTriangleAlert } from 'react-icons/lu'
-import { PANORAMA_SETTINGS } from '@/lib/pilot360'
+import { PANORAMA_SETTINGS } from '@/lib/survey360'
 
-// Equirectangular panorama viewer for the 360° pilot.
+// Equirectangular panorama viewer for the perceptual survey.
 //
 // Hand-rolled on Three.js — already a core dependency — rather than pulling in a
-// panorama library, because every constraint this pilot needs is a hard
+// panorama library, because every constraint this survey needs is a hard
 // requirement rather than a preference, and here each one is structural:
 //
-//   • YAW is free — the whole point of the pilot is looking all the way round.
-//   • PITCH is clamped to ±PITCH_LIMIT_DEG, so nobody spends the comparison
-//     staring at sky or pavement.
+//   • YAW is free — looking all the way round is the point of the stimulus.
+//   • PITCH is clamped, asymmetrically, so nobody spends the comparison
+//     staring at sky or pavement — trimmed a little further downward than
+//     upward, since the ground carries less of what this study measures.
 //   • HORIZONTAL FOV is a module constant, identical for all 18 plazas, and no
 //     code path changes it. Zoom cannot drift because zoom does not exist:
 //     no wheel handler, no pinch handler, no fov state.
@@ -19,9 +20,8 @@ import { PANORAMA_SETTINGS } from '@/lib/pilot360'
 //
 // The camera sits at the centre of a sphere with the image mapped on the inside.
 
-const { PITCH_LIMIT_DEG, HFOV_DEG } = PANORAMA_SETTINGS
+const { PITCH_LIMIT_UP_DEG, PITCH_LIMIT_DOWN_DEG, HFOV_DEG } = PANORAMA_SETTINGS
 const SPHERE_RADIUS = 500
-const DRAG_SENSITIVITY = 0.13 // degrees of rotation per pixel dragged
 
 // Sphere tessellation. Deliberately high.
 //
@@ -55,6 +55,23 @@ function verticalFovDeg(hFovDeg, aspect) {
   return (v * 180) / Math.PI
 }
 
+// The view angle of a point that sits `offsetPx` from the centre of a frame
+// `halfSpanPx` wide, under a perspective projection of half-angle `halfFov`.
+//
+// This is what makes dragging feel right. A fixed degrees-per-pixel rate cannot
+// track the cursor: how much angle a pixel is worth depends on the panel's size
+// AND on where in the frame you are, because a rectilinear projection spreads
+// the edges of the view over more pixels than the centre (the tan term).
+//
+// With a fixed rate the image slides relative to your hand — it lagged 22% on
+// the narrow triplet panels and ran 32% ahead on the wide rating panel — and
+// the brain reads that as the world revolving underneath rather than as turning
+// your own head. Inverting the projection instead pins the grabbed point to the
+// cursor exactly, at any panel size, which is how a photo viewer should feel.
+function viewAngle(offsetPx, halfSpanPx, halfFov) {
+  return Math.atan((offsetPx / Math.max(halfSpanPx, 1)) * Math.tan(halfFov))
+}
+
 export function PanoramaViewer({ url, label, openingYawDeg = 0, className = '', onError }) {
   const mountRef = useRef(null)
   const [status, setStatus] = useState('loading') // loading | ready | failed
@@ -84,7 +101,11 @@ export function PanoramaViewer({ url, label, openingYawDeg = 0, className = '', 
 
     let yaw = (openingYawDeg * Math.PI) / 180
     let pitch = 0
-    const pitchLimit = (PITCH_LIMIT_DEG * Math.PI) / 180
+    // Positive pitch looks up (sky), negative looks down (ground) — see
+    // applyCamera below, where y = sin(pitch). The two bounds are therefore
+    // independent: up stays generous, down is trimmed slightly.
+    const pitchLimitUp = (PITCH_LIMIT_UP_DEG * Math.PI) / 180
+    const pitchLimitDown = (PITCH_LIMIT_DOWN_DEG * Math.PI) / 180
 
     function applyCamera() {
       const rect = mount.getBoundingClientRect()
@@ -136,6 +157,20 @@ export function PanoramaViewer({ url, label, openingYawDeg = 0, className = '', 
 
         texture = tex
         texture.colorSpace = THREE.SRGBColorSpace
+        // The sphere's texture wraps at u=0/u=1 — that seam is where the
+        // panorama's 360° sweep closes on itself, and yaw is free, so every
+        // survey participant crosses it. Mipmapping and anisotropic filtering
+        // (below) sample neighbouring texels on BOTH sides of that seam to
+        // build each mip level; the default ClampToEdgeWrapping tells the GPU
+        // the texture stops at the edge instead of continuing round, so it
+        // smears the edge pixel rather than reaching across. That is the
+        // visible seam some panoramas show — worse wherever that column has
+        // real detail, which is why it varies by image rather than by which
+        // panel shows it. RepeatWrapping on U fixes it by sampling correctly
+        // across the wrap. V is left at the default: top and bottom are the
+        // zenith and nadir, not a seam, and must not wrap.
+        texture.wrapS = THREE.RepeatWrapping
+        texture.wrapT = THREE.ClampToEdgeWrapping
         // A 4096-wide image shown in a ~500 px panel is minified ~8×, and the
         // steepest minification is at grazing angles. Max anisotropy is what
         // keeps facade detail from shimmering as the view moves.
@@ -149,7 +184,7 @@ export function PanoramaViewer({ url, label, openingYawDeg = 0, className = '', 
         // around, 180° top to bottom. Some sources ship a vertically cropped
         // panorama instead — still 360° around, but less than 180° tall. Mapping
         // one of those onto a full sphere would stretch it and put the horizon
-        // in the wrong place, which would silently break the pilot's premise
+        // in the wrong place, which would silently break the survey's premise
         // that all 18 plazas are framed identically.
         //
         // So the geometry is cut to the band the image actually covers:
@@ -185,33 +220,54 @@ export function PanoramaViewer({ url, label, openingYawDeg = 0, className = '', 
     )
 
     // --- drag to look around (yaw free, pitch clamped) ---------------------
+    //
+    // The point under the cursor when the drag began stays under the cursor for
+    // the whole drag: the photo sticks to the finger, as in any map or panorama
+    // viewer. Angles are recovered by inverting the projection rather than by a
+    // per-pixel rate — see viewAngle above.
     let pointerId = null
-    let lastX = 0
-    let lastY = 0
+    let grab = null
+
+    function frame() {
+      const rect = mount.getBoundingClientRect()
+      const aspect = rect.width / Math.max(rect.height, 1)
+      return {
+        cx: rect.left + rect.width / 2,
+        cy: rect.top + rect.height / 2,
+        halfW: rect.width / 2,
+        halfH: rect.height / 2,
+        halfH_fov: (verticalFovDeg(HFOV_DEG, aspect) * Math.PI) / 360,
+        halfW_fov: (HFOV_DEG * Math.PI) / 360,
+      }
+    }
 
     function onPointerDown(e) {
       pointerId = e.pointerId
-      lastX = e.clientX
-      lastY = e.clientY
+      const f = frame()
+      grab = {
+        f,
+        yaw,
+        pitch,
+        ax: viewAngle(e.clientX - f.cx, f.halfW, f.halfW_fov),
+        ay: viewAngle(e.clientY - f.cy, f.halfH, f.halfH_fov),
+      }
       el.setPointerCapture(pointerId)
       el.style.cursor = 'grabbing'
       setDragging(true)
     }
 
     function onPointerMove(e) {
-      if (pointerId === null || e.pointerId !== pointerId) return
-      const dx = e.clientX - lastX
-      const dy = e.clientY - lastY
-      lastX = e.clientX
-      lastY = e.clientY
+      if (pointerId === null || e.pointerId !== pointerId || !grab) return
+      const { f } = grab
+
+      const ax = viewAngle(e.clientX - f.cx, f.halfW, f.halfW_fov)
+      const ay = viewAngle(e.clientY - f.cy, f.halfH, f.halfH_fov)
 
       // Yaw wraps freely; pitch is hard-clamped, so the horizon can never leave
       // the frame however far someone drags.
-      yaw -= (dx * DRAG_SENSITIVITY * Math.PI) / 180
-      pitch = Math.max(
-        -pitchLimit,
-        Math.min(pitchLimit, pitch + (dy * DRAG_SENSITIVITY * Math.PI) / 180)
-      )
+      yaw = grab.yaw - (ax - grab.ax)
+      pitch = Math.max(-pitchLimitDown, Math.min(pitchLimitUp, grab.pitch + (ay - grab.ay)))
+
       applyCamera()
       render()
     }
@@ -224,6 +280,7 @@ export function PanoramaViewer({ url, label, openingYawDeg = 0, className = '', 
         // Capture may already be gone; nothing to release.
       }
       pointerId = null
+      grab = null
       el.style.cursor = 'grab'
       setDragging(false)
     }

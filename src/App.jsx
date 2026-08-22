@@ -7,8 +7,6 @@ import { SurveyPage } from '@/pages/SurveyPage'
 import { SurveyLaunch } from '@/pages/SurveyLaunch'
 import { ResultsPage } from '@/pages/ResultsPage'
 import { PhasePlaceholder } from '@/pages/PhasePlaceholder'
-import { Pilot360Survey } from '@/pages/Pilot360Survey'
-import { Pilot360Review } from '@/pages/Pilot360Review'
 
 // The 3D viewer carries Three.js — by far the heaviest part of the app — so it
 // loads on demand. Participants opening the ?survey link never fetch it.
@@ -16,12 +14,7 @@ const SiteViewer = lazy(() =>
   import('@/components/SiteViewer').then((m) => ({ default: m.SiteViewer }))
 )
 
-// The panoramic pilot sits outside the nine-phase workflow: it is a feasibility
-// side-study, not a stage of the thesis pipeline. Its review page therefore gets
-// a route but no nav station, and its participant link is chrome-free like P3's.
-const PILOT_360_REVIEW = 'pilot-360-review'
-
-const ROUTES = ['home', ...PHASES.map((p) => p.id), PILOT_360_REVIEW]
+const ROUTES = ['home', ...PHASES.map((p) => p.id)]
 
 // Phases that are still to be built get a station and a route, but land on a
 // placeholder. Better an honest empty berth than a missing one — the workflow
@@ -50,7 +43,6 @@ export default function App() {
   // P3 (?survey) is live; P8 (?matched-view-survey) gets its link reserved here
   // so it can never collide with a researcher route once it is built.
   if (query.has('survey')) return <SurveyPage />
-  if (query.has('pilot-360')) return <Pilot360Survey />
   if (query.has('matched-view-survey')) {
     return <PhasePlaceholder phase={phaseById.get('matched-view')} standalone />
   }
@@ -140,9 +132,6 @@ function ResearcherShell() {
         </Page>
         <Page active={route === 'survey'}>{visited.has('survey') && <SurveyLaunch />}</Page>
         <Page active={route === 'results'}>{visited.has('results') && <ResultsPage />}</Page>
-        <Page active={route === PILOT_360_REVIEW}>
-          {visited.has(PILOT_360_REVIEW) && <Pilot360Review />}
-        </Page>
         {PLANNED.map((p) => (
           <Page key={p.id} active={route === p.id}>
             {visited.has(p.id) && <PhasePlaceholder phase={p} />}

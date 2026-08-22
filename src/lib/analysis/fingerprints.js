@@ -46,7 +46,7 @@ export const METRIC_UNITS = {
 //
 //   perceptual_120 — 120° directional, at the survey vantage/heading (P3/P5)
 //   perceptual_360 — 360° omnidirectional, at those SAME vantage points, for
-//                    the panoramic pilot. Direction-independent by construction.
+//                    the panoramic survey. Direction-independent by construction.
 //   field_360      — 360° omnidirectional, on the P6 sampling grid
 export const FOV_MODES = ['perceptual_120', 'perceptual_360', 'field_360']
 

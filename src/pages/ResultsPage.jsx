@@ -3,8 +3,9 @@ import {
   LuLink2,
   LuRadar,
   LuRefreshCw,
-  LuShieldCheck,
+  LuSlidersHorizontal,
   LuTimer,
+  LuTriangleAlert,
   LuUsersRound,
 } from 'react-icons/lu'
 import allReadings from '@/data/results.json'
@@ -12,23 +13,19 @@ import sites from '@/data/sites.json'
 import { CoveragePanel } from '@/components/CoveragePanel'
 import { phaseById } from '@/lib/phases'
 import { activeSites } from '@/lib/site'
-import { SURVEY_LENGTH, TARGET_PARTICIPANTS } from '@/lib/triplets'
+import { TARGET_PARTICIPANTS } from '@/lib/triplets'
+import { TRIPLET_COUNT, RATING_SCALES } from '@/lib/survey360'
 import { useSurveyResponses } from '@/lib/surveyData'
-import {
-  recordAttentionCheckPassed,
-  sessionStatus,
-  STATUS_ABANDONED,
-  STATUS_COMPLETED,
-  STATUS_LABELS,
-} from '@/lib/session'
+import { sessionStatus, STATUS_ABANDONED, STATUS_COMPLETED, STATUS_LABELS } from '@/lib/session'
 
-// P4 — Survey Results Dashboard. The researcher's read on response quality:
-// who answered, how completely, whether the attention check discriminated, and
-// whether pooled pair coverage supports the sampling assumption. Everything
-// derived FROM the responses (fitted weights, hypothesis tests, zone typology)
-// lives in P5 onward, not here.
-// Reads src/data/survey-responses.json — the same file the dev-server endpoint
-// appends to — so it's current on every reload while collecting locally.
+// P4 — Survey Results Dashboard. The researcher's read on response quality: who
+// answered, how completely, how long each comparison took, and whether coverage
+// — of site pairs in the triplet task, and of sites in the rating task —
+// supports the analysis. Everything derived FROM the responses (fitted weights,
+// hypothesis tests, zone typology) lives in P5 onward, not here.
+//
+// Reads src/data/survey-responses-360.json. The archived static-photo dataset is
+// deliberately not shown anywhere in the app.
 
 // Sessions are saved after every answer, so a record here may be a survey still
 // being taken, one someone walked away from, or a finished one — sessionStatus
@@ -41,13 +38,17 @@ function participantStats(record) {
     Number.isFinite(started) && Number.isFinite(finished) && finished >= started
       ? Math.round((finished - started) / 1000)
       : null
+  const answers = record.responses ?? []
+  const times = answers.map((a) => a.duration_ms).filter((d) => Number.isFinite(d))
   return {
     id: record.participant_id,
-    answered: (record.responses ?? []).length,
-    // true / false / null — null while the mid-survey check is still ahead.
-    attentionPassed: recordAttentionCheckPassed(record),
+    answered: answers.length,
     status: sessionStatus(record),
     durationS,
+    medianPerQuestion: median(times),
+    ratings: (record.rating_responses ?? []).length,
+    ratedSites: (record.rated_site_ids ?? []).length,
+    version: record.survey_version ?? null,
     background: record.background ?? 'undisclosed',
     ageGroup: record.age_group ?? null,
     finishedAt: record.finished_at,
@@ -72,8 +73,8 @@ function median(values) {
 const ACTIVE_SITES = activeSites(sites)
 
 // results.json carries every FOV layer. This dashboard reports the perceptual
-// (120°) layer the survey was built on; the panoramic pilot's 360° readings are
-// a separate layer and are counted on the pilot's own page.
+// (120°) layer. The panoramic 360° readings the live survey pairs with are a
+// separate layer, reported in the 3D viewer.
 const isovistReadings = allReadings.filter((r) => r.fov_mode === 'perceptual_120')
 
 const BACKGROUND_LABELS = {
@@ -93,16 +94,24 @@ export function ResultsPage() {
   const completed = participants.filter((p) => p.status === STATUS_COMPLETED)
   const abandoned = participants.filter((p) => p.status === STATUS_ABANDONED)
 
-  // One attention check per session now, so the pass rate counts sessions, not
-  // checks. Sessions that stopped before reaching the check are left out of
-  // both sides — they neither passed nor failed it.
-  const checked = participants.filter((p) => p.attentionPassed != null)
-  const passedCheck = checked.filter((p) => p.attentionPassed)
-  const passRate = checked.length
-    ? Math.round((passedCheck.length / checked.length) * 100)
-    : null
   // Only finished sessions have a meaningful start-to-submit duration.
   const medianDuration = median(completed.map((p) => p.durationS))
+  const medianPerQuestion = median(participants.map((p) => p.medianPerQuestion))
+  const totalRatings = participants.reduce((s, p) => s + p.ratings, 0)
+
+  // Rating coverage. Each participant rates only the plazas their own triplets
+  // showed them, so the sets differ between people — a site could end up rated
+  // by very few. This is the check that no site is quietly under-covered.
+  const ratedBySite = new Map(ACTIVE_SITES.map((s) => [s.id, 0]))
+  for (const record of responses) {
+    for (const id of record.rated_site_ids ?? []) {
+      if (ratedBySite.has(id)) ratedBySite.set(id, ratedBySite.get(id) + 1)
+    }
+  }
+  const coverageRows = [...ratedBySite.entries()]
+    .map(([id, n]) => ({ id, n }))
+    .sort((a, b) => a.n - b.n || a.id.localeCompare(b.id))
+  const worstCoverage = coverageRows[0]?.n ?? 0
 
   // Demographics are asked at the very end, so only completed sessions can
   // answer them — counting abandoned ones would inflate "not disclosed".
@@ -151,7 +160,7 @@ export function ResultsPage() {
             </button>
             <p className="font-mono text-xs text-ink-faint">
               {source === 'live'
-                ? `src/data/survey-responses.json · read ${readAt?.toLocaleTimeString() ?? 'just now'}`
+                ? `src/data/survey-responses-360.json · read ${readAt?.toLocaleTimeString() ?? 'just now'}`
                 : 'build-time snapshot — run npm run dev for live reads'}
             </p>
           </div>
@@ -170,18 +179,20 @@ export function ResultsPage() {
                 detail={`${completed.length} completed · ${totalAnswers} triplet judgements`}
               />
               <Stat
-                icon={LuShieldCheck}
-                label="Attention check passed"
-                value={passRate == null ? '—' : `${passRate}%`}
-                detail={`${passedCheck.length} of ${checked.length} who reached it`}
+                icon={LuSlidersHorizontal}
+                label="Ratings collected"
+                value={totalRatings}
+                detail={`${RATING_SCALES.length} scales per plaza rated`}
               />
               <Stat
                 icon={LuTimer}
                 label="Median completion"
                 value={formatDuration(medianDuration)}
                 detail={
-                  abandoned.length
-                    ? `${abandoned.length} abandoned, partials kept`
+                  medianPerQuestion != null
+                    ? `${(medianPerQuestion / 1000).toFixed(1)}s per comparison${
+                        abandoned.length ? ` · ${abandoned.length} abandoned` : ''
+                      }`
                     : 'from first screen to submit'
                 }
               />
@@ -211,7 +222,7 @@ export function ResultsPage() {
                         <th className="px-3 py-2 font-medium">Participant</th>
                         <th className="px-3 py-2 font-medium">Status</th>
                         <th className="px-3 py-2 text-right font-medium">Answers</th>
-                        <th className="px-3 py-2 text-right font-medium">Check</th>
+                        <th className="px-3 py-2 text-right font-medium">Ratings</th>
                         <th className="px-3 py-2 text-right font-medium">Duration</th>
                         <th className="px-3 py-2 font-medium">Background</th>
                         <th className="px-3 py-2 font-medium">Age</th>
@@ -232,22 +243,19 @@ export function ResultsPage() {
                           </td>
                           <td className="px-3 py-2 text-right">
                             {p.answered}
-                            <span className="text-ink-faint">/{SURVEY_LENGTH}</span>
+                            <span className="text-ink-faint">/{TRIPLET_COUNT}</span>
                           </td>
-                          <td
-                            className={`px-3 py-2 text-right ${
-                              p.attentionPassed === false
-                                ? 'text-redline'
-                                : p.attentionPassed
-                                  ? 'text-ok'
-                                  : 'text-ink-faint'
-                            }`}
-                          >
-                            {p.attentionPassed == null
-                              ? 'not reached'
-                              : p.attentionPassed
-                                ? 'passed'
-                                : 'failed'}
+                          <td className="px-3 py-2 text-right">
+                            {p.ratings > 0 ? (
+                              <>
+                                {p.ratings}
+                                <span className="text-ink-faint">
+                                  /{p.ratedSites * RATING_SCALES.length || '?'}
+                                </span>
+                              </>
+                            ) : (
+                              <span className="text-ink-faint">—</span>
+                            )}
                           </td>
                           <td className="px-3 py-2 text-right">{formatDuration(p.durationS)}</td>
                           <td className="px-3 py-2">{BACKGROUND_LABELS[p.background] ?? '—'}</td>
@@ -258,8 +266,8 @@ export function ResultsPage() {
                   </table>
                 </div>
                 <p className="mt-2 font-mono text-xs text-ink-faint">
-                  A failed check (red) flags a session for exclusion from the perceptual fit.
-                  Abandoned sessions keep every answer given before the participant left.
+                  Abandoned sessions keep every answer given before the participant left. A dash
+                  under Ratings means the session ended before the rating block, or predates it.
                 </p>
               </section>
 
@@ -277,6 +285,56 @@ export function ResultsPage() {
                 </p>
               </aside>
             </div>
+
+            {/* Rating coverage — the check the varying rating sets require */}
+            <section className="mt-10">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-line-strong pb-2">
+                <h2 className="text-base font-semibold tracking-tight text-ink">Rating coverage</h2>
+                <p className="font-mono text-xs text-ink-faint">
+                  participants who rated each plaza
+                </p>
+              </div>
+              <p className="mt-2 max-w-prose text-sm leading-relaxed text-ink-muted">
+                Each participant rates only the plazas their own triplets showed them, so the sets
+                differ between people. A plaza rated by very few participants has an unreliable
+                mean, which would weaken the per-metric correlation it feeds — this is where that
+                shows up.
+              </p>
+
+              {worstCoverage < 5 && participants.length > 0 && (
+                <p className="mt-3 flex items-start gap-2 font-mono text-xs text-warn">
+                  <LuTriangleAlert aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                  Least-covered plaza has {worstCoverage} rating
+                  {worstCoverage === 1 ? '' : 's'} so far.
+                </p>
+              )}
+
+              <div className="mt-4 space-y-1.5">
+                {coverageRows.map((row) => {
+                  const max = Math.max(1, coverageRows[coverageRows.length - 1].n)
+                  return (
+                    <div key={row.id} className="flex items-center gap-3">
+                      <span className="w-44 shrink-0 truncate font-mono text-xs text-ink-muted">
+                        {row.id}
+                      </span>
+                      <div className="h-4 min-w-0 flex-1 overflow-hidden rounded-sm bg-surface">
+                        <div
+                          className={row.n === 0 ? 'h-full' : 'h-full bg-primary/70'}
+                          style={{ width: `${(row.n / max) * 100}%` }}
+                        />
+                      </div>
+                      <span
+                        className={`w-8 shrink-0 text-right font-mono text-xs ${
+                          row.n === 0 ? 'text-redline' : 'text-ink-muted'
+                        }`}
+                      >
+                        {row.n}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+            </section>
 
             {/* Pooled coverage — the empirical check on the sampling assumption */}
             <section className="mt-10">

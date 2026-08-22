@@ -21,10 +21,39 @@ import { castIsovist, bearingTo } from '@/lib/isovist'
 import { Buildings } from './Buildings'
 import { IsovistOverlay } from './IsovistOverlay'
 
-// results.json holds every FOV layer side by side. The viewer casts and saves
-// 120° readings only; everything else is passed through untouched.
-const PERCEPTUAL_READINGS = savedResults.filter((r) => r.fov_mode !== 'perceptual_360' && r.fov_mode !== 'field_360')
-const OTHER_LAYER_READINGS = savedResults.filter((r) => r.fov_mode === 'perceptual_360' || r.fov_mode === 'field_360')
+// The two FOV conventions this viewer can cast and save. They are separate
+// measurement layers with their own normalisation bounds — never mixed.
+//
+// 120° is directional: the reading depends on where you stand AND which way you
+// face, so placing one takes two clicks.
+// 360° is omnidirectional: it depends only on where you stand. Heading cannot
+// change the numbers (test/isovist.test.js asserts this), so aiming is skipped
+// entirely and one click is the whole interaction.
+const FOV_MODES = {
+  perceptual_120: {
+    id: 'perceptual_120',
+    label: '120° directional',
+    short: '120°',
+    fov: 120,
+    rays: 120,
+    directional: true,
+    blurb: 'What a person sees facing one way. Two clicks: place, then aim.',
+  },
+  perceptual_360: {
+    id: 'perceptual_360',
+    label: '360° panoramic',
+    short: '360°',
+    fov: 360,
+    rays: 360,
+    directional: false,
+    blurb: 'Everything visible from the point. One click — heading cannot affect it.',
+  },
+}
+
+// results.json holds every layer side by side. The viewer edits one at a time
+// and passes every other record through untouched on save.
+const FIELD_READINGS = savedResults.filter((r) => r.fov_mode === 'field_360')
+const EDITABLE_READINGS = savedResults.filter((r) => r.fov_mode !== 'field_360')
 
 
 // The whole scene uses a Z-up world (X = east/right, Y = north/front, Z = up),
@@ -124,11 +153,15 @@ export function SiteViewer({ active = true }) {
   const [direction, setDirection] = useState(initial.direction) // compass bearing, radians (0 = north, clockwise)
   const [stage, setStage] = useState(initial.stage) // 'vantage' = next click sets viewpoint, 'aim' = next click sets facing direction
   const [resetToken, setResetToken] = useState(0)
-  // The viewer works in the perceptual (120°) layer, so its readings list shows
-  // only those rows. results.json also holds the panoramic pilot's 360° layer;
-  // those are held aside in OTHER_LAYER_READINGS and re-attached on every save
-  // so writing a new 120° reading can never drop them.
-  const [results, setResults] = useState(PERCEPTUAL_READINGS)
+  // Both perceptual layers are editable here; the P6 field layer is held aside
+  // in FIELD_READINGS and re-attached on every save so it can never be dropped.
+  const [results, setResults] = useState(EDITABLE_READINGS)
+  // Which FOV layer is being cast and saved right now.
+  const [fovMode, setFovMode] = useState('perceptual_120')
+  // Effects below fire on site change, not on mode change, so they read the
+  // mode through a ref rather than a possibly stale closure value.
+  const fovModeRef = useRef(fovMode)
+  fovModeRef.current = fovMode
   const [saveError, setSaveError] = useState(null)
   const [showSavedProjections, setShowSavedProjections] = useState(false) // overlay saved points' isovists faintly
   const compassRef = useRef(null)
@@ -205,7 +238,7 @@ export function SiteViewer({ active = true }) {
       pendingLoadRef.current = null
       setPick({ point: { x: pending.local_x, y: pending.local_y }, inside: true, lat: pending.lat, lon: pending.lng })
       setDirection((pending.direction_deg * Math.PI) / 180)
-      setStage('aim')
+      setStage(FOV_MODES[fovModeRef.current].directional ? 'aim' : 'vantage')
     } else {
       setPick(null)
       setDirection(null)
@@ -271,8 +304,12 @@ export function SiteViewer({ active = true }) {
         lat: +lat.toFixed(6),
         lng: +lon.toFixed(6),
       })
+      // The heading is set either way — it aims the 120° cone, and for 360° it
+      // simply orients the marker arrow. It cannot affect a 360° reading.
       setDirection(bearingTo(point, data.centroid))
-      setStage('aim')
+      // 360° is direction-free, so one click completes the reading and the next
+      // click should place a new point rather than re-aim this one.
+      setStage(FOV_MODES[fovModeRef.current].directional ? 'aim' : 'vantage')
     }
     setPick({ point, inside, lat, lon })
   }
@@ -381,17 +418,25 @@ export function SiteViewer({ active = true }) {
 
   const data = projected.data
 
+  const mode = FOV_MODES[fovMode]
+
   const isovistResult = useMemo(() => {
-    if (!data || !pick?.inside || direction == null) return null
-    return castIsovist(pick.point, direction, data.buildings)
-  }, [data, pick, direction])
+    if (!data || !pick?.inside) return null
+    // A 360° sweep is direction-free, so it can be cast the moment a point
+    // exists — there is nothing to aim.
+    if (!mode.directional) {
+      return castIsovist(pick.point, 0, data.buildings, { fov: mode.fov, rayCount: mode.rays })
+    }
+    if (direction == null) return null
+    return castIsovist(pick.point, direction, data.buildings, { fov: mode.fov, rayCount: mode.rays })
+  }, [data, pick, direction, mode])
 
   // Every saved reading that belongs to the current plaza, drawn as a persistent
   // marker in the scene so all of a site's saved vantage points stay visible
   // (and clickable to reload) after switching sites or refreshing.
   const savedForSite = useMemo(
-    () => results.filter((r) => r.site_id === selectedId),
-    [results, selectedId]
+    () => results.filter((r) => r.site_id === selectedId && (r.fov_mode ?? 'perceptual_120') === fovMode),
+    [results, selectedId, fovMode]
   )
 
   // Recompute each saved point's isovist so its projection can be overlaid
@@ -401,9 +446,12 @@ export function SiteViewer({ active = true }) {
     if (!data || !showSavedProjections) return []
     return savedForSite.map((r) => ({
       id: r.id,
-      result: castIsovist({ x: r.local_x, y: r.local_y }, (r.direction_deg * Math.PI) / 180, data.buildings),
+      result: castIsovist({ x: r.local_x, y: r.local_y }, (r.direction_deg * Math.PI) / 180, data.buildings, {
+        fov: mode.fov,
+        rayCount: mode.rays,
+      }),
     }))
-  }, [data, savedForSite, showSavedProjections])
+  }, [data, savedForSite, showSavedProjections, mode])
 
   // Sends the whole results array to the dev-only /__save-results endpoint,
   // updating React state first so the panel reacts immediately. On the deployed
@@ -416,7 +464,7 @@ export function SiteViewer({ active = true }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         // Re-attach the layers this viewer does not edit, so the file keeps them.
-        body: JSON.stringify([...OTHER_LAYER_READINGS, ...next]),
+        body: JSON.stringify([...FIELD_READINGS, ...next]),
       })
       if (!response.ok) throw new Error(`save endpoint returned ${response.status}`)
       setSaveError(null)
@@ -426,7 +474,8 @@ export function SiteViewer({ active = true }) {
   }
 
   function handleSaveResult() {
-    if (!isovistResult || !pick?.inside || direction == null) return
+    if (!isovistResult || !pick?.inside) return
+    if (mode.directional && direction == null) return
     const record = {
       id: crypto.randomUUID(),
       site_id: site.id,
@@ -440,14 +489,26 @@ export function SiteViewer({ active = true }) {
       // sites with street openings a sub-degree rotation flips a ray between a
       // near facade and a 200 m escape — worth ~2% of area and ~12% of
       // occlusivity. Position at 2 dp is already 1 cm and needs no widening.
-      direction_deg: round(((direction * 180) / Math.PI + 360) % 360, 2),
+      direction_deg: direction == null ? 0 : round(((direction * 180) / Math.PI + 360) % 360, 2),
       area_m2: round(isovistResult.area, 2),
       compactness: round(isovistResult.compactness, 4),
       occlusivity_m: round(isovistResult.occlusivity, 2),
       enclosure_ratio: round(isovistResult.enclosureRatio, 4),
+      fov_mode: mode.id,
+      fov_deg: mode.fov,
+      ray_count: mode.rays,
+      // A 360° sweep is direction-free, so the stored heading is provenance
+      // only — it cannot have influenced these numbers.
+      ...(mode.directional ? {} : { heading_is_informational: true }),
+      canonical: true,
       saved_at: new Date().toISOString(),
     }
-    persistResults([...results, record])
+    // One canonical reading per site per layer. Saving a second replaces the
+    // first rather than stacking, so the downstream fit can never find two.
+    const others = results.filter(
+      (r) => !(r.site_id === site.id && (r.fov_mode ?? 'perceptual_120') === mode.id)
+    )
+    persistResults([...others, record])
   }
 
   function handleDelete(id) {
@@ -465,7 +526,7 @@ export function SiteViewer({ active = true }) {
     }
     setPick({ point: { x: entry.local_x, y: entry.local_y }, inside: true, lat: entry.lat, lon: entry.lng })
     setDirection((entry.direction_deg * Math.PI) / 180)
-    setStage('aim')
+    setStage(FOV_MODES[fovModeRef.current].directional ? 'aim' : 'vantage')
   }
 
   return (
@@ -581,6 +642,8 @@ export function SiteViewer({ active = true }) {
         stage={stage}
         direction={direction}
         result={isovistResult}
+        fovMode={fovMode}
+        onSetFovMode={setFovMode}
         onMoveViewpoint={() => setStage('vantage')}
         onSaveResult={handleSaveResult}
         saveError={saveError}
@@ -890,7 +953,7 @@ function clamp(v, lo, hi) {
   return Math.max(lo, Math.min(hi, v))
 }
 
-function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, direction, result, onMoveViewpoint, onSaveResult, saveError, savedCount, showSavedProjections, onToggleSavedProjections, draw, buildingNote, onStartDrawing, onUndoPoint, onSetDrawHeight, onFinishDrawing, onCancelDrawing, manualBuildings, onSetManualHeight, onCommitManualEdits, onDeleteManualBuilding }) {
+function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, direction, result, fovMode, onSetFovMode, onMoveViewpoint, onSaveResult, saveError, savedCount, showSavedProjections, onToggleSavedProjections, draw, buildingNote, onStartDrawing, onUndoPoint, onSetDrawHeight, onFinishDrawing, onCancelDrawing, manualBuildings, onSetManualHeight, onCommitManualEdits, onDeleteManualBuilding }) {
   const bearingDeg = direction != null ? Math.round(((direction * 180) / Math.PI + 360) % 360) : null
 
   return (
@@ -929,6 +992,37 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, di
         )}
       </div>
 
+      {/* Which measurement layer is being cast and saved. The two are separate
+          systems with their own normalisation bounds, so the switch is a first-
+          class control rather than a setting — it changes what a click means and
+          which saved readings are listed. */}
+      <div className="pointer-events-auto rounded-xl border border-line bg-paper/95 p-3 shadow-sm backdrop-blur">
+        <p className="px-1 font-mono text-xs text-ink-muted">Measurement layer</p>
+        <div className="mt-2 flex gap-1.5">
+          {Object.values(FOV_MODES).map((m) => (
+            <button
+              key={m.id}
+              onClick={() => onSetFovMode(m.id)}
+              aria-pressed={fovMode === m.id}
+              title={m.blurb}
+              className={`flex-1 rounded-lg border px-3 py-2 text-sm font-medium outline-none transition-all duration-150 focus-visible:ring-2 focus-visible:ring-primary-wash ${
+                fovMode === m.id
+                  ? 'border-primary bg-primary-wash/60 text-ink'
+                  : 'border-line-strong bg-paper text-ink-muted hover:border-primary hover:text-ink'
+              }`}
+            >
+              {m.short}
+              <span className="mt-0.5 block font-mono text-xs font-normal text-ink-faint">
+                {m.id === 'perceptual_120' ? 'place + aim' : 'place only'}
+              </span>
+            </button>
+          ))}
+        </div>
+        <p className="mt-2 px-1 text-xs leading-relaxed text-ink-faint">
+          {FOV_MODES[fovMode].blurb}
+        </p>
+      </div>
+
       <div className="pointer-events-auto rounded-xl border border-line bg-paper/95 p-4 text-sm shadow-sm backdrop-blur">
         <p className="flex items-start gap-2.5 text-ink-muted">
           {draw ? (
@@ -948,6 +1042,9 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, di
               <>
                 <span className="font-medium text-ink">Click the ground</span> inside the
                 plaza to drop a viewpoint.
+                {!FOV_MODES[fovMode].directional && (
+                  <> That is the whole reading — a 360° sweep has no direction to set.</>
+                )}
               </>
             ) : (
               <>
@@ -964,10 +1061,16 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, di
                 lat {pick.lat.toFixed(6)}, lng {pick.lon.toFixed(6)}
                 <br />
                 local x {pick.point.x.toFixed(1)} m, y {pick.point.y.toFixed(1)} m
-                {bearingDeg != null && (
+                {bearingDeg != null && FOV_MODES[fovMode].directional && (
                   <>
                     <br />
                     facing {bearingDeg}° {bearingLabel(bearingDeg)}
+                  </>
+                )}
+                {!FOV_MODES[fovMode].directional && (
+                  <>
+                    <br />
+                    <span className="text-ink-faint">360° — heading does not affect this reading</span>
                   </>
                 )}
               </>

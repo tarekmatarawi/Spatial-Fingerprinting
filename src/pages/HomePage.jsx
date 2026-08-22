@@ -1,7 +1,7 @@
 import { LuArrowRight, LuChevronRight } from 'react-icons/lu'
 import sites from '@/data/sites.json'
 import results from '@/data/results.json'
-import responses from '@/data/survey-responses.json'
+import responses from '@/data/survey-responses-360.json'
 import { groupedPhases } from '@/lib/phases'
 import { activeSites } from '@/lib/site'
 import { FigureGround } from '@/components/FigureGround'
@@ -11,7 +11,7 @@ import { FigureGround } from '@/components/FigureGround'
 // journey grouped into setup, analysis, and design application. Participants never see this — their link goes straight to ?survey.
 
 // Only the perceptual (120°) layer — results.json also holds the panoramic
-// pilot's 360° readings, which are not what this line is reporting.
+// survey's 360° readings, which are not what this line is reporting.
 const perceptualReadings = results.filter((r) => r.fov_mode === 'perceptual_120')
 
 const HERO_SITE =
