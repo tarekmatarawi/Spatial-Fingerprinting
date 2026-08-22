@@ -99,7 +99,14 @@ export function PanoramaViewer({ url, label, openingYawDeg = 0, className = '', 
     let texture = null
     let geometry = null
 
-    let yaw = (openingYawDeg * Math.PI) / 180
+    // SphereGeometry maps texture u=0 to world yaw +90°, so u=0.5 -- the raw
+    // file's own horizontal centre, i.e. whatever the camera was facing when
+    // the panorama was shot -- lands at yaw -90°, not yaw 0. Verified directly
+    // against THREE.SphereGeometry's own vertex/UV data, not just derived by
+    // hand. Without this offset every panorama opened a quarter-turn away from
+    // its own centre, on whatever happened to be at that arbitrary point.
+    const TEXTURE_CENTER_YAW_DEG = -90
+    let yaw = ((TEXTURE_CENTER_YAW_DEG + openingYawDeg) * Math.PI) / 180
     let pitch = 0
     // Positive pitch looks up (sky), negative looks down (ground) — see
     // applyCamera below, where y = sin(pitch). The two bounds are therefore
