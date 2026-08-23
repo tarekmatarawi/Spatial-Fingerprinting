@@ -337,7 +337,7 @@ function Round({ triplet, position, total, onChoice, onMissing }) {
   }
 
   return (
-    <div className="min-h-screen bg-bg">
+    <div className="h-full overflow-y-auto bg-bg">
       <div className="mx-auto max-w-[1500px] px-4 py-6 sm:px-6">
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
           <p className="font-mono text-xs text-ink-faint">
@@ -445,7 +445,7 @@ function RatingRound({ site, anchors, position, total, onSubmit, onMissing }) {
   const complete = RATING_SCALES.every((s) => values[s.id] != null)
 
   return (
-    <div className="min-h-screen bg-bg">
+    <div className="h-full overflow-y-auto bg-bg">
       <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6">
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
           <p className="font-mono text-xs text-ink-faint">
@@ -653,11 +653,12 @@ function Done({ submitState }) {
 }
 
 function Frame({ children }) {
+  const scrollRef = useRef(null)
   useEffect(() => {
-    window.scrollTo(0, 0)
+    scrollRef.current?.scrollTo(0, 0)
   }, [])
   return (
-    <div className="min-h-screen bg-bg">
+    <div ref={scrollRef} className="h-full overflow-y-auto bg-bg">
       <div className="mx-auto max-w-2xl px-5 py-12 sm:px-8 sm:py-16">{children}</div>
     </div>
   )
