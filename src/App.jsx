@@ -1,17 +1,42 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { Component, lazy, Suspense, useEffect, useState } from 'react'
 import { LuBox, LuHouse, LuChevronDown } from 'react-icons/lu'
 import { PHASES, groupedPhases, phaseById, phaseTitle } from '@/lib/phases'
-import { HomePage } from '@/pages/HomePage'
-import { AdminPage } from '@/pages/AdminPage'
-import { SurveyPage } from '@/pages/SurveyPage'
-import { SurveyLaunch } from '@/pages/SurveyLaunch'
-import { ResultsPage } from '@/pages/ResultsPage'
 import { PhasePlaceholder } from '@/pages/PhasePlaceholder'
 
-// The 3D viewer carries Three.js — by far the heaviest part of the app — so it
-// loads on demand. Participants opening the ?survey link never fetch it.
+// The 3D viewer carries Three.js, so it loads on demand rather than in the
+// eager entry bundle every visitor downloads first.
 const SiteViewer = lazy(() =>
   import('@/components/SiteViewer').then((m) => ({ default: m.SiteViewer }))
+)
+
+// The survey also carries Three.js (for the panorama viewer), so it is split
+// out the same way. Before this split it was bundled eagerly into the single
+// entry file every visitor downloads before anything can render — including a
+// researcher opening the plain overview, and a participant on a phone whose
+// browser has to parse and execute the whole thing (Three.js included) before
+// the first paint. On a memory-constrained mobile browser that is exactly the
+// failure mode that shows as a blank white screen with no error: the page is
+// killed mid-parse, before React ever mounts.
+const SurveyPage = lazy(() =>
+  import('@/pages/SurveyPage').then((m) => ({ default: m.SurveyPage }))
+)
+
+// Every researcher page is lazy too, for the same reason, and it matters more
+// than Three.js does: HomePage alone imports the full sites.json for its hero
+// drawing and status counts — 2.4 MB minified, all 18 plazas' complete
+// building footprints, for one drawing and a few numbers. Because these four
+// were previously plain top-level imports, that 2.4 MB (plus AdminPage's,
+// ResultsPage's and SurveyLaunch's own data) was parsed and executed on EVERY
+// route including ?survey, even though a participant never renders any of
+// them — App() returns before ResearcherShell ever mounts. Splitting them out
+// means a participant's phone downloads only what the survey itself needs.
+const HomePage = lazy(() => import('@/pages/HomePage').then((m) => ({ default: m.HomePage })))
+const AdminPage = lazy(() => import('@/pages/AdminPage').then((m) => ({ default: m.AdminPage })))
+const SurveyLaunch = lazy(() =>
+  import('@/pages/SurveyLaunch').then((m) => ({ default: m.SurveyLaunch }))
+)
+const ResultsPage = lazy(() =>
+  import('@/pages/ResultsPage').then((m) => ({ default: m.ResultsPage }))
 )
 
 const ROUTES = ['home', ...PHASES.map((p) => p.id)]
@@ -42,12 +67,24 @@ export default function App() {
   // carries their flag, render only the survey (no researcher navigation).
   // P3 (?survey) is live; P8 (?matched-view-survey) gets its link reserved here
   // so it can never collide with a researcher route once it is built.
-  if (query.has('survey')) return <SurveyPage />
+  if (query.has('survey')) {
+    return (
+      <StandaloneErrorBoundary>
+        <Suspense fallback={<StandaloneLoading />}>
+          <SurveyPage />
+        </Suspense>
+      </StandaloneErrorBoundary>
+    )
+  }
   if (query.has('matched-view-survey')) {
     return <PhasePlaceholder phase={phaseById.get('matched-view')} standalone />
   }
 
-  return <ResearcherShell />
+  return (
+    <ResearcherErrorBoundary>
+      <ResearcherShell />
+    </ResearcherErrorBoundary>
+  )
 }
 
 function ResearcherShell() {
@@ -121,8 +158,20 @@ function ResearcherShell() {
       </nav>
 
       <div className="relative min-h-0 flex-1">
-        <Page active={route === 'home'}>{visited.has('home') && <HomePage />}</Page>
-        <Page active={route === 'sites'}>{visited.has('sites') && <AdminPage />}</Page>
+        <Page active={route === 'home'}>
+          {visited.has('home') && (
+            <Suspense fallback={<RouteLoading />}>
+              <HomePage />
+            </Suspense>
+          )}
+        </Page>
+        <Page active={route === 'sites'}>
+          {visited.has('sites') && (
+            <Suspense fallback={<RouteLoading />}>
+              <AdminPage />
+            </Suspense>
+          )}
+        </Page>
         <Page active={route === 'viewer'}>
           {visited.has('viewer') && (
             <Suspense fallback={<ViewerLoading />}>
@@ -130,8 +179,20 @@ function ResearcherShell() {
             </Suspense>
           )}
         </Page>
-        <Page active={route === 'survey'}>{visited.has('survey') && <SurveyLaunch />}</Page>
-        <Page active={route === 'results'}>{visited.has('results') && <ResultsPage />}</Page>
+        <Page active={route === 'survey'}>
+          {visited.has('survey') && (
+            <Suspense fallback={<RouteLoading />}>
+              <SurveyLaunch />
+            </Suspense>
+          )}
+        </Page>
+        <Page active={route === 'results'}>
+          {visited.has('results') && (
+            <Suspense fallback={<RouteLoading />}>
+              <ResultsPage />
+            </Suspense>
+          )}
+        </Page>
         {PLANNED.map((p) => (
           <Page key={p.id} active={route === p.id}>
             {visited.has(p.id) && <PhasePlaceholder phase={p} />}
@@ -149,6 +210,16 @@ function Page({ active, children }) {
   return <div className={active ? 'h-full animate-page-in' : 'hidden'}>{children}</div>
 }
 
+// Shown while any researcher page's own chunk (and whatever data it imports)
+// is still in flight.
+function RouteLoading() {
+  return (
+    <div className="flex h-full items-center justify-center text-ink-faint">
+      <p className="font-mono text-xs">Loading…</p>
+    </div>
+  )
+}
+
 // Shown for the moment the Three.js chunk is in flight the first time the
 // viewer opens: the phase icon breathing over a one-line status.
 function ViewerLoading() {
@@ -157,6 +228,81 @@ function ViewerLoading() {
       <LuBox aria-hidden className="h-8 w-8 animate-pulse text-primary" />
       <p className="font-mono text-xs">Preparing the 3D model…</p>
     </div>
+  )
+}
+
+// The survey's chunk (Three.js included) is in flight. Deliberately bare and
+// chrome-free, matching the survey itself — a participant who followed the
+// link should never see researcher navigation, not even for a moment.
+function StandaloneLoading() {
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-bg text-ink-faint">
+      <LuBox aria-hidden className="h-8 w-8 animate-pulse text-primary" />
+      <p className="font-mono text-xs">Loading…</p>
+    </div>
+  )
+}
+
+// Catches a render error anywhere below it and shows a plain message instead
+// of leaving the page blank. Before this existed, ANY uncaught error on ANY
+// route — a WebGL context failing to create, a malformed response record, a
+// missing site field — silently blanked the whole app on every device, with
+// no sign of what happened. React error boundaries have to be class
+// components; there is no hook equivalent.
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { failed: false }
+  }
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+  componentDidCatch(error, info) {
+    console.error('[ErrorBoundary]', error, info)
+  }
+  render() {
+    if (this.state.failed) return this.props.fallback
+    return this.props.children
+  }
+}
+
+function StandaloneErrorBoundary({ children }) {
+  return (
+    <ErrorBoundary
+      fallback={
+        <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-bg px-6 text-center text-ink-muted">
+          <p className="text-sm">Something went wrong loading the survey.</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="rounded-full border border-line-strong bg-paper px-4 py-1.5 text-xs font-medium text-ink shadow-sm transition-colors duration-150 hover:border-primary hover:text-primary-deep"
+          >
+            Reload
+          </button>
+        </div>
+      }
+    >
+      {children}
+    </ErrorBoundary>
+  )
+}
+
+function ResearcherErrorBoundary({ children }) {
+  return (
+    <ErrorBoundary
+      fallback={
+        <div className="flex h-screen w-screen flex-col items-center justify-center gap-3 bg-bg px-6 text-center text-ink-muted">
+          <p className="text-sm">Something went wrong.</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="rounded-full border border-line-strong bg-paper px-4 py-1.5 text-xs font-medium text-ink shadow-sm transition-colors duration-150 hover:border-primary hover:text-primary-deep"
+          >
+            Reload
+          </button>
+        </div>
+      }
+    >
+      {children}
+    </ErrorBoundary>
   )
 }
 
