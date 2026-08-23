@@ -252,26 +252,40 @@ function StandaloneLoading() {
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props)
-    this.state = { failed: false }
+    this.state = { error: null }
   }
-  static getDerivedStateFromError() {
-    return { failed: true }
+  static getDerivedStateFromError(error) {
+    return { error }
   }
   componentDidCatch(error, info) {
     console.error('[ErrorBoundary]', error, info)
   }
   render() {
-    if (this.state.failed) return this.props.fallback
+    if (this.state.error) return this.props.fallback(this.state.error)
     return this.props.children
   }
+}
+
+// The actual error text, shown directly on screen rather than left in the
+// console — on a phone there is usually no way to open dev tools at all, so a
+// generic "something went wrong" gives nobody, including us, anything to act
+// on. This renders whatever the browser's own error names, in a selectable
+// block someone can read back or copy without any special tooling.
+function ErrorDetail({ error }) {
+  return (
+    <p className="max-w-sm rounded-lg border border-line bg-paper px-3 py-2 font-mono text-xs break-words text-ink-muted select-text">
+      {String(error?.name || 'Error')}: {String(error?.message || 'no message')}
+    </p>
+  )
 }
 
 function StandaloneErrorBoundary({ children }) {
   return (
     <ErrorBoundary
-      fallback={
+      fallback={(error) => (
         <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-bg px-6 text-center text-ink-muted">
           <p className="text-sm">Something went wrong loading the survey.</p>
+          <ErrorDetail error={error} />
           <button
             onClick={() => window.location.reload()}
             className="rounded-full border border-line-strong bg-paper px-4 py-1.5 text-xs font-medium text-ink shadow-sm transition-colors duration-150 hover:border-primary hover:text-primary-deep"
@@ -279,7 +293,7 @@ function StandaloneErrorBoundary({ children }) {
             Reload
           </button>
         </div>
-      }
+      )}
     >
       {children}
     </ErrorBoundary>
@@ -289,9 +303,10 @@ function StandaloneErrorBoundary({ children }) {
 function ResearcherErrorBoundary({ children }) {
   return (
     <ErrorBoundary
-      fallback={
+      fallback={(error) => (
         <div className="flex h-screen w-screen flex-col items-center justify-center gap-3 bg-bg px-6 text-center text-ink-muted">
           <p className="text-sm">Something went wrong.</p>
+          <ErrorDetail error={error} />
           <button
             onClick={() => window.location.reload()}
             className="rounded-full border border-line-strong bg-paper px-4 py-1.5 text-xs font-medium text-ink shadow-sm transition-colors duration-150 hover:border-primary hover:text-primary-deep"
@@ -299,7 +314,7 @@ function ResearcherErrorBoundary({ children }) {
             Reload
           </button>
         </div>
-      }
+      )}
     >
       {children}
     </ErrorBoundary>
