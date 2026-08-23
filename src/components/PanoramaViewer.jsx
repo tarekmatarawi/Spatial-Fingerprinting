@@ -91,7 +91,17 @@ export function PanoramaViewer({ url, label, openingYawDeg = 0, className = '', 
     el.style.width = '100%'
     el.style.height = '100%'
     el.style.display = 'block'
-    el.style.touchAction = 'none'
+    // 'pan-y', not 'none': three panoramas stack vertically on a narrow phone
+    // and easily run taller than the screen, so the participant MUST be able
+    // to swipe over one to reach the next — that is not optional, the survey
+    // is uncompletable otherwise. 'pan-y' tells the browser to keep handling a
+    // single-finger vertical swipe as its own native page scroll, and to hand
+    // JS a gesture only once it reads as horizontal-dominant, which is what
+    // yaw panning is anyway. Pitch (vertical) is dropped for touch input
+    // below as a direct consequence — scrolling the page has to win that
+    // axis — but stays intact for mouse dragging, where there is no such
+    // conflict (touch-action has no effect on mouse input at all).
+    el.style.touchAction = 'pan-y'
     el.style.cursor = 'grab'
     mount.appendChild(el)
 
@@ -268,12 +278,19 @@ export function PanoramaViewer({ url, label, openingYawDeg = 0, className = '', 
       const { f } = grab
 
       const ax = viewAngle(e.clientX - f.cx, f.halfW, f.halfW_fov)
-      const ay = viewAngle(e.clientY - f.cy, f.halfH, f.halfH_fov)
-
-      // Yaw wraps freely; pitch is hard-clamped, so the horizon can never leave
-      // the frame however far someone drags.
+      // Yaw wraps freely, and this applies to every input device alike.
       yaw = grab.yaw - (ax - grab.ax)
-      pitch = Math.max(-pitchLimitDown, Math.min(pitchLimitUp, grab.pitch + (ay - grab.ay)))
+
+      // Pitch only for a pointer that isn't touch. touch-action: pan-y above
+      // hands single-finger vertical swipes to the browser as page scroll —
+      // reaching the third panorama on a phone depends on that — so a touch
+      // drag has nothing left to spend on pitch; it stays purely horizontal.
+      // A mouse has no such conflict (touch-action never applies to it), so
+      // dragging still moves in both directions there.
+      if (e.pointerType !== 'touch') {
+        const ay = viewAngle(e.clientY - f.cy, f.halfH, f.halfH_fov)
+        pitch = Math.max(-pitchLimitDown, Math.min(pitchLimitUp, grab.pitch + (ay - grab.ay)))
+      }
 
       applyCamera()
       render()
