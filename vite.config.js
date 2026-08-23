@@ -251,6 +251,19 @@ function uploadImageEndpoint() {
 // https://vite.dev/config/
 export default defineConfig({
   base: '/Spatial-Fingerprinting/',
+  // A conservative baseline rather than the bundler's own default. Verified
+  // (test/build-target.test.js, and check-syntax.mjs used while diagnosing
+  // this) that without an explicit target, third-party code — Three.js in
+  // particular — ships syntax as new as ES2022 class static blocks
+  // untouched, which a phone on Safari older than 16.4 cannot even PARSE:
+  // not a runtime error, a SyntaxError on the file itself, silently failing
+  // exactly where a participant is most likely to be — on their own phone,
+  // mid-survey. es2020 is deliberately conservative; nothing here depends on
+  // anything newer, and the cost of targeting lower is a few bytes, not a
+  // feature.
+  build: {
+    target: 'es2020',
+  },
   plugins: [
     react(),
     tailwindcss(),
