@@ -3,9 +3,66 @@ import { LuBox, LuHouse, LuChevronDown } from 'react-icons/lu'
 import { PHASES, groupedPhases, phaseById, phaseTitle } from '@/lib/phases'
 import { PhasePlaceholder } from '@/pages/PhasePlaceholder'
 
+// A reload that cannot be served from cache: the query string makes the
+// request URL unique, so neither the browser's disk cache nor a CDN in front
+// of it can match it against a previously cached response — it has no choice
+// but to fetch the current index.html and the chunk manifest that goes with
+// it. A plain location.reload() doesn't guarantee this: within its
+// Cache-Control window (600s here) it can legitimately re-serve the exact
+// stale response that caused the failure, which reads as "the reload button
+// does nothing".
+function hardReload() {
+  const url = new URL(window.location.href)
+  url.searchParams.set('_r', Date.now().toString(36))
+  window.location.replace(url.toString())
+}
+
+// Every hashed chunk filename changes on every deploy, and each deploy
+// replaces the previous one's files outright — an old filename simply stops
+// existing. A browser (or phone) holding a cached copy of index.html from
+// before the latest deploy will still ask for the OLD names, get an HTML
+// error page back for each, and hand that HTML to the module loader as if it
+// were JavaScript — which is what "SyntaxError: Unexpected token" actually
+// means here; it is not a language-support problem, it is stale HTML naming
+// files that no longer exist.
+//
+// Wrapping lazy() this way makes that self-healing: the first time any lazy
+// chunk fails to load, it performs exactly one hard, cache-busting reload
+// (guarded in sessionStorage so a genuine, persistent error still surfaces
+// normally afterward rather than reload-looping forever) instead of leaving
+// someone stuck on a dead page with a Reload button that cannot fix anything.
+const RELOAD_GUARD_KEY = 'sf-stale-chunk-reload'
+function lazyWithReload(importer) {
+  return lazy(() =>
+    importer().catch((error) => {
+      let alreadyTried = false
+      try {
+        alreadyTried = sessionStorage.getItem(RELOAD_GUARD_KEY) === '1'
+      } catch {
+        // Private browsing / storage disabled — fall through to the
+        // ErrorBoundary rather than retry forever with no memory of trying.
+        alreadyTried = true
+      }
+      if (!alreadyTried) {
+        try {
+          sessionStorage.setItem(RELOAD_GUARD_KEY, '1')
+        } catch {
+          // Nothing to guard with; proceed anyway, the ErrorBoundary is the
+          // fallback if this reload doesn't resolve it.
+        }
+        hardReload()
+        // The page is navigating away — never resolve, so React doesn't
+        // briefly render an error state right before the reload lands.
+        return new Promise(() => {})
+      }
+      throw error
+    })
+  )
+}
+
 // The 3D viewer carries Three.js, so it loads on demand rather than in the
 // eager entry bundle every visitor downloads first.
-const SiteViewer = lazy(() =>
+const SiteViewer = lazyWithReload(() =>
   import('@/components/SiteViewer').then((m) => ({ default: m.SiteViewer }))
 )
 
@@ -17,7 +74,7 @@ const SiteViewer = lazy(() =>
 // the first paint. On a memory-constrained mobile browser that is exactly the
 // failure mode that shows as a blank white screen with no error: the page is
 // killed mid-parse, before React ever mounts.
-const SurveyPage = lazy(() =>
+const SurveyPage = lazyWithReload(() =>
   import('@/pages/SurveyPage').then((m) => ({ default: m.SurveyPage }))
 )
 
@@ -30,12 +87,16 @@ const SurveyPage = lazy(() =>
 // route including ?survey, even though a participant never renders any of
 // them — App() returns before ResearcherShell ever mounts. Splitting them out
 // means a participant's phone downloads only what the survey itself needs.
-const HomePage = lazy(() => import('@/pages/HomePage').then((m) => ({ default: m.HomePage })))
-const AdminPage = lazy(() => import('@/pages/AdminPage').then((m) => ({ default: m.AdminPage })))
-const SurveyLaunch = lazy(() =>
+const HomePage = lazyWithReload(() =>
+  import('@/pages/HomePage').then((m) => ({ default: m.HomePage }))
+)
+const AdminPage = lazyWithReload(() =>
+  import('@/pages/AdminPage').then((m) => ({ default: m.AdminPage }))
+)
+const SurveyLaunch = lazyWithReload(() =>
   import('@/pages/SurveyLaunch').then((m) => ({ default: m.SurveyLaunch }))
 )
-const ResultsPage = lazy(() =>
+const ResultsPage = lazyWithReload(() =>
   import('@/pages/ResultsPage').then((m) => ({ default: m.ResultsPage }))
 )
 
@@ -287,7 +348,7 @@ function StandaloneErrorBoundary({ children }) {
           <p className="text-sm">Something went wrong loading the survey.</p>
           <ErrorDetail error={error} />
           <button
-            onClick={() => window.location.reload()}
+            onClick={hardReload}
             className="rounded-full border border-line-strong bg-paper px-4 py-1.5 text-xs font-medium text-ink shadow-sm transition-colors duration-150 hover:border-primary hover:text-primary-deep"
           >
             Reload
@@ -308,7 +369,7 @@ function ResearcherErrorBoundary({ children }) {
           <p className="text-sm">Something went wrong.</p>
           <ErrorDetail error={error} />
           <button
-            onClick={() => window.location.reload()}
+            onClick={hardReload}
             className="rounded-full border border-line-strong bg-paper px-4 py-1.5 text-xs font-medium text-ink shadow-sm transition-colors duration-150 hover:border-primary hover:text-primary-deep"
           >
             Reload
