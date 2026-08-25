@@ -415,7 +415,8 @@ function PlazaPanorama({ site, selected, order, onToggle, onMissing }) {
           selected ? 'border-primary/30 bg-primary-wash/40' : 'border-line hover:bg-surface'
         }`}
       >
-        <span className="text-sm font-medium text-ink">{site?.name ?? 'Unknown square'}</span>
+        <span className="truncate text-sm font-medium text-ink">{site?.name ?? 'Unknown square'}</span>
+        <span className="shrink-0 font-mono text-xs text-ink-faint">{site?.city}</span>
         <span
           className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border font-mono text-xs ${
             selected
@@ -480,8 +481,11 @@ function RatingRound({ site, anchors, position, total, onSubmit, onMissing }) {
             // survey, not just across the 18 sites within one task.
             className="aspect-[4/3] w-full"
           />
-          <p className="border-t border-line px-4 py-2.5 text-sm font-medium text-ink">
-            {site?.name ?? 'Unknown square'}
+          <p className="flex items-center justify-between gap-3 border-t border-line px-4 py-2.5">
+            <span className="truncate text-sm font-medium text-ink">
+              {site?.name ?? 'Unknown square'}
+            </span>
+            <span className="shrink-0 font-mono text-xs text-ink-faint">{site?.city}</span>
           </p>
         </div>
 
