@@ -1,6 +1,6 @@
 {
-  "_comment": "Golden snapshot of the 120 deg engine output for the 18 canonical vantage points, captured after the 360 deg fix and byte-verified identical to the pre-fix engine. Regenerate ONLY with a deliberate, reviewed engine change: npm run test:golden",
-  "captured_at": "2026-08-17T00:42:03.755Z",
+  "_comment": "Golden snapshot of the 120 deg engine output for the 18 canonical vantage points. Re-cut 2026-08-27 for two deliberate engine corrections, both leaving area, perimeter and compactness untouched. (1) OCCLUSIVITY now counts only edges running along continuous facade — both ends on the same building, or on two that meet — rather than any edge whose two ends both happened to hit a wall; the old rule counted the gap across a street opening as closed perimeter, inflating it ~50% and making it unstable to ray count and sub-degree rotation. (2) ENCLOSURE is now the mean subtended angle over ALL rays as a share of 90 deg, not the mean h/d over wall-hit rays only: openings contribute 0 instead of being excluded (they are the absence of enclosure, not missing data), and the arctangent bounds each direction so one tall near building cannot dominate the ring. Regenerate ONLY with a deliberate, reviewed engine change: npm run recompute:readings",
+  "captured_at": "2026-08-27T12:45:25.595Z",
   "fov": 120,
   "rayCount": 120,
   "rangeM": 200,
@@ -13,8 +13,8 @@
       "area": 12524.004564346944,
       "perimeter": 1116.6495179903434,
       "compactness": 0.12621742497046534,
-      "occlusivity": 296.9523695650249,
-      "enclosureRatio": 0.21273146152188951
+      "occlusivity": 193.79751048389969,
+      "enclosureRatio": 0.11211148843841588
     },
     {
       "site_id": "Hauptwache-Frankfurt am Main",
@@ -24,8 +24,8 @@
       "area": 10180.947372099105,
       "perimeter": 784.8969796685011,
       "compactness": 0.20766951120874713,
-      "occlusivity": 388.41396010589483,
-      "enclosureRatio": 0.3354494194036518
+      "occlusivity": 188.81852332810428,
+      "enclosureRatio": 0.17483161369624697
     },
     {
       "site_id": "Römerberg-Frankfurt am Main",
@@ -35,8 +35,8 @@
       "area": 2939.9416368856896,
       "perimeter": 385.08322785245804,
       "compactness": 0.24913765134320323,
-      "occlusivity": 275.15243613335673,
-      "enclosureRatio": 0.29295038130255746
+      "occlusivity": 114.25864999565847,
+      "enclosureRatio": 0.17855676433215703
     },
     {
       "site_id": "Zeil-Frankfurt am Main",
@@ -46,8 +46,8 @@
       "area": 6625.385682142418,
       "perimeter": 519.5142236516594,
       "compactness": 0.30847938320326207,
-      "occlusivity": 202.38987618655014,
-      "enclosureRatio": 0.5171540794416226
+      "occlusivity": 177.65114792328518,
+      "enclosureRatio": 0.2639026963668217
     },
     {
       "site_id": "Bebelplatz-Berlin",
@@ -57,8 +57,8 @@
       "area": 8645.748696691855,
       "perimeter": 532.1089335420162,
       "compactness": 0.3837172923296483,
-      "occlusivity": 287.9736538362754,
-      "enclosureRatio": 0.3314869797013791
+      "occlusivity": 217.5014135345598,
+      "enclosureRatio": 0.1886857943383808
     },
     {
       "site_id": "Alexanderplatz-Berlin",
@@ -68,8 +68,8 @@
       "area": 8815.276301538917,
       "perimeter": 502.97504296956856,
       "compactness": 0.43787779287914796,
-      "occlusivity": 390.64629182401075,
-      "enclosureRatio": 0.3288707138904859
+      "occlusivity": 243.6354085080607,
+      "enclosureRatio": 0.19883200724681874
     },
     {
       "site_id": "Marienplatz-Munich",
@@ -79,8 +79,8 @@
       "area": 5639.887329033405,
       "perimeter": 558.2872094761011,
       "compactness": 0.2273866354661081,
-      "occlusivity": 496.92986185142354,
-      "enclosureRatio": 0.59509174124913
+      "occlusivity": 192.92947273153646,
+      "enclosureRatio": 0.2912921638152298
     },
     {
       "site_id": "Odeonsplatz-Munich",
@@ -90,8 +90,8 @@
       "area": 6903.187902504836,
       "perimeter": 702.4309090359421,
       "compactness": 0.1758135453767785,
-      "occlusivity": 382.78958021969675,
-      "enclosureRatio": 0.3884191007978122
+      "occlusivity": 273.463689311565,
+      "enclosureRatio": 0.2052596791848132
     },
     {
       "site_id": "Konstablerwache-Frankfurt am Main",
@@ -101,8 +101,8 @@
       "area": 8798.211298028114,
       "perimeter": 798.1526708155694,
       "compactness": 0.17355307358671962,
-      "occlusivity": 541.7119299537846,
-      "enclosureRatio": 0.21989301027996708
+      "occlusivity": 192.9193016869099,
+      "enclosureRatio": 0.13186299713009023
     },
     {
       "site_id": "Alter Markt-Cologne",
@@ -112,8 +112,8 @@
       "area": 3752.0685981536826,
       "perimeter": 485.27796359583436,
       "compactness": 0.20021632836803566,
-      "occlusivity": 423.2583068900624,
-      "enclosureRatio": 0.2984111638854997
+      "occlusivity": 140.51274962502436,
+      "enclosureRatio": 0.18288516941334648
     },
     {
       "site_id": "Rathausmarkt-Hamburg",
@@ -123,8 +123,8 @@
       "area": 10151.246769191872,
       "perimeter": 563.429956255196,
       "compactness": 0.40183649950568634,
-      "occlusivity": 393.8872810628958,
-      "enclosureRatio": 1.027490800576064
+      "occlusivity": 197.23878186591557,
+      "enclosureRatio": 0.28950695932928705
     },
     {
       "site_id": "Naschmarkt-Leipzig",
@@ -134,8 +134,8 @@
       "area": 1759.0219144744065,
       "perimeter": 341.53147785990166,
       "compactness": 0.18950454890301355,
-      "occlusivity": 314.23560274425205,
-      "enclosureRatio": 0.5708277287944863
+      "occlusivity": 140.28254485961577,
+      "enclosureRatio": 0.31452804413392776
     },
     {
       "site_id": "Burgplatz-Düsseldorf",
@@ -145,8 +145,8 @@
       "area": 9753.229545832804,
       "perimeter": 948.2755158751729,
       "compactness": 0.1362979220790565,
-      "occlusivity": 307.08621317323815,
-      "enclosureRatio": 0.3240217952587447
+      "occlusivity": 122.21667278474496,
+      "enclosureRatio": 0.15897727469661416
     },
     {
       "site_id": "Marktplatz-Heidelberg",
@@ -156,8 +156,8 @@
       "area": 2357.167165175688,
       "perimeter": 213.2057457252773,
       "compactness": 0.6516320521996383,
-      "occlusivity": 147.56946672641277,
-      "enclosureRatio": 0.7438939964843772
+      "occlusivity": 110.92214153136104,
+      "enclosureRatio": 0.3036105010313315
     },
     {
       "site_id": "Augustusplatz-Leipzig",
@@ -167,8 +167,8 @@
       "area": 7923.9975599279505,
       "perimeter": 704.8012647551868,
       "compactness": 0.2004568251440465,
-      "occlusivity": 540.4071704312903,
-      "enclosureRatio": 0.2905896248230516
+      "occlusivity": 198.52179731830483,
+      "enclosureRatio": 0.17802996621891967
     },
     {
       "site_id": "Hauptmarkt-Trier",
@@ -178,8 +178,8 @@
       "area": 4517.82715052627,
       "perimeter": 568.3481346955863,
       "compactness": 0.17575617688946144,
-      "occlusivity": 325.5955135642505,
-      "enclosureRatio": 0.4997030692914494
+      "occlusivity": 114.13659547237887,
+      "enclosureRatio": 0.24207920412292408
     },
     {
       "site_id": "Herderplatz-Weimar",
@@ -189,8 +189,8 @@
       "area": 2778.988105500949,
       "perimeter": 379.2164567882493,
       "compactness": 0.2428411046820178,
-      "occlusivity": 342.68367722756767,
-      "enclosureRatio": 0.3264915546805996
+      "occlusivity": 147.5596442311694,
+      "enclosureRatio": 0.19570050910294992
     },
     {
       "site_id": "Theaterplatz-Weimar",
@@ -200,8 +200,8 @@
       "area": 2693.4061548067466,
       "perimeter": 452.4383617763145,
       "compactness": 0.16534568658661428,
-      "occlusivity": 370.7284666469061,
-      "enclosureRatio": 0.27748846765771495
+      "occlusivity": 171.68816540192137,
+      "enclosureRatio": 0.17012211860332452
     }
   ]
 }

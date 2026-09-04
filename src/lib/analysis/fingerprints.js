@@ -29,13 +29,14 @@ export const METRIC_LABELS = {
   area: 'Isovist area',
   compactness: 'Compactness',
   occlusivity: 'Occlusivity',
-  enclosure: 'Enclosure ratio',
+  enclosure: 'Enclosure',
 }
 
 export const METRIC_UNITS = {
   area: 'm²',
   compactness: '',
   occlusivity: 'm',
+  // A share of the 90 deg you could look up; multiply by 90 for the angle.
   enclosure: '',
 }
 
@@ -47,8 +48,19 @@ export const METRIC_UNITS = {
 //   perceptual_120 — 120° directional, at the survey vantage/heading (P3/P5)
 //   perceptual_360 — 360° omnidirectional, at those SAME vantage points, for
 //                    the panoramic survey. Direction-independent by construction.
+//   perceptual_360_r100
+//                  — the SAME 360° vantage points cast to a 100 m sight-line
+//                    limit instead of the toolchain's 200 m. Gehl's social
+//                    field of vision — roughly the distance at which a person
+//                    is still legible as a person — is the stated ground for
+//                    100 m; the 200 m default was inherited from the Decoding
+//                    Spaces Grasshopper component for comparability and has no
+//                    perceptual justification behind it. Range changes what a
+//                    metric counts (a 200 m cast folds long street vistas into
+//                    a plaza's "area"), so it is a separate measurement system
+//                    with its own bounds, not the same layer at a setting.
 //   field_360      — 360° omnidirectional, on the P6 sampling grid
-export const FOV_MODES = ['perceptual_120', 'perceptual_360', 'field_360']
+export const FOV_MODES = ['perceptual_120', 'perceptual_360', 'perceptual_360_r100', 'field_360']
 
 // Pulls the canonical readings for one layer, and fails loudly on anything that
 // would quietly corrupt a fit: a missing site, a second reading for one site, a

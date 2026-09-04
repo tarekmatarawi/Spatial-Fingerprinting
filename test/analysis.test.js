@@ -157,13 +157,33 @@ describe('fingerprints — frozen normalisation bounds', () => {
   })
 
   test('bounds name the site that sets each end', () => {
+    // Asserts that the attribution is CORRECT, not which site happens to win.
+    // Naming specific sites pinned a fact about the dataset rather than about
+    // the code, so redefining a metric broke this test while nothing it exists
+    // to protect had changed — as the 2026-08-27 enclosure change showed, when
+    // the peak moved from Rathausmarkt to Naschmarkt purely because the formula
+    // did. Recomputing the extremes here keeps the guarantee that matters: a
+    // frozen bound always points at the site it actually came from.
+    const raw = canonicalReadings(readings, siteIds)
+    const SOURCE_KEYS = {
+      area: 'area_m2',
+      compactness: 'compactness',
+      occlusivity: 'occlusivity_m',
+      enclosure: 'enclosure_ratio',
+    }
     for (const m of METRICS) {
       const b = bounds[m]
       assert.ok(b.minSite && b.maxSite, `${m} bounds must be attributed`)
       assert.ok(b.max > b.min, `${m} must have spread`)
+
+      const values = [...raw].map(([id, r]) => [id, r[SOURCE_KEYS[m]]])
+      const trueMin = values.reduce((a, b2) => (b2[1] < a[1] ? b2 : a))
+      const trueMax = values.reduce((a, b2) => (b2[1] > a[1] ? b2 : a))
+      assert.equal(b.minSite, trueMin[0], `${m} minSite must be the site holding the minimum`)
+      assert.equal(b.maxSite, trueMax[0], `${m} maxSite must be the site holding the maximum`)
+      assert.equal(b.min, trueMin[1])
+      assert.equal(b.max, trueMax[1])
     }
-    assert.equal(bounds.area.maxSite, 'Gendarmenmarkt-Berlin')
-    assert.equal(bounds.enclosure.maxSite, 'Rathausmarkt-Hamburg')
   })
 
   test('normalisation puts the extreme sites exactly at 0 and 1', () => {

@@ -20,7 +20,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { castIsovist, FOV_DEG, MAX_RANGE_M, RAY_COUNT } from '../src/lib/isovist.js'
+import { castIsovist, buildEdgeIndex, FOV_DEG, MAX_RANGE_M, RAY_COUNT } from '../src/lib/isovist.js'
 import { projectSite, activeSites } from '../src/lib/site.js'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
@@ -265,7 +265,7 @@ describe('360° field layer — geometric correctness', () => {
     )
   })
 
-  test('square courtyard: enclosure ratio matches the analytic mean of h/d', () => {
+  test('square courtyard: enclosure matches the analytic mean subtended angle', () => {
     const a = 40
     const height = 20
     const rayCount = 1440
@@ -275,13 +275,44 @@ describe('360° field layer — geometric correctness', () => {
       const angle = -Math.PI + (i / rayCount) * 2 * Math.PI
       // Distance from centre to the wall of a square of half-width a.
       const d = a / Math.max(Math.abs(Math.sin(angle)), Math.abs(Math.cos(angle)))
-      expected += height / d
+      expected += Math.atan(height / d) / (Math.PI / 2)
     }
     expected /= rayCount
     assert.ok(
       Math.abs(m.enclosureRatio - expected) / expected < 0.01,
       `enclosure ${m.enclosureRatio} vs analytic ${expected}`
     )
+  })
+
+  // The two properties the angular form exists for, asserted directly rather
+  // than left implicit in the plaza numbers.
+  test('an opening lowers enclosure instead of being ignored', () => {
+    const height = 20
+    const walled = castIsovist({ x: 0, y: 0 }, 0, courtyard(40, height), { fov: 360, rayCount: 720 })
+    // Same room with one of its four sides removed: the missing side is now
+    // open sky, and must pull the figure down rather than drop out of it.
+    const threeSided = courtyard(40, height).slice(0, 3)
+    const open = castIsovist({ x: 0, y: 0 }, 0, threeSided, { fov: 360, rayCount: 720 })
+    assert.ok(
+      open.enclosureRatio < walled.enclosureRatio * 0.85,
+      `removing a whole side should visibly lower enclosure: ${open.enclosureRatio} vs ${walled.enclosureRatio}`
+    )
+  })
+
+  test('enclosure still rises with height, but saturates rather than scaling', () => {
+    const at = { x: 0, y: 0 }
+    const opts = { fov: 360, rayCount: 720 }
+    const low = castIsovist(at, 0, courtyard(40, 10), opts).enclosureRatio
+    const high = castIsovist(at, 0, courtyard(40, 20), opts).enclosureRatio
+    assert.ok(high > low, 'taller walls must read as more enclosed')
+    // Bounded above by the ratio it replaced: doubling height must not double
+    // the figure, or one tall building near the vantage point would dominate
+    // the whole ring again.
+    assert.ok(
+      high < low * 2,
+      `doubling height should saturate, not scale: ${low} -> ${high}`
+    )
+    assert.ok(high <= 1 && low >= 0, 'enclosure must stay within 0..1')
   })
 
   test('rotating the heading does not change any 360° metric', () => {
@@ -305,5 +336,57 @@ describe('360° field layer — geometric correctness', () => {
   test('the two layers report their own fov, so records can never be ambiguous', () => {
     assert.equal(castIsovist({ x: 0, y: 0 }, 0, []).fov, 120)
     assert.equal(castIsovist({ x: 0, y: 0 }, 0, [], full).fov, 360)
+  })
+})
+
+// The spatial index is a speed optimisation and nothing else. P6 casts from
+// ~11,700 grid points, which is only tractable with it, but a faster answer is
+// worthless if it is a different answer — so these tests assert the indexed
+// path is EXACTLY equal to the brute-force scan, not merely close.
+describe('spatial index — identical results, faster', () => {
+  const full = { fov: 360, rayCount: 360 }
+
+  test('indexed and brute-force casts agree exactly on real sites', () => {
+    const sitesForIndex = activeSites(sites)
+    for (const site of sitesForIndex.slice(0, 6)) {
+      const { buildings, boundary } = projectSite(site)
+      if (!boundary) continue
+      const index = buildEdgeIndex(buildings)
+      const xs = boundary.map((p) => p.x)
+      const ys = boundary.map((p) => p.y)
+      const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)]
+
+      for (let i = 0; i < 5; i++) {
+        const at = { x: x0 + ((x1 - x0) * (i + 0.5)) / 5, y: y0 + ((y1 - y0) * (i + 0.5)) / 5 }
+        const brute = castIsovist(at, 0, buildings, full)
+        const fast = castIsovist(at, 0, buildings, { ...full, index })
+        for (const key of ['area', 'perimeter', 'compactness', 'occlusivity', 'enclosureRatio']) {
+          assert.equal(fast[key], brute[key], `${site.name} ${key} differs at point ${i}`)
+        }
+      }
+    }
+  })
+
+  test('every ray terminates identically, not just the aggregate metrics', () => {
+    // Aggregates could coincide while individual rays differ, so the hit points
+    // themselves are compared.
+    const buildings = courtyard(40, 15)
+    const index = buildEdgeIndex(buildings)
+    const brute = castIsovist({ x: 3, y: -5 }, 0, buildings, full)
+    const fast = castIsovist({ x: 3, y: -5 }, 0, buildings, { ...full, index })
+    assert.equal(fast.rays.length, brute.rays.length)
+    for (let i = 0; i < brute.rays.length; i++) {
+      assert.equal(fast.rays[i].wall, brute.rays[i].wall, `ray ${i} wall flag`)
+      assert.equal(fast.rays[i].distance, brute.rays[i].distance, `ray ${i} distance`)
+      assert.equal(fast.rays[i].building, brute.rays[i].building, `ray ${i} building`)
+    }
+  })
+
+  test('an empty site yields an empty index and still casts', () => {
+    const index = buildEdgeIndex([])
+    assert.equal(index.empty, true)
+    const m = castIsovist({ x: 0, y: 0 }, 0, [], { ...full, index })
+    assert.ok(m.area > 0, 'an unobstructed 360° isovist is the full range disc')
+    assert.equal(m.occlusivity, 0)
   })
 })
