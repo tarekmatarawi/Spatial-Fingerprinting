@@ -1148,6 +1148,7 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, di
           </button>
         </label>
       )}
+      </div>
     </div>
   )
 }
