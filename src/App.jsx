@@ -1,4 +1,5 @@
-import { Component, lazy, Suspense, useEffect, useState } from 'react'
+import { Component, lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { LuBox, LuHouse, LuChevronDown } from 'react-icons/lu'
 import { PHASES, groupedPhases, phaseById, phaseTitle } from '@/lib/phases'
 import { PhasePlaceholder } from '@/pages/PhasePlaceholder'
@@ -100,12 +101,20 @@ const ResultsPage = lazyWithReload(() =>
   import('@/pages/ResultsPage').then((m) => ({ default: m.ResultsPage }))
 )
 
+const WeightsPage = lazyWithReload(() =>
+  import("@/pages/WeightsPage").then((m) => ({ default: m.WeightsPage }))
+)
+
+const FieldPage = lazyWithReload(() =>
+  import('@/pages/FieldPage').then((m) => ({ default: m.FieldPage }))
+)
+
 const ROUTES = ['home', ...PHASES.map((p) => p.id)]
 
 // Phases that are still to be built get a station and a route, but land on a
 // placeholder. Better an honest empty berth than a missing one — the workflow
 // should read as nine phases from the first day, not grow silently.
-const PLANNED = PHASES.filter((p) => p.status === 'planned')
+const PLANNED = PHASES.filter((p) => p.status === 'planned' && p.id !== 'field' && p.id !== 'weights')
 
 // Route from the URL hash (#/sites, #/viewer, …). A bare URL that carries the
 // viewer's ?site=… query (a shared deep link from before hash routing existed)
@@ -251,6 +260,20 @@ function ResearcherShell() {
           {visited.has('results') && (
             <Suspense fallback={<RouteLoading />}>
               <ResultsPage />
+            </Suspense>
+          )}
+        </Page>
+        <Page active={route === 'weights'}>
+          {visited.has('weights') && (
+            <Suspense fallback={<RouteLoading />}>
+              <WeightsPage />
+            </Suspense>
+          )}
+        </Page>
+        <Page active={route === 'field'}>
+          {visited.has('field') && (
+            <Suspense fallback={<RouteLoading />}>
+              <FieldPage />
             </Suspense>
           )}
         </Page>
@@ -418,19 +441,41 @@ function StepLink({ href, active, icon: Icon, code, label, title, planned = fals
 // that phase's code and name, so the bar never hides where you actually are.
 function PhaseCluster({ group, route }) {
   const [open, setOpen] = useState(false)
+  // Where to draw the menu, in viewport coordinates. Measured from the trigger
+  // when the menu opens — see the portal below for why it cannot simply be
+  // positioned relative to its parent.
+  const [anchor, setAnchor] = useState(null)
+  const triggerRef = useRef(null)
   const current = group.phases.find((p) => p.id === route)
+
+  const place = () => {
+    const rect = triggerRef.current?.getBoundingClientRect()
+    if (rect) setAnchor({ left: rect.left, top: rect.bottom + 4 })
+  }
 
   useEffect(() => {
     if (!open) return
     const onKey = (e) => e.key === 'Escape' && setOpen(false)
     const onClick = (e) => {
-      if (!e.target.closest('[data-phase-cluster]')) setOpen(false)
+      if (!e.target.closest('[data-phase-cluster]') && !e.target.closest('[data-phase-menu]')) {
+        setOpen(false)
+      }
     }
+    // The menu is positioned once, in viewport coordinates, so anything that
+    // moves the trigger underneath it would leave it stranded. Closing is
+    // simpler and less jarring than chasing the trigger around.
+    const onMove = () => setOpen(false)
     window.addEventListener('keydown', onKey)
     window.addEventListener('click', onClick)
+    window.addEventListener('resize', onMove)
+    // `true` catches scrolling inside the nav's own overflow container, not
+    // just the page.
+    window.addEventListener('scroll', onMove, true)
     return () => {
       window.removeEventListener('keydown', onKey)
       window.removeEventListener('click', onClick)
+      window.removeEventListener('resize', onMove)
+      window.removeEventListener('scroll', onMove, true)
     }
   }, [open])
 
@@ -444,7 +489,11 @@ function PhaseCluster({ group, route }) {
       <span aria-hidden className="my-auto h-px w-3 shrink-0 bg-line-strong sm:w-4" />
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        ref={triggerRef}
+        onClick={() => {
+          if (!open) place()
+          setOpen((v) => !v)
+        }}
         aria-expanded={open}
         aria-haspopup="true"
         title={current ? `${current.code} — ${phaseTitle(current)}` : group.name}
@@ -475,8 +524,22 @@ function PhaseCluster({ group, route }) {
         {current && <span className="absolute inset-x-1.5 bottom-0 h-0.5 bg-accent" />}
       </button>
 
-      {open && (
-        <div className="absolute top-full left-3 z-50 mt-1 w-72 overflow-hidden rounded-xl border border-line-strong bg-paper shadow-lg">
+      {/* Portalled to <body>, not positioned inside the nav.
+       *
+       * The nav bar scrolls horizontally on narrow screens, which means it
+       * carries `overflow-x: auto` — and CSS does not allow one axis to
+       * overflow visibly while the other scrolls, so the vertical axis is
+       * clipped too. A menu positioned inside it therefore opened correctly and
+       * was then cut off at the bar's own bottom edge: the button appeared to
+       * do nothing at all. Rendering into <body> in viewport coordinates takes
+       * the menu out of that clipping context entirely. */}
+      {open && anchor &&
+        createPortal(
+          <div
+            data-phase-menu
+            style={{ position: 'fixed', left: anchor.left, top: anchor.top }}
+            className="z-50 w-72 overflow-hidden rounded-xl border border-line-strong bg-paper shadow-lg"
+          >
           <p className="border-b border-line px-3 py-2 font-mono text-xs text-ink-faint">
             {group.name} · {group.blurb}
           </p>
@@ -511,8 +574,9 @@ function PhaseCluster({ group, route }) {
               </li>
             ))}
           </ul>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </span>
   )
 }

@@ -12,7 +12,11 @@
     "analyze": "node scripts/analyze.mjs",
     "analyze:selftest": "node scripts/analyze.mjs --selftest",
     "sync:survey": "node scripts/sync-survey-360.js",
-    "compute:360": "node scripts/compute-360.mjs"
+    "compute:360": "node scripts/compute-360.mjs",
+    "recompute:readings": "node scripts/recompute-readings.mjs",
+    "validate:ratings": "node scripts/validate-ratings.mjs",
+    "fields": "node scripts/compute-fields.mjs",
+    "zones": "node scripts/compute-zones.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
