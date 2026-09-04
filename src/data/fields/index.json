@@ -1,0 +1,175 @@
+{
+  "generated_at": "2026-09-04T01:26:23.533Z",
+  "fov_mode": "field_360",
+  "spacing_m": 2.5,
+  "range_m": 200,
+  "clearance_m": 1,
+  "normalisation_source": "perceptual_360",
+  "bounds": {
+    "area": {
+      "min": 3905.37,
+      "max": 46656.93,
+      "minSite": "Marktplatz-Heidelberg",
+      "maxSite": "Burgplatz-Düsseldorf"
+    },
+    "compactness": {
+      "min": 0.057,
+      "max": 0.2031,
+      "minSite": "Herderplatz-Weimar",
+      "maxSite": "Bebelplatz-Berlin"
+    },
+    "occlusivity": {
+      "min": 267.22,
+      "max": 622.93,
+      "minSite": "Marktplatz-Heidelberg",
+      "maxSite": "Hauptwache-Frankfurt am Main"
+    },
+    "enclosure": {
+      "min": 0.1131,
+      "max": 0.3841,
+      "minSite": "Burgplatz-Düsseldorf",
+      "maxSite": "Naschmarkt-Leipzig"
+    }
+  },
+  "metrics": [
+    "area",
+    "compactness",
+    "occlusivity",
+    "enclosure"
+  ],
+  "total_points": 11580,
+  "out_of_range": {
+    "area": 764,
+    "compactness": 1588,
+    "occlusivity": 1302,
+    "enclosure": 1337
+  },
+  "sites": [
+    {
+      "site_id": "Gendarmenmarkt-Berlin",
+      "name": "Gendarmenmarkt",
+      "file": "gendarmenmarkt-berlin.json",
+      "point_count": 862,
+      "points_rejected": 0
+    },
+    {
+      "site_id": "Hauptwache-Frankfurt am Main",
+      "name": "Hauptwache",
+      "file": "hauptwache-frankfurt-am-main.json",
+      "point_count": 1224,
+      "points_rejected": 69
+    },
+    {
+      "site_id": "Römerberg-Frankfurt am Main",
+      "name": "Römerberg",
+      "file": "r-merberg-frankfurt-am-main.json",
+      "point_count": 560,
+      "points_rejected": 0
+    },
+    {
+      "site_id": "Zeil-Frankfurt am Main",
+      "name": "Zeil",
+      "file": "zeil-frankfurt-am-main.json",
+      "point_count": 307,
+      "points_rejected": 0
+    },
+    {
+      "site_id": "Bebelplatz-Berlin",
+      "name": "Bebelplatz",
+      "file": "bebelplatz-berlin.json",
+      "point_count": 940,
+      "points_rejected": 0
+    },
+    {
+      "site_id": "Alexanderplatz-Berlin",
+      "name": "Alexanderplatz",
+      "file": "alexanderplatz-berlin.json",
+      "point_count": 1032,
+      "points_rejected": 3
+    },
+    {
+      "site_id": "Marienplatz-Munich",
+      "name": "Marienplatz",
+      "file": "marienplatz-munich.json",
+      "point_count": 562,
+      "points_rejected": 4
+    },
+    {
+      "site_id": "Odeonsplatz-Munich",
+      "name": "Odeonsplatz",
+      "file": "odeonsplatz-munich.json",
+      "point_count": 418,
+      "points_rejected": 0
+    },
+    {
+      "site_id": "Konstablerwache-Frankfurt am Main",
+      "name": "Konstablerwache",
+      "file": "konstablerwache-frankfurt-am-main.json",
+      "point_count": 967,
+      "points_rejected": 21
+    },
+    {
+      "site_id": "Alter Markt-Cologne",
+      "name": "Alter Markt",
+      "file": "alter-markt-cologne.json",
+      "point_count": 660,
+      "points_rejected": 2
+    },
+    {
+      "site_id": "Rathausmarkt-Hamburg",
+      "name": "Rathausmarkt",
+      "file": "rathausmarkt-hamburg.json",
+      "point_count": 1006,
+      "points_rejected": 3
+    },
+    {
+      "site_id": "Naschmarkt-Leipzig",
+      "name": "Naschmarkt",
+      "file": "naschmarkt-leipzig.json",
+      "point_count": 190,
+      "points_rejected": 0
+    },
+    {
+      "site_id": "Burgplatz-Düsseldorf",
+      "name": "Burgplatz",
+      "file": "burgplatz-d-sseldorf.json",
+      "point_count": 817,
+      "points_rejected": 0
+    },
+    {
+      "site_id": "Marktplatz-Heidelberg",
+      "name": "Marktplatz",
+      "file": "marktplatz-heidelberg.json",
+      "point_count": 256,
+      "points_rejected": 0
+    },
+    {
+      "site_id": "Augustusplatz-Leipzig",
+      "name": "Augustusplatz",
+      "file": "augustusplatz-leipzig.json",
+      "point_count": 1026,
+      "points_rejected": 10
+    },
+    {
+      "site_id": "Hauptmarkt-Trier",
+      "name": "Hauptmarkt",
+      "file": "hauptmarkt-trier.json",
+      "point_count": 340,
+      "points_rejected": 4
+    },
+    {
+      "site_id": "Herderplatz-Weimar",
+      "name": "Herderplatz",
+      "file": "herderplatz-weimar.json",
+      "point_count": 204,
+      "points_rejected": 0
+    },
+    {
+      "site_id": "Theaterplatz-Weimar",
+      "name": "Theaterplatz",
+      "file": "theaterplatz-weimar.json",
+      "point_count": 209,
+      "points_rejected": 0
+    }
+  ]
+}

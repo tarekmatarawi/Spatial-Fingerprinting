@@ -55,7 +55,6 @@ const FOV_MODES = {
 const FIELD_READINGS = savedResults.filter((r) => r.fov_mode === 'field_360')
 const EDITABLE_READINGS = savedResults.filter((r) => r.fov_mode !== 'field_360')
 
-
 // The whole scene uses a Z-up world (X = east/right, Y = north/front, Z = up),
 // matching CAD tools like Rhino. This also renders each site the correct way
 // round (no mirroring), since a top-down view of the X/Y plane is a standard
@@ -1149,7 +1148,6 @@ function Panel({ sites, selectedId, onSelect, site, data, error, pick, stage, di
           </button>
         </label>
       )}
-      </div>
     </div>
   )
 }
@@ -1295,7 +1293,14 @@ function MetricsPanel({ result }) {
         <MetricRow label="Area" value={`${result.area.toFixed(1)} m²`} />
         <MetricRow label="Compactness" value={result.compactness.toFixed(4)} />
         <MetricRow label="Occlusivity" value={`${result.occlusivity.toFixed(1)} m`} />
-        <MetricRow label="Enclosure ratio" value={result.enclosureRatio.toFixed(4)} />
+        {/* Enclosure is a share of the 90° you could look up, so the angle it
+            stands for is the readable half — 14°/18°/27° are where the
+            classical enclosure thresholds sit, and reading them off directly
+            beats converting 0.1594 in your head. */}
+        <MetricRow
+          label="Enclosure"
+          value={`${result.enclosureRatio.toFixed(4)}  ·  ${(result.enclosureRatio * 90).toFixed(1)}°`}
+        />
       </dl>
     </div>
   )
