@@ -173,7 +173,7 @@ export function HomePage() {
 
         {/* ---- Record strip -------------------------------------------- */}
         <p className="mt-14 border-t border-line pt-5 font-mono text-xs leading-relaxed text-ink-faint">
-          Geometry engine validated against Grasshopper reference values · phases gated in order ·
+          Geometry engine compared against a Grasshopper reference point · phases gated in order ·
           participant survey runs standalone at its own link
         </p>
       </div>
