@@ -1,0 +1,790 @@
+{
+  "generated_at": "2026-08-29T15:56:00.618Z",
+  "stability_trajectory": {
+    "area": [
+      {
+        "participants": 10,
+        "plazas": 18,
+        "r": 0.7087035968904226
+      },
+      {
+        "participants": 20,
+        "plazas": 18,
+        "r": 0.7193200837017749
+      },
+      {
+        "participants": 30,
+        "plazas": 18,
+        "r": 0.7299234282428821
+      }
+    ],
+    "compactness": [
+      {
+        "participants": 10,
+        "plazas": 18,
+        "r": 0.26375162537766317
+      },
+      {
+        "participants": 20,
+        "plazas": 18,
+        "r": 0.23184363417827417
+      },
+      {
+        "participants": 30,
+        "plazas": 18,
+        "r": 0.11757234610221816
+      }
+    ],
+    "occlusivity": [
+      {
+        "participants": 10,
+        "plazas": 18,
+        "r": -0.424717262372696
+      },
+      {
+        "participants": 20,
+        "plazas": 18,
+        "r": -0.5313386437628072
+      },
+      {
+        "participants": 30,
+        "plazas": 18,
+        "r": -0.4881825271560686
+      }
+    ],
+    "enclosure": [
+      {
+        "participants": 10,
+        "plazas": 18,
+        "r": 0.7836176907351519
+      },
+      {
+        "participants": 20,
+        "plazas": 18,
+        "r": 0.771404154215121
+      },
+      {
+        "participants": 30,
+        "plazas": 18,
+        "r": 0.787919546608174
+      }
+    ]
+  },
+  "purpose": "Independent validation that the computed metrics track what participants perceived. Does not enter the weight fit.",
+  "fov_mode": "perceptual_360",
+  "responses": "src/data/survey-responses-360.json",
+  "participants": 30,
+  "ratings": 1924,
+  "permutation_shuffles": 2000,
+  "reliability_splits": 200,
+  "scales": [
+    {
+      "metric": "area",
+      "label": "Isovist area",
+      "anchors": {
+        "low": "Tight and confined",
+        "high": "Spacious and open"
+      },
+      "expected_sign": 1,
+      "n_plazas": 18,
+      "ratings_per_plaza": 26.72222222222222,
+      "pearson_raw": 0.7299234282428821,
+      "pearson_aligned": 0.7299234282428821,
+      "pearson_ci": {
+        "lo": 0.39902909946221116,
+        "hi": 0.892612186450479
+      },
+      "pearson_p": 0.0009995002498750624,
+      "spearman_raw": 0.8002066115427213,
+      "spearman_aligned": 0.8002066115427213,
+      "spearman_p": 0.0004997501249375312,
+      "participant_bootstrap": {
+        "lo": 0.664289064541891,
+        "hi": 0.7822002849360423,
+        "pPositive": 1,
+        "draws": 300
+      },
+      "reliability": 0.9779128792108931,
+      "reliability_splits": 200,
+      "disattenuated_pearson": 0.7381204203985043,
+      "per_site": [
+        {
+          "site_id": "Gendarmenmarkt-Berlin",
+          "name": "Gendarmenmarkt",
+          "computed": 30856.12,
+          "normalised": 0.6304038963724365,
+          "mean_rating": 5.12,
+          "n_raters": 25
+        },
+        {
+          "site_id": "Hauptwache-Frankfurt am Main",
+          "name": "Hauptwache",
+          "computed": 20936.65,
+          "normalised": 0.39837797731825464,
+          "mean_rating": 5.458333333333333,
+          "n_raters": 24
+        },
+        {
+          "site_id": "Römerberg-Frankfurt am Main",
+          "name": "Römerberg",
+          "computed": 9663.21,
+          "normalised": 0.13468140109974933,
+          "mean_rating": 5.37037037037037,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Zeil-Frankfurt am Main",
+          "name": "Zeil",
+          "computed": 10150.96,
+          "normalised": 0.14609034149864938,
+          "mean_rating": 3.814814814814815,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Bebelplatz-Berlin",
+          "name": "Bebelplatz",
+          "computed": 25275.48,
+          "normalised": 0.49986737326076525,
+          "mean_rating": 6.037037037037037,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Alexanderplatz-Berlin",
+          "name": "Alexanderplatz",
+          "computed": 21775.4,
+          "normalised": 0.41799714443168867,
+          "mean_rating": 6.592592592592593,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Marienplatz-Munich",
+          "name": "Marienplatz",
+          "computed": 7532.2,
+          "normalised": 0.08483503292043612,
+          "mean_rating": 3.107142857142857,
+          "n_raters": 28
+        },
+        {
+          "site_id": "Odeonsplatz-Munich",
+          "name": "Odeonsplatz",
+          "computed": 14224.87,
+          "normalised": 0.2413830045032275,
+          "mean_rating": 4.88,
+          "n_raters": 25
+        },
+        {
+          "site_id": "Konstablerwache-Frankfurt am Main",
+          "name": "Konstablerwache",
+          "computed": 16698.05,
+          "normalised": 0.2992330572264498,
+          "mean_rating": 5.333333333333333,
+          "n_raters": 24
+        },
+        {
+          "site_id": "Alter Markt-Cologne",
+          "name": "Alter Markt",
+          "computed": 10886.49,
+          "normalised": 0.1632950937930686,
+          "mean_rating": 4.555555555555555,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Rathausmarkt-Hamburg",
+          "name": "Rathausmarkt",
+          "computed": 20141.25,
+          "normalised": 0.3797728082905045,
+          "mean_rating": 5.518518518518518,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Naschmarkt-Leipzig",
+          "name": "Naschmarkt",
+          "computed": 4020.21,
+          "normalised": 0.0026862177660885393,
+          "mean_rating": 2.769230769230769,
+          "n_raters": 26
+        },
+        {
+          "site_id": "Burgplatz-Düsseldorf",
+          "name": "Burgplatz",
+          "computed": 46656.93,
+          "normalised": 1,
+          "mean_rating": 6.407407407407407,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Marktplatz-Heidelberg",
+          "name": "Marktplatz",
+          "computed": 3905.37,
+          "normalised": 0,
+          "mean_rating": 2.8620689655172415,
+          "n_raters": 29
+        },
+        {
+          "site_id": "Augustusplatz-Leipzig",
+          "name": "Augustusplatz",
+          "computed": 33095.58,
+          "normalised": 0.6827870140879071,
+          "mean_rating": 5.333333333333333,
+          "n_raters": 30
+        },
+        {
+          "site_id": "Hauptmarkt-Trier",
+          "name": "Hauptmarkt",
+          "computed": 10723.82,
+          "normalised": 0.1594900864436292,
+          "mean_rating": 5.148148148148148,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Herderplatz-Weimar",
+          "name": "Herderplatz",
+          "computed": 5648.63,
+          "normalised": 0.04077652371047981,
+          "mean_rating": 4.222222222222222,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Theaterplatz-Weimar",
+          "name": "Theaterplatz",
+          "computed": 7804.35,
+          "normalised": 0.09120088249411251,
+          "mean_rating": 4.703703703703703,
+          "n_raters": 27
+        }
+      ],
+      "pearson_p_holm": 0.0029985007496251873
+    },
+    {
+      "metric": "compactness",
+      "label": "Compactness",
+      "anchors": {
+        "low": "Irregular, stretched-out shape",
+        "high": "Compact, regular shape"
+      },
+      "expected_sign": 1,
+      "n_plazas": 18,
+      "ratings_per_plaza": 26.72222222222222,
+      "pearson_raw": 0.11757234610221816,
+      "pearson_aligned": 0.11757234610221816,
+      "pearson_ci": {
+        "lo": -0.3695926283861219,
+        "hi": 0.5540375382692979
+      },
+      "pearson_p": 0.6361819090454772,
+      "spearman_raw": 0.0961241465347086,
+      "spearman_aligned": 0.0961241465347086,
+      "spearman_p": 0.6956521739130435,
+      "participant_bootstrap": {
+        "lo": 0.004665801183332852,
+        "hi": 0.2322064430075395,
+        "pPositive": 0.9833333333333333,
+        "draws": 300
+      },
+      "reliability": 0.9313865406911439,
+      "reliability_splits": 200,
+      "disattenuated_pearson": 0.12182606188861046,
+      "per_site": [
+        {
+          "site_id": "Gendarmenmarkt-Berlin",
+          "name": "Gendarmenmarkt",
+          "computed": 0.1286,
+          "normalised": 0.4900752908966461,
+          "mean_rating": 4.56,
+          "n_raters": 25
+        },
+        {
+          "site_id": "Hauptwache-Frankfurt am Main",
+          "name": "Hauptwache",
+          "computed": 0.11,
+          "normalised": 0.3627652292950034,
+          "mean_rating": 2.7083333333333335,
+          "n_raters": 24
+        },
+        {
+          "site_id": "Römerberg-Frankfurt am Main",
+          "name": "Römerberg",
+          "computed": 0.0806,
+          "normalised": 0.16153319644079397,
+          "mean_rating": 5.62962962962963,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Zeil-Frankfurt am Main",
+          "name": "Zeil",
+          "computed": 0.1083,
+          "normalised": 0.3511293634496919,
+          "mean_rating": 3.740740740740741,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Bebelplatz-Berlin",
+          "name": "Bebelplatz",
+          "computed": 0.2031,
+          "normalised": 1,
+          "mean_rating": 4.777777777777778,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Alexanderplatz-Berlin",
+          "name": "Alexanderplatz",
+          "computed": 0.1728,
+          "normalised": 0.7926078028747434,
+          "mean_rating": 3.3333333333333335,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Marienplatz-Munich",
+          "name": "Marienplatz",
+          "computed": 0.0749,
+          "normalised": 0.12251882272416148,
+          "mean_rating": 3.107142857142857,
+          "n_raters": 28
+        },
+        {
+          "site_id": "Odeonsplatz-Munich",
+          "name": "Odeonsplatz",
+          "computed": 0.155,
+          "normalised": 0.6707734428473648,
+          "mean_rating": 3.04,
+          "n_raters": 25
+        },
+        {
+          "site_id": "Konstablerwache-Frankfurt am Main",
+          "name": "Konstablerwache",
+          "computed": 0.1257,
+          "normalised": 0.47022587268993843,
+          "mean_rating": 4.833333333333333,
+          "n_raters": 24
+        },
+        {
+          "site_id": "Alter Markt-Cologne",
+          "name": "Alter Markt",
+          "computed": 0.0577,
+          "normalised": 0.004791238877481172,
+          "mean_rating": 3.2222222222222223,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Rathausmarkt-Hamburg",
+          "name": "Rathausmarkt",
+          "computed": 0.1331,
+          "normalised": 0.5208761122518822,
+          "mean_rating": 3.7037037037037037,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Naschmarkt-Leipzig",
+          "name": "Naschmarkt",
+          "computed": 0.1524,
+          "normalised": 0.6529774127310062,
+          "mean_rating": 5.076923076923077,
+          "n_raters": 26
+        },
+        {
+          "site_id": "Burgplatz-Düsseldorf",
+          "name": "Burgplatz",
+          "computed": 0.1481,
+          "normalised": 0.6235455167693361,
+          "mean_rating": 3.3333333333333335,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Marktplatz-Heidelberg",
+          "name": "Marktplatz",
+          "computed": 0.1565,
+          "normalised": 0.6810403832991102,
+          "mean_rating": 3.896551724137931,
+          "n_raters": 29
+        },
+        {
+          "site_id": "Augustusplatz-Leipzig",
+          "name": "Augustusplatz",
+          "computed": 0.1412,
+          "normalised": 0.5763175906913073,
+          "mean_rating": 4.466666666666667,
+          "n_raters": 30
+        },
+        {
+          "site_id": "Hauptmarkt-Trier",
+          "name": "Hauptmarkt",
+          "computed": 0.1028,
+          "normalised": 0.3134839151266256,
+          "mean_rating": 3.4444444444444446,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Herderplatz-Weimar",
+          "name": "Herderplatz",
+          "computed": 0.057,
+          "normalised": 0,
+          "mean_rating": 3.4444444444444446,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Theaterplatz-Weimar",
+          "name": "Theaterplatz",
+          "computed": 0.0684,
+          "normalised": 0.07802874743326489,
+          "mean_rating": 4.777777777777778,
+          "n_raters": 27
+        }
+      ],
+      "pearson_p_holm": 0.6361819090454772
+    },
+    {
+      "metric": "occlusivity",
+      "label": "Occlusivity",
+      "anchors": {
+        "low": "Views blocked, hidden corners",
+        "high": "Clear sightlines, nothing hidden"
+      },
+      "expected_sign": -1,
+      "n_plazas": 18,
+      "ratings_per_plaza": 26.72222222222222,
+      "pearson_raw": 0.4881825271560686,
+      "pearson_aligned": -0.4881825271560686,
+      "pearson_ci": {
+        "lo": -0.7777858600139201,
+        "hi": -0.0275945742553903
+      },
+      "pearson_p": 0.04047976011994003,
+      "spearman_raw": 0.47496134362535714,
+      "spearman_aligned": -0.47496134362535714,
+      "spearman_p": 0.04847576211894053,
+      "participant_bootstrap": {
+        "lo": -0.5893630534156896,
+        "hi": -0.35182946212187394,
+        "pPositive": 0,
+        "draws": 300
+      },
+      "reliability": 0.9328541939220005,
+      "reliability_splits": 200,
+      "disattenuated_pearson": -0.5054466786269426,
+      "per_site": [
+        {
+          "site_id": "Gendarmenmarkt-Berlin",
+          "name": "Gendarmenmarkt",
+          "computed": 602.92,
+          "normalised": 0.9437463101965085,
+          "mean_rating": 5.2,
+          "n_raters": 25
+        },
+        {
+          "site_id": "Hauptwache-Frankfurt am Main",
+          "name": "Hauptwache",
+          "computed": 622.93,
+          "normalised": 1,
+          "mean_rating": 3.5833333333333335,
+          "n_raters": 24
+        },
+        {
+          "site_id": "Römerberg-Frankfurt am Main",
+          "name": "Römerberg",
+          "computed": 330.77,
+          "normalised": 0.17865677096511193,
+          "mean_rating": 3.7777777777777777,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Zeil-Frankfurt am Main",
+          "name": "Zeil",
+          "computed": 396.51,
+          "normalised": 0.3634702426133648,
+          "mean_rating": 4.333333333333333,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Bebelplatz-Berlin",
+          "name": "Bebelplatz",
+          "computed": 395.37,
+          "normalised": 0.3602653847235107,
+          "mean_rating": 4.888888888888889,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Alexanderplatz-Berlin",
+          "name": "Alexanderplatz",
+          "computed": 497.91,
+          "normalised": 0.6485339180793345,
+          "mean_rating": 5.444444444444445,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Marienplatz-Munich",
+          "name": "Marienplatz",
+          "computed": 364.06,
+          "normalised": 0.2722442439065531,
+          "mean_rating": 3.1785714285714284,
+          "n_raters": 28
+        },
+        {
+          "site_id": "Odeonsplatz-Munich",
+          "name": "Odeonsplatz",
+          "computed": 407.26,
+          "normalised": 0.39369149025891875,
+          "mean_rating": 4.8,
+          "n_raters": 25
+        },
+        {
+          "site_id": "Konstablerwache-Frankfurt am Main",
+          "name": "Konstablerwache",
+          "computed": 503.72,
+          "normalised": 0.6648674482021873,
+          "mean_rating": 4.625,
+          "n_raters": 24
+        },
+        {
+          "site_id": "Alter Markt-Cologne",
+          "name": "Alter Markt",
+          "computed": 411.95,
+          "normalised": 0.40687638806893256,
+          "mean_rating": 3.4444444444444446,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Rathausmarkt-Hamburg",
+          "name": "Rathausmarkt",
+          "computed": 566.77,
+          "normalised": 0.8421185797419246,
+          "mean_rating": 5,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Naschmarkt-Leipzig",
+          "name": "Naschmarkt",
+          "computed": 314.45,
+          "normalised": 0.1327767001208849,
+          "mean_rating": 4.153846153846154,
+          "n_raters": 26
+        },
+        {
+          "site_id": "Burgplatz-Düsseldorf",
+          "name": "Burgplatz",
+          "computed": 272.07,
+          "normalised": 0.013634702426133556,
+          "mean_rating": 5.037037037037037,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Marktplatz-Heidelberg",
+          "name": "Marktplatz",
+          "computed": 267.22,
+          "normalised": 0,
+          "mean_rating": 2.689655172413793,
+          "n_raters": 29
+        },
+        {
+          "site_id": "Augustusplatz-Leipzig",
+          "name": "Augustusplatz",
+          "computed": 571.94,
+          "normalised": 0.8566528914002982,
+          "mean_rating": 4.533333333333333,
+          "n_raters": 30
+        },
+        {
+          "site_id": "Hauptmarkt-Trier",
+          "name": "Hauptmarkt",
+          "computed": 283.54,
+          "normalised": 0.04588007084422703,
+          "mean_rating": 3.037037037037037,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Herderplatz-Weimar",
+          "name": "Herderplatz",
+          "computed": 304.47,
+          "normalised": 0.10472013719040794,
+          "mean_rating": 3.2962962962962963,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Theaterplatz-Weimar",
+          "name": "Theaterplatz",
+          "computed": 414.88,
+          "normalised": 0.41511343510162774,
+          "mean_rating": 4.333333333333333,
+          "n_raters": 27
+        }
+      ],
+      "pearson_p_holm": 0.08095952023988005
+    },
+    {
+      "metric": "enclosure",
+      "label": "Enclosure",
+      "anchors": {
+        "low": "Low walls, exposed to the sky",
+        "high": "Tall walls, strongly enclosed"
+      },
+      "expected_sign": 1,
+      "n_plazas": 18,
+      "ratings_per_plaza": 26.72222222222222,
+      "pearson_raw": 0.787919546608174,
+      "pearson_aligned": 0.787919546608174,
+      "pearson_ci": {
+        "lo": 0.5078670992772363,
+        "hi": 0.9173418723266734
+      },
+      "pearson_p": 0.0004997501249375312,
+      "spearman_raw": 0.8452012383900929,
+      "spearman_aligned": 0.8452012383900929,
+      "spearman_p": 0.0004997501249375312,
+      "participant_bootstrap": {
+        "lo": 0.6946130515365712,
+        "hi": 0.8150709662279443,
+        "pPositive": 1,
+        "draws": 300
+      },
+      "reliability": 0.9150370290925729,
+      "reliability_splits": 200,
+      "disattenuated_pearson": 0.823687622576514,
+      "per_site": [
+        {
+          "site_id": "Gendarmenmarkt-Berlin",
+          "name": "Gendarmenmarkt",
+          "computed": 0.1587,
+          "normalised": 0.16826568265682657,
+          "mean_rating": 4.16,
+          "n_raters": 25
+        },
+        {
+          "site_id": "Hauptwache-Frankfurt am Main",
+          "name": "Hauptwache",
+          "computed": 0.1631,
+          "normalised": 0.18450184501845013,
+          "mean_rating": 4.708333333333333,
+          "n_raters": 24
+        },
+        {
+          "site_id": "Römerberg-Frankfurt am Main",
+          "name": "Römerberg",
+          "computed": 0.1991,
+          "normalised": 0.3173431734317343,
+          "mean_rating": 4.888888888888889,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Zeil-Frankfurt am Main",
+          "name": "Zeil",
+          "computed": 0.3328,
+          "normalised": 0.81070110701107,
+          "mean_rating": 5.962962962962963,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Bebelplatz-Berlin",
+          "name": "Bebelplatz",
+          "computed": 0.2102,
+          "normalised": 0.3583025830258302,
+          "mean_rating": 5.185185185185185,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Alexanderplatz-Berlin",
+          "name": "Alexanderplatz",
+          "computed": 0.2162,
+          "normalised": 0.38044280442804423,
+          "mean_rating": 4.518518518518518,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Marienplatz-Munich",
+          "name": "Marienplatz",
+          "computed": 0.3818,
+          "normalised": 0.991512915129151,
+          "mean_rating": 5.357142857142857,
+          "n_raters": 28
+        },
+        {
+          "site_id": "Odeonsplatz-Munich",
+          "name": "Odeonsplatz",
+          "computed": 0.3402,
+          "normalised": 0.8380073800738007,
+          "mean_rating": 5.08,
+          "n_raters": 25
+        },
+        {
+          "site_id": "Konstablerwache-Frankfurt am Main",
+          "name": "Konstablerwache",
+          "computed": 0.1886,
+          "normalised": 0.2785977859778597,
+          "mean_rating": 4.291666666666667,
+          "n_raters": 24
+        },
+        {
+          "site_id": "Alter Markt-Cologne",
+          "name": "Alter Markt",
+          "computed": 0.1965,
+          "normalised": 0.3077490774907749,
+          "mean_rating": 4.7407407407407405,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Rathausmarkt-Hamburg",
+          "name": "Rathausmarkt",
+          "computed": 0.2256,
+          "normalised": 0.41512915129151284,
+          "mean_rating": 4.62962962962963,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Naschmarkt-Leipzig",
+          "name": "Naschmarkt",
+          "computed": 0.3841,
+          "normalised": 1,
+          "mean_rating": 5.269230769230769,
+          "n_raters": 26
+        },
+        {
+          "site_id": "Burgplatz-Düsseldorf",
+          "name": "Burgplatz",
+          "computed": 0.1131,
+          "normalised": 0,
+          "mean_rating": 2.814814814814815,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Marktplatz-Heidelberg",
+          "name": "Marktplatz",
+          "computed": 0.2651,
+          "normalised": 0.5608856088560885,
+          "mean_rating": 5.379310344827586,
+          "n_raters": 29
+        },
+        {
+          "site_id": "Augustusplatz-Leipzig",
+          "name": "Augustusplatz",
+          "computed": 0.1145,
+          "normalised": 0.005166051660516599,
+          "mean_rating": 3.966666666666667,
+          "n_raters": 30
+        },
+        {
+          "site_id": "Hauptmarkt-Trier",
+          "name": "Hauptmarkt",
+          "computed": 0.1893,
+          "normalised": 0.28118081180811805,
+          "mean_rating": 4.407407407407407,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Herderplatz-Weimar",
+          "name": "Herderplatz",
+          "computed": 0.2471,
+          "normalised": 0.4944649446494464,
+          "mean_rating": 4.555555555555555,
+          "n_raters": 27
+        },
+        {
+          "site_id": "Theaterplatz-Weimar",
+          "name": "Theaterplatz",
+          "computed": 0.1583,
+          "normalised": 0.16678966789667893,
+          "mean_rating": 3.7777777777777777,
+          "n_raters": 27
+        }
+      ],
+      "pearson_p_holm": 0.001999000499750125
+    }
+  ]
+}

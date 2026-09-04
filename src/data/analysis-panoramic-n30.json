@@ -1,0 +1,1434 @@
+{
+  "analysis_version": "1.0.0",
+  "generated_at": "2026-08-29T15:55:17.667Z",
+  "fov_mode": "perceptual_360",
+  "fingerprint_source": "computed_geometry_only",
+  "source": {
+    "id": "panoramic",
+    "label": "panoramic survey × 360° readings (200 m)",
+    "responses": "src/data/survey-responses-360.json"
+  },
+  "metrics": [
+    "area",
+    "compactness",
+    "occlusivity",
+    "enclosure"
+  ],
+  "metric_labels": {
+    "area": "Isovist area",
+    "compactness": "Compactness",
+    "occlusivity": "Occlusivity",
+    "enclosure": "Enclosure"
+  },
+  "seeds": {
+    "fit": 20260817,
+    "bootstrap": 20260817,
+    "permutation": 20260817
+  },
+  "bounds": {
+    "area": {
+      "min": 3905.37,
+      "max": 46656.93,
+      "minSite": "Marktplatz-Heidelberg",
+      "maxSite": "Burgplatz-Düsseldorf"
+    },
+    "compactness": {
+      "min": 0.057,
+      "max": 0.2031,
+      "minSite": "Herderplatz-Weimar",
+      "maxSite": "Bebelplatz-Berlin"
+    },
+    "occlusivity": {
+      "min": 267.22,
+      "max": 622.93,
+      "minSite": "Marktplatz-Heidelberg",
+      "maxSite": "Hauptwache-Frankfurt am Main"
+    },
+    "enclosure": {
+      "min": 0.1131,
+      "max": 0.3841,
+      "minSite": "Burgplatz-Düsseldorf",
+      "maxSite": "Naschmarkt-Leipzig"
+    }
+  },
+  "inputs": {
+    "participants": {
+      "collected": 30,
+      "used": 30,
+      "dropped": 0,
+      "byReason": {
+        "failed_attention_check": 0,
+        "never_reached_attention_check": 0
+      }
+    },
+    "responses": {
+      "collected": 360,
+      "used": 360,
+      "dropped": {
+        "failed_attention_check": 0,
+        "never_reached_attention_check": 0,
+        "attention_check_triplet": 0,
+        "names_an_excluded_site": 0,
+        "malformed_response": 0
+      }
+    },
+    "attentionCheckAdministered": false,
+    "attentionCheckDiscriminated": false
+  },
+  "fit": {
+    "weights": [
+      1.6543410372802672,
+      0.8361419051876968,
+      1.0224502015111123,
+      0.7595539764208169
+    ],
+    "weights_normalised": [
+      0.3872079635726146,
+      0.19570378602087773,
+      0.2393103063153093,
+      0.17777794409119826
+    ],
+    "nll": 367.8407155139225,
+    "n": 360,
+    "restarts": 5,
+    "converged": true
+  },
+  "bootstrap": {
+    "resamples": 1000,
+    "failures": 0,
+    "per_metric": [
+      {
+        "mean": 0.40409060062198854,
+        "median": 0.39554129228843526,
+        "lo": 0.19012633931811215,
+        "hi": 0.6674660779384601,
+        "n": 1000
+      },
+      {
+        "mean": 0.18559440461220936,
+        "median": 0.1904261476971506,
+        "lo": 0.011318119164369532,
+        "hi": 0.3275896951225935,
+        "n": 1000
+      },
+      {
+        "mean": 0.23470022800593884,
+        "median": 0.23502534435135167,
+        "lo": 0.07758422229298287,
+        "hi": 0.3864238931301149,
+        "n": 1000
+      },
+      {
+        "mean": 0.17561476675986315,
+        "median": 0.1788210717125333,
+        "lo": 0.01754588578946072,
+        "hi": 0.3383747462876008,
+        "n": 1000
+      }
+    ]
+  },
+  "crossval": {
+    "chance": 0.3333333333333333,
+    "mean_accuracy": 0.4800266087514669,
+    "per_fold": [
+      {
+        "site": "Gendarmenmarkt-Berlin",
+        "n": 65,
+        "accuracy": 0.4307692307692308
+      },
+      {
+        "site": "Hauptwache-Frankfurt am Main",
+        "n": 46,
+        "accuracy": 0.43478260869565216
+      },
+      {
+        "site": "Römerberg-Frankfurt am Main",
+        "n": 60,
+        "accuracy": 0.4666666666666667
+      },
+      {
+        "site": "Zeil-Frankfurt am Main",
+        "n": 69,
+        "accuracy": 0.4927536231884058
+      },
+      {
+        "site": "Bebelplatz-Berlin",
+        "n": 57,
+        "accuracy": 0.5087719298245614
+      },
+      {
+        "site": "Alexanderplatz-Berlin",
+        "n": 58,
+        "accuracy": 0.5
+      },
+      {
+        "site": "Marienplatz-Munich",
+        "n": 54,
+        "accuracy": 0.4074074074074074
+      },
+      {
+        "site": "Odeonsplatz-Munich",
+        "n": 49,
+        "accuracy": 0.46938775510204084
+      },
+      {
+        "site": "Konstablerwache-Frankfurt am Main",
+        "n": 55,
+        "accuracy": 0.509090909090909
+      },
+      {
+        "site": "Alter Markt-Cologne",
+        "n": 67,
+        "accuracy": 0.4626865671641791
+      },
+      {
+        "site": "Rathausmarkt-Hamburg",
+        "n": 58,
+        "accuracy": 0.43103448275862066
+      },
+      {
+        "site": "Naschmarkt-Leipzig",
+        "n": 65,
+        "accuracy": 0.5538461538461539
+      },
+      {
+        "site": "Burgplatz-Düsseldorf",
+        "n": 56,
+        "accuracy": 0.4642857142857143
+      },
+      {
+        "site": "Marktplatz-Heidelberg",
+        "n": 69,
+        "accuracy": 0.5362318840579711
+      },
+      {
+        "site": "Augustusplatz-Leipzig",
+        "n": 67,
+        "accuracy": 0.5522388059701493
+      },
+      {
+        "site": "Hauptmarkt-Trier",
+        "n": 59,
+        "accuracy": 0.576271186440678
+      },
+      {
+        "site": "Herderplatz-Weimar",
+        "n": 62,
+        "accuracy": 0.5161290322580645
+      },
+      {
+        "site": "Theaterplatz-Weimar",
+        "n": 64,
+        "accuracy": 0.328125
+      }
+    ],
+    "area_only": {
+      "mean_accuracy": 0.48626839993097604,
+      "per_fold": [
+        {
+          "site": "Gendarmenmarkt-Berlin",
+          "n": 65,
+          "accuracy": 0.47692307692307695
+        },
+        {
+          "site": "Hauptwache-Frankfurt am Main",
+          "n": 46,
+          "accuracy": 0.45652173913043476
+        },
+        {
+          "site": "Römerberg-Frankfurt am Main",
+          "n": 60,
+          "accuracy": 0.43333333333333335
+        },
+        {
+          "site": "Zeil-Frankfurt am Main",
+          "n": 69,
+          "accuracy": 0.5072463768115942
+        },
+        {
+          "site": "Bebelplatz-Berlin",
+          "n": 57,
+          "accuracy": 0.5263157894736842
+        },
+        {
+          "site": "Alexanderplatz-Berlin",
+          "n": 58,
+          "accuracy": 0.4827586206896552
+        },
+        {
+          "site": "Marienplatz-Munich",
+          "n": 54,
+          "accuracy": 0.48148148148148145
+        },
+        {
+          "site": "Odeonsplatz-Munich",
+          "n": 49,
+          "accuracy": 0.3877551020408163
+        },
+        {
+          "site": "Konstablerwache-Frankfurt am Main",
+          "n": 55,
+          "accuracy": 0.45454545454545453
+        },
+        {
+          "site": "Alter Markt-Cologne",
+          "n": 67,
+          "accuracy": 0.6268656716417911
+        },
+        {
+          "site": "Rathausmarkt-Hamburg",
+          "n": 58,
+          "accuracy": 0.5172413793103449
+        },
+        {
+          "site": "Naschmarkt-Leipzig",
+          "n": 65,
+          "accuracy": 0.5538461538461539
+        },
+        {
+          "site": "Burgplatz-Düsseldorf",
+          "n": 56,
+          "accuracy": 0.48214285714285715
+        },
+        {
+          "site": "Marktplatz-Heidelberg",
+          "n": 69,
+          "accuracy": 0.4927536231884058
+        },
+        {
+          "site": "Augustusplatz-Leipzig",
+          "n": 67,
+          "accuracy": 0.5223880597014925
+        },
+        {
+          "site": "Hauptmarkt-Trier",
+          "n": 59,
+          "accuracy": 0.5084745762711864
+        },
+        {
+          "site": "Herderplatz-Weimar",
+          "n": 62,
+          "accuracy": 0.45161290322580644
+        },
+        {
+          "site": "Theaterplatz-Weimar",
+          "n": 64,
+          "accuracy": 0.390625
+        }
+      ]
+    },
+    "paired": {
+      "perFold": [
+        {
+          "site": "Gendarmenmarkt-Berlin",
+          "full": 0.4307692307692308,
+          "baseline": 0.47692307692307695,
+          "delta": -0.046153846153846156
+        },
+        {
+          "site": "Hauptwache-Frankfurt am Main",
+          "full": 0.43478260869565216,
+          "baseline": 0.45652173913043476,
+          "delta": -0.021739130434782594
+        },
+        {
+          "site": "Römerberg-Frankfurt am Main",
+          "full": 0.4666666666666667,
+          "baseline": 0.43333333333333335,
+          "delta": 0.033333333333333326
+        },
+        {
+          "site": "Zeil-Frankfurt am Main",
+          "full": 0.4927536231884058,
+          "baseline": 0.5072463768115942,
+          "delta": -0.014492753623188415
+        },
+        {
+          "site": "Bebelplatz-Berlin",
+          "full": 0.5087719298245614,
+          "baseline": 0.5263157894736842,
+          "delta": -0.01754385964912275
+        },
+        {
+          "site": "Alexanderplatz-Berlin",
+          "full": 0.5,
+          "baseline": 0.4827586206896552,
+          "delta": 0.017241379310344807
+        },
+        {
+          "site": "Marienplatz-Munich",
+          "full": 0.4074074074074074,
+          "baseline": 0.48148148148148145,
+          "delta": -0.07407407407407407
+        },
+        {
+          "site": "Odeonsplatz-Munich",
+          "full": 0.46938775510204084,
+          "baseline": 0.3877551020408163,
+          "delta": 0.08163265306122452
+        },
+        {
+          "site": "Konstablerwache-Frankfurt am Main",
+          "full": 0.509090909090909,
+          "baseline": 0.45454545454545453,
+          "delta": 0.05454545454545451
+        },
+        {
+          "site": "Alter Markt-Cologne",
+          "full": 0.4626865671641791,
+          "baseline": 0.6268656716417911,
+          "delta": -0.16417910447761197
+        },
+        {
+          "site": "Rathausmarkt-Hamburg",
+          "full": 0.43103448275862066,
+          "baseline": 0.5172413793103449,
+          "delta": -0.0862068965517242
+        },
+        {
+          "site": "Naschmarkt-Leipzig",
+          "full": 0.5538461538461539,
+          "baseline": 0.5538461538461539,
+          "delta": 0
+        },
+        {
+          "site": "Burgplatz-Düsseldorf",
+          "full": 0.4642857142857143,
+          "baseline": 0.48214285714285715,
+          "delta": -0.01785714285714285
+        },
+        {
+          "site": "Marktplatz-Heidelberg",
+          "full": 0.5362318840579711,
+          "baseline": 0.4927536231884058,
+          "delta": 0.043478260869565244
+        },
+        {
+          "site": "Augustusplatz-Leipzig",
+          "full": 0.5522388059701493,
+          "baseline": 0.5223880597014925,
+          "delta": 0.029850746268656803
+        },
+        {
+          "site": "Hauptmarkt-Trier",
+          "full": 0.576271186440678,
+          "baseline": 0.5084745762711864,
+          "delta": 0.06779661016949157
+        },
+        {
+          "site": "Herderplatz-Weimar",
+          "full": 0.5161290322580645,
+          "baseline": 0.45161290322580644,
+          "delta": 0.06451612903225806
+        },
+        {
+          "site": "Theaterplatz-Weimar",
+          "full": 0.328125,
+          "baseline": 0.390625,
+          "delta": -0.0625
+        }
+      ],
+      "wins": 8,
+      "losses": 9,
+      "ties": 1,
+      "meanDelta": -0.00624179117950912,
+      "signTestP": 1
+    }
+  },
+  "permutation": {
+    "permutations": 1000,
+    "p": 0.000999000999000999,
+    "null_mean": 0.33235547103022234,
+    "null_min": 0.2672009670527142,
+    "null_max": 0.40972161660142636,
+    "null_95": 0.3763526301229505
+  },
+  "ablation": {
+    "fullAccuracy": 0.4800266087514669,
+    "results": [
+      {
+        "metric": "area",
+        "label": "Isovist area",
+        "accuracyWithout": 0.45472117829169256,
+        "drop": 0.025305430459774347,
+        "perFold": [
+          {
+            "site": "Gendarmenmarkt-Berlin",
+            "n": 65,
+            "nTrain": 295,
+            "accuracy": 0.4153846153846154,
+            "weights": [
+              0.2033484127485152,
+              0.2625986182718575,
+              0.30762843321612116,
+              0.22642453576350607
+            ]
+          },
+          {
+            "site": "Hauptwache-Frankfurt am Main",
+            "n": 46,
+            "nTrain": 314,
+            "accuracy": 0.41304347826086957,
+            "weights": [
+              0.20273520435075185,
+              0.2785053323904734,
+              0.2732036489734762,
+              0.24555581428529855
+            ]
+          },
+          {
+            "site": "Römerberg-Frankfurt am Main",
+            "n": 60,
+            "nTrain": 300,
+            "accuracy": 0.4,
+            "weights": [
+              0.21071462969279572,
+              0.2847918013556171,
+              0.2287847154429728,
+              0.2757088535086144
+            ]
+          },
+          {
+            "site": "Zeil-Frankfurt am Main",
+            "n": 69,
+            "nTrain": 291,
+            "accuracy": 0.6086956521739131,
+            "weights": [
+              0.27454615777125146,
+              0.23596424879989286,
+              0.3473188527309882,
+              0.14217074069786736
+            ]
+          },
+          {
+            "site": "Bebelplatz-Berlin",
+            "n": 57,
+            "nTrain": 303,
+            "accuracy": 0.42105263157894735,
+            "weights": [
+              0.20602407308104714,
+              0.2530233044489614,
+              0.2819555577472629,
+              0.2589970647227286
+            ]
+          },
+          {
+            "site": "Alexanderplatz-Berlin",
+            "n": 58,
+            "nTrain": 302,
+            "accuracy": 0.5344827586206896,
+            "weights": [
+              0.22615342075140268,
+              0.24546245915084156,
+              0.2701108802857171,
+              0.25827323981203865
+            ]
+          },
+          {
+            "site": "Marienplatz-Munich",
+            "n": 54,
+            "nTrain": 306,
+            "accuracy": 0.3333333333333333,
+            "weights": [
+              0.1976575697132437,
+              0.2328642041710899,
+              0.23551540357856637,
+              0.3339628225371
+            ]
+          },
+          {
+            "site": "Odeonsplatz-Munich",
+            "n": 49,
+            "nTrain": 311,
+            "accuracy": 0.4897959183673469,
+            "weights": [
+              0.22250464151932095,
+              0.2244633914668278,
+              0.2828318098475691,
+              0.2702001571662822
+            ]
+          },
+          {
+            "site": "Konstablerwache-Frankfurt am Main",
+            "n": 55,
+            "nTrain": 305,
+            "accuracy": 0.43636363636363634,
+            "weights": [
+              0.2143839671556419,
+              0.23809245944209392,
+              0.27891919400167553,
+              0.26860437940058873
+            ]
+          },
+          {
+            "site": "Alter Markt-Cologne",
+            "n": 67,
+            "nTrain": 293,
+            "accuracy": 0.43283582089552236,
+            "weights": [
+              0.2388828627692195,
+              0.11228146157089511,
+              0.317444550581762,
+              0.33139112507812335
+            ]
+          },
+          {
+            "site": "Rathausmarkt-Hamburg",
+            "n": 58,
+            "nTrain": 302,
+            "accuracy": 0.41379310344827586,
+            "weights": [
+              0.2036809406811446,
+              0.26133688096454183,
+              0.290893534036994,
+              0.24408864431731964
+            ]
+          },
+          {
+            "site": "Naschmarkt-Leipzig",
+            "n": 65,
+            "nTrain": 295,
+            "accuracy": 0.47692307692307695,
+            "weights": [
+              0.2125740071501925,
+              0.2506282053952073,
+              0.25318895271499375,
+              0.2836088347396065
+            ]
+          },
+          {
+            "site": "Burgplatz-Düsseldorf",
+            "n": 56,
+            "nTrain": 304,
+            "accuracy": 0.44642857142857145,
+            "weights": [
+              0.22377327211852024,
+              0.22014081655978907,
+              0.3165328686590999,
+              0.23955304266259092
+            ]
+          },
+          {
+            "site": "Marktplatz-Heidelberg",
+            "n": 69,
+            "nTrain": 291,
+            "accuracy": 0.5362318840579711,
+            "weights": [
+              0.2136526044733428,
+              0.24649412814256996,
+              0.28498730491041746,
+              0.25486596247366966
+            ]
+          },
+          {
+            "site": "Augustusplatz-Leipzig",
+            "n": 67,
+            "nTrain": 293,
+            "accuracy": 0.4925373134328358,
+            "weights": [
+              0.23482097703838917,
+              0.2306888213921221,
+              0.2461463316158151,
+              0.28834386995367367
+            ]
+          },
+          {
+            "site": "Hauptmarkt-Trier",
+            "n": 59,
+            "nTrain": 301,
+            "accuracy": 0.5084745762711864,
+            "weights": [
+              0.23468907936774486,
+              0.18413427068859514,
+              0.2638674894988656,
+              0.3173091604447944
+            ]
+          },
+          {
+            "site": "Herderplatz-Weimar",
+            "n": 62,
+            "nTrain": 298,
+            "accuracy": 0.41935483870967744,
+            "weights": [
+              0.21414045001252466,
+              0.2797962957698268,
+              0.270227961722447,
+              0.2358352924952016
+            ]
+          },
+          {
+            "site": "Theaterplatz-Weimar",
+            "n": 64,
+            "nTrain": 296,
+            "accuracy": 0.40625,
+            "weights": [
+              0.21499118906585926,
+              0.26730438972496734,
+              0.26081572705914896,
+              0.2568886941500245
+            ]
+          }
+        ]
+      },
+      {
+        "metric": "compactness",
+        "label": "Compactness",
+        "accuracyWithout": 0.46829317813507987,
+        "drop": 0.011733430616387042,
+        "perFold": [
+          {
+            "site": "Gendarmenmarkt-Berlin",
+            "n": 65,
+            "nTrain": 295,
+            "accuracy": 0.4,
+            "weights": [
+              0.4189489773667283,
+              0.2219094977968365,
+              0.2513905564726322,
+              0.10775096836380309
+            ]
+          },
+          {
+            "site": "Hauptwache-Frankfurt am Main",
+            "n": 46,
+            "nTrain": 314,
+            "accuracy": 0.43478260869565216,
+            "weights": [
+              0.41869444158536795,
+              0.24012843915271823,
+              0.21523839586336416,
+              0.12593872339854964
+            ]
+          },
+          {
+            "site": "Römerberg-Frankfurt am Main",
+            "n": 60,
+            "nTrain": 300,
+            "accuracy": 0.48333333333333334,
+            "weights": [
+              0.480595320327828,
+              0.22906786436731255,
+              0.14981109948488602,
+              0.1405257158199734
+            ]
+          },
+          {
+            "site": "Zeil-Frankfurt am Main",
+            "n": 69,
+            "nTrain": 291,
+            "accuracy": 0.5072463768115942,
+            "weights": [
+              0.4956166166266194,
+              0.2577683023330163,
+              0.24542614934874526,
+              0.0011889316916190618
+            ]
+          },
+          {
+            "site": "Bebelplatz-Berlin",
+            "n": 57,
+            "nTrain": 303,
+            "accuracy": 0.43859649122807015,
+            "weights": [
+              0.39090300065524675,
+              0.2199271518780081,
+              0.22737788748495633,
+              0.16179195998178894
+            ]
+          },
+          {
+            "site": "Alexanderplatz-Berlin",
+            "n": 58,
+            "nTrain": 302,
+            "accuracy": 0.4482758620689655,
+            "weights": [
+              0.4424295791418819,
+              0.23676231617607493,
+              0.19812197741596418,
+              0.12268612726607905
+            ]
+          },
+          {
+            "site": "Marienplatz-Munich",
+            "n": 54,
+            "nTrain": 306,
+            "accuracy": 0.3888888888888889,
+            "weights": [
+              0.31314715025898926,
+              0.21889538795583108,
+              0.1980315631750895,
+              0.2699258986100902
+            ]
+          },
+          {
+            "site": "Odeonsplatz-Munich",
+            "n": 49,
+            "nTrain": 311,
+            "accuracy": 0.4489795918367347,
+            "weights": [
+              0.39967907586623097,
+              0.23094197441226733,
+              0.21924428387211736,
+              0.15013466584938426
+            ]
+          },
+          {
+            "site": "Konstablerwache-Frankfurt am Main",
+            "n": 55,
+            "nTrain": 305,
+            "accuracy": 0.43636363636363634,
+            "weights": [
+              0.40962300484148834,
+              0.22565083289558222,
+              0.2087667488740524,
+              0.15595941338887723
+            ]
+          },
+          {
+            "site": "Alter Markt-Cologne",
+            "n": 67,
+            "nTrain": 293,
+            "accuracy": 0.417910447761194,
+            "weights": [
+              0.32397311330902184,
+              0.22130010372961725,
+              0.2495398057442086,
+              0.2051869772171523
+            ]
+          },
+          {
+            "site": "Rathausmarkt-Hamburg",
+            "n": 58,
+            "nTrain": 302,
+            "accuracy": 0.4827586206896552,
+            "weights": [
+              0.3619628185303291,
+              0.2341529319883581,
+              0.24433900858266683,
+              0.15954524089864608
+            ]
+          },
+          {
+            "site": "Naschmarkt-Leipzig",
+            "n": 65,
+            "nTrain": 295,
+            "accuracy": 0.5692307692307692,
+            "weights": [
+              0.367677743934523,
+              0.23943687154538124,
+              0.20214490346961553,
+              0.19074048105048017
+            ]
+          },
+          {
+            "site": "Burgplatz-Düsseldorf",
+            "n": 56,
+            "nTrain": 304,
+            "accuracy": 0.48214285714285715,
+            "weights": [
+              0.6199656676091535,
+              0.1816642940305873,
+              0.07998738426460443,
+              0.11838265409565472
+            ]
+          },
+          {
+            "site": "Marktplatz-Heidelberg",
+            "n": 69,
+            "nTrain": 291,
+            "accuracy": 0.5072463768115942,
+            "weights": [
+              0.41109066430892194,
+              0.21958052732526714,
+              0.23499019370247093,
+              0.1343386146633398
+            ]
+          },
+          {
+            "site": "Augustusplatz-Leipzig",
+            "n": 67,
+            "nTrain": 293,
+            "accuracy": 0.582089552238806,
+            "weights": [
+              0.3918841804613107,
+              0.24338148145974925,
+              0.18008584261216284,
+              0.18464849546677728
+            ]
+          },
+          {
+            "site": "Hauptmarkt-Trier",
+            "n": 59,
+            "nTrain": 301,
+            "accuracy": 0.5254237288135594,
+            "weights": [
+              0.38884864891231075,
+              0.2328978294369009,
+              0.18618039302572326,
+              0.19207312862506512
+            ]
+          },
+          {
+            "site": "Herderplatz-Weimar",
+            "n": 62,
+            "nTrain": 298,
+            "accuracy": 0.532258064516129,
+            "weights": [
+              0.40978409088610807,
+              0.24106936531514156,
+              0.20929047910049897,
+              0.1398560646982514
+            ]
+          },
+          {
+            "site": "Theaterplatz-Weimar",
+            "n": 64,
+            "nTrain": 296,
+            "accuracy": 0.34375,
+            "weights": [
+              0.5413562836174417,
+              0.22362238726807623,
+              0.177828491607166,
+              0.05719283750731606
+            ]
+          }
+        ]
+      },
+      {
+        "metric": "occlusivity",
+        "label": "Occlusivity",
+        "accuracyWithout": 0.4617025725625342,
+        "drop": 0.01832403618893269,
+        "perFold": [
+          {
+            "site": "Gendarmenmarkt-Berlin",
+            "n": 65,
+            "nTrain": 295,
+            "accuracy": 0.4461538461538462,
+            "weights": [
+              0.45602843575415897,
+              0.17186507637699103,
+              0.23325604105506578,
+              0.1388504468137841
+            ]
+          },
+          {
+            "site": "Hauptwache-Frankfurt am Main",
+            "n": 46,
+            "nTrain": 314,
+            "accuracy": 0.391304347826087,
+            "weights": [
+              0.41538262833408773,
+              0.20481773000157336,
+              0.22361508291450627,
+              0.15618455874983259
+            ]
+          },
+          {
+            "site": "Römerberg-Frankfurt am Main",
+            "n": 60,
+            "nTrain": 300,
+            "accuracy": 0.45,
+            "weights": [
+              0.47012876022566774,
+              0.1806459320609791,
+              0.20500154965062337,
+              0.1442237580627298
+            ]
+          },
+          {
+            "site": "Zeil-Frankfurt am Main",
+            "n": 69,
+            "nTrain": 291,
+            "accuracy": 0.5072463768115942,
+            "weights": [
+              0.6193682641289867,
+              0.09747402438897396,
+              0.28176226726277126,
+              0.0013954442192681328
+            ]
+          },
+          {
+            "site": "Bebelplatz-Berlin",
+            "n": 57,
+            "nTrain": 303,
+            "accuracy": 0.49122807017543857,
+            "weights": [
+              0.4722814931269827,
+              0.14088864630484785,
+              0.2234767337065722,
+              0.1633531268615974
+            ]
+          },
+          {
+            "site": "Alexanderplatz-Berlin",
+            "n": 58,
+            "nTrain": 302,
+            "accuracy": 0.5,
+            "weights": [
+              0.4997756665488272,
+              0.11763556222855105,
+              0.2431641755471911,
+              0.13942459567543067
+            ]
+          },
+          {
+            "site": "Marienplatz-Munich",
+            "n": 54,
+            "nTrain": 306,
+            "accuracy": 0.3333333333333333,
+            "weights": [
+              0.3516760923549432,
+              0.1708198016484007,
+              0.21128363160806157,
+              0.26622047438859453
+            ]
+          },
+          {
+            "site": "Odeonsplatz-Munich",
+            "n": 49,
+            "nTrain": 311,
+            "accuracy": 0.4489795918367347,
+            "weights": [
+              0.481767768126387,
+              0.10502362224286253,
+              0.24769005279454154,
+              0.16551855683620892
+            ]
+          },
+          {
+            "site": "Konstablerwache-Frankfurt am Main",
+            "n": 55,
+            "nTrain": 305,
+            "accuracy": 0.45454545454545453,
+            "weights": [
+              0.4738806362123947,
+              0.13550766727652871,
+              0.23182393989324976,
+              0.1587877566178269
+            ]
+          },
+          {
+            "site": "Alter Markt-Cologne",
+            "n": 67,
+            "nTrain": 293,
+            "accuracy": 0.5373134328358209,
+            "weights": [
+              0.49030487758896046,
+              0.004660159241657117,
+              0.2730297792793496,
+              0.23200518389003283
+            ]
+          },
+          {
+            "site": "Rathausmarkt-Hamburg",
+            "n": 58,
+            "nTrain": 302,
+            "accuracy": 0.43103448275862066,
+            "weights": [
+              0.39779719455551305,
+              0.18549620750542134,
+              0.23812879500324066,
+              0.17857780293582484
+            ]
+          },
+          {
+            "site": "Naschmarkt-Leipzig",
+            "n": 65,
+            "nTrain": 295,
+            "accuracy": 0.5538461538461539,
+            "weights": [
+              0.3915929775973938,
+              0.16176287058035302,
+              0.24223346471434015,
+              0.2044106871079132
+            ]
+          },
+          {
+            "site": "Burgplatz-Düsseldorf",
+            "n": 56,
+            "nTrain": 304,
+            "accuracy": 0.4642857142857143,
+            "weights": [
+              0.6323748205763434,
+              0.08887822235236416,
+              0.16297405605571672,
+              0.11577290101557577
+            ]
+          },
+          {
+            "site": "Marktplatz-Heidelberg",
+            "n": 69,
+            "nTrain": 291,
+            "accuracy": 0.463768115942029,
+            "weights": [
+              0.4622339738136994,
+              0.14325482966146902,
+              0.2320601522060345,
+              0.16245104431879714
+            ]
+          },
+          {
+            "site": "Augustusplatz-Leipzig",
+            "n": 67,
+            "nTrain": 293,
+            "accuracy": 0.5671641791044776,
+            "weights": [
+              0.4298316219871647,
+              0.13623547789075308,
+              0.24773569076605592,
+              0.18619720935602627
+            ]
+          },
+          {
+            "site": "Hauptmarkt-Trier",
+            "n": 59,
+            "nTrain": 301,
+            "accuracy": 0.4745762711864407,
+            "weights": [
+              0.45575595011787157,
+              0.09227290276215687,
+              0.24219868966052568,
+              0.20977245745944578
+            ]
+          },
+          {
+            "site": "Herderplatz-Weimar",
+            "n": 62,
+            "nTrain": 298,
+            "accuracy": 0.46774193548387094,
+            "weights": [
+              0.4304394697915723,
+              0.1843166543181129,
+              0.23140012286656678,
+              0.15384375302374803
+            ]
+          },
+          {
+            "site": "Theaterplatz-Weimar",
+            "n": 64,
+            "nTrain": 296,
+            "accuracy": 0.328125,
+            "weights": [
+              0.5543436191754371,
+              0.16447268309368787,
+              0.20908126143485126,
+              0.0721024362960239
+            ]
+          }
+        ]
+      },
+      {
+        "metric": "enclosure",
+        "label": "Enclosure",
+        "accuracyWithout": 0.4686159335359612,
+        "drop": 0.011410675215505706,
+        "perFold": [
+          {
+            "site": "Gendarmenmarkt-Berlin",
+            "n": 65,
+            "nTrain": 295,
+            "accuracy": 0.4307692307692308,
+            "weights": [
+              0.38140203449053034,
+              0.17289390376033242,
+              0.25126883434831343,
+              0.19443522740082386
+            ]
+          },
+          {
+            "site": "Hauptwache-Frankfurt am Main",
+            "n": 46,
+            "nTrain": 314,
+            "accuracy": 0.41304347826086957,
+            "weights": [
+              0.3924755451450258,
+              0.19433230505405144,
+              0.20459305176664683,
+              0.20859909803427593
+            ]
+          },
+          {
+            "site": "Römerberg-Frankfurt am Main",
+            "n": 60,
+            "nTrain": 300,
+            "accuracy": 0.43333333333333335,
+            "weights": [
+              0.45567019093878874,
+              0.18634829803029462,
+              0.15629576246299023,
+              0.20168574856792654
+            ]
+          },
+          {
+            "site": "Zeil-Frankfurt am Main",
+            "n": 69,
+            "nTrain": 291,
+            "accuracy": 0.4927536231884058,
+            "weights": [
+              0.40626046564497154,
+              0.1191884802424511,
+              0.24518157003500293,
+              0.22936948407757432
+            ]
+          },
+          {
+            "site": "Bebelplatz-Berlin",
+            "n": 57,
+            "nTrain": 303,
+            "accuracy": 0.43859649122807015,
+            "weights": [
+              0.3984441301934639,
+              0.15285590805843552,
+              0.23637154881617964,
+              0.21232841293192084
+            ]
+          },
+          {
+            "site": "Alexanderplatz-Berlin",
+            "n": 58,
+            "nTrain": 302,
+            "accuracy": 0.5172413793103449,
+            "weights": [
+              0.438007265803742,
+              0.13639045721829174,
+              0.1999837014178663,
+              0.22561857556009984
+            ]
+          },
+          {
+            "site": "Marienplatz-Munich",
+            "n": 54,
+            "nTrain": 306,
+            "accuracy": 0.42592592592592593,
+            "weights": [
+              0.38285485679348363,
+              0.18653947236981386,
+              0.20925891918469874,
+              0.22134675165200388
+            ]
+          },
+          {
+            "site": "Odeonsplatz-Munich",
+            "n": 49,
+            "nTrain": 311,
+            "accuracy": 0.4489795918367347,
+            "weights": [
+              0.415648019645167,
+              0.12502572287603025,
+              0.23254735332355453,
+              0.2267789041552481
+            ]
+          },
+          {
+            "site": "Konstablerwache-Frankfurt am Main",
+            "n": 55,
+            "nTrain": 305,
+            "accuracy": 0.45454545454545453,
+            "weights": [
+              0.4375436405466485,
+              0.1442703880875262,
+              0.2064941182696021,
+              0.21169185309622313
+            ]
+          },
+          {
+            "site": "Alter Markt-Cologne",
+            "n": 67,
+            "nTrain": 293,
+            "accuracy": 0.43283582089552236,
+            "weights": [
+              0.45434807038757596,
+              0.015089246572346478,
+              0.2774854633038579,
+              0.25307721973621966
+            ]
+          },
+          {
+            "site": "Rathausmarkt-Hamburg",
+            "n": 58,
+            "nTrain": 302,
+            "accuracy": 0.4482758620689655,
+            "weights": [
+              0.3546132500940505,
+              0.18964583252096504,
+              0.2463150137369401,
+              0.2094259036480444
+            ]
+          },
+          {
+            "site": "Naschmarkt-Leipzig",
+            "n": 65,
+            "nTrain": 295,
+            "accuracy": 0.5384615384615384,
+            "weights": [
+              0.3617476229745779,
+              0.17964740542033936,
+              0.22200686087057642,
+              0.2365981107345062
+            ]
+          },
+          {
+            "site": "Burgplatz-Düsseldorf",
+            "n": 56,
+            "nTrain": 304,
+            "accuracy": 0.48214285714285715,
+            "weights": [
+              0.6428419097283742,
+              0.09355530201703786,
+              0.08385511332599144,
+              0.17974767492859658
+            ]
+          },
+          {
+            "site": "Marktplatz-Heidelberg",
+            "n": 69,
+            "nTrain": 291,
+            "accuracy": 0.5072463768115942,
+            "weights": [
+              0.4169107523308426,
+              0.12952885763153132,
+              0.2415167410154117,
+              0.21204364902221437
+            ]
+          },
+          {
+            "site": "Augustusplatz-Leipzig",
+            "n": 67,
+            "nTrain": 293,
+            "accuracy": 0.5522388059701493,
+            "weights": [
+              0.4174882091867052,
+              0.1497964562198668,
+              0.1900910196209968,
+              0.24262431497243117
+            ]
+          },
+          {
+            "site": "Hauptmarkt-Trier",
+            "n": 59,
+            "nTrain": 301,
+            "accuracy": 0.559322033898305,
+            "weights": [
+              0.47979522056194485,
+              0.08268269374451868,
+              0.19671317369082256,
+              0.240808912002714
+            ]
+          },
+          {
+            "site": "Herderplatz-Weimar",
+            "n": 62,
+            "nTrain": 298,
+            "accuracy": 0.5,
+            "weights": [
+              0.38576297043293334,
+              0.1981991536330222,
+              0.2074390744998755,
+              0.208598801434169
+            ]
+          },
+          {
+            "site": "Theaterplatz-Weimar",
+            "n": 64,
+            "nTrain": 296,
+            "accuracy": 0.359375,
+            "weights": [
+              0.4694871819711481,
+              0.1724161859181933,
+              0.16996558076310475,
+              0.18813105134755387
+            ]
+          }
+        ]
+      }
+    ],
+    "ranked": [
+      {
+        "metric": "area",
+        "label": "Isovist area",
+        "drop": 0.025305430459774347,
+        "rank": 1
+      },
+      {
+        "metric": "occlusivity",
+        "label": "Occlusivity",
+        "drop": 0.01832403618893269,
+        "rank": 2
+      },
+      {
+        "metric": "compactness",
+        "label": "Compactness",
+        "drop": 0.011733430616387042,
+        "rank": 3
+      },
+      {
+        "metric": "enclosure",
+        "label": "Enclosure",
+        "drop": 0.011410675215505706,
+        "rank": 4
+      }
+    ]
+  },
+  "hypotheses": {
+    "H1": {
+      "statement": "The weighted four-metric model predicts perceived similarity better than chance.",
+      "accuracy": 0.4800266087514669,
+      "chance": 0.3333333333333333,
+      "p": 0.000999000999000999,
+      "supported": true
+    },
+    "H2": {
+      "statement": "A four-metric framework predicts perceptual similarity more accurately than isovist area alone.",
+      "full": 0.4800266087514669,
+      "area_only": 0.48626839993097604,
+      "mean_delta": -0.00624179117950912,
+      "wins": 8,
+      "losses": 9,
+      "p": 1,
+      "supported": false
+    },
+    "H3": {
+      "statement": "Enclosure carries the largest perceptual weight of the four metrics.",
+      "verdict": "not_supported",
+      "weightEvidence": {
+        "passes": false,
+        "largestShare": 0.042,
+        "leadMean": -0.24419184366883898,
+        "leadLo": -0.6115351982678919,
+        "leadHi": 0.0296532918310625
+      },
+      "ablationEvidence": {
+        "passes": false,
+        "rank": 4,
+        "drop": 0.011410675215505706,
+        "ranking": [
+          {
+            "metric": "area",
+            "label": "Isovist area",
+            "drop": 0.025305430459774347,
+            "rank": 1
+          },
+          {
+            "metric": "occlusivity",
+            "label": "Occlusivity",
+            "drop": 0.01832403618893269,
+            "rank": 2
+          },
+          {
+            "metric": "compactness",
+            "label": "Compactness",
+            "drop": 0.011733430616387042,
+            "rank": 3
+          },
+          {
+            "metric": "enclosure",
+            "label": "Enclosure",
+            "drop": 0.011410675215505706,
+            "rank": 4
+          }
+        ]
+      }
+    }
+  }
+}

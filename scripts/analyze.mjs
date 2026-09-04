@@ -8,6 +8,37 @@
 // The self-test is the gate for this phase: until synthetic weight recovery and
 // permutation-null uniformity both pass, no number produced from real responses
 // means anything.
+//
+// LAYER AND SOURCE MUST MATCH. The stimulus a participant judged and the
+// geometry the fit reads have to be the same measurement of the same thing:
+// panoramic responses are judgements of the full surround, so they belong with
+// perceptual_360 readings, while the archived static-photo responses are
+// judgements of one directed view and belong with perceptual_120. Crossing them
+// fits perceptual weights to geometry nobody was shown. The pairing is
+// therefore declared in one place — SOURCES below — and chosen by name rather
+// than assembled from two independent flags that could disagree:
+//
+//   npm run analyze -- --source=panoramic   (default) panoramic survey × 360°
+//   npm run analyze -- --source=archive     archived static-photo survey × 120°
+//
+// THE FIT READS THE TRIPLETS ONLY. Each plaza is placed by measured geometry
+// and nothing else. The rating block is not folded into the coordinates.
+//
+// An earlier version blended the two, placing each plaza midway between what
+// the engine measured and what participants reported. It was dropped on two
+// grounds. First, the mixture fraction was unjustifiable: 50/50 is a stated
+// preference, not a quantity the study can derive, and a thesis should not rest
+// on a free parameter chosen by the author. Second, and fatally, it is
+// circular — locating plazas by participants' ratings and then predicting those
+// same participants' choices uses one sample twice, and the
+// leave-one-participant-out test in scripts/perceived-holdout.mjs showed the
+// apparent gain vanishing entirely once no one helped place the plazas used to
+// predict their own answers.
+//
+// The rating block is not discarded, it is repurposed. It answers a different
+// and cleaner question — do people perceive these four dimensions the way the
+// geometry measures them? — as an independent validation, in
+// scripts/validate-ratings.mjs. Ratings never touch the weights.
 
 import fs from 'node:fs'
 import os from 'node:os'
@@ -18,7 +49,7 @@ import { Worker } from 'node:worker_threads'
 import { writeJsonAtomic } from './writeJsonAtomic.js'
 import { activeSites } from '../src/lib/site.js'
 import { mulberry32 } from '../src/lib/triplets.js'
-import { METRICS, METRIC_LABELS, buildFingerprints, FOV_MODE, FOV_MODES } from '../src/lib/analysis/fingerprints.js'
+import { METRICS, METRIC_LABELS, buildFingerprints, FOV_MODES } from '../src/lib/analysis/fingerprints.js'
 import { PAIRS, N_METRICS, pairProbabilities } from '../src/lib/analysis/model.js'
 import { fitWeights } from '../src/lib/analysis/fit.js'
 import { selectTriplets, summarise } from '../src/lib/analysis/exclusions.js'
@@ -41,6 +72,34 @@ const ANALYSIS_VERSION = '1.0.0'
 const args = new Set(process.argv.slice(2))
 const QUICK = args.has('--quick')
 const pct = (v) => (v == null ? '—' : `${(v * 100).toFixed(1)}%`)
+
+// The valid pairings of survey instrument to geometry layer. Adding a source
+// means naming both halves together; there is deliberately no way to select one
+// without the other.
+// Sight lines run to 200 m in both layers. A 100 m variant was built and tested
+// against Gehl's social field of vision and is not carried here: the plazas
+// reorder very little between the two, and 200 m is what the Grasshopper
+// reference toolchain uses, so it keeps this study comparable to the
+// established isovist literature rather than to one reading of one author.
+const SOURCES = {
+  panoramic: {
+    responses: 'src/data/survey-responses-360.json',
+    fovMode: 'perceptual_360',
+    label: 'panoramic survey × 360° readings (200 m)',
+  },
+  archive: {
+    responses: 'src/data/survey-responses.json',
+    fovMode: 'perceptual_120',
+    label: 'archived static-photo survey × 120° readings',
+  },
+}
+
+const sourceArg = [...args].find((a) => a.startsWith('--source='))?.split('=')[1] ?? 'panoramic'
+const SOURCE = SOURCES[sourceArg]
+if (!SOURCE) {
+  console.error(`Unknown --source "${sourceArg}". Expected one of: ${Object.keys(SOURCES).join(', ')}`)
+  process.exit(1)
+}
 
 // ------------------------------------------------------- parallel permutation
 
@@ -321,7 +380,7 @@ async function main() {
   const readings = read('src/data/results.json')
   const siteIds = activeSites(sites).map((s) => s.id)
 
-  const { bounds, fingerprints } = buildFingerprints(readings, siteIds)
+  const { bounds, fingerprints } = buildFingerprints(readings, siteIds, SOURCE.fovMode)
   const orderedSiteIds = [...fingerprints.keys()].sort()
 
   if (args.has('--selftest')) {
@@ -329,7 +388,28 @@ async function main() {
     return
   }
 
-  const records = read('src/data/survey-responses.json')
+  console.log(`Source\n  ${SOURCE.label}`)
+  console.log(`  ${SOURCE.responses} × fov_mode ${SOURCE.fovMode}\n`)
+  let records = read(SOURCE.responses)
+
+  // --limit=N runs the whole analysis on the first N participants in the order
+  // they actually took the survey. It exists to answer "did the conclusions
+  // change as the sample grew" with the SAME pipeline rather than a re-derived
+  // one, which is the only way that comparison means anything.
+  //
+  // Order is by start time, fixed before any analysis and not chosen by us.
+  const limitArg = [...args].find((a) => a.startsWith('--limit='))?.split('=')[1]
+  if (limitArg) {
+    const n = Number(limitArg)
+    if (!Number.isInteger(n) || n < 1) {
+      console.error(`--limit must be a positive integer, got "${limitArg}"`)
+      process.exit(1)
+    }
+    records = [...records]
+      .sort((a, b) => (a.started_at ?? '').localeCompare(b.started_at ?? ''))
+      .slice(0, n)
+    console.log(`  --limit=${n}: first ${records.length} participants by start time\n`)
+  }
   const selection = selectTriplets(records, fingerprints, siteIds)
   const inputs = summarise(records, selection)
   const triplets = selection.triplets
@@ -340,7 +420,9 @@ async function main() {
   for (const [reason, n] of Object.entries(inputs.responses.dropped)) {
     if (n > 0) console.log(`                −${n} ${reason.replace(/_/g, ' ')}`)
   }
-  if (!inputs.attentionCheckDiscriminated) {
+  if (!inputs.attentionCheckAdministered) {
+    console.log('  note          this instrument administers no attention check')
+  } else if (!inputs.attentionCheckDiscriminated) {
     console.log('  note          the attention check excluded nobody — it did not discriminate')
   }
 
@@ -396,7 +478,15 @@ async function main() {
   const output = {
     analysis_version: ANALYSIS_VERSION,
     generated_at: new Date().toISOString(),
-    fov_mode: FOV_MODE,
+    // Both halves of the pairing travel with the result: a weight vector is
+    // only interpretable against the geometry layer AND the instrument it was
+    // fitted from, and a later reader must never have to infer either.
+    fov_mode: SOURCE.fovMode,
+    // Recorded so a later reader never has to infer it: the plazas are placed
+    // by measured geometry alone. Ratings are validated separately and never
+    // enter the fit. See scripts/validate-ratings.mjs.
+    fingerprint_source: 'computed_geometry_only',
+    source: { id: sourceArg, label: SOURCE.label, responses: SOURCE.responses },
     metrics: METRICS,
     metric_labels: METRIC_LABELS,
     seeds: { fit: full.seed ?? 20260817, bootstrap: bootstrap.seed, permutation: permutation.seed },
@@ -461,13 +551,18 @@ async function main() {
     },
   }
 
-  writeJsonAtomic(path.join(root, 'src/data/analysis.json'), output)
+  // One file per source, so the panoramic result and the archived static-photo
+  // result can sit side by side rather than each run destroying the other. The
+  // quick flag is in the name too, so a coarse exploratory run can never be
+  // mistaken later for the full one it resembles.
+  const outFile = `src/data/analysis-${sourceArg}${limitArg ? `-n${records.length}` : ''}${QUICK ? '-quick' : ''}.json`
+  writeJsonAtomic(path.join(root, outFile), output)
 
   console.log('\nHypotheses')
   console.log(`  H1 ${output.hypotheses.H1.supported ? 'supported' : 'NOT supported'} — accuracy ${pct(loo.meanAccuracy)} vs chance ${pct(CHANCE)}, p ${permutation.p.toExponential(2)}`)
   console.log(`  H2 ${output.hypotheses.H2.supported ? 'supported' : 'NOT supported'} — ${pct(loo.meanAccuracy)} vs area-only ${pct(baseline.meanAccuracy)}, p ${paired.signTestP?.toExponential(2)}`)
   console.log(`  H3 ${h3.verdict} — enclosure largest in ${pct(h3.weightEvidence.largestShare)} of draws, ablation rank ${h3.ablationEvidence.rank}/4`)
-  console.log('\nWrote src/data/analysis.json')
+  console.log(`\nWrote ${outFile}`)
 }
 
 await main()
