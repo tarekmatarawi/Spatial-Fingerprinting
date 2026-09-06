@@ -100,6 +100,27 @@ export function FieldPage() {
 
   const geometry = useMemo(() => (site ? projectSite(site) : null), [site])
 
+  // Every plaza map is drawn inside the same physical window, at the same
+  // metres-per-pixel scale — otherwise a small plaza cropped tight to its own
+  // footprint fills the frame exactly as much as a large one does, and the
+  // maps stop being comparable at a glance. The radius is derived from the
+  // corpus itself — the widest plaza boundary, plus a fixed context margin so
+  // the surrounding block is visible everywhere — rather than tuned by eye,
+  // so a future site cannot silently end up cropped tighter than the rest.
+  // sites.json is already fully loaded (this is not a field file), so every
+  // active site's boundary can be measured up front for the price of one pass.
+  const windowRadius = useMemo(() => {
+    const CONTEXT_MARGIN_M = 40
+    const radii = active.map((s) => {
+      try {
+        return projectSite(s).boundaryRadius
+      } catch {
+        return 0
+      }
+    })
+    return Math.max(0, ...radii) + CONTEXT_MARGIN_M
+  }, [active])
+
   const zoneNames = useMemo(() => zones.centres.map(describeZone), [])
 
   return (
@@ -231,7 +252,7 @@ export function FieldPage() {
 
           {field && geometry && (
             <div className="mt-5 grid gap-6 lg:grid-cols-[1fr_280px]">
-              <FieldMap field={field} geometry={geometry} metric={metric} />
+              <FieldMap field={field} geometry={geometry} metric={metric} windowRadius={windowRadius} />
               <SiteComposition field={field} zoneNames={zoneNames} />
             </div>
           )}
@@ -300,38 +321,34 @@ export function FieldPage() {
 // Scatter of the sampled grid over the plaza's footprints. Points are drawn as
 // squares at grid spacing so the field reads as a continuous surface rather
 // than as dots, which is what it represents.
-function FieldMap({ field, geometry, metric }) {
+function FieldMap({ field, geometry, metric, windowRadius }) {
   const { buildings, boundary } = geometry
   const view = useMemo(() => {
-    const xs = []
-    const ys = []
-    for (const p of field.points) {
-      xs.push(p.x)
-      ys.push(p.y)
-    }
+    const xs = field.points.map((p) => p.x)
+    const ys = field.points.map((p) => p.y)
     if (boundary) {
       for (const p of boundary) {
         xs.push(p.x)
         ys.push(p.y)
       }
     }
-    // Padding is proportional, not fixed. A tight crop on the sampled points
-    // shows the zone map floating with nothing around it — the surrounding
-    // built fabric is what makes a zone legible as a place, since these
-    // metrics are entirely about what that fabric does to the view. A quarter
-    // of the plaza's own extent brings the enclosing blocks in without
-    // shrinking the plaza to a speck, and a floor keeps very small squares
-    // from being padded to nothing.
-    const spanX = Math.max(...xs) - Math.min(...xs)
-    const spanY = Math.max(...ys) - Math.min(...ys)
-    const pad = Math.max(18, Math.max(spanX, spanY) * 0.25)
+    // A FIXED window, the same size for every plaza (see windowRadius in
+    // FieldPage) — only its centre moves from site to site. Sizing the crop to
+    // this plaza's own extent, as an earlier version did, drew every plaza at
+    // a different scale: a small square filled the frame exactly as much as a
+    // large one, so nothing on screen said which was actually bigger. A fixed
+    // window also always reaches past the sampled points into the surrounding
+    // blocks, so a zone reads as a place rather than as a patch of colour
+    // floating on its own.
+    const cx = (Math.min(...xs) + Math.max(...xs)) / 2
+    const cy = (Math.min(...ys) + Math.max(...ys)) / 2
     return {
-      minX: Math.min(...xs) - pad,
-      maxX: Math.max(...xs) + pad,
-      minY: Math.min(...ys) - pad,
-      maxY: Math.max(...ys) + pad,
+      minX: cx - windowRadius,
+      maxX: cx + windowRadius,
+      minY: cy - windowRadius,
+      maxY: cy + windowRadius,
     }
-  }, [field, boundary])
+  }, [field, boundary, windowRadius])
 
   const w = view.maxX - view.minX
   const h = view.maxY - view.minY
