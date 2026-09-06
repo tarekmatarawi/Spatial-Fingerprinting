@@ -11,12 +11,17 @@ import {
   buildHypotheses,
   summariseVerdicts,
   reliabilityPrecondition,
+  concealmentCorrelations,
   VERDICT,
   R_SIGNIFICANCE_18,
 } from '@/lib/analysis/hypotheses'
 import {
   ParallelCoordinates,
-  SimilarityMap,
+  SimilarityMDS,
+  DimensionLoadings,
+  ScatterMatrix,
+  PairedFoldChart,
+  ConcealmentComparison,
   ConvergenceScatter,
   MetricCorrelation,
 } from '@/components/charts/FingerprintCharts'
@@ -58,9 +63,19 @@ export function WeightsPage() {
     () => buildFingerprints(readings, siteIds, analysis.fov_mode).fingerprints,
     [siteIds]
   )
-  // Hovering a plaza in one figure highlights it in the other, so a line in the
-  // profile chart and a dot on the map can be read as the same square.
-  const [highlight, setHighlight] = useState(null)
+  const concealment = useMemo(() => concealmentCorrelations(ratings), [])
+
+  // One plaza is selected across every figure on the page, so a line in the
+  // profile chart, a dot on the map and a point in the scatterplot matrix read
+  // as the same square. Hovering selects temporarily; clicking pins — which is
+  // what lets a reader hold one plaza still while studying another figure, and
+  // what makes a screenshot of a single plaza possible.
+  const [hovered, setHovered] = useState(null)
+  const [pinned, setPinned] = useState(null)
+  // A pin outranks the pointer, so hovering elsewhere cannot disturb it.
+  const selected = pinned ?? hovered
+  const togglePin = (id) => setPinned((current) => (current === id ? null : id))
+  const link = { selected, pinned, onHover: setHovered, onPin: togglePin }
 
   return (
     <div className="h-full overflow-y-auto">
@@ -126,17 +141,21 @@ export function WeightsPage() {
             names={names}
             fingerprints={fingerprints}
             weights={analysis.fit.weights_normalised}
-            highlight={highlight}
-            onHighlight={setHighlight}
+            {...link}
           />
 
-          <SimilarityMap
+          <SimilarityMDS
             siteIds={siteIds}
             names={names}
             fingerprints={fingerprints}
             weights={analysis.fit.weights_normalised}
-            highlight={highlight}
-            onHighlight={setHighlight}
+            {...link}
+          />
+
+          <DimensionLoadings
+            siteIds={siteIds}
+            fingerprints={fingerprints}
+            weights={analysis.fit.weights_normalised}
           />
         </Section>
 
@@ -175,7 +194,11 @@ export function WeightsPage() {
             a coin flip.
           </p>
 
-          <FoldChart folds={analysis.crossval.paired.perFold} />
+          <PairedFoldChart crossval={analysis.crossval} names={names} {...link} />
+
+          <FoldChart folds={analysis.crossval.paired.perFold} names={names} />
+
+          <ScatterMatrix siteIds={siteIds} names={names} fingerprints={fingerprints} {...link} />
 
           <MetricCorrelation siteIds={siteIds} fingerprints={fingerprints} />
         </Section>
@@ -244,6 +267,15 @@ export function WeightsPage() {
           </Note>
 
           <ConvergenceScatter ratings={ratings} />
+
+          <p className="mt-8 max-w-2xl text-sm text-ink-muted">
+            The table above asks each metric about its own scale. H3 asks a harder question — of
+            the four dimensions, which best tracks a single percept, concealment? Answering it
+            needs every metric correlated against the <em>same</em> ratings, which is the figure
+            below.
+          </p>
+
+          <ConcealmentComparison rows={concealment} significanceThreshold={R_SIGNIFICANCE_18} />
 
           <div className="mt-8 rounded-lg border border-line bg-surface p-4">
             <h3 className="text-sm font-semibold text-ink">
@@ -425,14 +457,14 @@ function Stat({ label, value, compare, detail, tone }) {
 // Per-plaza difference between the full model and the area-only baseline. The
 // spread is the point: a mean of +0.4 pp is built from folds ranging roughly
 // ±12 pp, which is why the difference is not distinguishable from zero.
-function FoldChart({ folds }) {
+function FoldChart({ folds, names }) {
   const rows = useMemo(() => [...folds].sort((a, b) => a.delta - b.delta), [folds])
   const max = useMemo(() => Math.max(...rows.map((r) => Math.abs(r.delta))), [rows])
 
   return (
     <figure className="mt-6">
       <figcaption className="font-mono text-[11px] text-ink-faint">
-        Per-plaza difference, four-metric model minus area-only
+        The same 18 folds as differences — four-metric model minus area-only, ranked
       </figcaption>
       <div className="mt-3 space-y-1">
         {rows.map((r) => {
@@ -440,7 +472,9 @@ function FoldChart({ folds }) {
           const positive = r.delta >= 0
           return (
             <div key={r.site} className="grid grid-cols-[150px_1fr_66px] items-center gap-3">
-              <span className="truncate text-xs text-ink-muted">{r.site.split('-')[0]}</span>
+              <span className="truncate text-xs text-ink-muted">
+                {names?.get(r.site) ?? r.site.split('-')[0]}
+              </span>
               <span className="relative h-3.5">
                 <span className="absolute inset-y-0 left-1/2 w-px bg-line-strong" />
                 <span

@@ -10,7 +10,12 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { buildHypotheses, summariseVerdicts, VERDICT } from '../src/lib/analysis/hypotheses.js'
+import {
+  buildHypotheses,
+  summariseVerdicts,
+  concealmentCorrelations,
+  VERDICT,
+} from '../src/lib/analysis/hypotheses.js'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const read = (rel) => JSON.parse(fs.readFileSync(path.join(root, rel), 'utf8'))
@@ -97,5 +102,44 @@ describe('hypotheses — derivation from the analysis outputs', () => {
     const s = summariseVerdicts(hs)
     assert.equal(s.supported + s.partly + s.notSupported, s.total)
     assert.equal(s.total, hs.length)
+  })
+})
+
+describe('hypotheses — the H3 concealment comparison', () => {
+  test('ranks all four metrics against the one percept, strongest first', () => {
+    const rows = concealmentCorrelations(ratings)
+
+    assert.deepEqual(
+      rows.map((r) => r.metric),
+      ['compactness', 'area', 'occlusivity', 'enclosure']
+    )
+    // The figure quotes these; if the analysis is rerun and they move, the
+    // caption in the thesis moves with them rather than silently disagreeing.
+    assert.deepEqual(
+      rows.map((r) => r.aligned.toFixed(3)),
+      ['0.460', '0.379', '0.223', '0.012']
+    )
+    for (const r of rows) {
+      assert.equal(r.aligned, Math.abs(r.r))
+      assert.equal(r.n, 18)
+    }
+  })
+
+  test('occlusivity matches the value the rating validation already reports', () => {
+    const occ = concealmentCorrelations(ratings).find((r) => r.metric === 'occlusivity')
+    const scale = ratings.scales.find((s) => s.metric === 'occlusivity')
+    // Perceived concealment is the reversed occlusivity rating, so the metric's
+    // correlation with it is exactly the aligned r already in the record — one
+    // number, computed twice, never allowed to differ.
+    assert.ok(Math.abs(occ.r - scale.pearson_aligned) < 1e-9)
+  })
+
+  test('the H3 claim is about ranking, and the ranking holds', () => {
+    const rows = concealmentCorrelations(ratings)
+    const occ = rows.find((r) => r.metric === 'occlusivity')
+    const better = rows.filter((r) => r.aligned > occ.aligned).map((r) => r.metric)
+    // The finding the figure exists to show: two other metrics track perceived
+    // concealment more closely than the one named for it.
+    assert.deepEqual(better, ['compactness', 'area'])
   })
 })

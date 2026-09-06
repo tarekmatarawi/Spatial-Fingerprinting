@@ -243,3 +243,64 @@ export function summariseVerdicts(hypotheses) {
     total: hypotheses.length,
   }
 }
+
+// H3, drawn rather than asserted.
+//
+// The claim under test is not "occlusivity is a weak metric" but something
+// sharper: that the metric NAMED occlusivity is not the best available account
+// of perceived concealment. Answering it needs all four metrics correlated
+// against the SAME percept — the concealment scale — not each metric against
+// its own scale. That comparison is what the figure shows, and it is computed
+// here so the figure and any number quoted beside it come from one place.
+//
+// The occlusivity scale runs 1 = "views blocked, hidden corners" to 7 = "clear
+// sightlines, nothing hidden", so perceived concealment is the reversed rating.
+// Correlations are reported twice: `r` is the raw signed value against that
+// percept, `aligned` is |r| — the strength of the association, which is what
+// ranks the rows. Sign is carried separately and stated in the figure, because
+// "more compact reads as less concealing" and "more occluding reads as more
+// concealing" are both evidence about the same percept, in opposite directions.
+export function concealmentCorrelations(ratings) {
+  const scale = ratings.scales.find((s) => s.metric === 'occlusivity')
+  if (!scale) return []
+
+  // Reversed so that a larger number means "felt more concealing".
+  const concealment = new Map(scale.per_site.map((p) => [p.site_id, -p.mean_rating]))
+
+  return ratings.scales
+    .map((s) => {
+      const sites = s.per_site.filter((p) => concealment.has(p.site_id))
+      const r = pearsonR(
+        sites.map((p) => p.normalised),
+        sites.map((p) => concealment.get(p.site_id))
+      )
+      return {
+        metric: s.metric,
+        label: s.label,
+        r,
+        aligned: Math.abs(r),
+        n: sites.length,
+        // Positive: more of this metric reads as more concealed. Negative: more
+        // of it reads as more open.
+        direction: r >= 0 ? 'more concealing' : 'more open',
+      }
+    })
+    .sort((a, b) => b.aligned - a.aligned)
+}
+
+// Local so this module has no dependency on the projection/figure layer — the
+// analysis must not need the drawing code to compute a number.
+function pearsonR(xs, ys) {
+  const n = xs.length
+  const mx = xs.reduce((a, b) => a + b, 0) / n
+  const my = ys.reduce((a, b) => a + b, 0) / n
+  let num = 0
+  let dx = 0
+  let dy = 0
+  for (let i = 0; i < n; i++) {
+    num += (xs[i] - mx) * (ys[i] - my)
+    dx += (xs[i] - mx) ** 2
+    dy += (ys[i] - my) ** 2
+  }
+  return dx > 0 && dy > 0 ? num / Math.sqrt(dx * dy) : 0
+}

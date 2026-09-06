@@ -7,6 +7,12 @@ import assert from 'node:assert/strict'
 
 import {
   classicalMDS,
+  distanceMatrix,
+  dimensionLoadings,
+  nearestNeighbours,
+  histogram,
+  kde,
+  placeLabels,
   weightedDistance,
   correlationMatrix,
   linearFit,
@@ -110,5 +116,94 @@ describe('projection — correlation helpers', () => {
     const { slope, intercept } = linearFit(xs, ys)
     assert.ok(Math.abs(slope - 3) < 1e-12)
     assert.ok(Math.abs(intercept - 7) < 1e-12)
+  })
+})
+
+describe('projection — figure helpers', () => {
+  test('nearest neighbours come back in order, with real indices', () => {
+    // Four points on a line: distances from 0 are 1, 2, 4.
+    const pts = [[0, 0, 0, 0], [1, 0, 0, 0], [3, 0, 0, 0], [7, 0, 0, 0]]
+    const D = distanceMatrix(pts, UNIT)
+    const near = nearestNeighbours(D, 0, 3)
+
+    assert.deepEqual(near.map((n) => n.index), [1, 2, 3])
+    assert.deepEqual(near.map((n) => n.distance), [1, 3, 7])
+    // The regression this pins: distanceMatrix rows are Float64Arrays, whose
+    // map() coerces the returned objects back to numbers — every index came
+    // back undefined and the map drew leaders to nowhere.
+    assert.ok(near.every((n) => Number.isInteger(n.index)))
+    // A plaza is never its own neighbour.
+    assert.ok(!nearestNeighbours(D, 2, 3).some((n) => n.index === 2))
+  })
+
+  test('dimension loadings correlate each metric against each axis', () => {
+    // Points that vary only on the first metric must load entirely on the
+    // first MDS axis, and not at all on the second.
+    const pts = [0, 1, 2, 3, 4, 5].map((v) => [v, 0, 0, 0])
+    const { coords } = classicalMDS(pts, UNIT)
+    const L = dimensionLoadings(pts, coords)
+
+    assert.equal(L.length, 4)
+    assert.equal(L[0].length, 2)
+    assert.ok(Math.abs(Math.abs(L[0][0]) - 1) < 1e-9, 'metric 1 must load fully on axis 1')
+    assert.ok(Math.abs(L[0][1]) < 1e-6, 'metric 1 must not load on axis 2')
+  })
+
+  test('histogram bins every value exactly once, edges included', () => {
+    const values = [0, 0.1, 0.5, 0.99, 1]
+    const bins = histogram(values, { bins: 4 })
+    assert.equal(bins.length, 4)
+    assert.equal(bins.reduce((a, b) => a + b.count, 0), values.length)
+    // 1.0 belongs to the last bin, not to a fifth one off the end.
+    assert.equal(bins[3].count, 2)
+  })
+
+  test('the density curve integrates to about one and peaks near the data', () => {
+    const values = [0.48, 0.5, 0.5, 0.52]
+    const curve = kde(values, { samples: 200 })
+    const step = curve[1].x - curve[0].x
+    const mass = curve.reduce((a, c) => a + c.density * step, 0)
+    assert.ok(Math.abs(mass - 1) < 0.05, `density should integrate to ~1, got ${mass}`)
+    const peak = curve.reduce((a, c) => (c.density > a.density ? c : a))
+    assert.ok(Math.abs(peak.x - 0.5) < 0.05)
+  })
+
+  test('identical values do not divide by a zero bandwidth', () => {
+    const curve = kde([0.5, 0.5, 0.5], { samples: 20 })
+    assert.ok(curve.every((c) => Number.isFinite(c.density)))
+  })
+
+  test('label placement separates labels that would otherwise collide', () => {
+    // Three points stacked in one spot: no two labels may end up in the same
+    // place, and none may be dropped.
+    const items = [
+      { x: 100, y: 100, text: 'Alpha' },
+      { x: 104, y: 102, text: 'Beta' },
+      { x: 108, y: 98, text: 'Gamma' },
+    ]
+    const placed = placeLabels(items, { width: 400, height: 300 })
+    assert.equal(placed.length, 3)
+    for (let i = 0; i < 3; i++) {
+      for (let j = i + 1; j < 3; j++) {
+        const same = placed[i].x === placed[j].x && placed[i].y === placed[j].y
+        assert.ok(!same, 'two labels landed on the same point')
+      }
+    }
+  })
+
+  test('label placement is deterministic and stays inside the frame', () => {
+    const items = Array.from({ length: 12 }, (_, i) => ({
+      x: 20 + (i % 4) * 90,
+      y: 20 + Math.floor(i / 4) * 60,
+      text: `Plaza ${i}`,
+    }))
+    const a = placeLabels(items, { width: 400, height: 220 })
+    const b = placeLabels(items, { width: 400, height: 220 })
+    assert.deepEqual(a, b, 'the same input must always give the same layout')
+    // Nothing pushed off the edge: the frame cost dominates every collision.
+    for (const l of a) {
+      assert.ok(l.x >= -40 && l.x <= 440)
+      assert.ok(l.y >= -20 && l.y <= 260)
+    }
   })
 })

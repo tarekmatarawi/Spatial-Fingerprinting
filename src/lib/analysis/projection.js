@@ -203,3 +203,156 @@ export function linearFit(xs, ys) {
   const slope = den === 0 ? 0 : num / den
   return { slope, intercept: my - slope * mx }
 }
+
+// How to read the two MDS axes.
+//
+// Classical MDS returns axes that are mathematically well-defined but have no
+// name: they are whatever directions carry the most spread. Correlating each
+// original metric against each axis is what turns them from "Dimension 1" into
+// something a reader can interpret — an axis that correlates +0.9 with area is
+// an area axis, whatever the algorithm called it.
+//
+// Returns one row per metric: { r: [rDim1, rDim2] }, Pearson across the plazas.
+export function dimensionLoadings(points, coords) {
+  const dims = points[0].length
+  const axes = coords[0].length
+  return Array.from({ length: dims }, (_, k) => {
+    const column = points.map((p) => p[k])
+    return Array.from({ length: axes }, (_, d) => pearson(column, coords.map((c) => c[d])))
+  })
+}
+
+// The k plazas closest to `index` in the TRUE weighted space — not in the
+// flattened picture. Drawn as leaders when a plaza is pinned, so a reader can
+// check the projection against the quantity it approximates: if a leader runs
+// to a dot that looks far away, the flattening moved it.
+export function nearestNeighbours(D, index, k = 3) {
+  // Array.from, not D[index].map: the rows are Float64Arrays, and a typed
+  // array's map coerces whatever the callback returns back to a number — every
+  // object becomes NaN and the indices are silently lost.
+  return Array.from(D[index], (d, j) => ({ index: j, distance: d }))
+    .filter((e) => e.index !== index)
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, k)
+}
+
+/* ------------------------------------------------ univariate distribution */
+
+// Equal-width bins over a fixed domain. Used on the diagonal of the scatterplot
+// matrix, where the question is how the 18 plazas spread along one metric
+// rather than how two metrics relate.
+export function histogram(values, { bins = 6, domain = [0, 1] } = {}) {
+  const [lo, hi] = domain
+  const width = (hi - lo) / bins
+  const counts = new Array(bins).fill(0)
+  for (const v of values) {
+    const idx = Math.min(bins - 1, Math.max(0, Math.floor((v - lo) / width)))
+    counts[idx] += 1
+  }
+  return counts.map((count, i) => ({ x0: lo + i * width, x1: lo + (i + 1) * width, count }))
+}
+
+// Gaussian kernel density estimate, bandwidth by Silverman's rule.
+//
+// Drawn over the histogram because 18 observations in 6 bins is a shape that
+// changes if the bin edges move; the smooth curve is bin-independent and shows
+// whether a gap is real or an artefact of where a boundary fell. Neither is
+// trusted alone — that is the point of drawing both.
+export function kde(values, { samples = 64, domain = [0, 1] } = {}) {
+  const n = values.length
+  const mean = values.reduce((a, b) => a + b, 0) / n
+  const sd = Math.sqrt(values.reduce((a, v) => a + (v - mean) ** 2, 0) / Math.max(1, n - 1))
+  // A degenerate spread would give a zero bandwidth and divide by zero; the
+  // floor keeps the curve drawable and visibly narrow, which is the truth.
+  const h = Math.max(1e-3, 1.06 * sd * Math.pow(n, -0.2))
+  const [lo, hi] = domain
+  const out = []
+  for (let i = 0; i < samples; i++) {
+    const x = lo + ((hi - lo) * i) / (samples - 1)
+    let sum = 0
+    for (const v of values) {
+      const z = (x - v) / h
+      sum += Math.exp(-0.5 * z * z)
+    }
+    out.push({ x, density: sum / (n * h * Math.sqrt(2 * Math.PI)) })
+  }
+  return out
+}
+
+/* ------------------------------------------------------- label placement */
+
+// Greedy non-overlapping label placement for a scatter.
+//
+// Eighteen names on one plot will overprint if each is simply parked to the
+// right of its dot, and overprinted labels are worse than absent ones. Each
+// label tries eight positions around its point and takes the first that hits
+// neither an already-placed label, nor any point marker, nor the frame; if all
+// eight collide it takes the least-bad one, so a label is never dropped.
+//
+// Deterministic: same input, same layout, every render. A jittered or
+// force-simulated placement would move labels between frames and make hovering
+// feel unstable.
+export function placeLabels(items, { width, height, charWidth = 5.4, lineHeight = 11, gap = 9, markerRadius = 6 } = {}) {
+  // Right and left first: horizontal offsets read as belonging to their dot
+  // more clearly than a label parked above or below it.
+  const CANDIDATES = [
+    { dx: 1, dy: 0.32, anchor: 'start' },
+    { dx: -1, dy: 0.32, anchor: 'end' },
+    { dx: 1, dy: -0.9, anchor: 'start' },
+    { dx: -1, dy: -0.9, anchor: 'end' },
+    { dx: 1, dy: 1.5, anchor: 'start' },
+    { dx: -1, dy: 1.5, anchor: 'end' },
+    { dx: 0, dy: -1.35, anchor: 'middle' },
+    { dx: 0, dy: 2.1, anchor: 'middle' },
+  ]
+
+  const overlap = (a, b) =>
+    Math.max(0, Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0)) *
+    Math.max(0, Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0))
+
+  // Every marker is an obstacle from the start, including those whose own
+  // label has not been placed yet — otherwise early labels sit on later dots.
+  const obstacles = items.map((it) => ({
+    x0: it.x - markerRadius,
+    x1: it.x + markerRadius,
+    y0: it.y - markerRadius,
+    y1: it.y + markerRadius,
+  }))
+  const placed = []
+
+  // Left to right, so the reading order of the plot and of the algorithm agree
+  // and a crowd resolves outward in a way that looks deliberate.
+  const order = items.map((_, i) => i).sort((a, b) => items[a].x - items[b].x)
+  const out = new Array(items.length)
+
+  for (const i of order) {
+    const it = items[i]
+    const w = it.text.length * charWidth
+    let best = null
+
+    for (const c of CANDIDATES) {
+      const x = it.x + c.dx * gap
+      const y = it.y + c.dy * lineHeight
+      const x0 = c.anchor === 'start' ? x : c.anchor === 'end' ? x - w : x - w / 2
+      const box = { x0, x1: x0 + w, y0: y - lineHeight * 0.8, y1: y + lineHeight * 0.25 }
+
+      // Off the canvas counts as a collision, weighted heavily: a clipped label
+      // is unreadable in a way an overlapping one at least partly is not.
+      let cost = 0
+      if (box.x0 < 2) cost += (2 - box.x0) * lineHeight * 4
+      if (box.x1 > width - 2) cost += (box.x1 - (width - 2)) * lineHeight * 4
+      if (box.y0 < 2) cost += (2 - box.y0) * w * 4
+      if (box.y1 > height - 2) cost += (box.y1 - (height - 2)) * w * 4
+      for (const p of placed) cost += overlap(box, p)
+      for (const o of obstacles) cost += overlap(box, o)
+
+      if (best === null || cost < best.cost) best = { cost, x, y, anchor: c.anchor, box }
+      if (cost === 0) break
+    }
+
+    placed.push(best.box)
+    out[i] = { x: best.x, y: best.y, anchor: best.anchor, clean: best.cost === 0 }
+  }
+
+  return out
+}
