@@ -1,93 +1,7 @@
 {
-  "generated_at": "2026-09-04T01:32:25.421Z",
+  "generated_at": "2026-09-06T00:30:27.887Z",
   "k": 5,
-  "k_selection": {
-    "range": [
-      2,
-      12
-    ],
-    "criterion": "smallest k whose mean silhouette is within 0.04 of the peak AND which resolves structure inside plazas (>= 2 zones per plaza, <= 5 single-zone plazas). Silhouette alone peaks where the clustering separates plazas rather than places within them, which is out of scope for P6 and leaves P9 without zone-level structure to diagnose.",
-    "zone_presence_share": 0.05,
-    "diagnostics": [
-      {
-        "k": 2,
-        "inertia": 808.5058832957127,
-        "silhouette": 0.3083911072017691,
-        "singleZonePlazas": 13,
-        "zonesPerPlaza": 1.2777777777777777
-      },
-      {
-        "k": 3,
-        "inertia": 535.0629903117967,
-        "silhouette": 0.38008243001002995,
-        "singleZonePlazas": 13,
-        "zonesPerPlaza": 1.5555555555555556
-      },
-      {
-        "k": 4,
-        "inertia": 426.8442945556811,
-        "silhouette": 0.3761825846130953,
-        "singleZonePlazas": 8,
-        "zonesPerPlaza": 1.6666666666666667
-      },
-      {
-        "k": 5,
-        "inertia": 361.58439281928264,
-        "silhouette": 0.3528962592330282,
-        "singleZonePlazas": 4,
-        "zonesPerPlaza": 2.2222222222222223
-      },
-      {
-        "k": 6,
-        "inertia": 309.2347082769392,
-        "silhouette": 0.30790212269670975,
-        "singleZonePlazas": 3,
-        "zonesPerPlaza": 2.2777777777777777
-      },
-      {
-        "k": 7,
-        "inertia": 275.3804099345292,
-        "silhouette": 0.32502103793457016,
-        "singleZonePlazas": 3,
-        "zonesPerPlaza": 2.2222222222222223
-      },
-      {
-        "k": 8,
-        "inertia": 252.733540242552,
-        "silhouette": 0.3065114764392048,
-        "singleZonePlazas": 3,
-        "zonesPerPlaza": 2.388888888888889
-      },
-      {
-        "k": 9,
-        "inertia": 230.06596854142185,
-        "silhouette": 0.3087803973958175,
-        "singleZonePlazas": 3,
-        "zonesPerPlaza": 2.7222222222222223
-      },
-      {
-        "k": 10,
-        "inertia": 213.8365156017153,
-        "silhouette": 0.3045984747674762,
-        "singleZonePlazas": 3,
-        "zonesPerPlaza": 2.8333333333333335
-      },
-      {
-        "k": 11,
-        "inertia": 199.2000273276116,
-        "silhouette": 0.29989188752677437,
-        "singleZonePlazas": 2,
-        "zonesPerPlaza": 2.888888888888889
-      },
-      {
-        "k": 12,
-        "inertia": 187.33048192009542,
-        "silhouette": 0.2941199855536898,
-        "singleZonePlazas": 1,
-        "zonesPerPlaza": 2.9444444444444446
-      }
-    ]
-  },
+  "k_selection": null,
   "seed": 20260904,
   "restarts": 20,
   "weighted_by": {
@@ -106,58 +20,58 @@
     ]
   },
   "normalisation_source": "perceptual_360",
-  "total_points": 11580,
+  "total_points": 11719,
   "centres": [
+    [
+      0.49851,
+      0.43447,
+      0.81716,
+      0.30783
+    ],
+    [
+      0.45388,
+      1.02019,
+      0.43921,
+      0.53569
+    ],
+    [
+      0.15241,
+      0.5632,
+      0.25173,
+      0.95204
+    ],
+    [
+      0.15653,
+      0.21098,
+      0.26252,
+      0.49857
+    ],
     [
       1.16056,
       1.07255,
       0.17479,
       0.11272
-    ],
-    [
-      0.15372,
-      0.58445,
-      0.25355,
-      0.97103
-    ],
-    [
-      0.45668,
-      1.02159,
-      0.44139,
-      0.52984
-    ],
-    [
-      0.49733,
-      0.43331,
-      0.81518,
-      0.30822
-    ],
-    [
-      0.15798,
-      0.23296,
-      0.23997,
-      0.53532
     ]
   ],
   "counts": [
-    865,
-    2013,
-    1644,
-    4914,
-    2144
+    4879,
+    1671,
+    2158,
+    2146,
+    865
   ],
-  "inertia": 361.584,
-  "unweighted_agreement": 0.9592,
+  "inertia": 366.5841,
+  "unweighted_agreement": 0.9605,
   "composition": [
     {
       "site_id": "Gendarmenmarkt-Berlin",
       "name": "Gendarmenmarkt",
       "point_count": 862,
       "shares": [
-        0,
-        0,
-        0,
         1,
+        0,
+        0,
+        0,
         0
       ]
     },
@@ -166,11 +80,11 @@
       "name": "Hauptwache",
       "point_count": 1224,
       "shares": [
-        0,
-        0.0539,
+        0.8064,
         0.018,
-        0.8088,
-        0.1193
+        0.0613,
+        0.1144,
+        0
       ]
     },
     {
@@ -179,10 +93,10 @@
       "point_count": 560,
       "shares": [
         0,
-        0.3554,
-        0.1107,
-        0,
-        0.5339
+        0.1286,
+        0.4054,
+        0.4661,
+        0
       ]
     },
     {
@@ -191,10 +105,10 @@
       "point_count": 307,
       "shares": [
         0,
-        0.873,
         0,
-        0,
-        0.127
+        0.9186,
+        0.0814,
+        0
       ]
     },
     {
@@ -202,11 +116,11 @@
       "name": "Bebelplatz",
       "point_count": 940,
       "shares": [
-        0.3457,
-        0,
-        0.6138,
         0.0404,
-        0
+        0.6138,
+        0,
+        0,
+        0.3457
       ]
     },
     {
@@ -214,11 +128,11 @@
       "name": "Alexanderplatz",
       "point_count": 1032,
       "shares": [
-        0,
-        0.0824,
-        0.7258,
         0.1909,
-        0.001
+        0.7374,
+        0.0717,
+        0,
+        0
       ]
     },
     {
@@ -227,10 +141,10 @@
       "point_count": 562,
       "shares": [
         0,
-        0.8327,
         0,
-        0,
-        0.1673
+        0.8843,
+        0.1157,
+        0
       ]
     },
     {
@@ -238,11 +152,11 @@
       "name": "Odeonsplatz",
       "point_count": 418,
       "shares": [
-        0,
-        0.4641,
+        0.3373,
         0.0287,
-        0.3469,
-        0.1603
+        0.4833,
+        0.1507,
+        0
       ]
     },
     {
@@ -250,11 +164,11 @@
       "name": "Konstablerwache",
       "point_count": 967,
       "shares": [
-        0,
-        0.0941,
+        0.6805,
         0.0031,
-        0.7063,
-        0.1965
+        0.1013,
+        0.2151,
+        0
       ]
     },
     {
@@ -263,10 +177,10 @@
       "point_count": 660,
       "shares": [
         0,
-        0.1515,
         0,
-        0,
-        0.8485
+        0.2061,
+        0.7939,
+        0
       ]
     },
     {
@@ -274,10 +188,10 @@
       "name": "Rathausmarkt",
       "point_count": 1006,
       "shares": [
-        0,
-        0.0934,
-        0.0586,
         0.8479,
+        0.0606,
+        0.0915,
+        0,
         0
       ]
     },
@@ -287,10 +201,10 @@
       "point_count": 190,
       "shares": [
         0,
-        0.9895,
         0,
-        0,
-        0.0105
+        0.9947,
+        0.0053,
+        0
       ]
     },
     {
@@ -298,11 +212,11 @@
       "name": "Burgplatz",
       "point_count": 817,
       "shares": [
-        0.661,
-        0.0122,
-        0.1236,
-        0.1836,
-        0.0196
+        0.1799,
+        0.1261,
+        0.011,
+        0.022,
+        0.661
       ]
     },
     {
@@ -311,10 +225,10 @@
       "point_count": 256,
       "shares": [
         0,
-        0.6211,
-        0.1445,
-        0,
-        0.2344
+        0.1484,
+        0.6523,
+        0.1992,
+        0
       ]
     },
     {
@@ -322,11 +236,11 @@
       "name": "Augustusplatz",
       "point_count": 1026,
       "shares": [
-        0,
-        0.0068,
-        0.0214,
         0.9708,
-        0.001
+        0.0214,
+        0.0068,
+        0.001,
+        0
       ]
     },
     {
@@ -335,10 +249,10 @@
       "point_count": 340,
       "shares": [
         0,
-        0.1294,
         0,
-        0,
-        0.8706
+        0.1706,
+        0.8294,
+        0
       ]
     },
     {
@@ -347,22 +261,22 @@
       "point_count": 204,
       "shares": [
         0,
-        0.049,
         0,
-        0,
-        0.951
+        0.0833,
+        0.9167,
+        0
       ]
     },
     {
       "site_id": "Theaterplatz-Weimar",
       "name": "Theaterplatz",
-      "point_count": 209,
+      "point_count": 348,
       "shares": [
         0,
-        0.1435,
         0,
-        0,
-        0.8565
+        0.0805,
+        0.9195,
+        0
       ]
     }
   ]

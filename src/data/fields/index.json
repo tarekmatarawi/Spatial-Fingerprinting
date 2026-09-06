@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T01:26:23.533Z",
+  "generated_at": "2026-09-06T00:27:30.653Z",
   "fov_mode": "field_360",
   "spacing_m": 2.5,
   "range_m": 200,
@@ -37,12 +37,12 @@
     "occlusivity",
     "enclosure"
   ],
-  "total_points": 11580,
+  "total_points": 11719,
   "out_of_range": {
     "area": 764,
-    "compactness": 1588,
-    "occlusivity": 1302,
-    "enclosure": 1337
+    "compactness": 1631,
+    "occlusivity": 1296,
+    "enclosure": 1331
   },
   "sites": [
     {
@@ -168,7 +168,7 @@
       "site_id": "Theaterplatz-Weimar",
       "name": "Theaterplatz",
       "file": "theaterplatz-weimar.json",
-      "point_count": 209,
+      "point_count": 348,
       "points_rejected": 0
     }
   ]
