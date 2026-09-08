@@ -5,7 +5,7 @@ import sites from '@/data/sites.json'
 import zones from '@/data/zones.json'
 import fieldIndex from '@/data/fields/index.json'
 import { METRICS, METRIC_LABELS, METRIC_UNITS } from '@/lib/analysis/fingerprints'
-import { activeSites, projectSite } from '@/lib/site'
+import { activeSites, corpusWindowRadius, projectSite } from '@/lib/site'
 
 // P6 — Isovist Field Mapping & Zone Typology.
 //
@@ -101,25 +101,10 @@ export function FieldPage() {
   const geometry = useMemo(() => (site ? projectSite(site) : null), [site])
 
   // Every plaza map is drawn inside the same physical window, at the same
-  // metres-per-pixel scale — otherwise a small plaza cropped tight to its own
-  // footprint fills the frame exactly as much as a large one does, and the
-  // maps stop being comparable at a glance. The radius is derived from the
-  // corpus itself — the widest plaza boundary, plus a fixed context margin so
-  // the surrounding block is visible everywhere — rather than tuned by eye,
-  // so a future site cannot silently end up cropped tighter than the rest.
-  // sites.json is already fully loaded (this is not a field file), so every
-  // active site's boundary can be measured up front for the price of one pass.
-  const windowRadius = useMemo(() => {
-    const CONTEXT_MARGIN_M = 40
-    const radii = active.map((s) => {
-      try {
-        return projectSite(s).boundaryRadius
-      } catch {
-        return 0
-      }
-    })
-    return Math.max(0, ...radii) + CONTEXT_MARGIN_M
-  }, [active])
+  // metres-per-pixel scale, so the maps stay comparable at a glance and line
+  // weights read the same everywhere. The rule lives in lib/site.js because
+  // P7's plans use it too — see corpusWindowRadius there for why.
+  const windowRadius = useMemo(() => corpusWindowRadius(active), [active])
 
   const zoneNames = useMemo(() => zones.centres.map(describeZone), [])
 

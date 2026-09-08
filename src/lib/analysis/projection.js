@@ -112,7 +112,11 @@ export function classicalMDS(points, weights, { dimensions = 2 } = {}) {
 // eigenvalues and the matrix of eigenvectors in columns. Exact to machine
 // precision for the sizes used here, and — unlike deflated power iteration —
 // correct when eigenvalues repeat.
-function jacobiEigen(input, { sweeps = 100, tolerance = 1e-12 } = {}) {
+//
+// Exported because P7 needs it too: the Gaussian cloud distance is built on
+// matrix square roots, which are an eigendecomposition and nothing else. One
+// implementation, tested once, rather than a second copy that could drift.
+export function jacobiEigen(input, { sweeps = 100, tolerance = 1e-12 } = {}) {
   const n = input.length
   const a = input.map((row) => Float64Array.from(row))
   // Identity, accumulating each rotation so the columns end up as eigenvectors.

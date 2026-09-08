@@ -130,3 +130,34 @@ function maxDistance(center, points) {
   }
   return max
 }
+
+// The one scale every plaza map in the platform is drawn at.
+//
+// Each map is a fixed physical window — same metres per pixel everywhere — with
+// only its centre moving from site to site. Cropping each plaza to its own
+// extent instead, which is the obvious thing to do, makes a small square fill
+// the frame exactly as much as a large one, so nothing on screen says which is
+// actually bigger, and it also makes line weights inconsistent: a stroke width
+// in map units looks thick on a tightly cropped plaza and thin on a wide one.
+//
+// The radius comes from the corpus — the widest plaza boundary plus a fixed
+// context margin, so the surrounding blocks stay visible everywhere — rather
+// than a number tuned by eye, so adding a larger site later cannot silently
+// leave the others cropped tighter than they were.
+//
+// Shared by P6's field maps and P7's placement and matched-view drawings. It
+// lives here rather than in a page so those two cannot drift apart.
+export const MAP_CONTEXT_MARGIN_M = 40
+
+export function corpusWindowRadius(sites, margin = MAP_CONTEXT_MARGIN_M) {
+  const radii = (sites ?? []).map((s) => {
+    try {
+      return projectSite(s).boundaryRadius
+    } catch {
+      // A site with no centre coordinates yet cannot set the scale; it simply
+      // does not participate rather than collapsing the window to zero.
+      return 0
+    }
+  })
+  return Math.max(0, ...radii) + margin
+}

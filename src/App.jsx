@@ -109,12 +109,16 @@ const FieldPage = lazyWithReload(() =>
   import('@/pages/FieldPage').then((m) => ({ default: m.FieldPage }))
 )
 
+const CloudComparisonPage = lazyWithReload(() =>
+  import('@/pages/CloudComparisonPage').then((m) => ({ default: m.CloudComparisonPage }))
+)
+
 const ROUTES = ['home', ...PHASES.map((p) => p.id)]
 
 // Phases that are still to be built get a station and a route, but land on a
 // placeholder. Better an honest empty berth than a missing one — the workflow
 // should read as nine phases from the first day, not grow silently.
-const PLANNED = PHASES.filter((p) => p.status === 'planned' && p.id !== 'field' && p.id !== 'weights')
+const PLANNED = PHASES.filter((p) => p.status === 'planned')
 
 // Route from the URL hash (#/sites, #/viewer, …). A bare URL that carries the
 // viewer's ?site=… query (a shared deep link from before hash routing existed)
@@ -274,6 +278,13 @@ function ResearcherShell() {
           {visited.has('field') && (
             <Suspense fallback={<RouteLoading />}>
               <FieldPage />
+            </Suspense>
+          )}
+        </Page>
+        <Page active={route === 'cloud-comparison'}>
+          {visited.has('cloud-comparison') && (
+            <Suspense fallback={<RouteLoading />}>
+              <CloudComparisonPage />
             </Suspense>
           )}
         </Page>

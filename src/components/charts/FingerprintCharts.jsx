@@ -42,25 +42,24 @@ import {
 // fires after the next enter, so the selection blinks off and on as the cursor
 // crosses a boundary. Distance to the nearest mark has no boundaries to cross.
 
-const INK = '#17191D'
-const MUTED = '#5C6169'
-const FAINT = '#9AA0A8'
-const RULE = '#DCDCD5'
-const GRID = '#ECEAE1'
-const PAPER = '#FDFDFB'
-const WASH = '#FBEDE4'
-
-// Series blue and selection orange. Checked with the palette validator against
-// the paper surface: both sit inside the lightness band, clear the chroma
-// floor, and separate by ΔE 22.9 under protanopia — so the pairing survives
-// colour-blind readers and a greyscale thesis print alike.
-const COOL = '#1F5FAE'
-const ACCENT = '#C2410C'
-const NEG = '#A2382A'
-const OK = '#2C6A4C'
-
-const SANS = 'Inter, system-ui, sans-serif'
-const MONO = "'JetBrains Mono', ui-monospace, monospace"
+// The house drawing conventions — type scale, palette, fonts — shared with
+// every other phase that draws a figure, so P5, P6 and P7 cannot drift into
+// three different styles. See components/charts/tokens.js.
+import {
+  INK,
+  MUTED,
+  FAINT,
+  RULE,
+  GRID,
+  PAPER,
+  WASH,
+  COOL,
+  ACCENT,
+  NEG,
+  OK,
+  SANS,
+  MONO,
+} from './tokens.js'
 
 const fmt = (v, d = 2) => v.toFixed(d)
 const pctStr = (v, d = 1) => `${(v * 100).toFixed(d)}%`

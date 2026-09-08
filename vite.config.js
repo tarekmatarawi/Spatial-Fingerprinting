@@ -187,6 +187,47 @@ function survey360Endpoints() {
   }
 }
 
+// Dev-only endpoint: lets the P7 page save its view-cloud markers back into
+// src/data/view-clouds.json while running `npm run dev`. Same arrangement as the
+// three above — absent on the deployed static site, where the page reads the
+// committed file and says so rather than pretending a save worked.
+//
+// The payload is validated against the same rule the analysis relies on before
+// anything is written: view clouds are a perceptual_120 object, and a record
+// from another layer must never reach this file. Validating in the endpoint,
+// not only in the UI, means a hand-edited or mis-posted record fails loudly
+// here instead of quietly corrupting a distance matrix later.
+function viewCloudsSaveEndpoint() {
+  const FILE = 'src/data/view-clouds.json'
+  return {
+    name: 'view-clouds-save-endpoint',
+    configureServer(server) {
+      server.middlewares.use('/__save-view-clouds', (req, res) => {
+        if (req.method !== 'POST') {
+          res.statusCode = 405
+          return res.end()
+        }
+        let body = ''
+        req.on('data', (chunk) => (body += chunk))
+        req.on('end', async () => {
+          try {
+            const file = JSON.parse(body)
+            const { validateCloudFile } = await server.ssrLoadModule('/src/lib/viewClouds.js')
+            validateCloudFile(file)
+            writeJsonAtomic(path.resolve(dirname, FILE), file)
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ ok: true, markers: file.markers.length }))
+          } catch (err) {
+            res.statusCode = 400
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ ok: false, error: String(err.message || err) }))
+          }
+        })
+      })
+    },
+  }
+}
+
 const UPLOAD_DIRS = {
   images: path.resolve(dirname, 'public/images'),
   panoramas: path.resolve(dirname, 'public/panoramas'),
@@ -270,6 +311,7 @@ export default defineConfig({
     sitesSaveEndpoint(),
     resultsSaveEndpoint(),
     viewerStateSaveEndpoint(),
+    viewCloudsSaveEndpoint(),
     survey360Endpoints(),
     uploadImageEndpoint(),
   ],

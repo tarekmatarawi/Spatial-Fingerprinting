@@ -1,6 +1,6 @@
 # Project Guidelines
 
-**This project is the "Spatial Fingerprinting" master's thesis platform — see [docs/spec.md](docs/spec.md) for the phased build plan. Work strictly phase by phase and respect the validation gates between phases. Current phase: P5 (weight fitting) — P1–P4 (site register, 3D viewer + ray-casting engine, perceptual survey, survey results dashboard) are complete.**
+**This project is the "Spatial Fingerprinting" master's thesis platform — see [docs/spec.md](docs/spec.md) for the phased build plan. Work strictly phase by phase and respect the validation gates between phases. Current phase: P8 (matched-view validation survey) — P1–P7 (site register, 3D viewer + ray-casting engine, perceptual survey, survey results dashboard, weight fitting, isovist field mapping, view-cloud comparison) are complete.**
 
 You are helping a student from an urban design university studio build a simple web app. They are not professional developers. Explain each step in simple terms as you go. Make development experience as simple and enjoyable as possible.
 

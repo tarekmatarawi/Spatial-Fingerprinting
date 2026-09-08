@@ -117,7 +117,7 @@ export const PHASES = [
     id: 'cloud-comparison',
     code: 'P7',
     group: 'analysis',
-    status: 'planned',
+    status: 'built',
     icon: LuGitCompareArrows,
     name: 'View-Cloud Comparison',
     journey: 'View clouds',
