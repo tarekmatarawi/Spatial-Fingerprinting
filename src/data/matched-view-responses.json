@@ -1,0 +1,3917 @@
+[
+  {
+    "participant_id": "c9aa2d66-8567-4f79-bced-37aeff1fd79a",
+    "survey_version": "matched_view_v1",
+    "task": "matched_view_2afc",
+    "started_at": "2026-09-09T00:42:53.941Z",
+    "updated_at": "2026-09-09T01:15:08.849Z",
+    "finished_at": "2026-09-09T01:15:08.849Z",
+    "status": "completed",
+    "revision": 13,
+    "background": "yes",
+    "bank_version": "matched_view_v1",
+    "bank_generated_at": "2026-09-08T03:24:57.792Z",
+    "stimulus": {
+      "kind": "rendered_massing_view",
+      "fov_deg": 120,
+      "eye_height_m": 1.6,
+      "textures": false
+    },
+    "responses": [
+      {
+        "participant_id": "c9aa2d66-8567-4f79-bced-37aeff1fd79a",
+        "trial_id": "Herderplatz-Weimar:4:Hauptwache-Frankfurt am Main:Zeil-Frankfurt am Main",
+        "order": 0,
+        "stratum": "agreement",
+        "reference_site": "Herderplatz-Weimar",
+        "candidate_a_site": "Hauptwache-Frankfurt am Main",
+        "candidate_b_site": "Zeil-Frankfurt am Main",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T00:42:55.855Z",
+        "answered_at": "2026-09-09T00:43:00.904Z",
+        "duration_ms": 5049,
+        "timestamp": "2026-09-09T00:43:00.904Z"
+      },
+      {
+        "participant_id": "c9aa2d66-8567-4f79-bced-37aeff1fd79a",
+        "trial_id": "Marktplatz-Heidelberg:0:Gendarmenmarkt-Berlin:Herderplatz-Weimar",
+        "order": 1,
+        "stratum": "agreement",
+        "reference_site": "Marktplatz-Heidelberg",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T00:43:00.905Z",
+        "answered_at": "2026-09-09T00:43:33.672Z",
+        "duration_ms": 32767,
+        "timestamp": "2026-09-09T00:43:33.672Z"
+      },
+      {
+        "participant_id": "c9aa2d66-8567-4f79-bced-37aeff1fd79a",
+        "trial_id": "Theaterplatz-Weimar:2:Marienplatz-Munich:Augustusplatz-Leipzig",
+        "order": 2,
+        "stratum": "discriminating",
+        "reference_site": "Theaterplatz-Weimar",
+        "candidate_a_site": "Marienplatz-Munich",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T00:43:33.673Z",
+        "answered_at": "2026-09-09T00:43:49.356Z",
+        "duration_ms": 15683,
+        "timestamp": "2026-09-09T00:43:49.356Z"
+      },
+      {
+        "participant_id": "c9aa2d66-8567-4f79-bced-37aeff1fd79a",
+        "trial_id": "Augustusplatz-Leipzig:4:Gendarmenmarkt-Berlin:Theaterplatz-Weimar",
+        "order": 3,
+        "stratum": "discriminating",
+        "reference_site": "Augustusplatz-Leipzig",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T00:43:49.356Z",
+        "answered_at": "2026-09-09T00:43:54.991Z",
+        "duration_ms": 5635,
+        "timestamp": "2026-09-09T00:43:54.991Z"
+      },
+      {
+        "participant_id": "c9aa2d66-8567-4f79-bced-37aeff1fd79a",
+        "trial_id": "Bebelplatz-Berlin:5:Gendarmenmarkt-Berlin:Alter Markt-Cologne",
+        "order": 4,
+        "stratum": "discriminating",
+        "reference_site": "Bebelplatz-Berlin",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Alter Markt-Cologne",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T00:43:54.992Z",
+        "answered_at": "2026-09-09T01:13:59.800Z",
+        "duration_ms": 1804808,
+        "timestamp": "2026-09-09T01:13:59.800Z"
+      },
+      {
+        "participant_id": "c9aa2d66-8567-4f79-bced-37aeff1fd79a",
+        "trial_id": "Marktplatz-Heidelberg:3:Römerberg-Frankfurt am Main:Herderplatz-Weimar",
+        "order": 5,
+        "stratum": "discriminating",
+        "reference_site": "Marktplatz-Heidelberg",
+        "candidate_a_site": "Römerberg-Frankfurt am Main",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:13:59.801Z",
+        "answered_at": "2026-09-09T01:14:14.725Z",
+        "duration_ms": 14924,
+        "timestamp": "2026-09-09T01:14:14.725Z"
+      },
+      {
+        "participant_id": "c9aa2d66-8567-4f79-bced-37aeff1fd79a",
+        "trial_id": "Alexanderplatz-Berlin:3:Zeil-Frankfurt am Main:Bebelplatz-Berlin",
+        "order": 6,
+        "stratum": "agreement",
+        "reference_site": "Alexanderplatz-Berlin",
+        "candidate_a_site": "Zeil-Frankfurt am Main",
+        "candidate_b_site": "Bebelplatz-Berlin",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:14:14.726Z",
+        "answered_at": "2026-09-09T01:14:18.446Z",
+        "duration_ms": 3720,
+        "timestamp": "2026-09-09T01:14:18.446Z"
+      },
+      {
+        "participant_id": "c9aa2d66-8567-4f79-bced-37aeff1fd79a",
+        "trial_id": "Rathausmarkt-Hamburg:4:Alexanderplatz-Berlin:Naschmarkt-Leipzig",
+        "order": 7,
+        "stratum": "discriminating",
+        "reference_site": "Rathausmarkt-Hamburg",
+        "candidate_a_site": "Alexanderplatz-Berlin",
+        "candidate_b_site": "Naschmarkt-Leipzig",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:14:18.447Z",
+        "answered_at": "2026-09-09T01:14:23.058Z",
+        "duration_ms": 4611,
+        "timestamp": "2026-09-09T01:14:23.058Z"
+      },
+      {
+        "participant_id": "c9aa2d66-8567-4f79-bced-37aeff1fd79a",
+        "trial_id": "Hauptwache-Frankfurt am Main:6:Marktplatz-Heidelberg:Hauptmarkt-Trier",
+        "order": 8,
+        "stratum": "agreement",
+        "reference_site": "Hauptwache-Frankfurt am Main",
+        "candidate_a_site": "Marktplatz-Heidelberg",
+        "candidate_b_site": "Hauptmarkt-Trier",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:14:23.059Z",
+        "answered_at": "2026-09-09T01:14:29.617Z",
+        "duration_ms": 6558,
+        "timestamp": "2026-09-09T01:14:29.617Z"
+      },
+      {
+        "participant_id": "c9aa2d66-8567-4f79-bced-37aeff1fd79a",
+        "trial_id": "Hauptwache-Frankfurt am Main:3:Alexanderplatz-Berlin:Marktplatz-Heidelberg",
+        "order": 9,
+        "stratum": "discriminating",
+        "reference_site": "Hauptwache-Frankfurt am Main",
+        "candidate_a_site": "Alexanderplatz-Berlin",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:14:29.618Z",
+        "answered_at": "2026-09-09T01:14:41.769Z",
+        "duration_ms": 12151,
+        "timestamp": "2026-09-09T01:14:41.769Z"
+      },
+      {
+        "participant_id": "c9aa2d66-8567-4f79-bced-37aeff1fd79a",
+        "trial_id": "Marktplatz-Heidelberg:3:Burgplatz-Düsseldorf:Theaterplatz-Weimar",
+        "order": 10,
+        "stratum": "agreement",
+        "reference_site": "Marktplatz-Heidelberg",
+        "candidate_a_site": "Burgplatz-Düsseldorf",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:14:41.769Z",
+        "answered_at": "2026-09-09T01:14:52.078Z",
+        "duration_ms": 10309,
+        "timestamp": "2026-09-09T01:14:52.078Z"
+      },
+      {
+        "participant_id": "c9aa2d66-8567-4f79-bced-37aeff1fd79a",
+        "trial_id": "Gendarmenmarkt-Berlin:4:Bebelplatz-Berlin:Augustusplatz-Leipzig",
+        "order": 11,
+        "stratum": "agreement",
+        "reference_site": "Gendarmenmarkt-Berlin",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:14:52.079Z",
+        "answered_at": "2026-09-09T01:15:05.747Z",
+        "duration_ms": 13668,
+        "timestamp": "2026-09-09T01:15:05.747Z"
+      }
+    ]
+  },
+  {
+    "participant_id": "76849730-95b3-4c96-b497-87753cfce16f",
+    "survey_version": "matched_view_v1",
+    "task": "matched_view_2afc",
+    "started_at": "2026-09-09T01:15:21.656Z",
+    "updated_at": "2026-09-09T01:18:36.751Z",
+    "finished_at": "2026-09-09T01:18:36.751Z",
+    "status": "completed",
+    "revision": 13,
+    "background": "no",
+    "bank_version": "matched_view_v1",
+    "bank_generated_at": "2026-09-08T03:24:57.792Z",
+    "stimulus": {
+      "kind": "rendered_massing_view",
+      "fov_deg": 120,
+      "eye_height_m": 1.6,
+      "textures": false
+    },
+    "responses": [
+      {
+        "participant_id": "76849730-95b3-4c96-b497-87753cfce16f",
+        "trial_id": "Augustusplatz-Leipzig:5:Naschmarkt-Leipzig:Burgplatz-Düsseldorf",
+        "order": 0,
+        "stratum": "agreement",
+        "reference_site": "Augustusplatz-Leipzig",
+        "candidate_a_site": "Naschmarkt-Leipzig",
+        "candidate_b_site": "Burgplatz-Düsseldorf",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:17:06.631Z",
+        "answered_at": "2026-09-09T01:17:17.544Z",
+        "duration_ms": 10913,
+        "timestamp": "2026-09-09T01:17:17.544Z"
+      },
+      {
+        "participant_id": "76849730-95b3-4c96-b497-87753cfce16f",
+        "trial_id": "Römerberg-Frankfurt am Main:7:Zeil-Frankfurt am Main:Rathausmarkt-Hamburg",
+        "order": 1,
+        "stratum": "agreement",
+        "reference_site": "Römerberg-Frankfurt am Main",
+        "candidate_a_site": "Zeil-Frankfurt am Main",
+        "candidate_b_site": "Rathausmarkt-Hamburg",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:17:17.545Z",
+        "answered_at": "2026-09-09T01:17:21.120Z",
+        "duration_ms": 3575,
+        "timestamp": "2026-09-09T01:17:21.120Z"
+      },
+      {
+        "participant_id": "76849730-95b3-4c96-b497-87753cfce16f",
+        "trial_id": "Konstablerwache-Frankfurt am Main:4:Rathausmarkt-Hamburg:Naschmarkt-Leipzig",
+        "order": 2,
+        "stratum": "agreement",
+        "reference_site": "Konstablerwache-Frankfurt am Main",
+        "candidate_a_site": "Rathausmarkt-Hamburg",
+        "candidate_b_site": "Naschmarkt-Leipzig",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:17:21.121Z",
+        "answered_at": "2026-09-09T01:17:24.864Z",
+        "duration_ms": 3743,
+        "timestamp": "2026-09-09T01:17:24.864Z"
+      },
+      {
+        "participant_id": "76849730-95b3-4c96-b497-87753cfce16f",
+        "trial_id": "Römerberg-Frankfurt am Main:0:Bebelplatz-Berlin:Burgplatz-Düsseldorf",
+        "order": 3,
+        "stratum": "agreement",
+        "reference_site": "Römerberg-Frankfurt am Main",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Burgplatz-Düsseldorf",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:17:24.865Z",
+        "answered_at": "2026-09-09T01:17:40.852Z",
+        "duration_ms": 15987,
+        "timestamp": "2026-09-09T01:17:40.852Z"
+      },
+      {
+        "participant_id": "76849730-95b3-4c96-b497-87753cfce16f",
+        "trial_id": "Marktplatz-Heidelberg:1:Marienplatz-Munich:Konstablerwache-Frankfurt am Main",
+        "order": 4,
+        "stratum": "discriminating",
+        "reference_site": "Marktplatz-Heidelberg",
+        "candidate_a_site": "Marienplatz-Munich",
+        "candidate_b_site": "Konstablerwache-Frankfurt am Main",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:17:40.853Z",
+        "answered_at": "2026-09-09T01:17:46.946Z",
+        "duration_ms": 6093,
+        "timestamp": "2026-09-09T01:17:46.946Z"
+      },
+      {
+        "participant_id": "76849730-95b3-4c96-b497-87753cfce16f",
+        "trial_id": "Theaterplatz-Weimar:5:Konstablerwache-Frankfurt am Main:Augustusplatz-Leipzig",
+        "order": 5,
+        "stratum": "agreement",
+        "reference_site": "Theaterplatz-Weimar",
+        "candidate_a_site": "Konstablerwache-Frankfurt am Main",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:17:46.948Z",
+        "answered_at": "2026-09-09T01:17:57.049Z",
+        "duration_ms": 10101,
+        "timestamp": "2026-09-09T01:17:57.049Z"
+      },
+      {
+        "participant_id": "76849730-95b3-4c96-b497-87753cfce16f",
+        "trial_id": "Hauptmarkt-Trier:5:Gendarmenmarkt-Berlin:Odeonsplatz-Munich",
+        "order": 6,
+        "stratum": "discriminating",
+        "reference_site": "Hauptmarkt-Trier",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Odeonsplatz-Munich",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:17:57.050Z",
+        "answered_at": "2026-09-09T01:18:04.613Z",
+        "duration_ms": 7563,
+        "timestamp": "2026-09-09T01:18:04.613Z"
+      },
+      {
+        "participant_id": "76849730-95b3-4c96-b497-87753cfce16f",
+        "trial_id": "Konstablerwache-Frankfurt am Main:7:Hauptwache-Frankfurt am Main:Naschmarkt-Leipzig",
+        "order": 7,
+        "stratum": "discriminating",
+        "reference_site": "Konstablerwache-Frankfurt am Main",
+        "candidate_a_site": "Hauptwache-Frankfurt am Main",
+        "candidate_b_site": "Naschmarkt-Leipzig",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:18:04.614Z",
+        "answered_at": "2026-09-09T01:18:13.997Z",
+        "duration_ms": 9383,
+        "timestamp": "2026-09-09T01:18:13.997Z"
+      },
+      {
+        "participant_id": "76849730-95b3-4c96-b497-87753cfce16f",
+        "trial_id": "Konstablerwache-Frankfurt am Main:0:Gendarmenmarkt-Berlin:Theaterplatz-Weimar",
+        "order": 8,
+        "stratum": "discriminating",
+        "reference_site": "Konstablerwache-Frankfurt am Main",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:18:13.998Z",
+        "answered_at": "2026-09-09T01:18:18.584Z",
+        "duration_ms": 4586,
+        "timestamp": "2026-09-09T01:18:18.584Z"
+      },
+      {
+        "participant_id": "76849730-95b3-4c96-b497-87753cfce16f",
+        "trial_id": "Marktplatz-Heidelberg:3:Burgplatz-Düsseldorf:Theaterplatz-Weimar",
+        "order": 9,
+        "stratum": "agreement",
+        "reference_site": "Marktplatz-Heidelberg",
+        "candidate_a_site": "Burgplatz-Düsseldorf",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:18:18.585Z",
+        "answered_at": "2026-09-09T01:18:23.224Z",
+        "duration_ms": 4639,
+        "timestamp": "2026-09-09T01:18:23.224Z"
+      },
+      {
+        "participant_id": "76849730-95b3-4c96-b497-87753cfce16f",
+        "trial_id": "Herderplatz-Weimar:7:Bebelplatz-Berlin:Odeonsplatz-Munich",
+        "order": 10,
+        "stratum": "discriminating",
+        "reference_site": "Herderplatz-Weimar",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Odeonsplatz-Munich",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:18:23.224Z",
+        "answered_at": "2026-09-09T01:18:28.609Z",
+        "duration_ms": 5385,
+        "timestamp": "2026-09-09T01:18:28.609Z"
+      },
+      {
+        "participant_id": "76849730-95b3-4c96-b497-87753cfce16f",
+        "trial_id": "Alexanderplatz-Berlin:2:Rathausmarkt-Hamburg:Naschmarkt-Leipzig",
+        "order": 11,
+        "stratum": "discriminating",
+        "reference_site": "Alexanderplatz-Berlin",
+        "candidate_a_site": "Rathausmarkt-Hamburg",
+        "candidate_b_site": "Naschmarkt-Leipzig",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:18:28.611Z",
+        "answered_at": "2026-09-09T01:18:34.384Z",
+        "duration_ms": 5773,
+        "timestamp": "2026-09-09T01:18:34.384Z"
+      }
+    ]
+  },
+  {
+    "participant_id": "0565da94-17c2-4c2d-9b9a-132112262d2c",
+    "survey_version": "matched_view_v1",
+    "task": "matched_view_2afc",
+    "started_at": "2026-09-09T01:18:45.305Z",
+    "updated_at": "2026-09-09T01:22:07.199Z",
+    "finished_at": "2026-09-09T01:22:07.199Z",
+    "status": "completed",
+    "revision": 13,
+    "background": "yes",
+    "bank_version": "matched_view_v1",
+    "bank_generated_at": "2026-09-08T03:24:57.792Z",
+    "stimulus": {
+      "kind": "rendered_massing_view",
+      "fov_deg": 120,
+      "eye_height_m": 1.6,
+      "textures": false
+    },
+    "responses": [
+      {
+        "participant_id": "0565da94-17c2-4c2d-9b9a-132112262d2c",
+        "trial_id": "Alter Markt-Cologne:2:Burgplatz-Düsseldorf:Hauptmarkt-Trier",
+        "order": 0,
+        "stratum": "discriminating",
+        "reference_site": "Alter Markt-Cologne",
+        "candidate_a_site": "Burgplatz-Düsseldorf",
+        "candidate_b_site": "Hauptmarkt-Trier",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:19:30.296Z",
+        "answered_at": "2026-09-09T01:20:19.056Z",
+        "duration_ms": 48760,
+        "timestamp": "2026-09-09T01:20:19.056Z"
+      },
+      {
+        "participant_id": "0565da94-17c2-4c2d-9b9a-132112262d2c",
+        "trial_id": "Naschmarkt-Leipzig:1:Odeonsplatz-Munich:Marktplatz-Heidelberg",
+        "order": 1,
+        "stratum": "agreement",
+        "reference_site": "Naschmarkt-Leipzig",
+        "candidate_a_site": "Odeonsplatz-Munich",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:20:19.057Z",
+        "answered_at": "2026-09-09T01:20:29.292Z",
+        "duration_ms": 10235,
+        "timestamp": "2026-09-09T01:20:29.292Z"
+      },
+      {
+        "participant_id": "0565da94-17c2-4c2d-9b9a-132112262d2c",
+        "trial_id": "Rathausmarkt-Hamburg:7:Marienplatz-Munich:Konstablerwache-Frankfurt am Main",
+        "order": 2,
+        "stratum": "discriminating",
+        "reference_site": "Rathausmarkt-Hamburg",
+        "candidate_a_site": "Marienplatz-Munich",
+        "candidate_b_site": "Konstablerwache-Frankfurt am Main",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:20:29.292Z",
+        "answered_at": "2026-09-09T01:20:33.249Z",
+        "duration_ms": 3957,
+        "timestamp": "2026-09-09T01:20:33.249Z"
+      },
+      {
+        "participant_id": "0565da94-17c2-4c2d-9b9a-132112262d2c",
+        "trial_id": "Burgplatz-Düsseldorf:5:Gendarmenmarkt-Berlin:Marktplatz-Heidelberg",
+        "order": 3,
+        "stratum": "discriminating",
+        "reference_site": "Burgplatz-Düsseldorf",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:20:33.250Z",
+        "answered_at": "2026-09-09T01:20:43.008Z",
+        "duration_ms": 9758,
+        "timestamp": "2026-09-09T01:20:43.008Z"
+      },
+      {
+        "participant_id": "0565da94-17c2-4c2d-9b9a-132112262d2c",
+        "trial_id": "Naschmarkt-Leipzig:5:Augustusplatz-Leipzig:Hauptmarkt-Trier",
+        "order": 4,
+        "stratum": "discriminating",
+        "reference_site": "Naschmarkt-Leipzig",
+        "candidate_a_site": "Augustusplatz-Leipzig",
+        "candidate_b_site": "Hauptmarkt-Trier",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:20:43.009Z",
+        "answered_at": "2026-09-09T01:20:50.524Z",
+        "duration_ms": 7515,
+        "timestamp": "2026-09-09T01:20:50.524Z"
+      },
+      {
+        "participant_id": "0565da94-17c2-4c2d-9b9a-132112262d2c",
+        "trial_id": "Odeonsplatz-Munich:4:Bebelplatz-Berlin:Augustusplatz-Leipzig",
+        "order": 5,
+        "stratum": "agreement",
+        "reference_site": "Odeonsplatz-Munich",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:20:50.525Z",
+        "answered_at": "2026-09-09T01:21:03.807Z",
+        "duration_ms": 13282,
+        "timestamp": "2026-09-09T01:21:03.807Z"
+      },
+      {
+        "participant_id": "0565da94-17c2-4c2d-9b9a-132112262d2c",
+        "trial_id": "Hauptmarkt-Trier:7:Hauptwache-Frankfurt am Main:Zeil-Frankfurt am Main",
+        "order": 6,
+        "stratum": "discriminating",
+        "reference_site": "Hauptmarkt-Trier",
+        "candidate_a_site": "Hauptwache-Frankfurt am Main",
+        "candidate_b_site": "Zeil-Frankfurt am Main",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:21:03.808Z",
+        "answered_at": "2026-09-09T01:21:09.912Z",
+        "duration_ms": 6104,
+        "timestamp": "2026-09-09T01:21:09.912Z"
+      },
+      {
+        "participant_id": "0565da94-17c2-4c2d-9b9a-132112262d2c",
+        "trial_id": "Bebelplatz-Berlin:2:Marienplatz-Munich:Hauptmarkt-Trier",
+        "order": 7,
+        "stratum": "agreement",
+        "reference_site": "Bebelplatz-Berlin",
+        "candidate_a_site": "Marienplatz-Munich",
+        "candidate_b_site": "Hauptmarkt-Trier",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:21:09.913Z",
+        "answered_at": "2026-09-09T01:21:31.775Z",
+        "duration_ms": 21862,
+        "timestamp": "2026-09-09T01:21:31.775Z"
+      },
+      {
+        "participant_id": "0565da94-17c2-4c2d-9b9a-132112262d2c",
+        "trial_id": "Konstablerwache-Frankfurt am Main:0:Gendarmenmarkt-Berlin:Theaterplatz-Weimar",
+        "order": 8,
+        "stratum": "discriminating",
+        "reference_site": "Konstablerwache-Frankfurt am Main",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:21:31.776Z",
+        "answered_at": "2026-09-09T01:21:39.591Z",
+        "duration_ms": 7815,
+        "timestamp": "2026-09-09T01:21:39.591Z"
+      },
+      {
+        "participant_id": "0565da94-17c2-4c2d-9b9a-132112262d2c",
+        "trial_id": "Zeil-Frankfurt am Main:7:Odeonsplatz-Munich:Augustusplatz-Leipzig",
+        "order": 9,
+        "stratum": "agreement",
+        "reference_site": "Zeil-Frankfurt am Main",
+        "candidate_a_site": "Odeonsplatz-Munich",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:21:39.591Z",
+        "answered_at": "2026-09-09T01:21:45.023Z",
+        "duration_ms": 5432,
+        "timestamp": "2026-09-09T01:21:45.023Z"
+      },
+      {
+        "participant_id": "0565da94-17c2-4c2d-9b9a-132112262d2c",
+        "trial_id": "Alexanderplatz-Berlin:3:Zeil-Frankfurt am Main:Bebelplatz-Berlin",
+        "order": 10,
+        "stratum": "agreement",
+        "reference_site": "Alexanderplatz-Berlin",
+        "candidate_a_site": "Zeil-Frankfurt am Main",
+        "candidate_b_site": "Bebelplatz-Berlin",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:21:45.024Z",
+        "answered_at": "2026-09-09T01:21:49.599Z",
+        "duration_ms": 4575,
+        "timestamp": "2026-09-09T01:21:49.599Z"
+      },
+      {
+        "participant_id": "0565da94-17c2-4c2d-9b9a-132112262d2c",
+        "trial_id": "Alexanderplatz-Berlin:1:Hauptwache-Frankfurt am Main:Theaterplatz-Weimar",
+        "order": 11,
+        "stratum": "agreement",
+        "reference_site": "Alexanderplatz-Berlin",
+        "candidate_a_site": "Hauptwache-Frankfurt am Main",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:21:49.600Z",
+        "answered_at": "2026-09-09T01:22:04.551Z",
+        "duration_ms": 14951,
+        "timestamp": "2026-09-09T01:22:04.551Z"
+      }
+    ]
+  },
+  {
+    "participant_id": "a23c93bf-9726-4ea1-a287-717f34bfd5d5",
+    "survey_version": "matched_view_v1",
+    "task": "matched_view_2afc",
+    "started_at": "2026-09-09T01:22:14.434Z",
+    "updated_at": "2026-09-09T01:24:33.570Z",
+    "finished_at": "2026-09-09T01:24:33.570Z",
+    "status": "completed",
+    "revision": 13,
+    "background": "yes",
+    "bank_version": "matched_view_v1",
+    "bank_generated_at": "2026-09-08T03:24:57.792Z",
+    "stimulus": {
+      "kind": "rendered_massing_view",
+      "fov_deg": 120,
+      "eye_height_m": 1.6,
+      "textures": false
+    },
+    "responses": [
+      {
+        "participant_id": "a23c93bf-9726-4ea1-a287-717f34bfd5d5",
+        "trial_id": "Bebelplatz-Berlin:5:Gendarmenmarkt-Berlin:Alter Markt-Cologne",
+        "order": 0,
+        "stratum": "discriminating",
+        "reference_site": "Bebelplatz-Berlin",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Alter Markt-Cologne",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:22:29.263Z",
+        "answered_at": "2026-09-09T01:22:47.375Z",
+        "duration_ms": 18112,
+        "timestamp": "2026-09-09T01:22:47.375Z"
+      },
+      {
+        "participant_id": "a23c93bf-9726-4ea1-a287-717f34bfd5d5",
+        "trial_id": "Hauptwache-Frankfurt am Main:7:Odeonsplatz-Munich:Burgplatz-Düsseldorf",
+        "order": 1,
+        "stratum": "agreement",
+        "reference_site": "Hauptwache-Frankfurt am Main",
+        "candidate_a_site": "Odeonsplatz-Munich",
+        "candidate_b_site": "Burgplatz-Düsseldorf",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:22:47.376Z",
+        "answered_at": "2026-09-09T01:22:56.308Z",
+        "duration_ms": 8932,
+        "timestamp": "2026-09-09T01:22:56.308Z"
+      },
+      {
+        "participant_id": "a23c93bf-9726-4ea1-a287-717f34bfd5d5",
+        "trial_id": "Alexanderplatz-Berlin:1:Rathausmarkt-Hamburg:Marktplatz-Heidelberg",
+        "order": 2,
+        "stratum": "discriminating",
+        "reference_site": "Alexanderplatz-Berlin",
+        "candidate_a_site": "Rathausmarkt-Hamburg",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:22:56.308Z",
+        "answered_at": "2026-09-09T01:23:00.739Z",
+        "duration_ms": 4431,
+        "timestamp": "2026-09-09T01:23:00.739Z"
+      },
+      {
+        "participant_id": "a23c93bf-9726-4ea1-a287-717f34bfd5d5",
+        "trial_id": "Theaterplatz-Weimar:0:Burgplatz-Düsseldorf:Hauptmarkt-Trier",
+        "order": 3,
+        "stratum": "discriminating",
+        "reference_site": "Theaterplatz-Weimar",
+        "candidate_a_site": "Burgplatz-Düsseldorf",
+        "candidate_b_site": "Hauptmarkt-Trier",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:23:00.740Z",
+        "answered_at": "2026-09-09T01:23:08.681Z",
+        "duration_ms": 7941,
+        "timestamp": "2026-09-09T01:23:08.681Z"
+      },
+      {
+        "participant_id": "a23c93bf-9726-4ea1-a287-717f34bfd5d5",
+        "trial_id": "Herderplatz-Weimar:2:Römerberg-Frankfurt am Main:Marktplatz-Heidelberg",
+        "order": 4,
+        "stratum": "discriminating",
+        "reference_site": "Herderplatz-Weimar",
+        "candidate_a_site": "Römerberg-Frankfurt am Main",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:23:08.682Z",
+        "answered_at": "2026-09-09T01:23:14.891Z",
+        "duration_ms": 6209,
+        "timestamp": "2026-09-09T01:23:14.891Z"
+      },
+      {
+        "participant_id": "a23c93bf-9726-4ea1-a287-717f34bfd5d5",
+        "trial_id": "Naschmarkt-Leipzig:5:Augustusplatz-Leipzig:Hauptmarkt-Trier",
+        "order": 5,
+        "stratum": "discriminating",
+        "reference_site": "Naschmarkt-Leipzig",
+        "candidate_a_site": "Augustusplatz-Leipzig",
+        "candidate_b_site": "Hauptmarkt-Trier",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:23:14.892Z",
+        "answered_at": "2026-09-09T01:23:22.804Z",
+        "duration_ms": 7912,
+        "timestamp": "2026-09-09T01:23:22.804Z"
+      },
+      {
+        "participant_id": "a23c93bf-9726-4ea1-a287-717f34bfd5d5",
+        "trial_id": "Theaterplatz-Weimar:5:Konstablerwache-Frankfurt am Main:Augustusplatz-Leipzig",
+        "order": 6,
+        "stratum": "agreement",
+        "reference_site": "Theaterplatz-Weimar",
+        "candidate_a_site": "Konstablerwache-Frankfurt am Main",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:23:22.804Z",
+        "answered_at": "2026-09-09T01:23:36.579Z",
+        "duration_ms": 13775,
+        "timestamp": "2026-09-09T01:23:36.579Z"
+      },
+      {
+        "participant_id": "a23c93bf-9726-4ea1-a287-717f34bfd5d5",
+        "trial_id": "Gendarmenmarkt-Berlin:4:Bebelplatz-Berlin:Augustusplatz-Leipzig",
+        "order": 7,
+        "stratum": "agreement",
+        "reference_site": "Gendarmenmarkt-Berlin",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:23:36.579Z",
+        "answered_at": "2026-09-09T01:23:46.427Z",
+        "duration_ms": 9848,
+        "timestamp": "2026-09-09T01:23:46.427Z"
+      },
+      {
+        "participant_id": "a23c93bf-9726-4ea1-a287-717f34bfd5d5",
+        "trial_id": "Augustusplatz-Leipzig:0:Alexanderplatz-Berlin:Alter Markt-Cologne",
+        "order": 8,
+        "stratum": "agreement",
+        "reference_site": "Augustusplatz-Leipzig",
+        "candidate_a_site": "Alexanderplatz-Berlin",
+        "candidate_b_site": "Alter Markt-Cologne",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:23:46.429Z",
+        "answered_at": "2026-09-09T01:24:13.730Z",
+        "duration_ms": 27301,
+        "timestamp": "2026-09-09T01:24:13.730Z"
+      },
+      {
+        "participant_id": "a23c93bf-9726-4ea1-a287-717f34bfd5d5",
+        "trial_id": "Naschmarkt-Leipzig:1:Odeonsplatz-Munich:Marktplatz-Heidelberg",
+        "order": 9,
+        "stratum": "agreement",
+        "reference_site": "Naschmarkt-Leipzig",
+        "candidate_a_site": "Odeonsplatz-Munich",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:24:13.731Z",
+        "answered_at": "2026-09-09T01:24:19.010Z",
+        "duration_ms": 5279,
+        "timestamp": "2026-09-09T01:24:19.010Z"
+      },
+      {
+        "participant_id": "a23c93bf-9726-4ea1-a287-717f34bfd5d5",
+        "trial_id": "Gendarmenmarkt-Berlin:6:Naschmarkt-Leipzig:Burgplatz-Düsseldorf",
+        "order": 10,
+        "stratum": "agreement",
+        "reference_site": "Gendarmenmarkt-Berlin",
+        "candidate_a_site": "Naschmarkt-Leipzig",
+        "candidate_b_site": "Burgplatz-Düsseldorf",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:24:19.012Z",
+        "answered_at": "2026-09-09T01:24:26.346Z",
+        "duration_ms": 7334,
+        "timestamp": "2026-09-09T01:24:26.346Z"
+      },
+      {
+        "participant_id": "a23c93bf-9726-4ea1-a287-717f34bfd5d5",
+        "trial_id": "Odeonsplatz-Munich:6:Konstablerwache-Frankfurt am Main:Naschmarkt-Leipzig",
+        "order": 11,
+        "stratum": "discriminating",
+        "reference_site": "Odeonsplatz-Munich",
+        "candidate_a_site": "Konstablerwache-Frankfurt am Main",
+        "candidate_b_site": "Naschmarkt-Leipzig",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:24:26.347Z",
+        "answered_at": "2026-09-09T01:24:31.663Z",
+        "duration_ms": 5316,
+        "timestamp": "2026-09-09T01:24:31.663Z"
+      }
+    ]
+  },
+  {
+    "participant_id": "b7b5c3aa-0019-401e-b0e8-0f91387aa909",
+    "survey_version": "matched_view_v1",
+    "task": "matched_view_2afc",
+    "started_at": "2026-09-09T01:25:00.499Z",
+    "updated_at": "2026-09-09T01:27:12.137Z",
+    "finished_at": "2026-09-09T01:27:12.137Z",
+    "status": "completed",
+    "revision": 13,
+    "background": "no",
+    "bank_version": "matched_view_v1",
+    "bank_generated_at": "2026-09-08T03:24:57.792Z",
+    "stimulus": {
+      "kind": "rendered_massing_view",
+      "fov_deg": 120,
+      "eye_height_m": 1.6,
+      "textures": false
+    },
+    "responses": [
+      {
+        "participant_id": "b7b5c3aa-0019-401e-b0e8-0f91387aa909",
+        "trial_id": "Odeonsplatz-Munich:3:Hauptwache-Frankfurt am Main:Burgplatz-Düsseldorf",
+        "order": 0,
+        "stratum": "agreement",
+        "reference_site": "Odeonsplatz-Munich",
+        "candidate_a_site": "Hauptwache-Frankfurt am Main",
+        "candidate_b_site": "Burgplatz-Düsseldorf",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:25:01.526Z",
+        "answered_at": "2026-09-09T01:25:12.134Z",
+        "duration_ms": 10608,
+        "timestamp": "2026-09-09T01:25:12.134Z"
+      },
+      {
+        "participant_id": "b7b5c3aa-0019-401e-b0e8-0f91387aa909",
+        "trial_id": "Hauptwache-Frankfurt am Main:5:Bebelplatz-Berlin:Odeonsplatz-Munich",
+        "order": 1,
+        "stratum": "discriminating",
+        "reference_site": "Hauptwache-Frankfurt am Main",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Odeonsplatz-Munich",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:25:12.135Z",
+        "answered_at": "2026-09-09T01:25:27.507Z",
+        "duration_ms": 15372,
+        "timestamp": "2026-09-09T01:25:27.507Z"
+      },
+      {
+        "participant_id": "b7b5c3aa-0019-401e-b0e8-0f91387aa909",
+        "trial_id": "Burgplatz-Düsseldorf:5:Gendarmenmarkt-Berlin:Marktplatz-Heidelberg",
+        "order": 2,
+        "stratum": "discriminating",
+        "reference_site": "Burgplatz-Düsseldorf",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:25:27.507Z",
+        "answered_at": "2026-09-09T01:25:43.215Z",
+        "duration_ms": 15708,
+        "timestamp": "2026-09-09T01:25:43.215Z"
+      },
+      {
+        "participant_id": "b7b5c3aa-0019-401e-b0e8-0f91387aa909",
+        "trial_id": "Rathausmarkt-Hamburg:1:Römerberg-Frankfurt am Main:Herderplatz-Weimar",
+        "order": 3,
+        "stratum": "agreement",
+        "reference_site": "Rathausmarkt-Hamburg",
+        "candidate_a_site": "Römerberg-Frankfurt am Main",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:25:43.216Z",
+        "answered_at": "2026-09-09T01:25:48.610Z",
+        "duration_ms": 5394,
+        "timestamp": "2026-09-09T01:25:48.610Z"
+      },
+      {
+        "participant_id": "b7b5c3aa-0019-401e-b0e8-0f91387aa909",
+        "trial_id": "Zeil-Frankfurt am Main:3:Bebelplatz-Berlin:Konstablerwache-Frankfurt am Main",
+        "order": 4,
+        "stratum": "discriminating",
+        "reference_site": "Zeil-Frankfurt am Main",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Konstablerwache-Frankfurt am Main",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:25:48.611Z",
+        "answered_at": "2026-09-09T01:25:58.306Z",
+        "duration_ms": 9695,
+        "timestamp": "2026-09-09T01:25:58.306Z"
+      },
+      {
+        "participant_id": "b7b5c3aa-0019-401e-b0e8-0f91387aa909",
+        "trial_id": "Marienplatz-Munich:6:Odeonsplatz-Munich:Rathausmarkt-Hamburg",
+        "order": 5,
+        "stratum": "agreement",
+        "reference_site": "Marienplatz-Munich",
+        "candidate_a_site": "Odeonsplatz-Munich",
+        "candidate_b_site": "Rathausmarkt-Hamburg",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:25:58.306Z",
+        "answered_at": "2026-09-09T01:26:08.435Z",
+        "duration_ms": 10129,
+        "timestamp": "2026-09-09T01:26:08.435Z"
+      },
+      {
+        "participant_id": "b7b5c3aa-0019-401e-b0e8-0f91387aa909",
+        "trial_id": "Römerberg-Frankfurt am Main:0:Naschmarkt-Leipzig:Augustusplatz-Leipzig",
+        "order": 6,
+        "stratum": "discriminating",
+        "reference_site": "Römerberg-Frankfurt am Main",
+        "candidate_a_site": "Naschmarkt-Leipzig",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:26:08.436Z",
+        "answered_at": "2026-09-09T01:26:13.355Z",
+        "duration_ms": 4919,
+        "timestamp": "2026-09-09T01:26:13.355Z"
+      },
+      {
+        "participant_id": "b7b5c3aa-0019-401e-b0e8-0f91387aa909",
+        "trial_id": "Römerberg-Frankfurt am Main:3:Zeil-Frankfurt am Main:Burgplatz-Düsseldorf",
+        "order": 7,
+        "stratum": "discriminating",
+        "reference_site": "Römerberg-Frankfurt am Main",
+        "candidate_a_site": "Zeil-Frankfurt am Main",
+        "candidate_b_site": "Burgplatz-Düsseldorf",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:26:13.356Z",
+        "answered_at": "2026-09-09T01:26:25.233Z",
+        "duration_ms": 11877,
+        "timestamp": "2026-09-09T01:26:25.233Z"
+      },
+      {
+        "participant_id": "b7b5c3aa-0019-401e-b0e8-0f91387aa909",
+        "trial_id": "Theaterplatz-Weimar:4:Hauptwache-Frankfurt am Main:Alter Markt-Cologne",
+        "order": 8,
+        "stratum": "agreement",
+        "reference_site": "Theaterplatz-Weimar",
+        "candidate_a_site": "Hauptwache-Frankfurt am Main",
+        "candidate_b_site": "Alter Markt-Cologne",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:26:25.234Z",
+        "answered_at": "2026-09-09T01:26:37.710Z",
+        "duration_ms": 12476,
+        "timestamp": "2026-09-09T01:26:37.710Z"
+      },
+      {
+        "participant_id": "b7b5c3aa-0019-401e-b0e8-0f91387aa909",
+        "trial_id": "Naschmarkt-Leipzig:1:Odeonsplatz-Munich:Marktplatz-Heidelberg",
+        "order": 9,
+        "stratum": "agreement",
+        "reference_site": "Naschmarkt-Leipzig",
+        "candidate_a_site": "Odeonsplatz-Munich",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T01:26:37.711Z",
+        "answered_at": "2026-09-09T01:26:49.466Z",
+        "duration_ms": 11755,
+        "timestamp": "2026-09-09T01:26:49.466Z"
+      },
+      {
+        "participant_id": "b7b5c3aa-0019-401e-b0e8-0f91387aa909",
+        "trial_id": "Hauptwache-Frankfurt am Main:7:Odeonsplatz-Munich:Burgplatz-Düsseldorf",
+        "order": 10,
+        "stratum": "agreement",
+        "reference_site": "Hauptwache-Frankfurt am Main",
+        "candidate_a_site": "Odeonsplatz-Munich",
+        "candidate_b_site": "Burgplatz-Düsseldorf",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:26:49.467Z",
+        "answered_at": "2026-09-09T01:27:04.595Z",
+        "duration_ms": 15128,
+        "timestamp": "2026-09-09T01:27:04.595Z"
+      },
+      {
+        "participant_id": "b7b5c3aa-0019-401e-b0e8-0f91387aa909",
+        "trial_id": "Odeonsplatz-Munich:5:Marktplatz-Heidelberg:Theaterplatz-Weimar",
+        "order": 11,
+        "stratum": "discriminating",
+        "reference_site": "Odeonsplatz-Munich",
+        "candidate_a_site": "Marktplatz-Heidelberg",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T01:27:04.596Z",
+        "answered_at": "2026-09-09T01:27:10.066Z",
+        "duration_ms": 5470,
+        "timestamp": "2026-09-09T01:27:10.066Z"
+      }
+    ]
+  },
+  {
+    "participant_id": "c0a9f718-fba7-463e-9cca-f32a1a2ec3e1",
+    "survey_version": "matched_view_v1",
+    "task": "matched_view_2afc",
+    "started_at": "2026-09-09T02:28:22.857Z",
+    "updated_at": "2026-09-09T02:30:12.452Z",
+    "finished_at": "2026-09-09T02:30:12.452Z",
+    "status": "completed",
+    "revision": 13,
+    "background": "yes",
+    "bank_version": "matched_view_v1",
+    "bank_generated_at": "2026-09-08T03:24:57.792Z",
+    "stimulus": {
+      "kind": "rendered_massing_view",
+      "fov_deg": 120,
+      "eye_height_m": 1.6,
+      "textures": false
+    },
+    "responses": [
+      {
+        "participant_id": "c0a9f718-fba7-463e-9cca-f32a1a2ec3e1",
+        "trial_id": "Marktplatz-Heidelberg:1:Marienplatz-Munich:Konstablerwache-Frankfurt am Main",
+        "order": 0,
+        "stratum": "discriminating",
+        "reference_site": "Marktplatz-Heidelberg",
+        "candidate_a_site": "Marienplatz-Munich",
+        "candidate_b_site": "Konstablerwache-Frankfurt am Main",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:28:42.300Z",
+        "answered_at": "2026-09-09T02:28:48.718Z",
+        "duration_ms": 6418,
+        "timestamp": "2026-09-09T02:28:48.718Z"
+      },
+      {
+        "participant_id": "c0a9f718-fba7-463e-9cca-f32a1a2ec3e1",
+        "trial_id": "Hauptmarkt-Trier:5:Gendarmenmarkt-Berlin:Odeonsplatz-Munich",
+        "order": 1,
+        "stratum": "discriminating",
+        "reference_site": "Hauptmarkt-Trier",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Odeonsplatz-Munich",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:28:48.719Z",
+        "answered_at": "2026-09-09T02:28:54.340Z",
+        "duration_ms": 5621,
+        "timestamp": "2026-09-09T02:28:54.340Z"
+      },
+      {
+        "participant_id": "c0a9f718-fba7-463e-9cca-f32a1a2ec3e1",
+        "trial_id": "Bebelplatz-Berlin:7:Römerberg-Frankfurt am Main:Rathausmarkt-Hamburg",
+        "order": 2,
+        "stratum": "agreement",
+        "reference_site": "Bebelplatz-Berlin",
+        "candidate_a_site": "Römerberg-Frankfurt am Main",
+        "candidate_b_site": "Rathausmarkt-Hamburg",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:28:54.341Z",
+        "answered_at": "2026-09-09T02:28:59.746Z",
+        "duration_ms": 5405,
+        "timestamp": "2026-09-09T02:28:59.746Z"
+      },
+      {
+        "participant_id": "c0a9f718-fba7-463e-9cca-f32a1a2ec3e1",
+        "trial_id": "Römerberg-Frankfurt am Main:0:Bebelplatz-Berlin:Burgplatz-Düsseldorf",
+        "order": 3,
+        "stratum": "agreement",
+        "reference_site": "Römerberg-Frankfurt am Main",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Burgplatz-Düsseldorf",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:28:59.747Z",
+        "answered_at": "2026-09-09T02:29:07.876Z",
+        "duration_ms": 8129,
+        "timestamp": "2026-09-09T02:29:07.876Z"
+      },
+      {
+        "participant_id": "c0a9f718-fba7-463e-9cca-f32a1a2ec3e1",
+        "trial_id": "Burgplatz-Düsseldorf:1:Hauptwache-Frankfurt am Main:Alter Markt-Cologne",
+        "order": 4,
+        "stratum": "discriminating",
+        "reference_site": "Burgplatz-Düsseldorf",
+        "candidate_a_site": "Hauptwache-Frankfurt am Main",
+        "candidate_b_site": "Alter Markt-Cologne",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:29:07.877Z",
+        "answered_at": "2026-09-09T02:29:13.546Z",
+        "duration_ms": 5669,
+        "timestamp": "2026-09-09T02:29:13.546Z"
+      },
+      {
+        "participant_id": "c0a9f718-fba7-463e-9cca-f32a1a2ec3e1",
+        "trial_id": "Marienplatz-Munich:6:Odeonsplatz-Munich:Rathausmarkt-Hamburg",
+        "order": 5,
+        "stratum": "agreement",
+        "reference_site": "Marienplatz-Munich",
+        "candidate_a_site": "Odeonsplatz-Munich",
+        "candidate_b_site": "Rathausmarkt-Hamburg",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:29:13.547Z",
+        "answered_at": "2026-09-09T02:29:19.596Z",
+        "duration_ms": 6049,
+        "timestamp": "2026-09-09T02:29:19.596Z"
+      },
+      {
+        "participant_id": "c0a9f718-fba7-463e-9cca-f32a1a2ec3e1",
+        "trial_id": "Augustusplatz-Leipzig:7:Rathausmarkt-Hamburg:Theaterplatz-Weimar",
+        "order": 6,
+        "stratum": "agreement",
+        "reference_site": "Augustusplatz-Leipzig",
+        "candidate_a_site": "Rathausmarkt-Hamburg",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:29:19.597Z",
+        "answered_at": "2026-09-09T02:29:27.445Z",
+        "duration_ms": 7848,
+        "timestamp": "2026-09-09T02:29:27.445Z"
+      },
+      {
+        "participant_id": "c0a9f718-fba7-463e-9cca-f32a1a2ec3e1",
+        "trial_id": "Zeil-Frankfurt am Main:4:Burgplatz-Düsseldorf:Hauptmarkt-Trier",
+        "order": 7,
+        "stratum": "discriminating",
+        "reference_site": "Zeil-Frankfurt am Main",
+        "candidate_a_site": "Burgplatz-Düsseldorf",
+        "candidate_b_site": "Hauptmarkt-Trier",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:29:27.445Z",
+        "answered_at": "2026-09-09T02:29:35.625Z",
+        "duration_ms": 8180,
+        "timestamp": "2026-09-09T02:29:35.625Z"
+      },
+      {
+        "participant_id": "c0a9f718-fba7-463e-9cca-f32a1a2ec3e1",
+        "trial_id": "Gendarmenmarkt-Berlin:6:Naschmarkt-Leipzig:Burgplatz-Düsseldorf",
+        "order": 8,
+        "stratum": "agreement",
+        "reference_site": "Gendarmenmarkt-Berlin",
+        "candidate_a_site": "Naschmarkt-Leipzig",
+        "candidate_b_site": "Burgplatz-Düsseldorf",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:29:35.626Z",
+        "answered_at": "2026-09-09T02:29:56.204Z",
+        "duration_ms": 20578,
+        "timestamp": "2026-09-09T02:29:56.204Z"
+      },
+      {
+        "participant_id": "c0a9f718-fba7-463e-9cca-f32a1a2ec3e1",
+        "trial_id": "Marienplatz-Munich:6:Burgplatz-Düsseldorf:Herderplatz-Weimar",
+        "order": 9,
+        "stratum": "discriminating",
+        "reference_site": "Marienplatz-Munich",
+        "candidate_a_site": "Burgplatz-Düsseldorf",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:29:56.205Z",
+        "answered_at": "2026-09-09T02:30:00.540Z",
+        "duration_ms": 4335,
+        "timestamp": "2026-09-09T02:30:00.540Z"
+      },
+      {
+        "participant_id": "c0a9f718-fba7-463e-9cca-f32a1a2ec3e1",
+        "trial_id": "Alter Markt-Cologne:5:Bebelplatz-Berlin:Herderplatz-Weimar",
+        "order": 10,
+        "stratum": "agreement",
+        "reference_site": "Alter Markt-Cologne",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:30:00.540Z",
+        "answered_at": "2026-09-09T02:30:06.536Z",
+        "duration_ms": 5996,
+        "timestamp": "2026-09-09T02:30:06.536Z"
+      },
+      {
+        "participant_id": "c0a9f718-fba7-463e-9cca-f32a1a2ec3e1",
+        "trial_id": "Römerberg-Frankfurt am Main:3:Zeil-Frankfurt am Main:Burgplatz-Düsseldorf",
+        "order": 11,
+        "stratum": "discriminating",
+        "reference_site": "Römerberg-Frankfurt am Main",
+        "candidate_a_site": "Zeil-Frankfurt am Main",
+        "candidate_b_site": "Burgplatz-Düsseldorf",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:30:06.537Z",
+        "answered_at": "2026-09-09T02:30:10.429Z",
+        "duration_ms": 3892,
+        "timestamp": "2026-09-09T02:30:10.429Z"
+      }
+    ]
+  },
+  {
+    "participant_id": "1b308244-bc23-4502-9486-f71264bc289d",
+    "survey_version": "matched_view_v1",
+    "task": "matched_view_2afc",
+    "started_at": "2026-09-09T02:30:20.912Z",
+    "updated_at": "2026-09-09T02:32:36.790Z",
+    "finished_at": "2026-09-09T02:32:36.790Z",
+    "status": "completed",
+    "revision": 13,
+    "background": "no",
+    "bank_version": "matched_view_v1",
+    "bank_generated_at": "2026-09-08T03:24:57.792Z",
+    "stimulus": {
+      "kind": "rendered_massing_view",
+      "fov_deg": 120,
+      "eye_height_m": 1.6,
+      "textures": false
+    },
+    "responses": [
+      {
+        "participant_id": "1b308244-bc23-4502-9486-f71264bc289d",
+        "trial_id": "Gendarmenmarkt-Berlin:1:Marienplatz-Munich:Burgplatz-Düsseldorf",
+        "order": 0,
+        "stratum": "discriminating",
+        "reference_site": "Gendarmenmarkt-Berlin",
+        "candidate_a_site": "Marienplatz-Munich",
+        "candidate_b_site": "Burgplatz-Düsseldorf",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:30:22.196Z",
+        "answered_at": "2026-09-09T02:30:31.964Z",
+        "duration_ms": 9768,
+        "timestamp": "2026-09-09T02:30:31.964Z"
+      },
+      {
+        "participant_id": "1b308244-bc23-4502-9486-f71264bc289d",
+        "trial_id": "Marienplatz-Munich:3:Alexanderplatz-Berlin:Alter Markt-Cologne",
+        "order": 1,
+        "stratum": "agreement",
+        "reference_site": "Marienplatz-Munich",
+        "candidate_a_site": "Alexanderplatz-Berlin",
+        "candidate_b_site": "Alter Markt-Cologne",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:30:31.965Z",
+        "answered_at": "2026-09-09T02:30:47.672Z",
+        "duration_ms": 15707,
+        "timestamp": "2026-09-09T02:30:47.672Z"
+      },
+      {
+        "participant_id": "1b308244-bc23-4502-9486-f71264bc289d",
+        "trial_id": "Konstablerwache-Frankfurt am Main:1:Bebelplatz-Berlin:Herderplatz-Weimar",
+        "order": 2,
+        "stratum": "discriminating",
+        "reference_site": "Konstablerwache-Frankfurt am Main",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:30:47.672Z",
+        "answered_at": "2026-09-09T02:30:53.332Z",
+        "duration_ms": 5660,
+        "timestamp": "2026-09-09T02:30:53.332Z"
+      },
+      {
+        "participant_id": "1b308244-bc23-4502-9486-f71264bc289d",
+        "trial_id": "Marienplatz-Munich:4:Burgplatz-Düsseldorf:Marktplatz-Heidelberg",
+        "order": 3,
+        "stratum": "agreement",
+        "reference_site": "Marienplatz-Munich",
+        "candidate_a_site": "Burgplatz-Düsseldorf",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:30:53.333Z",
+        "answered_at": "2026-09-09T02:31:01.032Z",
+        "duration_ms": 7699,
+        "timestamp": "2026-09-09T02:31:01.032Z"
+      },
+      {
+        "participant_id": "1b308244-bc23-4502-9486-f71264bc289d",
+        "trial_id": "Augustusplatz-Leipzig:4:Gendarmenmarkt-Berlin:Theaterplatz-Weimar",
+        "order": 4,
+        "stratum": "discriminating",
+        "reference_site": "Augustusplatz-Leipzig",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:31:01.033Z",
+        "answered_at": "2026-09-09T02:31:10.768Z",
+        "duration_ms": 9735,
+        "timestamp": "2026-09-09T02:31:10.768Z"
+      },
+      {
+        "participant_id": "1b308244-bc23-4502-9486-f71264bc289d",
+        "trial_id": "Alexanderplatz-Berlin:1:Hauptwache-Frankfurt am Main:Theaterplatz-Weimar",
+        "order": 5,
+        "stratum": "agreement",
+        "reference_site": "Alexanderplatz-Berlin",
+        "candidate_a_site": "Hauptwache-Frankfurt am Main",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:31:10.769Z",
+        "answered_at": "2026-09-09T02:31:18.225Z",
+        "duration_ms": 7456,
+        "timestamp": "2026-09-09T02:31:18.225Z"
+      },
+      {
+        "participant_id": "1b308244-bc23-4502-9486-f71264bc289d",
+        "trial_id": "Hauptwache-Frankfurt am Main:3:Alexanderplatz-Berlin:Marktplatz-Heidelberg",
+        "order": 6,
+        "stratum": "discriminating",
+        "reference_site": "Hauptwache-Frankfurt am Main",
+        "candidate_a_site": "Alexanderplatz-Berlin",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:31:18.225Z",
+        "answered_at": "2026-09-09T02:31:26.690Z",
+        "duration_ms": 8465,
+        "timestamp": "2026-09-09T02:31:26.690Z"
+      },
+      {
+        "participant_id": "1b308244-bc23-4502-9486-f71264bc289d",
+        "trial_id": "Alexanderplatz-Berlin:6:Römerberg-Frankfurt am Main:Konstablerwache-Frankfurt am Main",
+        "order": 7,
+        "stratum": "agreement",
+        "reference_site": "Alexanderplatz-Berlin",
+        "candidate_a_site": "Römerberg-Frankfurt am Main",
+        "candidate_b_site": "Konstablerwache-Frankfurt am Main",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:31:26.691Z",
+        "answered_at": "2026-09-09T02:31:36.385Z",
+        "duration_ms": 9694,
+        "timestamp": "2026-09-09T02:31:36.385Z"
+      },
+      {
+        "participant_id": "1b308244-bc23-4502-9486-f71264bc289d",
+        "trial_id": "Alter Markt-Cologne:0:Naschmarkt-Leipzig:Augustusplatz-Leipzig",
+        "order": 8,
+        "stratum": "discriminating",
+        "reference_site": "Alter Markt-Cologne",
+        "candidate_a_site": "Naschmarkt-Leipzig",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:31:36.386Z",
+        "answered_at": "2026-09-09T02:31:42.140Z",
+        "duration_ms": 5754,
+        "timestamp": "2026-09-09T02:31:42.140Z"
+      },
+      {
+        "participant_id": "1b308244-bc23-4502-9486-f71264bc289d",
+        "trial_id": "Römerberg-Frankfurt am Main:7:Zeil-Frankfurt am Main:Rathausmarkt-Hamburg",
+        "order": 9,
+        "stratum": "agreement",
+        "reference_site": "Römerberg-Frankfurt am Main",
+        "candidate_a_site": "Zeil-Frankfurt am Main",
+        "candidate_b_site": "Rathausmarkt-Hamburg",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:31:42.141Z",
+        "answered_at": "2026-09-09T02:31:53.632Z",
+        "duration_ms": 11491,
+        "timestamp": "2026-09-09T02:31:53.632Z"
+      },
+      {
+        "participant_id": "1b308244-bc23-4502-9486-f71264bc289d",
+        "trial_id": "Alexanderplatz-Berlin:7:Odeonsplatz-Munich:Herderplatz-Weimar",
+        "order": 10,
+        "stratum": "discriminating",
+        "reference_site": "Alexanderplatz-Berlin",
+        "candidate_a_site": "Odeonsplatz-Munich",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:31:53.633Z",
+        "answered_at": "2026-09-09T02:32:29.892Z",
+        "duration_ms": 36259,
+        "timestamp": "2026-09-09T02:32:29.892Z"
+      },
+      {
+        "participant_id": "1b308244-bc23-4502-9486-f71264bc289d",
+        "trial_id": "Zeil-Frankfurt am Main:7:Odeonsplatz-Munich:Augustusplatz-Leipzig",
+        "order": 11,
+        "stratum": "agreement",
+        "reference_site": "Zeil-Frankfurt am Main",
+        "candidate_a_site": "Odeonsplatz-Munich",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:32:29.892Z",
+        "answered_at": "2026-09-09T02:32:34.698Z",
+        "duration_ms": 4806,
+        "timestamp": "2026-09-09T02:32:34.698Z"
+      }
+    ]
+  },
+  {
+    "participant_id": "1052cbc1-4718-47a5-add6-ba0c3a4ac3f4",
+    "survey_version": "matched_view_v1",
+    "task": "matched_view_2afc",
+    "started_at": "2026-09-09T02:32:43.662Z",
+    "updated_at": "2026-09-09T02:36:05.110Z",
+    "finished_at": "2026-09-09T02:36:05.110Z",
+    "status": "completed",
+    "revision": 13,
+    "background": "yes",
+    "bank_version": "matched_view_v1",
+    "bank_generated_at": "2026-09-08T03:24:57.792Z",
+    "stimulus": {
+      "kind": "rendered_massing_view",
+      "fov_deg": 120,
+      "eye_height_m": 1.6,
+      "textures": false
+    },
+    "responses": [
+      {
+        "participant_id": "1052cbc1-4718-47a5-add6-ba0c3a4ac3f4",
+        "trial_id": "Odeonsplatz-Munich:4:Bebelplatz-Berlin:Augustusplatz-Leipzig",
+        "order": 0,
+        "stratum": "agreement",
+        "reference_site": "Odeonsplatz-Munich",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:34:37.918Z",
+        "answered_at": "2026-09-09T02:34:49.567Z",
+        "duration_ms": 11649,
+        "timestamp": "2026-09-09T02:34:49.567Z"
+      },
+      {
+        "participant_id": "1052cbc1-4718-47a5-add6-ba0c3a4ac3f4",
+        "trial_id": "Burgplatz-Düsseldorf:2:Alter Markt-Cologne:Hauptmarkt-Trier",
+        "order": 1,
+        "stratum": "discriminating",
+        "reference_site": "Burgplatz-Düsseldorf",
+        "candidate_a_site": "Alter Markt-Cologne",
+        "candidate_b_site": "Hauptmarkt-Trier",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:34:49.568Z",
+        "answered_at": "2026-09-09T02:34:54.419Z",
+        "duration_ms": 4851,
+        "timestamp": "2026-09-09T02:34:54.419Z"
+      },
+      {
+        "participant_id": "1052cbc1-4718-47a5-add6-ba0c3a4ac3f4",
+        "trial_id": "Odeonsplatz-Munich:5:Marktplatz-Heidelberg:Theaterplatz-Weimar",
+        "order": 2,
+        "stratum": "discriminating",
+        "reference_site": "Odeonsplatz-Munich",
+        "candidate_a_site": "Marktplatz-Heidelberg",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:34:54.419Z",
+        "answered_at": "2026-09-09T02:34:58.731Z",
+        "duration_ms": 4312,
+        "timestamp": "2026-09-09T02:34:58.731Z"
+      },
+      {
+        "participant_id": "1052cbc1-4718-47a5-add6-ba0c3a4ac3f4",
+        "trial_id": "Zeil-Frankfurt am Main:2:Hauptmarkt-Trier:Herderplatz-Weimar",
+        "order": 3,
+        "stratum": "agreement",
+        "reference_site": "Zeil-Frankfurt am Main",
+        "candidate_a_site": "Hauptmarkt-Trier",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:34:58.732Z",
+        "answered_at": "2026-09-09T02:35:02.283Z",
+        "duration_ms": 3551,
+        "timestamp": "2026-09-09T02:35:02.283Z"
+      },
+      {
+        "participant_id": "1052cbc1-4718-47a5-add6-ba0c3a4ac3f4",
+        "trial_id": "Rathausmarkt-Hamburg:4:Alexanderplatz-Berlin:Naschmarkt-Leipzig",
+        "order": 4,
+        "stratum": "discriminating",
+        "reference_site": "Rathausmarkt-Hamburg",
+        "candidate_a_site": "Alexanderplatz-Berlin",
+        "candidate_b_site": "Naschmarkt-Leipzig",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:35:02.283Z",
+        "answered_at": "2026-09-09T02:35:06.131Z",
+        "duration_ms": 3848,
+        "timestamp": "2026-09-09T02:35:06.131Z"
+      },
+      {
+        "participant_id": "1052cbc1-4718-47a5-add6-ba0c3a4ac3f4",
+        "trial_id": "Alexanderplatz-Berlin:1:Rathausmarkt-Hamburg:Marktplatz-Heidelberg",
+        "order": 5,
+        "stratum": "discriminating",
+        "reference_site": "Alexanderplatz-Berlin",
+        "candidate_a_site": "Rathausmarkt-Hamburg",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:35:06.132Z",
+        "answered_at": "2026-09-09T02:35:12.811Z",
+        "duration_ms": 6679,
+        "timestamp": "2026-09-09T02:35:12.811Z"
+      },
+      {
+        "participant_id": "1052cbc1-4718-47a5-add6-ba0c3a4ac3f4",
+        "trial_id": "Naschmarkt-Leipzig:1:Odeonsplatz-Munich:Marktplatz-Heidelberg",
+        "order": 6,
+        "stratum": "agreement",
+        "reference_site": "Naschmarkt-Leipzig",
+        "candidate_a_site": "Odeonsplatz-Munich",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:35:12.811Z",
+        "answered_at": "2026-09-09T02:35:20.811Z",
+        "duration_ms": 8000,
+        "timestamp": "2026-09-09T02:35:20.811Z"
+      },
+      {
+        "participant_id": "1052cbc1-4718-47a5-add6-ba0c3a4ac3f4",
+        "trial_id": "Gendarmenmarkt-Berlin:6:Hauptwache-Frankfurt am Main:Alexanderplatz-Berlin",
+        "order": 7,
+        "stratum": "discriminating",
+        "reference_site": "Gendarmenmarkt-Berlin",
+        "candidate_a_site": "Hauptwache-Frankfurt am Main",
+        "candidate_b_site": "Alexanderplatz-Berlin",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:35:20.811Z",
+        "answered_at": "2026-09-09T02:35:39.219Z",
+        "duration_ms": 18408,
+        "timestamp": "2026-09-09T02:35:39.219Z"
+      },
+      {
+        "participant_id": "1052cbc1-4718-47a5-add6-ba0c3a4ac3f4",
+        "trial_id": "Odeonsplatz-Munich:6:Konstablerwache-Frankfurt am Main:Theaterplatz-Weimar",
+        "order": 8,
+        "stratum": "agreement",
+        "reference_site": "Odeonsplatz-Munich",
+        "candidate_a_site": "Konstablerwache-Frankfurt am Main",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:35:39.220Z",
+        "answered_at": "2026-09-09T02:35:48.775Z",
+        "duration_ms": 9555,
+        "timestamp": "2026-09-09T02:35:48.775Z"
+      },
+      {
+        "participant_id": "1052cbc1-4718-47a5-add6-ba0c3a4ac3f4",
+        "trial_id": "Zeil-Frankfurt am Main:3:Bebelplatz-Berlin:Konstablerwache-Frankfurt am Main",
+        "order": 9,
+        "stratum": "discriminating",
+        "reference_site": "Zeil-Frankfurt am Main",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Konstablerwache-Frankfurt am Main",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:35:48.775Z",
+        "answered_at": "2026-09-09T02:35:54.211Z",
+        "duration_ms": 5436,
+        "timestamp": "2026-09-09T02:35:54.211Z"
+      },
+      {
+        "participant_id": "1052cbc1-4718-47a5-add6-ba0c3a4ac3f4",
+        "trial_id": "Herderplatz-Weimar:0:Naschmarkt-Leipzig:Hauptmarkt-Trier",
+        "order": 10,
+        "stratum": "agreement",
+        "reference_site": "Herderplatz-Weimar",
+        "candidate_a_site": "Naschmarkt-Leipzig",
+        "candidate_b_site": "Hauptmarkt-Trier",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:35:54.211Z",
+        "answered_at": "2026-09-09T02:36:00.053Z",
+        "duration_ms": 5842,
+        "timestamp": "2026-09-09T02:36:00.053Z"
+      },
+      {
+        "participant_id": "1052cbc1-4718-47a5-add6-ba0c3a4ac3f4",
+        "trial_id": "Alexanderplatz-Berlin:3:Zeil-Frankfurt am Main:Bebelplatz-Berlin",
+        "order": 11,
+        "stratum": "agreement",
+        "reference_site": "Alexanderplatz-Berlin",
+        "candidate_a_site": "Zeil-Frankfurt am Main",
+        "candidate_b_site": "Bebelplatz-Berlin",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:36:00.054Z",
+        "answered_at": "2026-09-09T02:36:03.460Z",
+        "duration_ms": 3406,
+        "timestamp": "2026-09-09T02:36:03.460Z"
+      }
+    ]
+  },
+  {
+    "participant_id": "e1fb5764-2272-43fb-9115-3dd7ee0ef122",
+    "survey_version": "matched_view_v1",
+    "task": "matched_view_2afc",
+    "started_at": "2026-09-09T02:36:14.936Z",
+    "updated_at": "2026-09-09T02:38:40.694Z",
+    "finished_at": "2026-09-09T02:38:40.694Z",
+    "status": "completed",
+    "revision": 13,
+    "background": "yes",
+    "bank_version": "matched_view_v1",
+    "bank_generated_at": "2026-09-08T03:24:57.792Z",
+    "stimulus": {
+      "kind": "rendered_massing_view",
+      "fov_deg": 120,
+      "eye_height_m": 1.6,
+      "textures": false
+    },
+    "responses": [
+      {
+        "participant_id": "e1fb5764-2272-43fb-9115-3dd7ee0ef122",
+        "trial_id": "Alter Markt-Cologne:0:Naschmarkt-Leipzig:Augustusplatz-Leipzig",
+        "order": 0,
+        "stratum": "discriminating",
+        "reference_site": "Alter Markt-Cologne",
+        "candidate_a_site": "Naschmarkt-Leipzig",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:36:20.238Z",
+        "answered_at": "2026-09-09T02:36:28.167Z",
+        "duration_ms": 7929,
+        "timestamp": "2026-09-09T02:36:28.167Z"
+      },
+      {
+        "participant_id": "e1fb5764-2272-43fb-9115-3dd7ee0ef122",
+        "trial_id": "Hauptmarkt-Trier:7:Hauptwache-Frankfurt am Main:Zeil-Frankfurt am Main",
+        "order": 1,
+        "stratum": "discriminating",
+        "reference_site": "Hauptmarkt-Trier",
+        "candidate_a_site": "Hauptwache-Frankfurt am Main",
+        "candidate_b_site": "Zeil-Frankfurt am Main",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:36:28.168Z",
+        "answered_at": "2026-09-09T02:36:33.268Z",
+        "duration_ms": 5100,
+        "timestamp": "2026-09-09T02:36:33.268Z"
+      },
+      {
+        "participant_id": "e1fb5764-2272-43fb-9115-3dd7ee0ef122",
+        "trial_id": "Zeil-Frankfurt am Main:7:Odeonsplatz-Munich:Augustusplatz-Leipzig",
+        "order": 2,
+        "stratum": "agreement",
+        "reference_site": "Zeil-Frankfurt am Main",
+        "candidate_a_site": "Odeonsplatz-Munich",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:36:33.269Z",
+        "answered_at": "2026-09-09T02:36:37.051Z",
+        "duration_ms": 3782,
+        "timestamp": "2026-09-09T02:36:37.051Z"
+      },
+      {
+        "participant_id": "e1fb5764-2272-43fb-9115-3dd7ee0ef122",
+        "trial_id": "Bebelplatz-Berlin:5:Gendarmenmarkt-Berlin:Alter Markt-Cologne",
+        "order": 3,
+        "stratum": "discriminating",
+        "reference_site": "Bebelplatz-Berlin",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Alter Markt-Cologne",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:36:37.052Z",
+        "answered_at": "2026-09-09T02:36:44.495Z",
+        "duration_ms": 7443,
+        "timestamp": "2026-09-09T02:36:44.495Z"
+      },
+      {
+        "participant_id": "e1fb5764-2272-43fb-9115-3dd7ee0ef122",
+        "trial_id": "Herderplatz-Weimar:3:Römerberg-Frankfurt am Main:Bebelplatz-Berlin",
+        "order": 4,
+        "stratum": "agreement",
+        "reference_site": "Herderplatz-Weimar",
+        "candidate_a_site": "Römerberg-Frankfurt am Main",
+        "candidate_b_site": "Bebelplatz-Berlin",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:36:44.495Z",
+        "answered_at": "2026-09-09T02:36:53.227Z",
+        "duration_ms": 8732,
+        "timestamp": "2026-09-09T02:36:53.227Z"
+      },
+      {
+        "participant_id": "e1fb5764-2272-43fb-9115-3dd7ee0ef122",
+        "trial_id": "Marktplatz-Heidelberg:3:Burgplatz-Düsseldorf:Theaterplatz-Weimar",
+        "order": 5,
+        "stratum": "agreement",
+        "reference_site": "Marktplatz-Heidelberg",
+        "candidate_a_site": "Burgplatz-Düsseldorf",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:36:53.228Z",
+        "answered_at": "2026-09-09T02:37:22.915Z",
+        "duration_ms": 29687,
+        "timestamp": "2026-09-09T02:37:22.915Z"
+      },
+      {
+        "participant_id": "e1fb5764-2272-43fb-9115-3dd7ee0ef122",
+        "trial_id": "Augustusplatz-Leipzig:4:Gendarmenmarkt-Berlin:Theaterplatz-Weimar",
+        "order": 6,
+        "stratum": "discriminating",
+        "reference_site": "Augustusplatz-Leipzig",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:37:22.916Z",
+        "answered_at": "2026-09-09T02:37:28.242Z",
+        "duration_ms": 5326,
+        "timestamp": "2026-09-09T02:37:28.242Z"
+      },
+      {
+        "participant_id": "e1fb5764-2272-43fb-9115-3dd7ee0ef122",
+        "trial_id": "Alexanderplatz-Berlin:7:Odeonsplatz-Munich:Herderplatz-Weimar",
+        "order": 7,
+        "stratum": "discriminating",
+        "reference_site": "Alexanderplatz-Berlin",
+        "candidate_a_site": "Odeonsplatz-Munich",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:37:28.243Z",
+        "answered_at": "2026-09-09T02:37:32.950Z",
+        "duration_ms": 4707,
+        "timestamp": "2026-09-09T02:37:32.950Z"
+      },
+      {
+        "participant_id": "e1fb5764-2272-43fb-9115-3dd7ee0ef122",
+        "trial_id": "Augustusplatz-Leipzig:7:Rathausmarkt-Hamburg:Theaterplatz-Weimar",
+        "order": 8,
+        "stratum": "agreement",
+        "reference_site": "Augustusplatz-Leipzig",
+        "candidate_a_site": "Rathausmarkt-Hamburg",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:37:32.951Z",
+        "answered_at": "2026-09-09T02:37:38.460Z",
+        "duration_ms": 5509,
+        "timestamp": "2026-09-09T02:37:38.460Z"
+      },
+      {
+        "participant_id": "e1fb5764-2272-43fb-9115-3dd7ee0ef122",
+        "trial_id": "Konstablerwache-Frankfurt am Main:3:Gendarmenmarkt-Berlin:Alexanderplatz-Berlin",
+        "order": 9,
+        "stratum": "agreement",
+        "reference_site": "Konstablerwache-Frankfurt am Main",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Alexanderplatz-Berlin",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:37:38.461Z",
+        "answered_at": "2026-09-09T02:38:09.519Z",
+        "duration_ms": 31058,
+        "timestamp": "2026-09-09T02:38:09.519Z"
+      },
+      {
+        "participant_id": "e1fb5764-2272-43fb-9115-3dd7ee0ef122",
+        "trial_id": "Augustusplatz-Leipzig:5:Naschmarkt-Leipzig:Burgplatz-Düsseldorf",
+        "order": 10,
+        "stratum": "agreement",
+        "reference_site": "Augustusplatz-Leipzig",
+        "candidate_a_site": "Naschmarkt-Leipzig",
+        "candidate_b_site": "Burgplatz-Düsseldorf",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T02:38:09.519Z",
+        "answered_at": "2026-09-09T02:38:23.935Z",
+        "duration_ms": 14416,
+        "timestamp": "2026-09-09T02:38:23.935Z"
+      },
+      {
+        "participant_id": "e1fb5764-2272-43fb-9115-3dd7ee0ef122",
+        "trial_id": "Hauptwache-Frankfurt am Main:5:Bebelplatz-Berlin:Odeonsplatz-Munich",
+        "order": 11,
+        "stratum": "discriminating",
+        "reference_site": "Hauptwache-Frankfurt am Main",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Odeonsplatz-Munich",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T02:38:23.936Z",
+        "answered_at": "2026-09-09T02:38:38.744Z",
+        "duration_ms": 14808,
+        "timestamp": "2026-09-09T02:38:38.744Z"
+      }
+    ]
+  },
+  {
+    "participant_id": "5aa2dd25-af52-4744-9b33-d55e9d4d4521",
+    "survey_version": "matched_view_v1",
+    "task": "matched_view_2afc",
+    "started_at": "2026-09-09T09:53:15.695Z",
+    "updated_at": "2026-09-09T09:57:22.074Z",
+    "finished_at": "2026-09-09T09:57:22.074Z",
+    "status": "completed",
+    "revision": 13,
+    "background": "no",
+    "bank_version": "matched_view_v1",
+    "bank_generated_at": "2026-09-08T03:24:57.792Z",
+    "stimulus": {
+      "kind": "rendered_massing_view",
+      "fov_deg": 120,
+      "eye_height_m": 1.6,
+      "textures": false
+    },
+    "responses": [
+      {
+        "participant_id": "5aa2dd25-af52-4744-9b33-d55e9d4d4521",
+        "trial_id": "Odeonsplatz-Munich:3:Hauptwache-Frankfurt am Main:Burgplatz-Düsseldorf",
+        "order": 0,
+        "stratum": "agreement",
+        "reference_site": "Odeonsplatz-Munich",
+        "candidate_a_site": "Hauptwache-Frankfurt am Main",
+        "candidate_b_site": "Burgplatz-Düsseldorf",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T09:53:19.161Z",
+        "answered_at": "2026-09-09T09:54:10.214Z",
+        "duration_ms": 51053,
+        "timestamp": "2026-09-09T09:54:10.214Z"
+      },
+      {
+        "participant_id": "5aa2dd25-af52-4744-9b33-d55e9d4d4521",
+        "trial_id": "Römerberg-Frankfurt am Main:0:Bebelplatz-Berlin:Burgplatz-Düsseldorf",
+        "order": 1,
+        "stratum": "agreement",
+        "reference_site": "Römerberg-Frankfurt am Main",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Burgplatz-Düsseldorf",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T09:54:10.216Z",
+        "answered_at": "2026-09-09T09:54:22.342Z",
+        "duration_ms": 12126,
+        "timestamp": "2026-09-09T09:54:22.342Z"
+      },
+      {
+        "participant_id": "5aa2dd25-af52-4744-9b33-d55e9d4d4521",
+        "trial_id": "Theaterplatz-Weimar:0:Burgplatz-Düsseldorf:Hauptmarkt-Trier",
+        "order": 2,
+        "stratum": "discriminating",
+        "reference_site": "Theaterplatz-Weimar",
+        "candidate_a_site": "Burgplatz-Düsseldorf",
+        "candidate_b_site": "Hauptmarkt-Trier",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T09:54:22.343Z",
+        "answered_at": "2026-09-09T09:54:33.361Z",
+        "duration_ms": 11018,
+        "timestamp": "2026-09-09T09:54:33.361Z"
+      },
+      {
+        "participant_id": "5aa2dd25-af52-4744-9b33-d55e9d4d4521",
+        "trial_id": "Herderplatz-Weimar:3:Römerberg-Frankfurt am Main:Bebelplatz-Berlin",
+        "order": 3,
+        "stratum": "agreement",
+        "reference_site": "Herderplatz-Weimar",
+        "candidate_a_site": "Römerberg-Frankfurt am Main",
+        "candidate_b_site": "Bebelplatz-Berlin",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T09:54:33.362Z",
+        "answered_at": "2026-09-09T09:54:41.859Z",
+        "duration_ms": 8497,
+        "timestamp": "2026-09-09T09:54:41.859Z"
+      },
+      {
+        "participant_id": "5aa2dd25-af52-4744-9b33-d55e9d4d4521",
+        "trial_id": "Marktplatz-Heidelberg:0:Bebelplatz-Berlin:Theaterplatz-Weimar",
+        "order": 4,
+        "stratum": "discriminating",
+        "reference_site": "Marktplatz-Heidelberg",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T09:54:41.860Z",
+        "answered_at": "2026-09-09T09:55:00.562Z",
+        "duration_ms": 18702,
+        "timestamp": "2026-09-09T09:55:00.562Z"
+      },
+      {
+        "participant_id": "5aa2dd25-af52-4744-9b33-d55e9d4d4521",
+        "trial_id": "Herderplatz-Weimar:7:Bebelplatz-Berlin:Odeonsplatz-Munich",
+        "order": 5,
+        "stratum": "discriminating",
+        "reference_site": "Herderplatz-Weimar",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Odeonsplatz-Munich",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T09:55:00.563Z",
+        "answered_at": "2026-09-09T09:55:11.137Z",
+        "duration_ms": 10574,
+        "timestamp": "2026-09-09T09:55:11.137Z"
+      },
+      {
+        "participant_id": "5aa2dd25-af52-4744-9b33-d55e9d4d4521",
+        "trial_id": "Alexanderplatz-Berlin:1:Hauptwache-Frankfurt am Main:Theaterplatz-Weimar",
+        "order": 6,
+        "stratum": "agreement",
+        "reference_site": "Alexanderplatz-Berlin",
+        "candidate_a_site": "Hauptwache-Frankfurt am Main",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T09:55:11.138Z",
+        "answered_at": "2026-09-09T09:55:36.027Z",
+        "duration_ms": 24889,
+        "timestamp": "2026-09-09T09:55:36.027Z"
+      },
+      {
+        "participant_id": "5aa2dd25-af52-4744-9b33-d55e9d4d4521",
+        "trial_id": "Augustusplatz-Leipzig:5:Alexanderplatz-Berlin:Herderplatz-Weimar",
+        "order": 7,
+        "stratum": "discriminating",
+        "reference_site": "Augustusplatz-Leipzig",
+        "candidate_a_site": "Alexanderplatz-Berlin",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T09:55:36.028Z",
+        "answered_at": "2026-09-09T09:55:52.667Z",
+        "duration_ms": 16639,
+        "timestamp": "2026-09-09T09:55:52.667Z"
+      },
+      {
+        "participant_id": "5aa2dd25-af52-4744-9b33-d55e9d4d4521",
+        "trial_id": "Odeonsplatz-Munich:4:Bebelplatz-Berlin:Augustusplatz-Leipzig",
+        "order": 8,
+        "stratum": "agreement",
+        "reference_site": "Odeonsplatz-Munich",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T09:55:52.667Z",
+        "answered_at": "2026-09-09T09:55:59.922Z",
+        "duration_ms": 7255,
+        "timestamp": "2026-09-09T09:55:59.922Z"
+      },
+      {
+        "participant_id": "5aa2dd25-af52-4744-9b33-d55e9d4d4521",
+        "trial_id": "Burgplatz-Düsseldorf:5:Gendarmenmarkt-Berlin:Marktplatz-Heidelberg",
+        "order": 9,
+        "stratum": "discriminating",
+        "reference_site": "Burgplatz-Düsseldorf",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T09:55:59.924Z",
+        "answered_at": "2026-09-09T09:56:46.599Z",
+        "duration_ms": 46675,
+        "timestamp": "2026-09-09T09:56:46.599Z"
+      },
+      {
+        "participant_id": "5aa2dd25-af52-4744-9b33-d55e9d4d4521",
+        "trial_id": "Bebelplatz-Berlin:7:Römerberg-Frankfurt am Main:Rathausmarkt-Hamburg",
+        "order": 10,
+        "stratum": "agreement",
+        "reference_site": "Bebelplatz-Berlin",
+        "candidate_a_site": "Römerberg-Frankfurt am Main",
+        "candidate_b_site": "Rathausmarkt-Hamburg",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T09:56:46.600Z",
+        "answered_at": "2026-09-09T09:57:08.322Z",
+        "duration_ms": 21722,
+        "timestamp": "2026-09-09T09:57:08.322Z"
+      },
+      {
+        "participant_id": "5aa2dd25-af52-4744-9b33-d55e9d4d4521",
+        "trial_id": "Augustusplatz-Leipzig:4:Gendarmenmarkt-Berlin:Theaterplatz-Weimar",
+        "order": 11,
+        "stratum": "discriminating",
+        "reference_site": "Augustusplatz-Leipzig",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T09:57:08.323Z",
+        "answered_at": "2026-09-09T09:57:20.031Z",
+        "duration_ms": 11708,
+        "timestamp": "2026-09-09T09:57:20.031Z"
+      }
+    ]
+  },
+  {
+    "participant_id": "d211c108-cb75-484d-a384-3c1a80c9a0c9",
+    "survey_version": "matched_view_v1",
+    "task": "matched_view_2afc",
+    "started_at": "2026-09-09T09:58:14.825Z",
+    "updated_at": "2026-09-09T10:00:49.605Z",
+    "finished_at": "2026-09-09T10:00:49.605Z",
+    "status": "completed",
+    "revision": 13,
+    "background": "yes",
+    "bank_version": "matched_view_v1",
+    "bank_generated_at": "2026-09-08T03:24:57.792Z",
+    "stimulus": {
+      "kind": "rendered_massing_view",
+      "fov_deg": 120,
+      "eye_height_m": 1.6,
+      "textures": false
+    },
+    "responses": [
+      {
+        "participant_id": "d211c108-cb75-484d-a384-3c1a80c9a0c9",
+        "trial_id": "Hauptmarkt-Trier:0:Zeil-Frankfurt am Main:Rathausmarkt-Hamburg",
+        "order": 0,
+        "stratum": "discriminating",
+        "reference_site": "Hauptmarkt-Trier",
+        "candidate_a_site": "Zeil-Frankfurt am Main",
+        "candidate_b_site": "Rathausmarkt-Hamburg",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T09:58:16.409Z",
+        "answered_at": "2026-09-09T09:58:44.421Z",
+        "duration_ms": 28012,
+        "timestamp": "2026-09-09T09:58:44.421Z"
+      },
+      {
+        "participant_id": "d211c108-cb75-484d-a384-3c1a80c9a0c9",
+        "trial_id": "Herderplatz-Weimar:0:Zeil-Frankfurt am Main:Augustusplatz-Leipzig",
+        "order": 1,
+        "stratum": "discriminating",
+        "reference_site": "Herderplatz-Weimar",
+        "candidate_a_site": "Zeil-Frankfurt am Main",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T09:58:44.421Z",
+        "answered_at": "2026-09-09T09:58:52.413Z",
+        "duration_ms": 7992,
+        "timestamp": "2026-09-09T09:58:52.413Z"
+      },
+      {
+        "participant_id": "d211c108-cb75-484d-a384-3c1a80c9a0c9",
+        "trial_id": "Marktplatz-Heidelberg:3:Römerberg-Frankfurt am Main:Herderplatz-Weimar",
+        "order": 2,
+        "stratum": "discriminating",
+        "reference_site": "Marktplatz-Heidelberg",
+        "candidate_a_site": "Römerberg-Frankfurt am Main",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T09:58:52.414Z",
+        "answered_at": "2026-09-09T09:59:05.945Z",
+        "duration_ms": 13531,
+        "timestamp": "2026-09-09T09:59:05.945Z"
+      },
+      {
+        "participant_id": "d211c108-cb75-484d-a384-3c1a80c9a0c9",
+        "trial_id": "Marktplatz-Heidelberg:2:Hauptwache-Frankfurt am Main:Marienplatz-Munich",
+        "order": 3,
+        "stratum": "agreement",
+        "reference_site": "Marktplatz-Heidelberg",
+        "candidate_a_site": "Hauptwache-Frankfurt am Main",
+        "candidate_b_site": "Marienplatz-Munich",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T09:59:05.945Z",
+        "answered_at": "2026-09-09T09:59:10.133Z",
+        "duration_ms": 4188,
+        "timestamp": "2026-09-09T09:59:10.133Z"
+      },
+      {
+        "participant_id": "d211c108-cb75-484d-a384-3c1a80c9a0c9",
+        "trial_id": "Naschmarkt-Leipzig:5:Augustusplatz-Leipzig:Hauptmarkt-Trier",
+        "order": 4,
+        "stratum": "discriminating",
+        "reference_site": "Naschmarkt-Leipzig",
+        "candidate_a_site": "Augustusplatz-Leipzig",
+        "candidate_b_site": "Hauptmarkt-Trier",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T09:59:10.134Z",
+        "answered_at": "2026-09-09T09:59:21.678Z",
+        "duration_ms": 11544,
+        "timestamp": "2026-09-09T09:59:21.678Z"
+      },
+      {
+        "participant_id": "d211c108-cb75-484d-a384-3c1a80c9a0c9",
+        "trial_id": "Marktplatz-Heidelberg:3:Burgplatz-Düsseldorf:Theaterplatz-Weimar",
+        "order": 5,
+        "stratum": "agreement",
+        "reference_site": "Marktplatz-Heidelberg",
+        "candidate_a_site": "Burgplatz-Düsseldorf",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T09:59:21.679Z",
+        "answered_at": "2026-09-09T09:59:30.089Z",
+        "duration_ms": 8410,
+        "timestamp": "2026-09-09T09:59:30.089Z"
+      },
+      {
+        "participant_id": "d211c108-cb75-484d-a384-3c1a80c9a0c9",
+        "trial_id": "Bebelplatz-Berlin:7:Römerberg-Frankfurt am Main:Rathausmarkt-Hamburg",
+        "order": 6,
+        "stratum": "agreement",
+        "reference_site": "Bebelplatz-Berlin",
+        "candidate_a_site": "Römerberg-Frankfurt am Main",
+        "candidate_b_site": "Rathausmarkt-Hamburg",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T09:59:30.089Z",
+        "answered_at": "2026-09-09T09:59:36.161Z",
+        "duration_ms": 6072,
+        "timestamp": "2026-09-09T09:59:36.161Z"
+      },
+      {
+        "participant_id": "d211c108-cb75-484d-a384-3c1a80c9a0c9",
+        "trial_id": "Gendarmenmarkt-Berlin:6:Naschmarkt-Leipzig:Burgplatz-Düsseldorf",
+        "order": 7,
+        "stratum": "agreement",
+        "reference_site": "Gendarmenmarkt-Berlin",
+        "candidate_a_site": "Naschmarkt-Leipzig",
+        "candidate_b_site": "Burgplatz-Düsseldorf",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T09:59:36.161Z",
+        "answered_at": "2026-09-09T10:00:01.878Z",
+        "duration_ms": 25717,
+        "timestamp": "2026-09-09T10:00:01.878Z"
+      },
+      {
+        "participant_id": "d211c108-cb75-484d-a384-3c1a80c9a0c9",
+        "trial_id": "Hauptwache-Frankfurt am Main:6:Marktplatz-Heidelberg:Hauptmarkt-Trier",
+        "order": 8,
+        "stratum": "agreement",
+        "reference_site": "Hauptwache-Frankfurt am Main",
+        "candidate_a_site": "Marktplatz-Heidelberg",
+        "candidate_b_site": "Hauptmarkt-Trier",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:00:01.878Z",
+        "answered_at": "2026-09-09T10:00:12.149Z",
+        "duration_ms": 10271,
+        "timestamp": "2026-09-09T10:00:12.149Z"
+      },
+      {
+        "participant_id": "d211c108-cb75-484d-a384-3c1a80c9a0c9",
+        "trial_id": "Burgplatz-Düsseldorf:2:Gendarmenmarkt-Berlin:Naschmarkt-Leipzig",
+        "order": 9,
+        "stratum": "agreement",
+        "reference_site": "Burgplatz-Düsseldorf",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Naschmarkt-Leipzig",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:00:12.149Z",
+        "answered_at": "2026-09-09T10:00:16.553Z",
+        "duration_ms": 4404,
+        "timestamp": "2026-09-09T10:00:16.553Z"
+      },
+      {
+        "participant_id": "d211c108-cb75-484d-a384-3c1a80c9a0c9",
+        "trial_id": "Alter Markt-Cologne:5:Marienplatz-Munich:Rathausmarkt-Hamburg",
+        "order": 10,
+        "stratum": "discriminating",
+        "reference_site": "Alter Markt-Cologne",
+        "candidate_a_site": "Marienplatz-Munich",
+        "candidate_b_site": "Rathausmarkt-Hamburg",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:00:16.553Z",
+        "answered_at": "2026-09-09T10:00:41.045Z",
+        "duration_ms": 24492,
+        "timestamp": "2026-09-09T10:00:41.045Z"
+      },
+      {
+        "participant_id": "d211c108-cb75-484d-a384-3c1a80c9a0c9",
+        "trial_id": "Marienplatz-Munich:6:Burgplatz-Düsseldorf:Herderplatz-Weimar",
+        "order": 11,
+        "stratum": "discriminating",
+        "reference_site": "Marienplatz-Munich",
+        "candidate_a_site": "Burgplatz-Düsseldorf",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:00:41.045Z",
+        "answered_at": "2026-09-09T10:00:47.625Z",
+        "duration_ms": 6580,
+        "timestamp": "2026-09-09T10:00:47.625Z"
+      }
+    ]
+  },
+  {
+    "participant_id": "abc595d4-5599-48e3-a62c-4153f18512b8",
+    "survey_version": "matched_view_v1",
+    "task": "matched_view_2afc",
+    "started_at": "2026-09-09T10:02:00.996Z",
+    "updated_at": "2026-09-09T10:05:28.127Z",
+    "finished_at": "2026-09-09T10:05:28.127Z",
+    "status": "completed",
+    "revision": 13,
+    "background": "yes",
+    "bank_version": "matched_view_v1",
+    "bank_generated_at": "2026-09-08T03:24:57.792Z",
+    "stimulus": {
+      "kind": "rendered_massing_view",
+      "fov_deg": 120,
+      "eye_height_m": 1.6,
+      "textures": false
+    },
+    "responses": [
+      {
+        "participant_id": "abc595d4-5599-48e3-a62c-4153f18512b8",
+        "trial_id": "Naschmarkt-Leipzig:3:Zeil-Frankfurt am Main:Alexanderplatz-Berlin",
+        "order": 0,
+        "stratum": "discriminating",
+        "reference_site": "Naschmarkt-Leipzig",
+        "candidate_a_site": "Zeil-Frankfurt am Main",
+        "candidate_b_site": "Alexanderplatz-Berlin",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:02:01.934Z",
+        "answered_at": "2026-09-09T10:02:13.065Z",
+        "duration_ms": 11131,
+        "timestamp": "2026-09-09T10:02:13.065Z"
+      },
+      {
+        "participant_id": "abc595d4-5599-48e3-a62c-4153f18512b8",
+        "trial_id": "Bebelplatz-Berlin:4:Gendarmenmarkt-Berlin:Römerberg-Frankfurt am Main",
+        "order": 1,
+        "stratum": "agreement",
+        "reference_site": "Bebelplatz-Berlin",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Römerberg-Frankfurt am Main",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:02:13.066Z",
+        "answered_at": "2026-09-09T10:02:17.753Z",
+        "duration_ms": 4687,
+        "timestamp": "2026-09-09T10:02:17.753Z"
+      },
+      {
+        "participant_id": "abc595d4-5599-48e3-a62c-4153f18512b8",
+        "trial_id": "Marktplatz-Heidelberg:1:Marienplatz-Munich:Konstablerwache-Frankfurt am Main",
+        "order": 2,
+        "stratum": "discriminating",
+        "reference_site": "Marktplatz-Heidelberg",
+        "candidate_a_site": "Marienplatz-Munich",
+        "candidate_b_site": "Konstablerwache-Frankfurt am Main",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:02:17.753Z",
+        "answered_at": "2026-09-09T10:02:23.176Z",
+        "duration_ms": 5423,
+        "timestamp": "2026-09-09T10:02:23.176Z"
+      },
+      {
+        "participant_id": "abc595d4-5599-48e3-a62c-4153f18512b8",
+        "trial_id": "Hauptwache-Frankfurt am Main:7:Zeil-Frankfurt am Main:Konstablerwache-Frankfurt am Main",
+        "order": 3,
+        "stratum": "discriminating",
+        "reference_site": "Hauptwache-Frankfurt am Main",
+        "candidate_a_site": "Zeil-Frankfurt am Main",
+        "candidate_b_site": "Konstablerwache-Frankfurt am Main",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:02:23.177Z",
+        "answered_at": "2026-09-09T10:02:27.624Z",
+        "duration_ms": 4447,
+        "timestamp": "2026-09-09T10:02:27.624Z"
+      },
+      {
+        "participant_id": "abc595d4-5599-48e3-a62c-4153f18512b8",
+        "trial_id": "Marktplatz-Heidelberg:3:Römerberg-Frankfurt am Main:Herderplatz-Weimar",
+        "order": 4,
+        "stratum": "discriminating",
+        "reference_site": "Marktplatz-Heidelberg",
+        "candidate_a_site": "Römerberg-Frankfurt am Main",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:02:27.624Z",
+        "answered_at": "2026-09-09T10:02:36.753Z",
+        "duration_ms": 9129,
+        "timestamp": "2026-09-09T10:02:36.753Z"
+      },
+      {
+        "participant_id": "abc595d4-5599-48e3-a62c-4153f18512b8",
+        "trial_id": "Rathausmarkt-Hamburg:0:Hauptwache-Frankfurt am Main:Zeil-Frankfurt am Main",
+        "order": 5,
+        "stratum": "discriminating",
+        "reference_site": "Rathausmarkt-Hamburg",
+        "candidate_a_site": "Hauptwache-Frankfurt am Main",
+        "candidate_b_site": "Zeil-Frankfurt am Main",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:02:36.754Z",
+        "answered_at": "2026-09-09T10:02:53.728Z",
+        "duration_ms": 16974,
+        "timestamp": "2026-09-09T10:02:53.728Z"
+      },
+      {
+        "participant_id": "abc595d4-5599-48e3-a62c-4153f18512b8",
+        "trial_id": "Zeil-Frankfurt am Main:2:Hauptmarkt-Trier:Herderplatz-Weimar",
+        "order": 6,
+        "stratum": "agreement",
+        "reference_site": "Zeil-Frankfurt am Main",
+        "candidate_a_site": "Hauptmarkt-Trier",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:02:53.729Z",
+        "answered_at": "2026-09-09T10:03:14.840Z",
+        "duration_ms": 21111,
+        "timestamp": "2026-09-09T10:03:14.840Z"
+      },
+      {
+        "participant_id": "abc595d4-5599-48e3-a62c-4153f18512b8",
+        "trial_id": "Bebelplatz-Berlin:3:Alter Markt-Cologne:Rathausmarkt-Hamburg",
+        "order": 7,
+        "stratum": "discriminating",
+        "reference_site": "Bebelplatz-Berlin",
+        "candidate_a_site": "Alter Markt-Cologne",
+        "candidate_b_site": "Rathausmarkt-Hamburg",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:03:14.841Z",
+        "answered_at": "2026-09-09T10:03:31.737Z",
+        "duration_ms": 16896,
+        "timestamp": "2026-09-09T10:03:31.737Z"
+      },
+      {
+        "participant_id": "abc595d4-5599-48e3-a62c-4153f18512b8",
+        "trial_id": "Zeil-Frankfurt am Main:7:Odeonsplatz-Munich:Augustusplatz-Leipzig",
+        "order": 8,
+        "stratum": "agreement",
+        "reference_site": "Zeil-Frankfurt am Main",
+        "candidate_a_site": "Odeonsplatz-Munich",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:03:31.738Z",
+        "answered_at": "2026-09-09T10:03:35.505Z",
+        "duration_ms": 3767,
+        "timestamp": "2026-09-09T10:03:35.505Z"
+      },
+      {
+        "participant_id": "abc595d4-5599-48e3-a62c-4153f18512b8",
+        "trial_id": "Hauptmarkt-Trier:0:Alter Markt-Cologne:Naschmarkt-Leipzig",
+        "order": 9,
+        "stratum": "agreement",
+        "reference_site": "Hauptmarkt-Trier",
+        "candidate_a_site": "Alter Markt-Cologne",
+        "candidate_b_site": "Naschmarkt-Leipzig",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:03:35.505Z",
+        "answered_at": "2026-09-09T10:05:14.847Z",
+        "duration_ms": 99342,
+        "timestamp": "2026-09-09T10:05:14.847Z"
+      },
+      {
+        "participant_id": "abc595d4-5599-48e3-a62c-4153f18512b8",
+        "trial_id": "Naschmarkt-Leipzig:7:Römerberg-Frankfurt am Main:Marienplatz-Munich",
+        "order": 10,
+        "stratum": "agreement",
+        "reference_site": "Naschmarkt-Leipzig",
+        "candidate_a_site": "Römerberg-Frankfurt am Main",
+        "candidate_b_site": "Marienplatz-Munich",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:05:14.848Z",
+        "answered_at": "2026-09-09T10:05:22.720Z",
+        "duration_ms": 7872,
+        "timestamp": "2026-09-09T10:05:22.720Z"
+      },
+      {
+        "participant_id": "abc595d4-5599-48e3-a62c-4153f18512b8",
+        "trial_id": "Naschmarkt-Leipzig:1:Odeonsplatz-Munich:Marktplatz-Heidelberg",
+        "order": 11,
+        "stratum": "agreement",
+        "reference_site": "Naschmarkt-Leipzig",
+        "candidate_a_site": "Odeonsplatz-Munich",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:05:22.720Z",
+        "answered_at": "2026-09-09T10:05:26.177Z",
+        "duration_ms": 3457,
+        "timestamp": "2026-09-09T10:05:26.177Z"
+      }
+    ]
+  },
+  {
+    "participant_id": "58b966d8-d836-44e8-be95-50925cff43f7",
+    "survey_version": "matched_view_v1",
+    "task": "matched_view_2afc",
+    "started_at": "2026-09-09T10:07:01.219Z",
+    "updated_at": "2026-09-09T10:09:08.143Z",
+    "finished_at": "2026-09-09T10:09:08.143Z",
+    "status": "completed",
+    "revision": 13,
+    "background": "yes",
+    "bank_version": "matched_view_v1",
+    "bank_generated_at": "2026-09-08T03:24:57.792Z",
+    "stimulus": {
+      "kind": "rendered_massing_view",
+      "fov_deg": 120,
+      "eye_height_m": 1.6,
+      "textures": false
+    },
+    "responses": [
+      {
+        "participant_id": "58b966d8-d836-44e8-be95-50925cff43f7",
+        "trial_id": "Konstablerwache-Frankfurt am Main:0:Gendarmenmarkt-Berlin:Theaterplatz-Weimar",
+        "order": 0,
+        "stratum": "discriminating",
+        "reference_site": "Konstablerwache-Frankfurt am Main",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:07:02.315Z",
+        "answered_at": "2026-09-09T10:07:10.725Z",
+        "duration_ms": 8410,
+        "timestamp": "2026-09-09T10:07:10.725Z"
+      },
+      {
+        "participant_id": "58b966d8-d836-44e8-be95-50925cff43f7",
+        "trial_id": "Hauptwache-Frankfurt am Main:5:Bebelplatz-Berlin:Odeonsplatz-Munich",
+        "order": 1,
+        "stratum": "discriminating",
+        "reference_site": "Hauptwache-Frankfurt am Main",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Odeonsplatz-Munich",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:07:10.726Z",
+        "answered_at": "2026-09-09T10:07:22.348Z",
+        "duration_ms": 11622,
+        "timestamp": "2026-09-09T10:07:22.348Z"
+      },
+      {
+        "participant_id": "58b966d8-d836-44e8-be95-50925cff43f7",
+        "trial_id": "Naschmarkt-Leipzig:3:Alter Markt-Cologne:Herderplatz-Weimar",
+        "order": 2,
+        "stratum": "agreement",
+        "reference_site": "Naschmarkt-Leipzig",
+        "candidate_a_site": "Alter Markt-Cologne",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:07:22.349Z",
+        "answered_at": "2026-09-09T10:07:24.859Z",
+        "duration_ms": 2510,
+        "timestamp": "2026-09-09T10:07:24.859Z"
+      },
+      {
+        "participant_id": "58b966d8-d836-44e8-be95-50925cff43f7",
+        "trial_id": "Naschmarkt-Leipzig:3:Zeil-Frankfurt am Main:Alexanderplatz-Berlin",
+        "order": 3,
+        "stratum": "discriminating",
+        "reference_site": "Naschmarkt-Leipzig",
+        "candidate_a_site": "Zeil-Frankfurt am Main",
+        "candidate_b_site": "Alexanderplatz-Berlin",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:07:24.860Z",
+        "answered_at": "2026-09-09T10:07:38.263Z",
+        "duration_ms": 13403,
+        "timestamp": "2026-09-09T10:07:38.263Z"
+      },
+      {
+        "participant_id": "58b966d8-d836-44e8-be95-50925cff43f7",
+        "trial_id": "Burgplatz-Düsseldorf:1:Hauptwache-Frankfurt am Main:Alter Markt-Cologne",
+        "order": 4,
+        "stratum": "discriminating",
+        "reference_site": "Burgplatz-Düsseldorf",
+        "candidate_a_site": "Hauptwache-Frankfurt am Main",
+        "candidate_b_site": "Alter Markt-Cologne",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:07:38.264Z",
+        "answered_at": "2026-09-09T10:07:41.415Z",
+        "duration_ms": 3151,
+        "timestamp": "2026-09-09T10:07:41.415Z"
+      },
+      {
+        "participant_id": "58b966d8-d836-44e8-be95-50925cff43f7",
+        "trial_id": "Augustusplatz-Leipzig:7:Rathausmarkt-Hamburg:Theaterplatz-Weimar",
+        "order": 5,
+        "stratum": "agreement",
+        "reference_site": "Augustusplatz-Leipzig",
+        "candidate_a_site": "Rathausmarkt-Hamburg",
+        "candidate_b_site": "Theaterplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:07:41.415Z",
+        "answered_at": "2026-09-09T10:07:55.635Z",
+        "duration_ms": 14220,
+        "timestamp": "2026-09-09T10:07:55.635Z"
+      },
+      {
+        "participant_id": "58b966d8-d836-44e8-be95-50925cff43f7",
+        "trial_id": "Hauptwache-Frankfurt am Main:7:Odeonsplatz-Munich:Burgplatz-Düsseldorf",
+        "order": 6,
+        "stratum": "agreement",
+        "reference_site": "Hauptwache-Frankfurt am Main",
+        "candidate_a_site": "Odeonsplatz-Munich",
+        "candidate_b_site": "Burgplatz-Düsseldorf",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:07:55.635Z",
+        "answered_at": "2026-09-09T10:08:17.955Z",
+        "duration_ms": 22320,
+        "timestamp": "2026-09-09T10:08:17.955Z"
+      },
+      {
+        "participant_id": "58b966d8-d836-44e8-be95-50925cff43f7",
+        "trial_id": "Hauptmarkt-Trier:5:Gendarmenmarkt-Berlin:Odeonsplatz-Munich",
+        "order": 7,
+        "stratum": "discriminating",
+        "reference_site": "Hauptmarkt-Trier",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Odeonsplatz-Munich",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:08:17.956Z",
+        "answered_at": "2026-09-09T10:08:29.339Z",
+        "duration_ms": 11383,
+        "timestamp": "2026-09-09T10:08:29.339Z"
+      },
+      {
+        "participant_id": "58b966d8-d836-44e8-be95-50925cff43f7",
+        "trial_id": "Gendarmenmarkt-Berlin:5:Zeil-Frankfurt am Main:Hauptmarkt-Trier",
+        "order": 8,
+        "stratum": "agreement",
+        "reference_site": "Gendarmenmarkt-Berlin",
+        "candidate_a_site": "Zeil-Frankfurt am Main",
+        "candidate_b_site": "Hauptmarkt-Trier",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:08:29.340Z",
+        "answered_at": "2026-09-09T10:08:44.435Z",
+        "duration_ms": 15095,
+        "timestamp": "2026-09-09T10:08:44.435Z"
+      },
+      {
+        "participant_id": "58b966d8-d836-44e8-be95-50925cff43f7",
+        "trial_id": "Rathausmarkt-Hamburg:3:Alter Markt-Cologne:Marktplatz-Heidelberg",
+        "order": 9,
+        "stratum": "agreement",
+        "reference_site": "Rathausmarkt-Hamburg",
+        "candidate_a_site": "Alter Markt-Cologne",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:08:44.436Z",
+        "answered_at": "2026-09-09T10:08:56.199Z",
+        "duration_ms": 11763,
+        "timestamp": "2026-09-09T10:08:56.199Z"
+      },
+      {
+        "participant_id": "58b966d8-d836-44e8-be95-50925cff43f7",
+        "trial_id": "Römerberg-Frankfurt am Main:7:Zeil-Frankfurt am Main:Rathausmarkt-Hamburg",
+        "order": 10,
+        "stratum": "agreement",
+        "reference_site": "Römerberg-Frankfurt am Main",
+        "candidate_a_site": "Zeil-Frankfurt am Main",
+        "candidate_b_site": "Rathausmarkt-Hamburg",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:08:56.199Z",
+        "answered_at": "2026-09-09T10:09:01.291Z",
+        "duration_ms": 5092,
+        "timestamp": "2026-09-09T10:09:01.291Z"
+      },
+      {
+        "participant_id": "58b966d8-d836-44e8-be95-50925cff43f7",
+        "trial_id": "Römerberg-Frankfurt am Main:0:Naschmarkt-Leipzig:Augustusplatz-Leipzig",
+        "order": 11,
+        "stratum": "discriminating",
+        "reference_site": "Römerberg-Frankfurt am Main",
+        "candidate_a_site": "Naschmarkt-Leipzig",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:09:01.292Z",
+        "answered_at": "2026-09-09T10:09:06.687Z",
+        "duration_ms": 5395,
+        "timestamp": "2026-09-09T10:09:06.687Z"
+      }
+    ]
+  },
+  {
+    "participant_id": "a3ff6215-10a5-4506-b6c6-44935fdeec33",
+    "survey_version": "matched_view_v1",
+    "task": "matched_view_2afc",
+    "started_at": "2026-09-09T10:09:21.393Z",
+    "updated_at": "2026-09-09T10:11:45.646Z",
+    "finished_at": "2026-09-09T10:11:45.646Z",
+    "status": "completed",
+    "revision": 13,
+    "background": "yes",
+    "bank_version": "matched_view_v1",
+    "bank_generated_at": "2026-09-08T03:24:57.792Z",
+    "stimulus": {
+      "kind": "rendered_massing_view",
+      "fov_deg": 120,
+      "eye_height_m": 1.6,
+      "textures": false
+    },
+    "responses": [
+      {
+        "participant_id": "a3ff6215-10a5-4506-b6c6-44935fdeec33",
+        "trial_id": "Marienplatz-Munich:0:Bebelplatz-Berlin:Konstablerwache-Frankfurt am Main",
+        "order": 0,
+        "stratum": "discriminating",
+        "reference_site": "Marienplatz-Munich",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Konstablerwache-Frankfurt am Main",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:10:33.987Z",
+        "answered_at": "2026-09-09T10:10:39.255Z",
+        "duration_ms": 5268,
+        "timestamp": "2026-09-09T10:10:39.255Z"
+      },
+      {
+        "participant_id": "a3ff6215-10a5-4506-b6c6-44935fdeec33",
+        "trial_id": "Rathausmarkt-Hamburg:1:Römerberg-Frankfurt am Main:Herderplatz-Weimar",
+        "order": 1,
+        "stratum": "agreement",
+        "reference_site": "Rathausmarkt-Hamburg",
+        "candidate_a_site": "Römerberg-Frankfurt am Main",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:10:39.255Z",
+        "answered_at": "2026-09-09T10:10:44.002Z",
+        "duration_ms": 4747,
+        "timestamp": "2026-09-09T10:10:44.002Z"
+      },
+      {
+        "participant_id": "a3ff6215-10a5-4506-b6c6-44935fdeec33",
+        "trial_id": "Hauptwache-Frankfurt am Main:6:Marktplatz-Heidelberg:Hauptmarkt-Trier",
+        "order": 2,
+        "stratum": "agreement",
+        "reference_site": "Hauptwache-Frankfurt am Main",
+        "candidate_a_site": "Marktplatz-Heidelberg",
+        "candidate_b_site": "Hauptmarkt-Trier",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:10:44.003Z",
+        "answered_at": "2026-09-09T10:10:53.163Z",
+        "duration_ms": 9160,
+        "timestamp": "2026-09-09T10:10:53.163Z"
+      },
+      {
+        "participant_id": "a3ff6215-10a5-4506-b6c6-44935fdeec33",
+        "trial_id": "Naschmarkt-Leipzig:3:Zeil-Frankfurt am Main:Alexanderplatz-Berlin",
+        "order": 3,
+        "stratum": "discriminating",
+        "reference_site": "Naschmarkt-Leipzig",
+        "candidate_a_site": "Zeil-Frankfurt am Main",
+        "candidate_b_site": "Alexanderplatz-Berlin",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:10:53.163Z",
+        "answered_at": "2026-09-09T10:11:02.779Z",
+        "duration_ms": 9616,
+        "timestamp": "2026-09-09T10:11:02.779Z"
+      },
+      {
+        "participant_id": "a3ff6215-10a5-4506-b6c6-44935fdeec33",
+        "trial_id": "Römerberg-Frankfurt am Main:0:Bebelplatz-Berlin:Burgplatz-Düsseldorf",
+        "order": 4,
+        "stratum": "agreement",
+        "reference_site": "Römerberg-Frankfurt am Main",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Burgplatz-Düsseldorf",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:11:02.779Z",
+        "answered_at": "2026-09-09T10:11:08.814Z",
+        "duration_ms": 6035,
+        "timestamp": "2026-09-09T10:11:08.814Z"
+      },
+      {
+        "participant_id": "a3ff6215-10a5-4506-b6c6-44935fdeec33",
+        "trial_id": "Marktplatz-Heidelberg:1:Marienplatz-Munich:Konstablerwache-Frankfurt am Main",
+        "order": 5,
+        "stratum": "discriminating",
+        "reference_site": "Marktplatz-Heidelberg",
+        "candidate_a_site": "Marienplatz-Munich",
+        "candidate_b_site": "Konstablerwache-Frankfurt am Main",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:11:08.814Z",
+        "answered_at": "2026-09-09T10:11:12.167Z",
+        "duration_ms": 3353,
+        "timestamp": "2026-09-09T10:11:12.167Z"
+      },
+      {
+        "participant_id": "a3ff6215-10a5-4506-b6c6-44935fdeec33",
+        "trial_id": "Gendarmenmarkt-Berlin:4:Bebelplatz-Berlin:Augustusplatz-Leipzig",
+        "order": 6,
+        "stratum": "agreement",
+        "reference_site": "Gendarmenmarkt-Berlin",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Augustusplatz-Leipzig",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:11:12.168Z",
+        "answered_at": "2026-09-09T10:11:17.010Z",
+        "duration_ms": 4842,
+        "timestamp": "2026-09-09T10:11:17.010Z"
+      },
+      {
+        "participant_id": "a3ff6215-10a5-4506-b6c6-44935fdeec33",
+        "trial_id": "Marktplatz-Heidelberg:3:Römerberg-Frankfurt am Main:Herderplatz-Weimar",
+        "order": 7,
+        "stratum": "discriminating",
+        "reference_site": "Marktplatz-Heidelberg",
+        "candidate_a_site": "Römerberg-Frankfurt am Main",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:11:17.010Z",
+        "answered_at": "2026-09-09T10:11:23.626Z",
+        "duration_ms": 6616,
+        "timestamp": "2026-09-09T10:11:23.626Z"
+      },
+      {
+        "participant_id": "a3ff6215-10a5-4506-b6c6-44935fdeec33",
+        "trial_id": "Naschmarkt-Leipzig:3:Alter Markt-Cologne:Herderplatz-Weimar",
+        "order": 8,
+        "stratum": "agreement",
+        "reference_site": "Naschmarkt-Leipzig",
+        "candidate_a_site": "Alter Markt-Cologne",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:11:23.627Z",
+        "answered_at": "2026-09-09T10:11:27.258Z",
+        "duration_ms": 3631,
+        "timestamp": "2026-09-09T10:11:27.258Z"
+      },
+      {
+        "participant_id": "a3ff6215-10a5-4506-b6c6-44935fdeec33",
+        "trial_id": "Rathausmarkt-Hamburg:4:Alexanderplatz-Berlin:Naschmarkt-Leipzig",
+        "order": 9,
+        "stratum": "discriminating",
+        "reference_site": "Rathausmarkt-Hamburg",
+        "candidate_a_site": "Alexanderplatz-Berlin",
+        "candidate_b_site": "Naschmarkt-Leipzig",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:11:27.258Z",
+        "answered_at": "2026-09-09T10:11:35.518Z",
+        "duration_ms": 8260,
+        "timestamp": "2026-09-09T10:11:35.518Z"
+      },
+      {
+        "participant_id": "a3ff6215-10a5-4506-b6c6-44935fdeec33",
+        "trial_id": "Alexanderplatz-Berlin:1:Rathausmarkt-Hamburg:Marktplatz-Heidelberg",
+        "order": 10,
+        "stratum": "discriminating",
+        "reference_site": "Alexanderplatz-Berlin",
+        "candidate_a_site": "Rathausmarkt-Hamburg",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T10:11:35.519Z",
+        "answered_at": "2026-09-09T10:11:40.042Z",
+        "duration_ms": 4523,
+        "timestamp": "2026-09-09T10:11:40.042Z"
+      },
+      {
+        "participant_id": "a3ff6215-10a5-4506-b6c6-44935fdeec33",
+        "trial_id": "Burgplatz-Düsseldorf:5:Konstablerwache-Frankfurt am Main:Marktplatz-Heidelberg",
+        "order": 11,
+        "stratum": "agreement",
+        "reference_site": "Burgplatz-Düsseldorf",
+        "candidate_a_site": "Konstablerwache-Frankfurt am Main",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T10:11:40.043Z",
+        "answered_at": "2026-09-09T10:11:43.979Z",
+        "duration_ms": 3936,
+        "timestamp": "2026-09-09T10:11:43.979Z"
+      }
+    ]
+  },
+  {
+    "participant_id": "6f67daba-2afd-4b49-81f2-5c6d057bdf05",
+    "survey_version": "matched_view_v1",
+    "task": "matched_view_2afc",
+    "started_at": "2026-09-09T12:36:48.061Z",
+    "updated_at": "2026-09-09T12:40:48.154Z",
+    "finished_at": "2026-09-09T12:40:48.154Z",
+    "status": "completed",
+    "revision": 13,
+    "background": "yes",
+    "bank_version": "matched_view_v1",
+    "bank_generated_at": "2026-09-08T03:24:57.792Z",
+    "stimulus": {
+      "kind": "rendered_massing_view",
+      "fov_deg": 120,
+      "eye_height_m": 1.6,
+      "textures": false
+    },
+    "responses": [
+      {
+        "participant_id": "6f67daba-2afd-4b49-81f2-5c6d057bdf05",
+        "trial_id": "Hauptmarkt-Trier:0:Alter Markt-Cologne:Naschmarkt-Leipzig",
+        "order": 0,
+        "stratum": "agreement",
+        "reference_site": "Hauptmarkt-Trier",
+        "candidate_a_site": "Alter Markt-Cologne",
+        "candidate_b_site": "Naschmarkt-Leipzig",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T12:36:49.179Z",
+        "answered_at": "2026-09-09T12:37:34.598Z",
+        "duration_ms": 45419,
+        "timestamp": "2026-09-09T12:37:34.598Z"
+      },
+      {
+        "participant_id": "6f67daba-2afd-4b49-81f2-5c6d057bdf05",
+        "trial_id": "Alter Markt-Cologne:7:Zeil-Frankfurt am Main:Alexanderplatz-Berlin",
+        "order": 1,
+        "stratum": "agreement",
+        "reference_site": "Alter Markt-Cologne",
+        "candidate_a_site": "Zeil-Frankfurt am Main",
+        "candidate_b_site": "Alexanderplatz-Berlin",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T12:37:34.599Z",
+        "answered_at": "2026-09-09T12:38:04.202Z",
+        "duration_ms": 29603,
+        "timestamp": "2026-09-09T12:38:04.202Z"
+      },
+      {
+        "participant_id": "6f67daba-2afd-4b49-81f2-5c6d057bdf05",
+        "trial_id": "Konstablerwache-Frankfurt am Main:3:Gendarmenmarkt-Berlin:Alexanderplatz-Berlin",
+        "order": 2,
+        "stratum": "agreement",
+        "reference_site": "Konstablerwache-Frankfurt am Main",
+        "candidate_a_site": "Gendarmenmarkt-Berlin",
+        "candidate_b_site": "Alexanderplatz-Berlin",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T12:38:04.203Z",
+        "answered_at": "2026-09-09T12:38:10.792Z",
+        "duration_ms": 6589,
+        "timestamp": "2026-09-09T12:38:10.792Z"
+      },
+      {
+        "participant_id": "6f67daba-2afd-4b49-81f2-5c6d057bdf05",
+        "trial_id": "Hauptwache-Frankfurt am Main:3:Alexanderplatz-Berlin:Marktplatz-Heidelberg",
+        "order": 3,
+        "stratum": "discriminating",
+        "reference_site": "Hauptwache-Frankfurt am Main",
+        "candidate_a_site": "Alexanderplatz-Berlin",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T12:38:10.793Z",
+        "answered_at": "2026-09-09T12:38:16.022Z",
+        "duration_ms": 5229,
+        "timestamp": "2026-09-09T12:38:16.022Z"
+      },
+      {
+        "participant_id": "6f67daba-2afd-4b49-81f2-5c6d057bdf05",
+        "trial_id": "Augustusplatz-Leipzig:6:Römerberg-Frankfurt am Main:Odeonsplatz-Munich",
+        "order": 4,
+        "stratum": "discriminating",
+        "reference_site": "Augustusplatz-Leipzig",
+        "candidate_a_site": "Römerberg-Frankfurt am Main",
+        "candidate_b_site": "Odeonsplatz-Munich",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T12:38:16.023Z",
+        "answered_at": "2026-09-09T12:38:22.215Z",
+        "duration_ms": 6192,
+        "timestamp": "2026-09-09T12:38:22.215Z"
+      },
+      {
+        "participant_id": "6f67daba-2afd-4b49-81f2-5c6d057bdf05",
+        "trial_id": "Hauptmarkt-Trier:4:Marienplatz-Munich:Alter Markt-Cologne",
+        "order": 5,
+        "stratum": "agreement",
+        "reference_site": "Hauptmarkt-Trier",
+        "candidate_a_site": "Marienplatz-Munich",
+        "candidate_b_site": "Alter Markt-Cologne",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T12:38:22.216Z",
+        "answered_at": "2026-09-09T12:38:30.690Z",
+        "duration_ms": 8474,
+        "timestamp": "2026-09-09T12:38:30.690Z"
+      },
+      {
+        "participant_id": "6f67daba-2afd-4b49-81f2-5c6d057bdf05",
+        "trial_id": "Hauptwache-Frankfurt am Main:7:Zeil-Frankfurt am Main:Konstablerwache-Frankfurt am Main",
+        "order": 6,
+        "stratum": "discriminating",
+        "reference_site": "Hauptwache-Frankfurt am Main",
+        "candidate_a_site": "Zeil-Frankfurt am Main",
+        "candidate_b_site": "Konstablerwache-Frankfurt am Main",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T12:38:30.691Z",
+        "answered_at": "2026-09-09T12:38:42.190Z",
+        "duration_ms": 11499,
+        "timestamp": "2026-09-09T12:38:42.190Z"
+      },
+      {
+        "participant_id": "6f67daba-2afd-4b49-81f2-5c6d057bdf05",
+        "trial_id": "Zeil-Frankfurt am Main:3:Bebelplatz-Berlin:Konstablerwache-Frankfurt am Main",
+        "order": 7,
+        "stratum": "discriminating",
+        "reference_site": "Zeil-Frankfurt am Main",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Konstablerwache-Frankfurt am Main",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T12:38:42.191Z",
+        "answered_at": "2026-09-09T12:38:49.010Z",
+        "duration_ms": 6819,
+        "timestamp": "2026-09-09T12:38:49.010Z"
+      },
+      {
+        "participant_id": "6f67daba-2afd-4b49-81f2-5c6d057bdf05",
+        "trial_id": "Alter Markt-Cologne:5:Bebelplatz-Berlin:Herderplatz-Weimar",
+        "order": 8,
+        "stratum": "agreement",
+        "reference_site": "Alter Markt-Cologne",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Herderplatz-Weimar",
+        "chosen_side": "b",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T12:38:49.011Z",
+        "answered_at": "2026-09-09T12:38:57.142Z",
+        "duration_ms": 8131,
+        "timestamp": "2026-09-09T12:38:57.142Z"
+      },
+      {
+        "participant_id": "6f67daba-2afd-4b49-81f2-5c6d057bdf05",
+        "trial_id": "Römerberg-Frankfurt am Main:7:Bebelplatz-Berlin:Marktplatz-Heidelberg",
+        "order": 9,
+        "stratum": "discriminating",
+        "reference_site": "Römerberg-Frankfurt am Main",
+        "candidate_a_site": "Bebelplatz-Berlin",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "a",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "b",
+          "gaussian": "b",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T12:38:57.143Z",
+        "answered_at": "2026-09-09T12:39:15.603Z",
+        "duration_ms": 18460,
+        "timestamp": "2026-09-09T12:39:15.603Z"
+      },
+      {
+        "participant_id": "6f67daba-2afd-4b49-81f2-5c6d057bdf05",
+        "trial_id": "Burgplatz-Düsseldorf:3:Hauptwache-Frankfurt am Main:Marienplatz-Munich",
+        "order": 10,
+        "stratum": "agreement",
+        "reference_site": "Burgplatz-Düsseldorf",
+        "candidate_a_site": "Hauptwache-Frankfurt am Main",
+        "candidate_b_site": "Marienplatz-Munich",
+        "chosen_side": "a",
+        "left_side": "b",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "a"
+        },
+        "shown_at": "2026-09-09T12:39:15.604Z",
+        "answered_at": "2026-09-09T12:40:24.979Z",
+        "duration_ms": 69375,
+        "timestamp": "2026-09-09T12:40:24.979Z"
+      },
+      {
+        "participant_id": "6f67daba-2afd-4b49-81f2-5c6d057bdf05",
+        "trial_id": "Herderplatz-Weimar:2:Römerberg-Frankfurt am Main:Marktplatz-Heidelberg",
+        "order": 11,
+        "stratum": "discriminating",
+        "reference_site": "Herderplatz-Weimar",
+        "candidate_a_site": "Römerberg-Frankfurt am Main",
+        "candidate_b_site": "Marktplatz-Heidelberg",
+        "chosen_side": "b",
+        "left_side": "a",
+        "predictions": {
+          "centroid": "a",
+          "gaussian": "a",
+          "chamfer": "b"
+        },
+        "shown_at": "2026-09-09T12:40:24.980Z",
+        "answered_at": "2026-09-09T12:40:46.358Z",
+        "duration_ms": 21378,
+        "timestamp": "2026-09-09T12:40:46.358Z"
+      }
+    ]
+  }
+]

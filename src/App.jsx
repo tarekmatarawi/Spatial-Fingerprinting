@@ -1,7 +1,7 @@
 import { Component, lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { LuBox, LuHouse, LuChevronDown } from 'react-icons/lu'
-import { PHASES, groupedPhases, phaseById, phaseTitle } from '@/lib/phases'
+import { PHASES, groupedPhases, phaseTitle } from '@/lib/phases'
 import { PhasePlaceholder } from '@/pages/PhasePlaceholder'
 
 // A reload that cannot be served from cache: the query string makes the
@@ -113,6 +113,18 @@ const CloudComparisonPage = lazyWithReload(() =>
   import('@/pages/CloudComparisonPage').then((m) => ({ default: m.CloudComparisonPage }))
 )
 
+const MatchedViewPage = lazyWithReload(() =>
+  import('@/pages/MatchedViewPage').then((m) => ({ default: m.MatchedViewPage }))
+)
+
+// P8's participant instrument, split out for the same reason the P3 survey is:
+// it carries Three.js for the rendered stimuli, and someone following the link
+// should download that and nothing else — none of the researcher pages, and
+// none of the data they pull in.
+const MatchedViewSurvey = lazyWithReload(() =>
+  import('@/pages/MatchedViewSurvey').then((m) => ({ default: m.MatchedViewSurvey }))
+)
+
 const ROUTES = ['home', ...PHASES.map((p) => p.id)]
 
 // Phases that are still to be built get a station and a route, but land on a
@@ -151,7 +163,13 @@ export default function App() {
     )
   }
   if (query.has('matched-view-survey')) {
-    return <PhasePlaceholder phase={phaseById.get('matched-view')} standalone />
+    return (
+      <StandaloneErrorBoundary>
+        <Suspense fallback={<StandaloneLoading />}>
+          <MatchedViewSurvey />
+        </Suspense>
+      </StandaloneErrorBoundary>
+    )
   }
 
   return (
@@ -285,6 +303,13 @@ function ResearcherShell() {
           {visited.has('cloud-comparison') && (
             <Suspense fallback={<RouteLoading />}>
               <CloudComparisonPage />
+            </Suspense>
+          )}
+        </Page>
+        <Page active={route === 'matched-view'}>
+          {visited.has('matched-view') && (
+            <Suspense fallback={<RouteLoading />}>
+              <MatchedViewPage />
             </Suspense>
           )}
         </Page>

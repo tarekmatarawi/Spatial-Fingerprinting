@@ -18,10 +18,10 @@ The full build plan lives in [docs/spec.md](docs/spec.md). Development proceeds 
 | **P2** | Spatial Analysis — 3D Viewer | `#/viewer` | ✅ built — ray-casting engine validated |
 | **P3** | Perceptual Survey — Views | `#/survey` (participants: `?survey`) | ✅ built — collecting responses |
 | **P4** | Survey Results Dashboard | `#/results` | ✅ built |
-| **P5** | Weight Fitting & Hypothesis Testing | `#/weights` | to build |
-| **P6** | Isovist Field Mapping & Zone Typology | `#/field` | to build |
-| **P7** | View-Cloud Comparison | `#/cloud-comparison` | to build |
-| **P8** | Matched-View Validation Survey | `#/matched-view` (participants: `?matched-view-survey`) | to build |
+| **P5** | Weight Fitting & Hypothesis Testing | `#/weights` | ✅ built — weights fitted, H1–H6 tested |
+| **P6** | Isovist Field Mapping & Zone Typology | `#/field` | ✅ built — 11,580 grid points, k = 5 zones |
+| **P7** | View-Cloud Comparison | `#/cloud-comparison` | ✅ built — 144 views, three distance measures |
+| **P8** | Matched-View Validation Survey | `#/matched-view` (participants: `?matched-view-survey`) | ✅ built — awaiting participants |
 | **P9** | Design Diagnostic & Intervention | `#/diagnose` | to build |
 
 P1–P4 form **Setup**, P5–P8 **Analysis**, and P9 the **Design Tool** — the grouping used in the app's navigation. The order above is the build order and does not change.
@@ -48,6 +48,8 @@ Open the printed URL (usually `http://localhost:5173/Spatial-Fingerprinting/`).
 - **P2 Spatial Analysis** — orbit/pan/zoom the 3D model, click to place a vantage point, click again to aim it, and read the four metrics live.
 - **P3 Perceptual Survey** — preview the participant survey and copy its shareable link.
 - **P4 Survey Results Dashboard** — response quality and pooled pair coverage, read live from disk while the dev server runs.
+- **P5–P7** — read the frozen analysis files written by the commands below; nothing on these pages refits anything.
+- **P8 Matched-View Validation** — the researcher review at `#/matched-view` previews any trial from the frozen bank and scores incoming responses. Participants use `?matched-view-survey`, a chrome-free two-minute instrument; answers save after every trial to `src/data/matched-view-responses.json` (dev server only).
 
 The save/read endpoints are dev-server middleware only; they do not exist on the deployed static site.
 
@@ -58,6 +60,17 @@ npm run dev      # dev server with the data-writing endpoints
 npm run build    # production build
 npm run lint     # oxlint
 npm test         # geometry engine regression + correctness tests
+```
+
+Analysis and data-generation steps, each writing a file the app then only reads:
+
+```bash
+npm run analyze              # P5 — fit the weights → src/data/analysis-<source>.json
+npm run validate:ratings     # P5 — ratings vs computed metrics → rating-validation.json
+npm run fields               # P6 — 360° grid over every plaza → src/data/fields/
+npm run zones                # P6 — zone typology over the pooled grid → zones.json
+npm run trials:matched-view  # P8 — freeze the trial bank → matched-view-trials.json
+npm run matched-view:selftest# P8 — the gate: recover a planted answer, hold size under the null
 ```
 
 `npm test` uses Node's built-in test runner — no test dependencies. It locks the 120° perceptual layer against a golden snapshot of all 18 canonical readings, so the geometry underneath the survey cannot change unnoticed.

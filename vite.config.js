@@ -228,6 +228,77 @@ function viewCloudsSaveEndpoint() {
   }
 }
 
+// Dev-only endpoints for the P8 matched-view survey. A separate file again,
+// for the same reason the panoramic survey got one: a different instrument's
+// records must not be interleaved with another's and sorted apart later.
+//
+// Same upsert-on-participant_id and stale-revision rules as the survey above —
+// answers are saved after every trial, so a participant who closes the tab
+// halfway still leaves their partial block behind, and a save that arrives out
+// of order must not roll the session back to fewer answers.
+function matchedViewEndpoints() {
+  const FILE = 'src/data/matched-view-responses.json'
+  return {
+    name: 'matched-view-endpoints',
+    configureServer(server) {
+      server.middlewares.use('/__save-matched-view', (req, res) => {
+        if (req.method !== 'POST') {
+          res.statusCode = 405
+          return res.end()
+        }
+        let body = ''
+        req.on('data', (chunk) => (body += chunk))
+        req.on('end', () => {
+          try {
+            const submission = JSON.parse(body)
+            if (!submission || typeof submission !== 'object' || Array.isArray(submission)) {
+              throw new Error('Expected a submission object')
+            }
+            if (!submission.participant_id) throw new Error('Submission has no participant_id')
+
+            const file = path.resolve(dirname, FILE)
+            const existing = JSON.parse(fs.readFileSync(file, 'utf8') || '[]')
+            const at = existing.findIndex((r) => r.participant_id === submission.participant_id)
+
+            if (at === -1) {
+              existing.push(submission)
+            } else if ((submission.revision ?? 0) >= (existing[at].revision ?? 0)) {
+              existing[at] = submission
+            } else {
+              res.setHeader('Content-Type', 'application/json')
+              return res.end(JSON.stringify({ ok: true, stale: true, total: existing.length }))
+            }
+
+            writeJsonAtomic(file, existing)
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ ok: true, total: existing.length }))
+          } catch (err) {
+            res.statusCode = 400
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ ok: false, error: String(err.message || err) }))
+          }
+        })
+      })
+
+      server.middlewares.use('/__matched-view-responses', (req, res) => {
+        if (req.method !== 'GET') {
+          res.statusCode = 405
+          return res.end()
+        }
+        try {
+          res.setHeader('Content-Type', 'application/json')
+          res.setHeader('Cache-Control', 'no-store')
+          res.end(fs.readFileSync(path.resolve(dirname, FILE), 'utf8') || '[]')
+        } catch (err) {
+          res.statusCode = 500
+          res.setHeader('Content-Type', 'application/json')
+          res.end(JSON.stringify({ ok: false, error: String(err.message || err) }))
+        }
+      })
+    },
+  }
+}
+
 const UPLOAD_DIRS = {
   images: path.resolve(dirname, 'public/images'),
   panoramas: path.resolve(dirname, 'public/panoramas'),
@@ -313,6 +384,7 @@ export default defineConfig({
     viewerStateSaveEndpoint(),
     viewCloudsSaveEndpoint(),
     survey360Endpoints(),
+    matchedViewEndpoints(),
     uploadImageEndpoint(),
   ],
   resolve: {

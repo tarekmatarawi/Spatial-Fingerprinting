@@ -12,3 +12,17 @@
 // mixing them would spoil the archive.
 export const SURVEY_ENDPOINT_URL =
   'https://script.google.com/macros/s/AKfycbwcbBUighRq9aooa49Zz8HHEPTilCt-jveQGur1purS60uYWMnbty7XWVNKeMbwH-kv/exec'
+
+// Where a deployed MATCHED-VIEW (P8) submission is sent.
+//
+// A SEPARATE Web App and a separate Sheet from the panoramic survey above, and
+// deliberately so: P8 is a different instrument answering a different question,
+// with a different record shape. Pointing it at P3's Sheet would interleave two
+// incompatible row formats in one tab and put the live perceptual study at risk
+// to save the trouble of a second deployment.
+//
+// Empty until the researcher deploys google-apps-script/MatchedView.gs and
+// pastes the resulting /exec URL here. While it is empty the survey still runs
+// end to end and says plainly that nothing was stored, rather than silently
+// discarding a participant's answers.
+export const MATCHED_VIEW_ENDPOINT_URL = ''

@@ -128,7 +128,7 @@ export const PHASES = [
     id: 'matched-view',
     code: 'P8',
     group: 'analysis',
-    status: 'planned',
+    status: 'built',
     icon: LuSquareCheckBig,
     name: 'Matched-View Validation',
     longName: 'Matched-View Validation Survey',
