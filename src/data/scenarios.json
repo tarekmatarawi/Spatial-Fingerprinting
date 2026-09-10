@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updated_at": "2026-09-10T20:36:48.971Z",
+ "updated_at": "2026-09-10T20:53:58.505Z",
  "scenarios": [
   {
    "id": "p9-balanced-mirror-test",
@@ -472,6 +472,244 @@
     "y": 4
    },
    "radius_m": 35,
+   "target_zone": 2,
+   "provenance": {
+    "zones_generated_at": "2026-09-06T00:30:27.887Z",
+    "zone_count": 5,
+    "weights": [
+     0.3121969818048535,
+     0.27488596169781887,
+     0.2065181660513352,
+     0.20639889044599233
+    ],
+    "field_spacing_m": 2.5,
+    "normalisation_source": "perceptual_360"
+   }
+  },
+  {
+   "id": "p9-bridging-the-level-break",
+   "name": "Bridging the Level Break",
+   "note": "Three station-head pavilions, 14 x 10 m at 6-7 m, each flanking one of the square's existing transport accesses rather than standing in open ground; 10 m raised step platforms on the square-facing side of each; one 20 m screen wall at 2.6 m closing the exposed gap between the two eastern pavilions. The accesses were read off the model, not assumed: three 3.2 m structures stand inside the plaza (#100 at 21.5,-20.8; #161 at 18.1,19.6; #162 at -18.5,29.6) and each punches a matching hole in the standable lattice, which is the fragmentation the brief describes, visible in the data. Result: 68.0 / 0.3 / 10.1 / 21.5 / 0 % becomes 10.2 / 9.3 / 23.1 / 57.4 / 0 %. TWO RESULTS THAT NO OTHER SCENARIO PRODUCES. First, compactness RISES 9.7 % — every other additive scenario lowers it, \"Rooms in the Square\" by 21.9 %. A control settles why: the same three pavilions, same footprints and heights, moved into open ground away from the accesses give compactness -19.9 % instead of +8.4 %, a 28-point swing from position alone. Consolidating mass against an existing obstruction absorbs it into one silhouette where the same mass in open ground adds a second, independent notch to the isovist. Second, \"Open, regular\" goes from 3 points to 82 (0.3 % to 9.3 %) — the only scenario in the set to reach that type at all, and the displaced control reaches 0.0 % of it. Against \"Rooms in the Square\": the changes here CLUSTER on the accesses (57 % of reclassified points lie within 30 m of one, against 46 % of the plaza) where Rooms' changes are exactly proportional to area (49 % against 49 %) — scattered, by the measurement. Bridging yields 17 distinct zone patches against Rooms' 13, and its largest single patch is 406 points against 670: more differentiated structure, not less.",
+   "site_id": "Konstablerwache-Frankfurt am Main",
+   "created_at": "2026-09-10T20:53:58.505Z",
+   "updated_at": "2026-09-10T20:53:58.505Z",
+   "elements": [
+    {
+     "id": "stationhead-se",
+     "footprint": [
+      {
+       "x": 3,
+       "y": -25
+      },
+      {
+       "x": 17,
+       "y": -25
+      },
+      {
+       "x": 17,
+       "y": -15
+      },
+      {
+       "x": 3,
+       "y": -15
+      }
+     ],
+     "height_m": 6.5,
+     "drawn_at": "2026-09-10T20:53:58.503Z"
+    },
+    {
+     "id": "stationhead-ne",
+     "footprint": [
+      {
+       "x": 1,
+       "y": 14
+      },
+      {
+       "x": 15,
+       "y": 14
+      },
+      {
+       "x": 15,
+       "y": 24
+      },
+      {
+       "x": 1,
+       "y": 24
+      }
+     ],
+     "height_m": 7,
+     "drawn_at": "2026-09-10T20:53:58.503Z"
+    },
+    {
+     "id": "stationhead-n",
+     "footprint": [
+      {
+       "x": -25.5,
+       "y": 16
+      },
+      {
+       "x": -11.5,
+       "y": 16
+      },
+      {
+       "x": -11.5,
+       "y": 26
+      },
+      {
+       "x": -25.5,
+       "y": 26
+      }
+     ],
+     "height_m": 6,
+     "drawn_at": "2026-09-10T20:53:58.503Z"
+    },
+    {
+     "id": "plinth-steps-se",
+     "kind": "preset",
+     "preset": "plinth",
+     "params": {
+      "size": 10,
+      "height": 0.9,
+      "sides_open": 2
+     },
+     "anchor": {
+      "x": -2,
+      "y": -20
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-09-10T20:53:58.503Z"
+    },
+    {
+     "id": "plinth-steps-ne",
+     "kind": "preset",
+     "preset": "plinth",
+     "params": {
+      "size": 10,
+      "height": 0.9,
+      "sides_open": 2
+     },
+     "anchor": {
+      "x": -4,
+      "y": 19
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-09-10T20:53:58.503Z"
+    },
+    {
+     "id": "plinth-steps-n",
+     "kind": "preset",
+     "preset": "plinth",
+     "params": {
+      "size": 10,
+      "height": 0.9,
+      "sides_open": 2
+     },
+     "anchor": {
+      "x": -18.5,
+      "y": 11
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-09-10T20:53:58.503Z"
+    },
+    {
+     "id": "screenWall-gap",
+     "kind": "preset",
+     "preset": "screenWall",
+     "params": {
+      "length": 20,
+      "height": 2.6,
+      "perforation": 0
+     },
+     "anchor": {
+      "x": 9,
+      "y": 0
+     },
+     "rotation_deg": 90,
+     "placed_at": "2026-09-10T20:53:58.503Z"
+    }
+   ],
+   "selection": {
+    "x": 7,
+    "y": 9
+   },
+   "radius_m": 35,
+   "target_zone": 2,
+   "provenance": {
+    "zones_generated_at": "2026-09-06T00:30:27.887Z",
+    "zone_count": 5,
+    "weights": [
+     0.3121969818048535,
+     0.27488596169781887,
+     0.2065181660513352,
+     0.20639889044599233
+    ],
+    "field_spacing_m": 2.5,
+    "normalisation_source": "perceptual_360"
+   }
+  },
+  {
+   "id": "p9-zeil-terminus",
+   "name": "Zeil Terminus",
+   "note": "One 20 x 20 m landmark at 15 m closing the Zeil axis at the east end, with two 35 m colonnades at 6 m compressing the western approach to a 14 m throat. Axis direction taken from the register rather than assumed: the Zeil site centre lies 417 m due west of Konstablerwache's, so the square is its eastern terminus and the gesture faces west. Result: 2.3 / 0 / 4.5 / 93.2 / 0 %. THE HEIGHT TEST, WHICH IS THE POINT OF THIS SCENARIO, AND IT IS CLEAN. Holding footprint and position identical and varying only height, the 20 x 20 mass alone gives: area -18.1 % at both 8 m and 15 m, compactness +5.9 % at both, enclosure 9.9 % against 16.9 %. Height moves enclosure and NOTHING else, to four significant figures — the first controlled confirmation in this phase that the other three metrics are pure plan geometry. Near the mass the effect nearly doubles: +47.5 % against +67.4 % within 25 m, +2.5 % against +7.0 % beyond. And it converts: \"Tight, strongly enclosed\" reaches 24.3 % at 8 m and 33.3 % at 15 m. BUT THE FULL SCENARIO DESTROYS ITS OWN RESULT. The landmark alone leaves the best-balanced plaza of any scenario here (21.8 / 5.6 / 24.3 / 48.3 % at 8 m, 19.5 / 3.5 / 33.3 / 43.7 % at 15 m); adding the two colonnades takes compactness to -75.7 % and flattens everything to 93.2 % \"Tight, irregular\". Half against half, split at x = -18: the compressed western half goes to 99.1 % one type, the terminus half to 84.2 % but keeping 11.4 % enclosed. Directional compression built from columns does not compress, it serrates. The single tall mass produces a stronger and more legible enclosure shift than four dispersed mid-rise masses or one long low one; the threshold that was supposed to reinforce it is what erases it. NOTE ON THE BRIEF: it asks whether height converts \"Vast, regular\" to \"Tight, strongly enclosed\". This plaza holds 0 points of \"Vast, regular\", so the conversion measured is out of \"Open, facade-rich\".",
+   "site_id": "Konstablerwache-Frankfurt am Main",
+   "created_at": "2026-09-10T20:53:58.505Z",
+   "updated_at": "2026-09-10T20:53:58.505Z",
+   "elements": [
+    {
+     "id": "landmark-terminus",
+     "kind": "preset",
+     "preset": "landmark",
+     "params": {
+      "size": 20,
+      "height": 15
+     },
+     "anchor": {
+      "x": 10,
+      "y": 2
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-09-10T20:53:58.503Z"
+    },
+    {
+     "id": "colonnade-threshold-n",
+     "kind": "preset",
+     "preset": "colonnade",
+     "params": {
+      "length": 35,
+      "depth": 4,
+      "spacing": 4,
+      "height": 6
+     },
+     "anchor": {
+      "x": -45,
+      "y": 9
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-09-10T20:53:58.503Z"
+    },
+    {
+     "id": "colonnade-threshold-s",
+     "kind": "preset",
+     "preset": "colonnade",
+     "params": {
+      "length": 35,
+      "depth": 4,
+      "spacing": 4,
+      "height": 6
+     },
+     "anchor": {
+      "x": -45,
+      "y": -5
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-09-10T20:53:58.503Z"
+    }
+   ],
+   "selection": {
+    "x": -10,
+    "y": 2
+   },
+   "radius_m": 45,
    "target_zone": 2,
    "provenance": {
     "zones_generated_at": "2026-09-06T00:30:27.887Z",

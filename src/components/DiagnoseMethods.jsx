@@ -273,6 +273,36 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             nothing three recesses add offsets serration on that scale. An edge strategy is not one
             move, and the two halves of one pull in opposite directions.
           </p>
+          <p>
+            <B>Where a mass goes changes what it does to the plan, by more than the mass does.</B>{' '}
+            Three pavilions placed against this square&rsquo;s existing transport accesses RAISE
+            compactness 9.7%. The same three &mdash; identical footprints, identical heights &mdash;
+            moved into open ground lower it 19.9%: a 28-point swing from position alone. Building
+            against an obstruction that is already standing absorbs it into one silhouette, where
+            the same mass in the open adds a second independent notch to the isovist. So the rule
+            above &mdash; that additive moves lower area, compactness and occlusivity together
+            &mdash; describes ISOLATED additions, and consolidating an existing interruption is
+            outside it. That placement is also the only route found here to &ldquo;Open,
+            regular&rdquo;: 0.3% of the plaza at baseline, 9.3% with the pavilions, 0.0% in the
+            displaced control.
+          </p>
+          <p>
+            <B>Height moves enclosure and nothing else, measured rather than argued.</B> Holding
+            footprint and position fixed and varying only height, a 20 &times; 20 m mass gives
+            isovist area −18.1% at both 8 m and 15 m, compactness +5.9% at both, and enclosure
+            9.9% against 16.9% &mdash; +47.5% against +67.4% within 25 m of it. The other three
+            metrics are pure plan geometry, which follows from how the engine is built; this is
+            the controlled measurement of it rather than the inference.
+          </p>
+          <p>
+            <B>A coherent-looking zone map and a structured one are not the same thing, and one
+            number cannot separate them.</B> The most uniform result in the scenario set scores
+            the highest neighbour agreement (96.2%) precisely because it flattened the square to
+            one type. The map that reads as designed scores worse on that statistic (80.3%) and
+            carries more distinct regions &mdash; 17 patches against 13, its largest 406 points
+            against 670. Read patch COUNT and the size of the dominant patch beside any agreement
+            figure, or homogenisation will look like structure.
+          </p>
 
           <H>The precedent panel</H>
           <p>
