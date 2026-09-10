@@ -150,6 +150,25 @@ function main() {
   const outOfRange = Object.fromEntries(METRICS.map((m) => [m, 0]))
   let totalPoints = 0
 
+  // THE OBSERVED ENVELOPE: how far each metric actually ranges, in normalised
+  // units, across every measured position in the corpus.
+  //
+  // The frozen `bounds` above say what 0 and 1 mean — they are set by the 18
+  // canonical vantage points. They do NOT say what values real ground positions
+  // take, and the two are quite different: a corner tighter than any surveyed
+  // vantage lands below 0, a long street vista above 1.
+  //
+  // P9's Tier A needs this, and needs it badly. Its sensitivity answer — the
+  // smallest change in one metric that would move a point into a target zone —
+  // is exact algebra with no notion of plausibility, so it will happily report
+  // that a point becomes the vast, regular type if occlusivity drops by 19.4
+  // normalised units. That is true and it is worthless: nothing anywhere in the
+  // corpus sits within nineteen corpus-widths of there. The envelope is what
+  // lets Tier A separate "a demanding change" from "not a place that exists".
+  const envelope = Object.fromEntries(
+    METRICS.map((m) => [m, { min: Infinity, max: -Infinity, minSite: null, maxSite: null }])
+  )
+
   for (const site of targets) {
     const { buildings, boundary } = projectSite(site)
     if (!boundary) {
@@ -178,7 +197,20 @@ function main() {
         const b = bounds[k]
         const v = (raw[k] - b.min) / (b.max - b.min)
         if (v < 0 || v > 1) outOfRange[k]++
-        return round(v, 5)
+        // Recorded from the ROUNDED value that reaches disk, so the envelope
+        // is a true bound on the stored data rather than on a fuller-precision
+        // number no reader ever sees.
+        const stored = round(v, 5)
+        const e = envelope[k]
+        if (stored < e.min) {
+          e.min = stored
+          e.minSite = site.id
+        }
+        if (stored > e.max) {
+          e.max = stored
+          e.maxSite = site.id
+        }
+        return stored
       })
       points.push({
         x: round(p.x, 2),
@@ -242,6 +274,21 @@ function main() {
     })
   }
 
+  // A --site run measures one plaza, so its envelope is not the corpus's. The
+  // previous index's envelope is carried forward rather than replaced with a
+  // narrower one that would silently claim the corpus never goes further than
+  // this single plaza does.
+  let observedEnvelope = envelope
+  if (ONLY) {
+    try {
+      const previous = read('src/data/fields/index.json').observed_envelope
+      if (previous) observedEnvelope = previous
+      console.log('\n  --site run: carried the corpus envelope forward from the previous index.')
+    } catch {
+      console.log('\n  --site run and no previous index: the envelope covers this plaza only.')
+    }
+  }
+
   writeJsonAtomic(path.join(root, 'src/data/fields/index.json'), {
     generated_at: new Date().toISOString(),
     fov_mode: FOV_MODE,
@@ -250,6 +297,10 @@ function main() {
     clearance_m: CLEARANCE_M,
     normalisation_source: 'perceptual_360',
     bounds,
+    // What the frozen bounds mean (0–1 = the range of the 18 canonical
+    // vantages) versus what ground positions actually do. See the definition
+    // above — P9's Tier A depends on the difference.
+    observed_envelope: observedEnvelope,
     metrics: METRICS,
     total_points: totalPoints,
     out_of_range: outOfRange,

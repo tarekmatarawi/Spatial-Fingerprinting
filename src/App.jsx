@@ -117,6 +117,12 @@ const MatchedViewPage = lazyWithReload(() =>
   import('@/pages/MatchedViewPage').then((m) => ({ default: m.MatchedViewPage }))
 )
 
+// P9 carries Three.js (the intervention's 3D view and the precedent-view
+// render) as well as a plaza's field grid, so it is split out like the rest.
+const DiagnosePage = lazyWithReload(() =>
+  import('@/pages/DiagnosePage').then((m) => ({ default: m.DiagnosePage }))
+)
+
 // P8's participant instrument, split out for the same reason the P3 survey is:
 // it carries Three.js for the rendered stimuli, and someone following the link
 // should download that and nothing else — none of the researcher pages, and
@@ -310,6 +316,13 @@ function ResearcherShell() {
           {visited.has('matched-view') && (
             <Suspense fallback={<RouteLoading />}>
               <MatchedViewPage />
+            </Suspense>
+          )}
+        </Page>
+        <Page active={route === 'diagnose'}>
+          {visited.has('diagnose') && (
+            <Suspense fallback={<RouteLoading />}>
+              <DiagnosePage />
             </Suspense>
           )}
         </Page>

@@ -13,12 +13,30 @@ import { LuDownload } from 'react-icons/lu'
 // quietly disagree with what is on screen — the commonest way an exported
 // figure ends up misreporting a result.
 
-export function Figure({ title, caption, filename, children, note }) {
+// `target` names WHICH svg to export, and exists because P9 wraps drawings that
+// are not alone in their panel. The default picks the first svg in the holder,
+// which is right for a chart and wrong for a plan sitting under a toolbar — a
+// react-icons icon is an svg too, and the first one found would be exported
+// instead of the drawing, producing a 16-pixel download that looks like a bug in
+// the button rather than in the selector. Plans pass 'svg[data-plan]'.
+//
+// `className` replaces the wrapper's own spacing for the same reason: a figure
+// inside a two-column grid must not carry the top margin a figure in a column
+// of prose needs.
+export function Figure({
+  title,
+  caption,
+  filename,
+  children,
+  note,
+  target = 'svg',
+  className = 'mt-6',
+}) {
   const holder = useRef(null)
   const [busy, setBusy] = useState(false)
 
   function serialise() {
-    const svg = holder.current?.querySelector('svg')
+    const svg = holder.current?.querySelector(target)
     if (!svg) return null
     const clone = svg.cloneNode(true)
     clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
@@ -27,10 +45,10 @@ export function Figure({ title, caption, filename, children, note }) {
     // properties, which mean nothing once the file is opened outside the app —
     // without this the exported figure comes out black on transparent.
     const source = svg.querySelectorAll('*')
-    const target = clone.querySelectorAll('*')
+    const copied = clone.querySelectorAll('*')
     for (let i = 0; i < source.length; i++) {
       const computed = getComputedStyle(source[i])
-      const el = target[i]
+      const el = copied[i]
       for (const prop of ['fill', 'stroke', 'stroke-width', 'font-size', 'font-family', 'font-weight', 'opacity', 'stroke-dasharray']) {
         const value = computed.getPropertyValue(prop)
         if (value && value !== 'none') el.setAttribute(prop, value)
@@ -71,7 +89,9 @@ export function Figure({ title, caption, filename, children, note }) {
 
   function downloadPNG() {
     const text = serialise()
-    const svg = holder.current?.querySelector('svg')
+    // The SAME node serialise() took, or the PNG would be rasterised at the
+    // dimensions of some other svg in the panel.
+    const svg = holder.current?.querySelector(target)
     if (!text || !svg) return
     setBusy(true)
 
@@ -96,7 +116,7 @@ export function Figure({ title, caption, filename, children, note }) {
   }
 
   return (
-    <figure className="mt-6 rounded-lg border border-line bg-paper p-4">
+    <figure className={`rounded-lg border border-line bg-paper p-4 ${className}`}>
       <div className="mb-3 flex flex-wrap items-start justify-between gap-3 border-b border-line pb-2">
         <div className="min-w-0">
           <figcaption className="text-sm font-semibold text-ink">{title}</figcaption>

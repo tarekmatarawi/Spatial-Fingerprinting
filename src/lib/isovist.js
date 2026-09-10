@@ -40,15 +40,36 @@ export function castIsovist(
   vantage,
   directionRad,
   buildings,
-  { fov = FOV_DEG, range = MAX_RANGE_M, rayCount = RAY_COUNT, index = null } = {}
+  {
+    fov = FOV_DEG,
+    range = MAX_RANGE_M,
+    rayCount = RAY_COUNT,
+    index = null,
+    // P9 ONLY. When true, a footprint obstructs the cast only if it straddles
+    // eye height — see buildingEdges. Left false, this engine behaves exactly
+    // as it did for P1–P8 and no stored value changes.
+    heightAware = false,
+    eyeHeight = EYE_HEIGHT_M,
+  } = {}
 ) {
   // `index` is an optional prebuilt edge index (buildEdgeIndex). Passing one
   // lets a batch caster build it once per site and reuse it across thousands of
   // points; omitting it falls back to scanning every edge, which is what the
   // viewer and the single-reading paths do. Both routes return the same hit —
   // test/isovist.test.js asserts it point for point.
+  //
+  // An index built in one height mode must not be reused in the other: it has
+  // already dropped the edges its mode excludes. buildEdgeIndex records the
+  // mode it was built under and this refuses a mismatch rather than silently
+  // measuring the wrong plaza.
   const useIndex = index && !index.empty
-  const edges = useIndex ? index.edges : buildingEdges(buildings)
+  if (useIndex && (index.heightAware ?? false) !== heightAware) {
+    throw new Error(
+      `Edge index was built with heightAware=${index.heightAware ?? false} but the cast asked for ` +
+        `${heightAware}. Rebuild the index for this mode — reusing it would measure a different set of obstacles.`
+    )
+  }
+  const edges = useIndex ? index.edges : buildingEdges(buildings, heightAware, eyeHeight)
   const span = (fov * Math.PI) / 180
   const halfFov = span / 2
 
@@ -89,19 +110,67 @@ export function castIsovist(
     )
   }
 
-  return { vantage, direction: directionRad, fov, rays, ...computeMetrics(vantage, rays, closed) }
+  // The angular width one ray stands for — what turns a count of rays into the
+  // share of the horizon they cover, and a distance into a subtended length.
+  const rayStep = span / (closed ? rayCount : Math.max(rayCount - 1, 1))
+
+  return {
+    vantage,
+    direction: directionRad,
+    fov,
+    rays,
+    ...computeMetrics(vantage, rays, closed, rayStep),
+  }
 }
 
-function buildingEdges(buildings) {
+// Standing eye height, and the band of space the cast actually samples when
+// height-aware mode is on. Matches EYE_HEIGHT_M in viewGeometry.js, which is
+// the height the enclosure metric's vertical angles already assume; it is
+// duplicated rather than imported so this module stays free of dependencies.
+export const EYE_HEIGHT_M = 1.6
+
+// A building's own edges, or the explicit edge list it supplies instead.
+//
+// `edges` exists for geometry that is not a closed ring: P9's recessed-arcade
+// preset removes a span from one facade and adds the recess walls behind it, so
+// the result is a building whose eye-height outline has a gap in it. Expressing
+// that as a ring would require a polygon boolean; expressed as edges it is a
+// one-dimensional interval subtraction along a single segment.
+//
+// HEIGHT AWARENESS IS OFF BY DEFAULT AND MUST STAY THAT WAY. P1–P8 call this
+// engine unflagged and every stored corpus value depends on the current
+// behaviour, in which every footprint obstructs regardless of height. When the
+// flag is off not a single comparison below is evaluated, so the unflagged path
+// is not merely equivalent to the old one, it is the old one.
+function buildingEdges(buildings, heightAware = false, eyeHeight = EYE_HEIGHT_M) {
   const edges = []
   for (let b = 0; b < buildings.length; b++) {
-    const ring = buildings[b].footprint
+    const source = buildings[b]
+
+    if (heightAware) {
+      // A part obstructs the eye-height slice only if it straddles it. A
+      // 300 mm planter rim and a pergola roof four metres up are both outside
+      // the slice and neither can stop a ray, which is the whole point of the
+      // mode: without it the engine treats every footprint as infinitely tall.
+      const base = source.base ?? 0
+      const top = source.height ?? Infinity
+      if (!(base <= eyeHeight && top > eyeHeight)) continue
+    }
+
+    if (Array.isArray(source.edges)) {
+      for (const e of source.edges) {
+        edges.push({ x1: e.x1, y1: e.y1, x2: e.x2, y2: e.y2, height: e.height ?? source.height, building: b })
+      }
+      continue
+    }
+
+    const ring = source.footprint
     for (let i = 0; i < ring.length; i++) {
       const a = ring[i]
       const c = ring[(i + 1) % ring.length]
       // `building` travels with the edge so occlusivity can tell a run along
       // one facade from a jump between two — see computeMetrics.
-      edges.push({ x1: a.x, y1: a.y, x2: c.x, y2: c.y, height: buildings[b].height, building: b })
+      edges.push({ x1: a.x, y1: a.y, x2: c.x, y2: c.y, height: source.height, building: b })
     }
   }
   return edges
@@ -126,9 +195,12 @@ function buildingEdges(buildings) {
 const INDEX_TARGET_CELL_M = 8
 const INDEX_MAX_CELLS = 262144
 
-export function buildEdgeIndex(buildings) {
-  const edges = buildingEdges(buildings)
-  if (!edges.length) return { edges, empty: true }
+export function buildEdgeIndex(buildings, { heightAware = false, eyeHeight = EYE_HEIGHT_M } = {}) {
+  const edges = buildingEdges(buildings, heightAware, eyeHeight)
+  // The mode is recorded so castIsovist can refuse an index built under the
+  // other one. An index has already discarded the edges its mode excludes, so
+  // reusing it across modes would quietly measure a different set of obstacles.
+  if (!edges.length) return { edges, empty: true, heightAware }
 
   let minX = Infinity
   let minY = Infinity
@@ -172,7 +244,7 @@ export function buildEdgeIndex(buildings) {
     }
   }
 
-  return { edges, buckets, cell, cols, rows, minX, minY, maxX, maxY, empty: false }
+  return { edges, buckets, cell, cols, rows, minX, minY, maxX, maxY, empty: false, heightAware }
 }
 
 function nearestIntersection(origin, dx, dy, maxRange, edges) {
@@ -285,7 +357,7 @@ function raySegmentDistance(ox, oy, dx, dy, x1, y1, x2, y2) {
 // ray endpoints already close the loop and the vantage point is omitted — there
 // the wrap-around edge from the last ray back to the first is a genuine
 // neighbouring pair and counts towards occlusivity like any other.
-function computeMetrics(vantage, rays, closed = false) {
+function computeMetrics(vantage, rays, closed = false, rayStep = 0) {
   const endpoints = rays.map((r) => ({
     x: r.point.x - vantage.x,
     y: r.point.y - vantage.y,
@@ -375,5 +447,112 @@ function computeMetrics(vantage, rays, closed = false) {
       ) / rays.length
     : 0
 
-  return { area, perimeter, compactness, occlusivity: closedPerimeter, enclosureRatio }
+  /* ------------------------------------------------ P9-only diagnostic metrics
+   *
+   * Two additional fields, added 2026-09-10 for P9's before/after diagnostics
+   * ONLY. They are never written into results.json, the field files, or any
+   * analysis output, and never enter a weight fit. P1–P8 simply ignore them.
+   *
+   * Each exists because one of the four fitted metrics answers a question P9
+   * needs asked differently — not because the fitted metric is wrong. Both of
+   * those stay exactly as validated.
+   */
+
+  // SOLID SHARE — the fraction of the horizon that terminates on something
+  // built. Per ray, with no pairing requirement between neighbours.
+  //
+  // This is the honest answer to "did this intervention add solid coverage",
+  // which occlusivity cannot give: closed perimeter credits an edge only where
+  // consecutive rays land on the same building, so a kiosk breaks continuity
+  // with the facade behind it and scores negative despite adding real surface.
+  // Solid share asks only whether each individual ray met something, so an
+  // object standing where there was open sky raises it, always.
+  const wallRays = rays.reduce((n, r) => n + (r.wall ? 1 : 0), 0)
+  const solidShare = rays.length ? wallRays / rays.length : 0
+
+  // SOLID FRONTAGE — the same thing in metres: the built horizon, measured as
+  // the arc each solid ray subtends at the distance it met the surface.
+  //
+  // READ THIS BEFORE USING IT AS "DID SOLID SURFACE INCREASE". It will not
+  // answer that question, and cannot. A kiosk in front of a facade hides sixty
+  // metres of distant frontage and shows eight metres of itself, so the total
+  // falls — which is physically correct, since you genuinely see less built
+  // surface. It measures HOW MUCH SURFACE IS IN VIEW, not how much of the view
+  // is surface. Solid share is the one for coverage; this is the one for
+  // quantity, and the two disagree exactly when an object stands in front of
+  // something else.
+  const solidFrontage = rays.reduce(
+    (sum, r) => sum + (r.wall ? r.distance * rayStep : 0),
+    0
+  )
+
+  // SOLIDITY — isovist area over the area of its convex hull.
+  //
+  // Compactness (4πA/P²) collapses under sparse slender obstacles: a 250 mm
+  // post stops one ray short while its neighbours run on a hundred metres, so
+  // each post adds two long radial edges to the perimeter, and perimeter enters
+  // compactness squared. Measured at Konstablerwache, a pergola takes 2.5% off
+  // area and 53% off compactness. That is what an isoperimetric quotient does
+  // when a shape grows fine fringe, and it makes compactness useless for
+  // judging whether an intervention of posts or trunks did anything.
+  //
+  // The convex hull ignores serration by construction — a notch cut into a
+  // shape does not move its hull — so solidity reports how much of the space's
+  // overall reach is actually occupied rather than how ragged its edge is. With
+  // 360 vertices the hull is numerically comfortable.
+  const hullArea = convexHullArea(verts)
+  const solidity = hullArea > 0 ? area / hullArea : 0
+
+  return {
+    area,
+    perimeter,
+    compactness,
+    occlusivity: closedPerimeter,
+    enclosureRatio,
+    solidShare,
+    solidFrontage,
+    solidity,
+  }
+}
+
+// Convex hull by Andrew's monotone chain: sort by x then y, sweep once for the
+// lower hull and once for the upper. O(n log n), and it needs no tolerance
+// parameter, which matters because the isovist polygon routinely contains
+// collinear runs where several rays escape to the same range arc.
+export function convexHull(points) {
+  if (points.length < 3) return [...points]
+  const pts = [...points].sort((a, b) => (a.x === b.x ? a.y - b.y : a.x - b.x))
+
+  // Cross product of OA × OB. Negative or zero drops B, which also discards
+  // collinear points — the hull should be corners, not every point along an edge.
+  const cross = (o, a, b) => (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x)
+
+  const lower = []
+  for (const p of pts) {
+    while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) {
+      lower.pop()
+    }
+    lower.push(p)
+  }
+  const upper = []
+  for (let i = pts.length - 1; i >= 0; i--) {
+    const p = pts[i]
+    while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) {
+      upper.pop()
+    }
+    upper.push(p)
+  }
+  lower.pop()
+  upper.pop()
+  return lower.concat(upper)
+}
+
+export function convexHullArea(points) {
+  const hull = convexHull(points)
+  if (hull.length < 3) return 0
+  let s = 0
+  for (let i = 0, j = hull.length - 1; i < hull.length; j = i++) {
+    s += hull[j].x * hull[i].y - hull[i].x * hull[j].y
+  }
+  return Math.abs(s) / 2
 }

@@ -5,7 +5,9 @@ import sites from '@/data/sites.json'
 import zones from '@/data/zones.json'
 import fieldIndex from '@/data/fields/index.json'
 import { METRICS, METRIC_LABELS, METRIC_UNITS } from '@/lib/analysis/fingerprints'
-import { activeSites, corpusWindowRadius, projectSite } from '@/lib/site'
+import { activeSites, corpusWindowRadius, pointsCentre, projectSite } from '@/lib/site'
+import { ZONE_COLOURS, zoneNames as describeZones } from '@/lib/zones'
+import { PlazaPlan } from '@/components/PlazaPlan'
 
 // P6 — Isovist Field Mapping & Zone Typology.
 //
@@ -18,12 +20,6 @@ import { activeSites, corpusWindowRadius, projectSite } from '@/lib/site'
 // plazas yield few points (Naschmarkt 190, Hauptwache 1,224), so a percentage
 // from one is not as precise as the same percentage from the other, and the
 // count is the only thing on screen that says so.
-
-// Zone colours are GLOBAL — zone 2 is the same colour at every plaza, because
-// the typology is one clustering over all 18. Ordered from the largest, most
-// open type through to the tightest, so the ramp reads as a sequence rather
-// than as arbitrary categories.
-const ZONE_COLOURS = ['#1D4ED8', '#0E7490', '#7C3AED', '#B45309', '#BE123C']
 
 // Sequential ramp for metric maps: pale where the metric is low, saturated
 // where it is high. Deliberately not the zone palette — a reader must never
@@ -39,22 +35,6 @@ function rampColour(t) {
   const clamped = Math.max(0, Math.min(1, t))
   const i = Math.min(RAMP.length - 1, Math.floor(clamped * (RAMP.length - 1)))
   return RAMP[i]
-}
-
-// Zone names are descriptive labels derived from each centre, not part of the
-// clustering — they exist so the legend reads as architecture rather than as
-// cluster indices. Built from the centre's own coordinates so they cannot
-// drift out of step with a re-run.
-function describeZone(centre) {
-  const [area, compact, occl, enclosure] = centre
-  const size = area > 0.8 ? 'Vast' : area > 0.4 ? 'Open' : 'Tight'
-  let character
-  if (enclosure > 0.8) character = 'strongly enclosed'
-  else if (occl > 0.7) character = 'facade-rich'
-  else if (compact > 0.9) character = 'regular'
-  else if (compact < 0.35) character = 'irregular'
-  else character = 'moderate'
-  return `${size}, ${character}`
 }
 
 export function FieldPage() {
@@ -106,7 +86,7 @@ export function FieldPage() {
   // P7's plans use it too — see corpusWindowRadius there for why.
   const windowRadius = useMemo(() => corpusWindowRadius(active), [active])
 
-  const zoneNames = useMemo(() => zones.centres.map(describeZone), [])
+  const zoneNames = useMemo(() => describeZones(zones.centres), [])
 
   return (
     <div className="h-full overflow-y-auto">
@@ -307,36 +287,18 @@ export function FieldPage() {
 // squares at grid spacing so the field reads as a continuous surface rather
 // than as dots, which is what it represents.
 function FieldMap({ field, geometry, metric, windowRadius }) {
-  const { buildings, boundary } = geometry
-  const view = useMemo(() => {
-    const xs = field.points.map((p) => p.x)
-    const ys = field.points.map((p) => p.y)
-    if (boundary) {
-      for (const p of boundary) {
-        xs.push(p.x)
-        ys.push(p.y)
-      }
-    }
-    // A FIXED window, the same size for every plaza (see windowRadius in
-    // FieldPage) — only its centre moves from site to site. Sizing the crop to
-    // this plaza's own extent, as an earlier version did, drew every plaza at
-    // a different scale: a small square filled the frame exactly as much as a
-    // large one, so nothing on screen said which was actually bigger. A fixed
-    // window also always reaches past the sampled points into the surrounding
-    // blocks, so a zone reads as a place rather than as a patch of colour
-    // floating on its own.
-    const cx = (Math.min(...xs) + Math.max(...xs)) / 2
-    const cy = (Math.min(...ys) + Math.max(...ys)) / 2
-    return {
-      minX: cx - windowRadius,
-      maxX: cx + windowRadius,
-      minY: cy - windowRadius,
-      maxY: cy + windowRadius,
-    }
-  }, [field, boundary, windowRadius])
-
-  const w = view.maxX - view.minX
-  const h = view.maxY - view.minY
+  const { boundary } = geometry
+  // A FIXED window, the same size for every plaza — only its centre moves from
+  // site to site. Sizing the crop to this plaza's own extent, as an earlier
+  // version did, drew every plaza at a different scale: a small square filled
+  // the frame exactly as much as a large one, so nothing on screen said which
+  // was actually bigger. A fixed window also always reaches past the sampled
+  // points into the surrounding blocks, so a zone reads as a place rather than
+  // as a patch of colour floating on its own.
+  //
+  // Centred on the sampled points rather than on the plaza centroid, which is
+  // this page's own framing choice — see the note on `centre` in PlazaPlan.
+  const centre = useMemo(() => pointsCentre(field.points, boundary), [field, boundary])
   const cell = field.spacing_m
 
   // Metric maps scale within this plaza so its internal variation is visible;
@@ -350,31 +312,12 @@ function FieldMap({ field, geometry, metric, windowRadius }) {
 
   return (
     <figure className="rounded-lg border border-line bg-paper p-3">
-      <svg
-        viewBox={`${view.minX} ${-view.maxY} ${w} ${h}`}
-        className="w-full"
-        style={{ aspectRatio: `${w} / ${h}` }}
-        role="img"
-        aria-label={`${field.name} field map`}
+      <PlazaPlan
+        geometry={geometry}
+        windowRadius={windowRadius}
+        centre={centre}
+        ariaLabel={`${field.name} field map`}
       >
-        {/* y is negated throughout so north sits at the top */}
-        {buildings.map((b, i) => (
-          <polygon
-            key={i}
-            points={b.footprint.map((p) => `${p.x},${-p.y}`).join(' ')}
-            className="fill-surface stroke-line-strong"
-            strokeWidth={0.4}
-          />
-        ))}
-        {boundary && (
-          <polygon
-            points={boundary.map((p) => `${p.x},${-p.y}`).join(' ')}
-            fill="none"
-            className="stroke-redline"
-            strokeWidth={0.8}
-            strokeDasharray="3 2"
-          />
-        )}
         {field.points.map((p, i) => {
           const colour =
             metric === 'zones'
@@ -392,7 +335,7 @@ function FieldMap({ field, geometry, metric, windowRadius }) {
             />
           )
         })}
-      </svg>
+      </PlazaPlan>
       <figcaption className="mt-2 flex items-center justify-between font-mono text-[11px] text-ink-faint">
         <span>
           {field.name} · {field.point_count.toLocaleString()} points at {field.spacing_m} m

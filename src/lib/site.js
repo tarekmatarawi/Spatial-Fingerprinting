@@ -149,6 +149,28 @@ function maxDistance(center, points) {
 // lives here rather than in a page so those two cannot drift apart.
 export const MAP_CONTEXT_MARGIN_M = 40
 
+// The bounding-box centre of a set of local points, with the boundary folded
+// in. Where a fixed-radius window is CENTRED, as distinct from how wide it is.
+//
+// P6 frames its field maps on the sampled points rather than on the plaza
+// centroid, which shifts the frame slightly where a plaza's standable ground
+// is lopsided — a boundary with a large building biting into one side. Both
+// are defensible; what matters is that a page states which it uses, so the
+// choice lives here rather than inline in a component.
+export function pointsCentre(points, boundary) {
+  const xs = (points ?? []).map((p) => p.x)
+  const ys = (points ?? []).map((p) => p.y)
+  for (const p of boundary ?? []) {
+    xs.push(p.x)
+    ys.push(p.y)
+  }
+  if (!xs.length) return { x: 0, y: 0 }
+  return {
+    x: (Math.min(...xs) + Math.max(...xs)) / 2,
+    y: (Math.min(...ys) + Math.max(...ys)) / 2,
+  }
+}
+
 export function corpusWindowRadius(sites, margin = MAP_CONTEXT_MARGIN_M) {
   const radii = (sites ?? []).map((s) => {
     try {

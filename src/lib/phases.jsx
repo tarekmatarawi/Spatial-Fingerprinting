@@ -143,7 +143,7 @@ export const PHASES = [
     id: 'diagnose',
     code: 'P9',
     group: 'design',
-    status: 'planned',
+    status: 'built',
     icon: LuDraftingCompass,
     name: 'Design Diagnostic',
     longName: 'Design Diagnostic & Intervention',

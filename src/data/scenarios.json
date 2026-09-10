@@ -1,0 +1,120 @@
+{
+ "version": 1,
+ "updated_at": "2026-09-10T17:55:55.255Z",
+ "scenarios": [
+  {
+   "id": "p9-balanced-mirror-test",
+   "name": "test",
+   "note": "Mirrored about the plaza centre line (y = 1.0): four building removals, a pair of landmarks and a pair of solid screen walls. Found by search over the whole library scored on an even mixture of zone types plus matching north and south compositions. Result 25.6 / 5.3 / 24.0 / 45.0 % across the four reachable types, halves differing by 3.5 % (half L1), against a baseline of 68 / 0.3 / 10 / 21.5 % and 35.6 %. The removals are what keep \"Open, facade-rich\" alive: additive elements break facade continuity everywhere they are visible and collapse occlusivity, so a walls-only version of this scenario lost that type entirely (3.3 %). Zone 4 \"Vast, regular\" stays at 0 — it needs isovist area beyond what four removals free up.",
+   "site_id": "Konstablerwache-Frankfurt am Main",
+   "created_at": "2026-09-10T17:50:11.351Z",
+   "updated_at": "2026-09-10T17:55:55.255Z",
+   "elements": [
+    {
+     "id": "demolish-144",
+     "kind": "demolish",
+     "building": 144,
+     "drawn_at": "2026-09-10T17:55:15.975Z"
+    },
+    {
+     "id": "demolish-102",
+     "kind": "demolish",
+     "building": 102,
+     "drawn_at": "2026-09-10T17:55:15.975Z"
+    },
+    {
+     "id": "landmark-pz4ayda",
+     "kind": "preset",
+     "preset": "landmark",
+     "params": {
+      "size": 8,
+      "height": 8.406
+     },
+     "anchor": {
+      "x": -38.8453634083271,
+      "y": 6.028031383725974
+     },
+     "rotation_deg": 36.13370095487684,
+     "placed_at": "2026-09-10T17:55:15.975Z"
+    },
+    {
+     "id": "landmark-ftn4m2o",
+     "kind": "preset",
+     "preset": "landmark",
+     "params": {
+      "size": 8,
+      "height": 8.406
+     },
+     "anchor": {
+      "x": -38.8453634083271,
+      "y": -3.971968616274026
+     },
+     "rotation_deg": -36.13370095487684,
+     "placed_at": "2026-09-10T17:55:15.975Z"
+    },
+    {
+     "id": "demolish-60",
+     "kind": "demolish",
+     "building": 60,
+     "drawn_at": "2026-09-10T17:55:15.975Z"
+    },
+    {
+     "id": "demolish-89",
+     "kind": "demolish",
+     "building": 89,
+     "drawn_at": "2026-09-10T17:55:15.975Z"
+    },
+    {
+     "id": "screenWall-mtj8qrl",
+     "kind": "preset",
+     "preset": "screenWall",
+     "params": {
+      "length": 41.41439051017761,
+      "height": 7.585078339571693,
+      "perforation": 0
+     },
+     "anchor": {
+      "x": -47.928777882903816,
+      "y": 20.57511442290728
+     },
+     "rotation_deg": -45.85248343180865,
+     "placed_at": "2026-09-10T17:55:15.975Z"
+    },
+    {
+     "id": "screenWall-9vwcqrc",
+     "kind": "preset",
+     "preset": "screenWall",
+     "params": {
+      "length": 41.41439051017761,
+      "height": 7.585078339571693,
+      "perforation": 0
+     },
+     "anchor": {
+      "x": -47.928777882903816,
+      "y": -18.519051655455332
+     },
+     "rotation_deg": 45.85248343180865,
+     "placed_at": "2026-09-10T17:55:15.975Z"
+    }
+   ],
+   "selection": {
+    "x": -23.69,
+    "y": 1.03
+   },
+   "radius_m": 20,
+   "target_zone": null,
+   "provenance": {
+    "zones_generated_at": "2026-09-06T00:30:27.887Z",
+    "zone_count": 5,
+    "weights": [
+     0.3121969818048535,
+     0.27488596169781887,
+     0.2065181660513352,
+     0.20639889044599233
+    ],
+    "field_spacing_m": 2.5,
+    "normalisation_source": "perceptual_360"
+   }
+  }
+ ]
+}

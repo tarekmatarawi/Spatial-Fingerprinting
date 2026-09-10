@@ -18,7 +18,8 @@
     "fields": "node scripts/compute-fields.mjs",
     "zones": "node scripts/compute-zones.mjs",
     "trials:matched-view": "node scripts/build-matched-view-trials.mjs",
-    "matched-view:selftest": "node scripts/matched-view-selftest.mjs"
+    "matched-view:selftest": "node scripts/matched-view-selftest.mjs",
+    "validate:presets": "node scripts/validate-presets.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",

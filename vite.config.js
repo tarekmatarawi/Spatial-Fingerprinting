@@ -299,6 +299,68 @@ function matchedViewEndpoints() {
   }
 }
 
+// Dev-only endpoints for P9's named scenarios. Modelled on the view-cloud pair
+// above, and separate for the same reason every other instrument got its own
+// file: a different kind of record, with its own validator.
+//
+// THE PHASE GATE LIVES HERE AS WELL AS IN THE LIBRARY. `SCENARIO_FILE` is
+// imported from lib/scenarios.js rather than spelled out, so there is exactly
+// one string in the codebase naming where a scenario may be written, and it is
+// not sites.json. Validation runs in the endpoint, not only in the UI, so a
+// payload posted by hand or by the wrong page fails here with a message that
+// names the problem instead of landing on disk.
+function scenarioEndpoints() {
+  return {
+    name: 'scenario-endpoints',
+    configureServer(server) {
+      server.middlewares.use('/__save-scenarios', (req, res) => {
+        if (req.method !== 'POST') {
+          res.statusCode = 405
+          return res.end()
+        }
+        let body = ''
+        req.on('data', (chunk) => (body += chunk))
+        req.on('end', async () => {
+          try {
+            const file = JSON.parse(body)
+            const { validateScenarioFile, SCENARIO_FILE } =
+              await server.ssrLoadModule('/src/lib/scenarios.js')
+            validateScenarioFile(file)
+            writeJsonAtomic(path.resolve(dirname, SCENARIO_FILE), file)
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ ok: true, scenarios: file.scenarios.length }))
+          } catch (err) {
+            res.statusCode = 400
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ ok: false, error: String(err.message || err) }))
+          }
+        })
+      })
+
+      // GET returns the file from disk. The page reads it on arrival rather
+      // than trusting the copy bundled at build time, so two dev sessions —
+      // or a save made after the page was loaded — cannot leave the list
+      // showing scenarios that no longer exist.
+      server.middlewares.use('/__scenarios', async (req, res) => {
+        if (req.method !== 'GET') {
+          res.statusCode = 405
+          return res.end()
+        }
+        try {
+          const { SCENARIO_FILE } = await server.ssrLoadModule('/src/lib/scenarios.js')
+          res.setHeader('Content-Type', 'application/json')
+          res.setHeader('Cache-Control', 'no-store')
+          res.end(fs.readFileSync(path.resolve(dirname, SCENARIO_FILE), 'utf8'))
+        } catch (err) {
+          res.statusCode = 500
+          res.setHeader('Content-Type', 'application/json')
+          res.end(JSON.stringify({ ok: false, error: String(err.message || err) }))
+        }
+      })
+    },
+  }
+}
+
 const UPLOAD_DIRS = {
   images: path.resolve(dirname, 'public/images'),
   panoramas: path.resolve(dirname, 'public/panoramas'),
@@ -385,6 +447,7 @@ export default defineConfig({
     viewCloudsSaveEndpoint(),
     survey360Endpoints(),
     matchedViewEndpoints(),
+    scenarioEndpoints(),
     uploadImageEndpoint(),
   ],
   resolve: {
