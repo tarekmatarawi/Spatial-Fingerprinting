@@ -258,6 +258,21 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             than it and &ldquo;Open, facade-rich&rdquo; are hard to reach without demolition
             widening what an intervention can do.
           </p>
+          <p>
+            <B>One preset is the exception, and it was found by drawing scenarios rather than by
+            reasoning about the library.</B> The recessed arcade is the only intervention here that
+            makes a zone type MORE itself. Cut into three separate facades around this square it
+            takes &ldquo;Open, facade-rich&rdquo; from 68.0% of the plaza to 93.3%, raising
+            occlusivity 15.0%, isovist area 1.1% and solidity 1.2% together — the only move of the
+            ten that improves three metrics at once, and the only additive one that raises area at
+            all. It works because its piers stand on the ORIGINAL building line, so the surface it
+            adds extends the run of continuous edge that occlusivity counts instead of breaking it,
+            which is exactly what every freestanding object does instead. The qualification matters
+            as much as the finding: adding one 40 m freestanding colonnade alongside those three
+            recesses inverts the result — zone 0 back to 29.4%, compactness −57.6% — because
+            nothing three recesses add offsets serration on that scale. An edge strategy is not one
+            move, and the two halves of one pull in opposite directions.
+          </p>
 
           <H>The precedent panel</H>
           <p>

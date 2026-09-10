@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updated_at": "2026-09-10T17:55:55.255Z",
+ "updated_at": "2026-09-10T20:36:48.971Z",
  "scenarios": [
   {
    "id": "p9-balanced-mirror-test",
@@ -103,6 +103,376 @@
    },
    "radius_m": 20,
    "target_zone": null,
+   "provenance": {
+    "zones_generated_at": "2026-09-06T00:30:27.887Z",
+    "zone_count": 5,
+    "weights": [
+     0.3121969818048535,
+     0.27488596169781887,
+     0.2065181660513352,
+     0.20639889044599233
+    ],
+    "field_spacing_m": 2.5,
+    "normalisation_source": "perceptual_360"
+   }
+  },
+  {
+   "id": "p9-rooms-in-the-square",
+   "name": "Rooms in the Square",
+   "note": "Four freestanding pavilions, 12 x 12 m at 7-9 m, staggered off-axis 25-30 m apart across the open middle. Intent: break the undifferentiated central plane into a sequence of inhabitable compartments. NOTE ON THE BRIEF: this was written to convert the square's \"Vast, regular\" ground, and Konstablerwache has none — that type holds 0 of 967 sampled points at baseline. What the pavilions actually convert is \"Open, facade-rich\", which is the undifferentiated centre the brief describes and which holds 68.0 % of the plaza. Result: 68.0 / 0.3 / 10.1 / 21.5 / 0 % becomes 2.0 / 0 / 18.7 / 79.3 / 0 %. Of the 658 zone-0 points, 121 are built over, 118 become \"Tight, strongly enclosed\" and 402 become \"Tight, irregular\". Enclosure rises 50.4 % within 20 m of a pavilion and only 4.9 % beyond, which is the compartment effect the brief predicted, localised as predicted. Occlusivity falls 29 % for the documented freestanding-continuity reason.",
+   "site_id": "Konstablerwache-Frankfurt am Main",
+   "created_at": "2026-09-10T20:36:48.971Z",
+   "updated_at": "2026-09-10T20:36:48.971Z",
+   "elements": [
+    {
+     "id": "landmark-a",
+     "kind": "preset",
+     "preset": "landmark",
+     "params": {
+      "size": 12,
+      "height": 8
+     },
+     "anchor": {
+      "x": -56,
+      "y": 14
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-09-10T20:36:48.710Z"
+    },
+    {
+     "id": "landmark-b",
+     "kind": "preset",
+     "preset": "landmark",
+     "params": {
+      "size": 12,
+      "height": 9
+     },
+     "anchor": {
+      "x": -30,
+      "y": 5
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-09-10T20:36:48.710Z"
+    },
+    {
+     "id": "landmark-c",
+     "kind": "preset",
+     "preset": "landmark",
+     "params": {
+      "size": 12,
+      "height": 7.5
+     },
+     "anchor": {
+      "x": -4,
+      "y": 15
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-09-10T20:36:48.710Z"
+    },
+    {
+     "id": "landmark-d",
+     "kind": "preset",
+     "preset": "landmark",
+     "params": {
+      "size": 12,
+      "height": 8.5
+     },
+     "anchor": {
+      "x": 16,
+      "y": 0
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-09-10T20:36:48.710Z"
+    }
+   ],
+   "selection": {
+    "x": -25,
+    "y": 8
+   },
+   "radius_m": 35,
+   "target_zone": 2,
+   "provenance": {
+    "zones_generated_at": "2026-09-06T00:30:27.887Z",
+    "zone_count": 5,
+    "weights": [
+     0.3121969818048535,
+     0.27488596169781887,
+     0.2065181660513352,
+     0.20639889044599233
+    ],
+    "field_spacing_m": 2.5,
+    "normalisation_source": "perceptual_360"
+   }
+  },
+  {
+   "id": "p9-market-hall",
+   "name": "Market Hall",
+   "note": "One 60 x 18 m hall at 8 m on the square's long east-west market axis, with a 6 x 6 m kiosk at either end at 4 m. The single-mass counterpart to \"Rooms in the Square\", drawn on the same selection against the same target so the two are directly comparable. Result: 4.5 / 0 / 45.7 / 49.8 / 0 %. It converts more of the open centre into \"Tight, strongly enclosed\" than four pavilions do (235 points against 118) and leaves a slightly more even spread (0.555 against 0.593 on half-L1 from an even five-way split) — but it reaches that partly by DELETING ground rather than changing it: 218 sampled positions are built over against 121. Enclosure rises 80.4 % within 20 m of the hall. Compactness is the one metric where the two diverge in kind: one large rectangular mass costs 2.1 %, four scattered ones cost 21.9 %, because a single convex obstacle does not serrate an isovist the way four separated ones do.",
+   "site_id": "Konstablerwache-Frankfurt am Main",
+   "created_at": "2026-09-10T20:36:48.971Z",
+   "updated_at": "2026-09-10T20:36:48.971Z",
+   "elements": [
+    {
+     "id": "markethall",
+     "footprint": [
+      {
+       "x": -55,
+       "y": -5
+      },
+      {
+       "x": 5,
+       "y": -5
+      },
+      {
+       "x": 5,
+       "y": 13
+      },
+      {
+       "x": -55,
+       "y": 13
+      }
+     ],
+     "height_m": 8,
+     "drawn_at": "2026-09-10T20:36:48.710Z"
+    },
+    {
+     "id": "landmark-kioskW",
+     "kind": "preset",
+     "preset": "landmark",
+     "params": {
+      "size": 6,
+      "height": 4
+     },
+     "anchor": {
+      "x": -63,
+      "y": 4
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-09-10T20:36:48.710Z"
+    },
+    {
+     "id": "landmark-kioskE",
+     "kind": "preset",
+     "preset": "landmark",
+     "params": {
+      "size": 6,
+      "height": 4
+     },
+     "anchor": {
+      "x": 13,
+      "y": 4
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-09-10T20:36:48.710Z"
+    }
+   ],
+   "selection": {
+    "x": -25,
+    "y": 8
+   },
+   "radius_m": 35,
+   "target_zone": 2,
+   "provenance": {
+    "zones_generated_at": "2026-09-06T00:30:27.887Z",
+    "zone_count": 5,
+    "weights": [
+     0.3121969818048535,
+     0.27488596169781887,
+     0.2065181660513352,
+     0.20639889044599233
+    ],
+    "field_spacing_m": 2.5,
+    "normalisation_source": "perceptual_360"
+   }
+  },
+  {
+   "id": "p9-colonnaded-edge",
+   "name": "Colonnaded Edge",
+   "note": "Three recessed arcades cut into three separate facades (north #63, south #89, west #164), 4 m deep, 28 m requested and 13.8 / 23.5 / 25.5 m actually cut — the recess holds one depth clear of each corner so its return walls meet open facade, which caps the opening at the facade length less 8 m. Plus a freestanding 40 m colonnade at 6 m along the east rim, where no facade qualifies for a recess. THE SHARPEST RESULT IN THE SET, and it splits: the recesses ALONE take \"Open, facade-rich\" from 68.0 % to 93.3 %, raising occlusivity 15.0 %, area 1.1 % and solidity 1.2 % — the only intervention in the library that strengthens a zone instead of diluting it, and the only one that improves three metrics at once. The added colonnade ALONE does the opposite: compactness -54.9 %, zone 0 down to 12.0 %. Together the colonnade wins (29.4 % zone 0, compactness -57.6 %), because nothing the recesses add can offset serration on that scale. The change propagates: occlusivity rises 15.5 % at the rim and 14.4 % in the centre, but reclassification does not — 40 % of rim points change type against 10 % in the centre, because centre points were already deep inside zone 0 and a strengthened zone 0 is still zone 0.",
+   "site_id": "Konstablerwache-Frankfurt am Main",
+   "created_at": "2026-09-10T20:36:48.971Z",
+   "updated_at": "2026-09-10T20:36:48.971Z",
+   "elements": [
+    {
+     "id": "recess-north",
+     "kind": "recess",
+     "preset": "recessedArcade",
+     "params": {
+      "length": 28,
+      "depth": 4,
+      "pier_spacing": 5
+     },
+     "building": 63,
+     "edge": 4,
+     "t": 0.4718126839594257,
+     "placed_at": "2026-09-10T20:36:48.711Z"
+    },
+    {
+     "id": "recess-south",
+     "kind": "recess",
+     "preset": "recessedArcade",
+     "params": {
+      "length": 28,
+      "depth": 4,
+      "pier_spacing": 5
+     },
+     "building": 89,
+     "edge": 22,
+     "t": 0.42321032526419156,
+     "placed_at": "2026-09-10T20:36:48.711Z"
+    },
+    {
+     "id": "recess-west",
+     "kind": "recess",
+     "preset": "recessedArcade",
+     "params": {
+      "length": 28,
+      "depth": 4,
+      "pier_spacing": 5
+     },
+     "building": 164,
+     "edge": 9,
+     "t": 0.6225627024011938,
+     "placed_at": "2026-09-10T20:36:48.712Z"
+    },
+    {
+     "id": "colonnade-east",
+     "kind": "preset",
+     "preset": "colonnade",
+     "params": {
+      "length": 40,
+      "depth": 4,
+      "spacing": 4,
+      "height": 6
+     },
+     "anchor": {
+      "x": 19,
+      "y": 8
+     },
+     "rotation_deg": 90,
+     "placed_at": "2026-09-10T20:36:48.712Z"
+    }
+   ],
+   "selection": {
+    "x": -25,
+    "y": 8
+   },
+   "radius_m": 45,
+   "target_zone": 0,
+   "provenance": {
+    "zones_generated_at": "2026-09-06T00:30:27.887Z",
+    "zone_count": 5,
+    "weights": [
+     0.3121969818048535,
+     0.27488596169781887,
+     0.2065181660513352,
+     0.20639889044599233
+    ],
+    "field_spacing_m": 2.5,
+    "normalisation_source": "perceptual_360"
+   }
+  },
+  {
+   "id": "p9-shaded-grove",
+   "name": "Shaded Grove",
+   "note": "Two rows of eight trees at 6 m spacing, canopy 7 m across topping out at 5 m; a 30 x 12 m canopy on 600 mm piers at 6 m, built as two parallel colonnade runs 12 m apart because the pergola preset's posts are fixed at 250 mm and the colonnade's are 600 mm; and a 20 m raised step platform along the east side. Result: 2.1 / 0 / 0.1 / 97.8 / 0 %. WHAT MOVED AND WHAT DID NOT: solidity -17.5 % and area -19.3 % are the real changes; occlusivity -20.0 % is real and in the documented direction; enclosure +2.7 % is nothing; compactness -84.5 % is the spurious thin-element collapse this phase added solidity to replace, and must not be read as a finding. The steps register EXACTLY nothing — zero change on all six metrics, zero points dropped — because at 0.9 m they sit under the 1.6 m measured slice, which is the preset predicting its own result. Neither do the canopies: at 2.5 m clearance the foliage floats above the slice and only 400 mm trunks are counted, so this scenario measures a grove's trunks and has no way at all to register its shade.",
+   "site_id": "Konstablerwache-Frankfurt am Main",
+   "created_at": "2026-09-10T20:36:48.971Z",
+   "updated_at": "2026-09-10T20:36:48.971Z",
+   "elements": [
+    {
+     "id": "treeRow-north",
+     "kind": "preset",
+     "preset": "treeRow",
+     "params": {
+      "length": 42,
+      "spacing": 6,
+      "clearance": 2.5,
+      "canopy_diameter": 7,
+      "canopy_height": 5
+     },
+     "anchor": {
+      "x": -34,
+      "y": 22
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-09-10T20:36:48.712Z"
+    },
+    {
+     "id": "treeRow-south",
+     "kind": "preset",
+     "preset": "treeRow",
+     "params": {
+      "length": 42,
+      "spacing": 6,
+      "clearance": 2.5,
+      "canopy_diameter": 7,
+      "canopy_height": 5
+     },
+     "anchor": {
+      "x": -34,
+      "y": -14
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-09-10T20:36:48.712Z"
+    },
+    {
+     "id": "colonnade-canopyN",
+     "kind": "preset",
+     "preset": "colonnade",
+     "params": {
+      "length": 30,
+      "depth": 4,
+      "spacing": 5,
+      "height": 6
+     },
+     "anchor": {
+      "x": -34,
+      "y": 10
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-09-10T20:36:48.712Z"
+    },
+    {
+     "id": "colonnade-canopyS",
+     "kind": "preset",
+     "preset": "colonnade",
+     "params": {
+      "length": 30,
+      "depth": 4,
+      "spacing": 5,
+      "height": 6
+     },
+     "anchor": {
+      "x": -34,
+      "y": -2
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-09-10T20:36:48.712Z"
+    },
+    {
+     "id": "plinth-steps",
+     "kind": "preset",
+     "preset": "plinth",
+     "params": {
+      "size": 20,
+      "height": 0.9,
+      "sides_open": 2
+     },
+     "anchor": {
+      "x": 10,
+      "y": 4
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-09-10T20:36:48.712Z"
+    }
+   ],
+   "selection": {
+    "x": -34,
+    "y": 4
+   },
+   "radius_m": 35,
+   "target_zone": 2,
    "provenance": {
     "zones_generated_at": "2026-09-06T00:30:27.887Z",
     "zone_count": 5,
