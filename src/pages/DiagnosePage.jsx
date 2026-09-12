@@ -1,4 +1,4 @@
-import { Suspense, lazy, memo, useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, lazy, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { LuCrosshair, LuInfo } from 'react-icons/lu'
 
 import sites from '@/data/sites.json'
@@ -9,6 +9,7 @@ import cloudFile from '@/data/view-clouds.json'
 import trialBank from '@/data/matched-view-trials.json'
 import { Figure } from '@/components/Figure'
 import { PlazaPlan } from '@/components/PlazaPlan'
+import { CellProbePanel, IsovistOutline, ProbeMarker } from '@/components/CellProbe'
 import { Boundary } from '@/components/Boundary'
 import { PrecedentPanel } from '@/components/PrecedentPanel'
 import { DiagnoseMethods } from '@/components/DiagnoseMethods'
@@ -56,6 +57,7 @@ import {
   recomputeField,
   validateMass,
 } from '@/lib/sandbox'
+import { cellIsovist, findCell, readCell } from '@/lib/probe'
 import {
   ElementList,
   MetricCaveats,
@@ -143,6 +145,21 @@ export function DiagnosePage() {
   const [selection, setSelection] = useState(null)
   const [radius, setRadius] = useState(DEFAULT_RADIUS_M)
   const [hover, setHover] = useState(null)
+
+  // INSPECT MODE — click one cell instead of selecting an area.
+  //
+  // A toggle rather than a second gesture because the plan's click is already
+  // spoken for on both surfaces: it sets the selection disc on the zone map and
+  // places geometry in the sandbox. Overloading it on a modifier key would make
+  // the more destructive of the two reachable by accident.
+  //
+  // The probed cell is stored as an INDEX into the field's point array, not as
+  // a position. Tier B rebuilds its point records on every edit, and an index
+  // survives that where a coordinate would have to be re-matched — so the panel
+  // keeps pointing at the same ground while the numbers under it change, which
+  // is the entire use for it.
+  const [inspecting, setInspecting] = useState(false)
+  const [probeIndex, setProbeIndex] = useState(null)
 
   // The character the designer INTENDS this area to have. Null until stated,
   // and deliberately not defaulted to whatever the area already is — the
@@ -631,6 +648,61 @@ export function DiagnosePage() {
 
   // One derivation, two drawings. The plan and the model must never disagree
   // about which points changed type.
+  // ------------------------------------------------------- the inspected cell
+  //
+  // Read, never re-measured. The as-built reading comes from the stored field
+  // exactly as P6 wrote it; the sandbox reading comes from `recomputeField`'s
+  // own output. Both are the records the maps are coloured from, so the panel
+  // cannot report a number the cell under the crosshair disagrees with.
+  const probeBefore = useMemo(() => {
+    if (probeIndex == null || !field) return null
+    const p = field.points[probeIndex]
+    if (!p) return null
+    return readCell({ ...p, zone: field.zones[probeIndex] }, zonesFile.centres, weights, zoneNames)
+  }, [probeIndex, field, weights, zoneNames])
+
+  const probeAfter = useMemo(() => {
+    if (probeIndex == null || !sandbox) return null
+    // A mass drawn over the probed cell removes it from the sample. That is a
+    // real answer — "nobody stands here any more" — and is reported as such
+    // rather than by silently falling back to the as-built reading.
+    const p = sandbox.result.points.find((q) => q.index === probeIndex)
+    if (!p) return 'built-over'
+    return readCell(p, zonesFile.centres, weights, zoneNames)
+  }, [probeIndex, sandbox, weights, zoneNames])
+
+  // The outline is the one thing that IS cast, and only to be drawn. Cast
+  // through whichever geometry the surface it is drawn on represents, so the
+  // shape shown is the shape the numbers beside it describe.
+  const probeIsovistBefore = useMemo(() => {
+    if (probeIndex == null || !field || !geometry) return null
+    return cellIsovist(field.points[probeIndex], geometry, [])
+  }, [probeIndex, field, geometry])
+
+  const probeIsovistAfter = useMemo(() => {
+    if (probeIndex == null || !field || !geometry) return null
+    return cellIsovist(field.points[probeIndex], geometry, masses)
+  }, [probeIndex, field, geometry, masses])
+
+  const probeCell = useMemo(
+    () => (probeIndex == null || !field ? null : field.points[probeIndex]),
+    [probeIndex, field]
+  )
+
+  // Turning inspect mode off leaves the cell marked. Clearing is its own
+  // gesture, because the common move is to probe a cell, switch back to
+  // selecting an area around it, and compare the two — and losing the marker on
+  // the way would make that impossible.
+  const probePlan = useCallback(
+    (point) => {
+      if (!field || !point) return false
+      const found = findCell(point, field.points)
+      setProbeIndex(found ? found.index : null)
+      return true
+    },
+    [field]
+  )
+
   const zoneCells = useMemo(
     () => zoneCellsFor(field, sandbox, sandboxView),
     [field, sandbox, sandboxView]
@@ -719,10 +791,18 @@ export function DiagnosePage() {
                   windowRadius={windowRadius}
                   centre={centre}
                   interactive
-                  onPlanClick={(point) => point && setSelection(point)}
+                  onPlanClick={(point) => {
+                    if (!point) return
+                    if (inspecting) probePlan(point)
+                    else setSelection(point)
+                  }}
                   onPlanMove={(point) => setHover(point)}
                   onPlanLeave={() => setHover(null)}
-                  ariaLabel={`${field.name} zone map — click to select an area`}
+                  ariaLabel={
+                    inspecting
+                      ? `${field.name} zone map — click a cell to inspect it`
+                      : `${field.name} zone map — click to select an area`
+                  }
                 >
                   {({ k }) => (
                     <>
@@ -734,6 +814,12 @@ export function DiagnosePage() {
                         hasSelection={!!selection}
                       />
 
+                      {/* Drawn UNDER the marker so the crosshair stays legible
+                          against it, and only on the surface whose geometry it
+                          was cast through. */}
+                      <IsovistOutline isovist={probeIsovistBefore} k={k} />
+                      <ProbeMarker cell={probeCell} k={k} />
+
                       {/* The selection ring is drawn in markup red, the
                           platform's reserved colour for something the
                           researcher has added on top of a measurement rather
@@ -741,7 +827,9 @@ export function DiagnosePage() {
                       {selection && (
                         <SelectionRing centre={selection} radius={radius} k={k} />
                       )}
-                      {!selection && hover && (
+                      {/* No ghost ring while inspecting: it previews a
+                          selection the click will not make. */}
+                      {!selection && hover && !inspecting && (
                         <SelectionRing centre={hover} radius={radius} k={k} ghost />
                       )}
                     </>
@@ -757,11 +845,27 @@ export function DiagnosePage() {
                     {field.name} · {field.point_count.toLocaleString()} points at{' '}
                     {field.spacing_m} m · 360°
                   </span>
-                  <span className={selection ? '' : 'text-primary'}>
-                    {selection ? 'click again to move the selection' : 'click inside the plaza'}
+                  <span className={inspecting || selection ? '' : 'text-primary'}>
+                    {inspecting
+                      ? 'click a cell to inspect it'
+                      : selection
+                        ? 'click again to move the selection'
+                        : 'click inside the plaza'}
                   </span>
                 </p>
               </Figure>
+
+              <InspectToggle
+                on={inspecting}
+                onChange={setInspecting}
+                probed={probeIndex != null}
+                onClear={() => setProbeIndex(null)}
+              />
+
+              <CellProbePanel
+                reading={probeBefore}
+                onClear={() => setProbeIndex(null)}
+              />
 
               <SelectionPanel
                 summary={summary}
@@ -1157,6 +1261,10 @@ export function DiagnosePage() {
                   view={sandboxView}
                   selection={selection}
                   radius={radius}
+                  inspecting={inspecting}
+                  onProbe={probePlan}
+                  probeCell={probeCell}
+                  probeIsovist={probeIsovistAfter}
                   onVertex={(point) => {
                     if (!point) return
                     // One plan, three tools. A click adds a corner while a
@@ -1193,15 +1301,32 @@ export function DiagnosePage() {
                     disabled={!sandbox || (sandboxDim === '3d' && !showZones3d)}
                     changedCount={sandbox?.diff.changedCount ?? 0}
                   />
-                  <span className={drawing ? 'text-primary' : ''}>
-                    {drawing
-                      ? `${drawing.vertices.length} corner${drawing.vertices.length === 1 ? '' : 's'} — click to add, Esc to cancel`
-                      : computing
-                        ? 'measuring the plaza again…'
-                        : `${masses.length} mass${masses.length === 1 ? '' : 'es'} in the sandbox`}
+                  <span className={inspecting || drawing ? 'text-primary' : ''}>
+                    {inspecting
+                      ? 'click a cell to inspect it'
+                      : drawing
+                        ? `${drawing.vertices.length} corner${drawing.vertices.length === 1 ? '' : 's'} — click to add, Esc to cancel`
+                        : computing
+                          ? 'measuring the plaza again…'
+                          : `${masses.length} mass${masses.length === 1 ? '' : 'es'} in the sandbox`}
                   </span>
                 </p>
               </Figure>
+
+              {/* The same switch as on the zone map, and deliberately the same
+                  state: a reader who probes a cell above and scrolls down here
+                  is asking about that cell, not about a different one. */}
+              <InspectToggle
+                on={inspecting}
+                onChange={(v) => {
+                  setInspecting(v)
+                  // Arming inspect while a footprint is half-drawn would strand
+                  // the vertices with no way to finish them.
+                  if (v) setDrawing(null)
+                }}
+                probed={probeIndex != null}
+                onClear={() => setProbeIndex(null)}
+              />
 
               <div className="min-w-0">
                 <ToolTabs
@@ -1426,6 +1551,33 @@ export function DiagnosePage() {
                     have an answer. */}
                 <MetricEffect effect={selectionEffect} />
 
+                {/* The single-cell counterpart to the table above. Both answer
+                    "what did this do", one averaged over a selection and one at
+                    a named position — and the pair is the point, because a mean
+                    over a selection can hide a large local effect entirely. */}
+                {probeAfter === 'built-over' ? (
+                  <div className="mt-4 rounded-lg border border-redline/40 bg-paper p-4">
+                    <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-redline">
+                      Inspected cell
+                    </p>
+                    <p className="mt-1.5 text-sm text-ink">
+                      <span className="font-medium">Built over.</span> An intervention now stands
+                      on this position, so it is no longer somewhere a person measures the square
+                      from and it has left the sample.
+                    </p>
+                    <p className="mt-1 text-xs text-ink-muted">
+                      It still appears on the as-surveyed map above, where it has its original
+                      reading.
+                    </p>
+                  </div>
+                ) : (
+                  <CellProbePanel
+                    reading={probeAfter}
+                    before={probeBefore}
+                    onClear={() => setProbeIndex(null)}
+                  />
+                )}
+
                 {!selection && (
                   <p className="mt-8 rounded-lg border border-line bg-surface p-4 text-sm text-ink-muted">
                     <span className="font-medium text-ink">
@@ -1585,6 +1737,44 @@ function RadiusControl({ value, onChange, disabled }) {
 // which types they are, how settled they are in those types. The intended type
 // and the gap to it belong to the diagnosis below, and keeping them apart is
 // what stops a reader mistaking "this area is 70% type 0" for a judgement.
+// Switches what a click on the plan means.
+//
+// Presented as a switch rather than a modifier key because the two gestures are
+// not equally recoverable: on the sandbox plan the default click PLACES
+// GEOMETRY, and a reader holding the wrong key to inspect a cell would instead
+// build something. A visible mode with a visible state is the honest version.
+function InspectToggle({ on, onChange, probed, onClear }) {
+  return (
+    <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+      <button
+        onClick={() => onChange(!on)}
+        aria-pressed={on}
+        className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 font-mono text-[11px] transition-colors duration-150 outline-none focus-visible:ring-2 focus-visible:ring-primary-wash ${
+          on
+            ? 'border-redline bg-redline text-paper'
+            : 'border-line-strong bg-paper text-ink-muted hover:border-primary hover:text-primary'
+        }`}
+      >
+        <LuCrosshair aria-hidden className="h-3 w-3" />
+        inspect a cell
+      </button>
+      {probed && !on && (
+        <button
+          onClick={onClear}
+          className="font-mono text-[11px] text-ink-faint underline underline-offset-2 hover:text-primary"
+        >
+          clear the inspected cell
+        </button>
+      )}
+      <span className="font-mono text-[10px] text-ink-faint">
+        {on
+          ? 'clicking now reads one cell instead of selecting an area'
+          : 'read the four metrics at a single sampled position'}
+      </span>
+    </div>
+  )
+}
+
 function SelectionPanel({ summary, selection, radius, zoneNames, onClear }) {
   if (!selection) {
     return (
@@ -2393,6 +2583,13 @@ function SandboxPlan({
   selectedElementId = null,
   recesses = [],
   demolished = null,
+  // Inspect mode takes the click ahead of drawing or placing, and makes the
+  // plan interactive even when neither is active — otherwise a reader could
+  // not inspect a cell without first arming a tool that would build something.
+  inspecting = false,
+  onProbe = null,
+  probeCell = null,
+  probeIsovist = null,
 }) {
   return (
     <PlazaPlan
@@ -2400,11 +2597,15 @@ function SandboxPlan({
       windowRadius={windowRadius}
       centre={centre}
       demolished={demolished}
-      interactive={!!drawing || placing}
-      onPlanClick={(point) => onVertex(point)}
+      interactive={inspecting || !!drawing || placing}
+      onPlanClick={(point) => (inspecting ? onProbe?.(point) : onVertex(point))}
       onPlanMove={(point) => onHover(point)}
       onPlanLeave={() => onHover(null)}
-      ariaLabel="Konstablerwache sandbox plan"
+      ariaLabel={
+        inspecting
+          ? 'Konstablerwache sandbox plan — click a cell to inspect it'
+          : 'Konstablerwache sandbox plan'
+      }
     >
       {({ k }) => (
         <>
@@ -2482,6 +2683,12 @@ function SandboxPlan({
           )}
 
           {selection && <SelectionRing centre={selection} radius={radius} k={k} />}
+
+          {/* Cast through the SANDBOX geometry, so the outline here is what can
+              be seen with the interventions standing — the same shape the
+              recomputed numbers beside it describe. */}
+          <IsovistOutline isovist={probeIsovist} k={k} />
+          <ProbeMarker cell={probeCell} k={k} />
         </>
       )}
     </PlazaPlan>
