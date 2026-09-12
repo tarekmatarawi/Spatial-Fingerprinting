@@ -163,6 +163,22 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             its edge has become. It is what to read instead of compactness when thin elements are
             in play.
           </p>
+          <Ex
+            title="One colonnade with every slider at its minimum — four posts, 0.6 m square, 1.44 m² of blocking footprint in a 6,000 m² square"
+            rows={[
+              { label: 'Isovist area', value: '−3.4%' },
+              { label: 'Compactness', value: '−31.8%', flag: true },
+              { label: 'Solidity', value: '−3.1%' },
+            ]}
+            verdict={
+              'Area and solidity agree that almost nothing happened, and they agree to within ' +
+              'three tenths of a point. Compactness disagrees by a factor of ten — one blocked ray ' +
+              'costs about 128 m of perimeter, and perimeter enters compactness squared. ' +
+              'Compactness is the one of the three the typology actually reads, which is why those ' +
+              'four posts move “Open, facade-rich” from 68.0% of the plaza to 30.6%. Read solidity ' +
+              'wherever posts, trunks or columns are involved.'
+            }
+          />
           <p>
             <B>Closed share</B> is the reliable replacement for occlusivity&rsquo;s blind spot.
             It uses the exact same continuity rule occlusivity does — an edge counts only where
@@ -173,6 +189,23 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             metres but leave nothing between them uncounted. It is not saturated here the way solid
             share is: the baseline sits at 0.897, with real room to move in either direction.
           </p>
+          <Ex
+            title="Standing at the centre of four 12 × 12 m pavilions, 9 m tall, 14 m from each — surrounded on all sides"
+            rows={[
+              { label: 'Occlusivity (metres of unbroken wall)', value: '499 m → 175 m  (−65%)', flag: true },
+              { label: 'Closed share (share of horizon)', value: '0.917 → 0.958  (+5%)' },
+              { label: 'Enclosure', value: '0.193 → 0.410  (+112%)' },
+              { label: 'Isovist area', value: '−77%' },
+            ]}
+            verdict={
+              'The same continuity rule, applied to the same rays, reaching opposite conclusions. ' +
+              'Occlusivity falls because four small pavilions are individually short in metres ' +
+              'where the distant facade they replaced was long. Closed share rises because those ' +
+              'pavilions leave almost none of the horizon uncounted. Enclosure and area settle ' +
+              'which one matches standing there: you are emphatically more enclosed, and ' +
+              'occlusivity alone would have reported the opposite.'
+            }
+          />
           <p>
             <B>Solid share</B> is <B>directional only</B>. It is the fraction of rays that
             terminate on something built, and at this site the baseline is already 0.981 — about
@@ -180,6 +213,22 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             and none lowered it, so the SIGN is a finding and the MAGNITUDE is not. It is never
             presented beside solidity or closed share as an equally reliable number.
           </p>
+          <Ex
+            title="The same four pavilions, and the ceiling solid share is already pressed against"
+            rows={[
+              { label: 'Rays meeting open sky, before anything is built', value: '7 of 360  (1.9%)', flag: true },
+              { label: 'Solid share', value: '0.981 → 1.000  (+2.0%)' },
+            ]}
+            verdict={
+              'Solid share asks each ray one question — did you meet anything built, near or far — ' +
+              'and in a dense city square almost every direction already ended on a building ' +
+              'before a single pavilion was drawn. Building a wall 5 m away in a direction that ' +
+              'previously ended on a facade 100 m away changes the answer from “yes” to “yes”. ' +
+              'Only 1.9% of the horizon was ever available to convert, so 1.9% is the entire range ' +
+              'this measure can move at this site no matter what is built — which is why its sign ' +
+              'is reported and its size is not. On a sparser site it would have room to mean more.'
+            }
+          />
           <p>
             A fourth field, solid frontage, existed here until 2026-09-12 and was removed. It
             reported how much built surface is in view, not how much was added, so an object
@@ -385,4 +434,43 @@ function H({ children }) {
 
 function B({ children }) {
   return <strong className="font-medium text-ink">{children}</strong>
+}
+
+// A measured case, set apart from the prose around it.
+//
+// Every one of these carries numbers taken from this plaza with the current
+// engine, not from the argument being made around them. That is the point of
+// the block: a claim that a metric misleads is only worth the case that shows
+// it, and a reader who disbelieves the prose can check the arithmetic against
+// the tool above. The `flag` row is the one the paragraph is warning about.
+function Ex({ title, rows, verdict }) {
+  return (
+    <div className="my-2.5 rounded border border-line-strong/60 bg-surface px-3 py-2.5">
+      <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-faint">
+        Worked example
+      </p>
+      <p className="mt-1 text-[12px] font-medium leading-snug text-ink">{title}</p>
+      <dl className="mt-2 space-y-1">
+        {rows.map((r) => (
+          <div key={r.label} className="flex items-baseline justify-between gap-4">
+            <dt className={`text-[11px] ${r.flag ? 'font-medium text-warn' : 'text-ink-muted'}`}>
+              {r.label}
+            </dt>
+            <dd
+              className={`shrink-0 font-mono text-[11px] tabular-nums ${
+                r.flag ? 'font-medium text-warn' : 'text-ink'
+              }`}
+            >
+              {r.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+      {verdict && (
+        <p className="mt-2 border-t border-line pt-1.5 text-[11px] leading-relaxed text-ink-muted">
+          {verdict}
+        </p>
+      )}
+    </div>
+  )
 }

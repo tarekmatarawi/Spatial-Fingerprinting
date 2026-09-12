@@ -3,12 +3,12 @@
  "updated_at": "2026-09-10T20:53:58.505Z",
  "scenarios": [
   {
-   "id": "p9-balanced-mirror-test",
-   "name": "test",
-   "note": "Mirrored about the plaza centre line (y = 1.0): four building removals, a pair of landmarks and a pair of solid screen walls. Found by search over the whole library scored on an even mixture of zone types plus matching north and south compositions. Result 25.6 / 5.3 / 24.0 / 45.0 % across the four reachable types, halves differing by 3.5 % (half L1), against a baseline of 68 / 0.3 / 10 / 21.5 % and 35.6 %. The removals are what keep \"Open, facade-rich\" alive: additive elements break facade continuity everywhere they are visible and collapse occlusivity, so a walls-only version of this scenario lost that type entirely (3.3 %). Zone 4 \"Vast, regular\" stays at 0 — it needs isovist area beyond what four removals free up.",
+   "id": "p9-four-types-two-halves",
+   "name": "Four Types, Two Halves",
+   "note": "NOT AN URBAN PROPOSAL — a reachability demonstration, and the only scenario here that is. The other six each argue a design idea for this square; this one asks a prior question: can the tool reach a balanced zone composition at all, and can it do so symmetrically? Both targets were set before the search, not read off the result. Mirrored about the plaza centre line (y = 1.0): four building removals, a pair of landmarks and a pair of solid screen walls, found by search over the whole library scored on an even mixture of zone types plus matching north and south compositions. Result 25.6 / 5.3 / 24.0 / 45.0 % across the four reachable types, against a baseline of 68.0 / 0.3 / 10.1 / 21.5 %, with the two halves differing by 3.5 % (half L1) against 35.6 % at baseline. So yes to both, and the name records what was reached: four of the five types present at once, in two halves that match. THE REMOVALS ARE WHAT MAKE IT WORK. Additive elements break facade continuity everywhere they are visible and collapse occlusivity with it, so a walls-only version of the same idea lost \"Open, facade-rich\" entirely (3.3 %). Zone 4 \"Vast, regular\" stays at 0 — it needs isovist area beyond what four removals free up, and nothing additive can raise area at all.",
    "site_id": "Konstablerwache-Frankfurt am Main",
    "created_at": "2026-09-10T17:50:11.351Z",
-   "updated_at": "2026-09-10T17:55:55.255Z",
+   "updated_at": "2026-09-12T13:56:10.298Z",
    "elements": [
     {
      "id": "demolish-144",

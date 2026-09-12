@@ -862,18 +862,50 @@ export function DiagnosePage() {
         )}
 
         {/* ------------------------------------------- Tier A: sensitivity */}
-        {summary && diagnosis && response && shifted && (
+        {/* THE HEADING RENDERS WHETHER OR NOT THERE IS A SELECTION, and that is
+            the whole reason the gate sits inside the section rather than around
+            it. Tier A needs a selected area and an intended type before it has
+            anything to say, and it used to render nothing at all until it had
+            both — so a reader arriving at the page met a "Tier B" with no Tier A
+            anywhere above it, which reads as a missing section rather than as an
+            empty one. An empty state that names what is missing is the same
+            answer the Tier B effect table already gives. */}
+        {field && geometry && (
           <section className="pt-12">
             <div className="border-b border-line pb-3">
               <h2 className="text-lg font-semibold text-ink">
                 Tier A — parametric sensitivity
               </h2>
               <p className="mt-1 max-w-2xl text-sm text-ink-muted">
-                A question, not a design move: which of the four numbers would this area need to
-                change most, to read as <span className="text-ink">{zoneNames[targetZone]}</span>{' '}
-                instead of what it is now?
+                {targetZone != null ? (
+                  <>
+                    A question, not a design move: which of the four numbers would this area need
+                    to change most, to read as{' '}
+                    <span className="text-ink">{zoneNames[targetZone]}</span> instead of what it is
+                    now?
+                  </>
+                ) : (
+                  <>
+                    A question, not a design move: which of the four numbers would a selected area
+                    need to change most, to read as an intended type instead of what it is now?
+                  </>
+                )}
               </p>
             </div>
+
+            {!(summary && diagnosis && response && shifted) && (
+              <p className="mt-4 rounded-lg border border-line bg-surface p-4 text-sm leading-relaxed text-ink-muted">
+                <span className="font-medium text-ink">
+                  Select an area on the plan above, then choose an intended type.
+                </span>{' '}
+                Tier A then sweeps each of the four metrics on its own and reports the share of
+                your selected points that would reclassify — which is how you find the one or two
+                dimensions worth aiming a real design move at in Tier B below.
+              </p>
+            )}
+
+            {summary && diagnosis && response && shifted && (
+              <>
 
             {/* Plain-language framing, kept short on purpose. The graph and
                 sliders below each carry their own one-line "what is this"
@@ -933,6 +965,8 @@ export function DiagnosePage() {
                 n={summary.n}
               />
             </div>
+              </>
+            )}
           </section>
         )}
 
