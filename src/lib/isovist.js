@@ -110,16 +110,12 @@ export function castIsovist(
     )
   }
 
-  // The angular width one ray stands for — what turns a count of rays into the
-  // share of the horizon they cover, and a distance into a subtended length.
-  const rayStep = span / (closed ? rayCount : Math.max(rayCount - 1, 1))
-
   return {
     vantage,
     direction: directionRad,
     fov,
     rays,
-    ...computeMetrics(vantage, rays, closed, rayStep),
+    ...computeMetrics(vantage, rays, closed),
   }
 }
 
@@ -357,7 +353,7 @@ function raySegmentDistance(ox, oy, dx, dy, x1, y1, x2, y2) {
 // ray endpoints already close the loop and the vantage point is omitted — there
 // the wrap-around edge from the last ray back to the first is a genuine
 // neighbouring pair and counts towards occlusivity like any other.
-function computeMetrics(vantage, rays, closed = false, rayStep = 0) {
+function computeMetrics(vantage, rays, closed = false) {
   const endpoints = rays.map((r) => ({
     x: r.point.x - vantage.x,
     y: r.point.y - vantage.y,
@@ -370,6 +366,7 @@ function computeMetrics(vantage, rays, closed = false, rayStep = 0) {
   let shoelace = 0
   let perimeter = 0
   let closedPerimeter = 0
+  let closedEdges = 0
 
   for (let i = 0; i < n; i++) {
     const a = verts[i]
@@ -407,8 +404,32 @@ function computeMetrics(vantage, rays, closed = false, rayStep = 0) {
     // width of the street.
     const continuous =
       a.building === b.building || edgeLen <= TOUCHING_TOLERANCE_M
-    if (a.wall && b.wall && continuous) closedPerimeter += edgeLen
+    if (a.wall && b.wall && continuous) {
+      closedPerimeter += edgeLen
+      closedEdges++
+    }
   }
+
+  // CLOSED SHARE — the same continuity test as occlusivity, added 2026-09-12,
+  // but tallied as a FRACTION OF THE HORIZON rather than a length in metres.
+  //
+  // Occlusivity answers "how many real metres of unbroken wall touch my view."
+  // That is the right question for comparing plazas of different sizes, but it
+  // has a blind spot P9 is the first phase to expose: a near object and a far
+  // one can pass the exact same continuity test and still disagree completely
+  // once converted to metres, because a near surface is physically small no
+  // matter how much of the horizon it fills. Four small pavilions built close
+  // enough to surround a person can drop occlusivity by two thirds while
+  // raising closed share, because the pavilions are individually tiny in
+  // metres but leave nothing between them uncounted.
+  //
+  // Closed share is therefore occlusivity's answer to "how much of what I see
+  // is unbroken wall" rather than "how long is that wall" — the coverage
+  // question solid share was meant to answer, asked with occlusivity's
+  // continuity rule instead of solid share's none. It is not saturated at this
+  // site the way solid share is: the baseline sits at 0.897, not 0.981, and
+  // both additive and subtractive interventions move it in both directions.
+  const closedShare = n > 0 ? closedEdges / n : 0
 
   const area = Math.abs(shoelace) / 2
   const compactness = perimeter > 0 ? (4 * Math.PI * area) / (perimeter * perimeter) : 0
@@ -470,22 +491,6 @@ function computeMetrics(vantage, rays, closed = false, rayStep = 0) {
   const wallRays = rays.reduce((n, r) => n + (r.wall ? 1 : 0), 0)
   const solidShare = rays.length ? wallRays / rays.length : 0
 
-  // SOLID FRONTAGE — the same thing in metres: the built horizon, measured as
-  // the arc each solid ray subtends at the distance it met the surface.
-  //
-  // READ THIS BEFORE USING IT AS "DID SOLID SURFACE INCREASE". It will not
-  // answer that question, and cannot. A kiosk in front of a facade hides sixty
-  // metres of distant frontage and shows eight metres of itself, so the total
-  // falls — which is physically correct, since you genuinely see less built
-  // surface. It measures HOW MUCH SURFACE IS IN VIEW, not how much of the view
-  // is surface. Solid share is the one for coverage; this is the one for
-  // quantity, and the two disagree exactly when an object stands in front of
-  // something else.
-  const solidFrontage = rays.reduce(
-    (sum, r) => sum + (r.wall ? r.distance * rayStep : 0),
-    0
-  )
-
   // SOLIDITY — isovist area over the area of its convex hull.
   //
   // Compactness (4πA/P²) collapses under sparse slender obstacles: a 250 mm
@@ -510,7 +515,7 @@ function computeMetrics(vantage, rays, closed = false, rayStep = 0) {
     occlusivity: closedPerimeter,
     enclosureRatio,
     solidShare,
-    solidFrontage,
+    closedShare,
     solidity,
   }
 }

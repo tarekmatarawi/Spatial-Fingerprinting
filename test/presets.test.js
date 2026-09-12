@@ -17,7 +17,6 @@ import {
   EYE_HEIGHT_M,
   MIN_FACADE_HEIGHT_M,
   MIN_FACADE_LENGTH_M,
-  NON_DIAGNOSTIC_METRICS,
   PRESETS,
   defaultParams,
   describeElement,
@@ -40,7 +39,7 @@ const sites = read('src/data/sites.json')
 const site = activeSites(sites).find((s) => s.id === 'Konstablerwache-Frankfurt am Main')
 const geometry = projectSite(site)
 
-const P9_METRICS = [...METRICS, 'solidShare', 'solidFrontage', 'solidity']
+const P9_METRICS = [...METRICS, 'solidShare', 'closedShare', 'solidity']
 const ANCHOR = { x: -20, y: 0 }
 
 describe('presets — every generator produces usable geometry', () => {
@@ -366,8 +365,18 @@ describe('presets — expectation tags', () => {
     }
   })
 
-  test('solid frontage is excluded from judgement', () => {
-    assert.ok(NON_DIAGNOSTIC_METRICS.includes('solidFrontage'))
+  test('closed share is tagged diagnostic everywhere, unlike solid share', () => {
+    // Closed share is NOT saturated at this site (baseline 0.897, not 0.981),
+    // so unlike solid share its magnitude is trustworthy and it must be tagged
+    // as such — the two must never carry the same caveat by accident.
+    for (const preset of PRESETS) {
+      const tag = normaliseExpectation(preset.expected.closedShare)
+      assert.equal(
+        tag.diagnostic,
+        true,
+        `${preset.name} tags closed share as directional-only; it has real headroom here`
+      )
+    }
   })
 
   test('the presets with no intuitive match carry their limitation in writing', () => {

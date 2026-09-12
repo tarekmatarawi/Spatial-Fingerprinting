@@ -145,37 +145,51 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             never sampled the ground a building stood on, so there are no readings to show there.
           </p>
 
-          <H>The two P9-only metrics</H>
+          <H>The three P9-only metrics</H>
           <p>
             Compactness (4&pi;A/P²) collapses under sparse slender obstacles: a 250 mm post stops
             one ray while its neighbours run on a hundred metres, adding two long radial edges to
             the perimeter — and perimeter enters compactness squared. Measured here, a pergola
-            takes 2.5% off isovist area and 53% off compactness. Two diagnostics were added for
-            this phase alone to say something useful where compactness cannot.
+            takes 2.5% off isovist area and 53% off compactness. Occlusivity has a matching blind
+            spot of its own: it counts real metres of unbroken wall, and a near object can fill
+            most of the horizon while remaining physically small, so it can drop the metric sharply
+            while the space feels far more enclosed. Diagnostics were added for this phase alone to
+            say something useful where these two cannot.
           </p>
           <p>
-            <B>Solidity</B> (isovist area over the area of its convex hull) is the reliable one. A
-            hull ignores serration by construction, so solidity reports how much of the
-            space&rsquo;s reach is actually occupied rather than how ragged its edge has become. It
-            is what to read instead of compactness when thin elements are in play.
+            <B>Solidity</B> (isovist area over the area of its convex hull) is the reliable
+            replacement for compactness. A hull ignores serration by construction, so solidity
+            reports how much of the space&rsquo;s reach is actually occupied rather than how ragged
+            its edge has become. It is what to read instead of compactness when thin elements are
+            in play.
+          </p>
+          <p>
+            <B>Closed share</B> is the reliable replacement for occlusivity&rsquo;s blind spot.
+            It uses the exact same continuity rule occlusivity does — an edge counts only where
+            consecutive rays land on the same building, or on two that meet — but tallies what
+            SHARE of the horizon is unbroken wall rather than how many metres of it there are.
+            Standing among four pavilions close enough to surround a person can drop occlusivity by
+            two thirds while raising closed share, because the pavilions are individually small in
+            metres but leave nothing between them uncounted. It is not saturated here the way solid
+            share is: the baseline sits at 0.897, with real room to move in either direction.
           </p>
           <p>
             <B>Solid share</B> is <B>directional only</B>. It is the fraction of rays that
             terminate on something built, and at this site the baseline is already 0.981 — about
             two points of headroom at the 200 m sight line. Every additive intervention raised it
             and none lowered it, so the SIGN is a finding and the MAGNITUDE is not. It is never
-            presented beside solidity as an equally reliable number.
+            presented beside solidity or closed share as an equally reliable number.
           </p>
           <p>
-            <B>Solid frontage</B> is computed and excluded from every judgement on this page. It
-            reports how much built surface is in view, not how much was added, so an object
-            standing in front of a facade lowers it while adding real surface. It is kept as a
-            field because it costs nothing, and it does not adjudicate anything.
+            A fourth field, solid frontage, existed here until 2026-09-12 and was removed. It
+            reported how much built surface is in view, not how much was added, so an object
+            standing in front of a facade lowered it while adding real surface — the reading FELL on
+            the exact case it existed to help with, and a field that reads the wrong sign on its own
+            motivating example is not one a caveat can fix.
           </p>
           <p>
-            Neither solidity nor solid share ever reaches a weight model, and neither is written to
-            any corpus data file. The zone assignment uses the four validated metrics alone,
-            exactly as P6 does.
+            None of the three ever reaches a weight model, and none is written to any corpus data
+            file. The zone assignment uses the four validated metrics alone, exactly as P6 does.
           </p>
 
           <H>What the tiers can and cannot tell you</H>

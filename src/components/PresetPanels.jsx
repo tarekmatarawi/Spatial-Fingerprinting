@@ -245,18 +245,28 @@ export function ElementList({ elements, describe, selectedId, onSelect, onDelete
   )
 }
 
-// How the two P9-only measures are allowed to be presented.
+// How the three P9-only measures are allowed to be presented.
 //
 // They are NOT equally reliable and must never appear side by side as though
-// they were. Solidity replaces compactness cleanly; solid share is saturated at
-// this site and carries only its sign; solid frontage answers a different
-// question altogether and judges nothing. Saying so beside the numbers is the
-// only thing stopping a reader from treating a 0.1% move as a result.
-export function MetricCaveats({ solidShareNote, solidFrontageNote }) {
+// they were. Solidity replaces compactness cleanly; closed share replaces
+// occlusivity's blind spot cleanly; solid share is saturated at this site and
+// carries only its sign. Saying so beside the numbers is the only thing
+// stopping a reader from treating a 0.1% move as a result.
+//
+// A fourth field, solid frontage, existed here until 2026-09-12 and was
+// removed: it answered a question distinct from all three of these ("how much
+// built surface is in view," not "did solid coverage increase") and its
+// number moved the wrong way on the exact case it was meant to help with — a
+// kiosk in front of a facade hides sixty metres of distant frontage and shows
+// eight metres of itself, so the reading FELL while real surface was added.
+// Every consumer of solid_frontage_m was a place a false negative could sit
+// unnoticed next to a true one, so it was deleted rather than merely
+// disclaimed.
+export function MetricCaveats({ solidShareNote }) {
   return (
     <details className="mt-4 rounded-lg border border-line bg-surface p-3">
       <summary className="cursor-pointer text-xs font-semibold text-ink">
-        How to read the two P9-only measures
+        How to read the three P9-only measures
       </summary>
       <dl className="mt-2 space-y-2 text-[11px] leading-relaxed">
         <div>
@@ -268,12 +278,17 @@ export function MetricCaveats({ solidShareNote, solidFrontageNote }) {
           </dd>
         </div>
         <div>
-          <dt className="font-medium text-ink">Solid share — sign only</dt>
-          <dd className="text-warn">{solidShareNote}</dd>
+          <dt className="font-medium text-ink">Closed share (horizon) — reliable</dt>
+          <dd className="text-ink-muted">
+            Answers &ldquo;how much of what I see is unbroken wall&rdquo; rather than occlusivity&rsquo;s
+            &ldquo;how many metres of it&rdquo; &mdash; the two can move in opposite directions, because a
+            near object fills a large share of the horizon while remaining physically small. Not
+            saturated at this site: baseline 0.897, with genuine room to move either way.
+          </dd>
         </div>
         <div>
-          <dt className="font-medium text-ink">Solid frontage — not a verdict</dt>
-          <dd className="text-ink-faint">{solidFrontageNote}</dd>
+          <dt className="font-medium text-ink">Solid share — sign only</dt>
+          <dd className="text-warn">{solidShareNote}</dd>
         </div>
       </dl>
     </details>

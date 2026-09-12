@@ -34,8 +34,6 @@ import { fileURLToPath } from 'node:url'
 import { activeSites, projectSite } from '../src/lib/site.js'
 import { recomputeField } from '../src/lib/sandbox.js'
 import {
-  NON_DIAGNOSTIC_METRICS,
-  SOLID_FRONTAGE_NOTE,
   SOLID_SHARE_NOTE,
   makeRecessElement,
   nearestFacade,
@@ -52,13 +50,13 @@ import {
 } from '../src/lib/presets.js'
 import { METRICS, METRIC_LABELS } from '../src/lib/analysis/fingerprints.js'
 
-// The four fitted metrics plus P9's two additions. The additions are diagnostic
-// only: they never enter a weight fit and are never written to any corpus file.
-const P9_METRICS = [...METRICS, 'solidShare', 'solidFrontage', 'solidity']
+// The four fitted metrics plus P9's addition. Diagnostic only: it never enters
+// a weight fit and is never written to any corpus file.
+const P9_METRICS = [...METRICS, 'solidShare', 'closedShare', 'solidity']
 const P9_LABELS = {
   ...METRIC_LABELS,
   solidShare: 'Solid share',
-  solidFrontage: 'Solid frontage',
+  closedShare: 'Closed share',
   solidity: 'Solidity (hull)',
 }
 
@@ -85,7 +83,7 @@ const RAW_KEYS = {
   occlusivity: 'occlusivity_m',
   enclosure: 'enclosure_ratio',
   solidShare: 'solid_share',
-  solidFrontage: 'solid_frontage_m',
+  closedShare: 'closed_share',
   solidity: 'solidity',
 }
 
@@ -176,7 +174,7 @@ function main() {
       const observed =
         Math.abs(relative) < NEGLIGIBLE_SHARE ? 'none' : relative > 0 ? 'raise' : 'lower'
       const tag = normaliseExpectation(preset.expected[metric])
-      const judged = tag != null && !NON_DIAGNOSTIC_METRICS.includes(metric)
+      const judged = tag != null
 
       // A directional-only tag is held to its SIGN, not to a threshold it has
       // no headroom to cross: right sign passes, no movement passes, wrong sign
@@ -209,9 +207,8 @@ function main() {
   summarise(rows)
 
   console.log('')
-  console.log('Note on the two P9-only metrics:')
+  console.log('Note on the P9-only solid share metric:')
   console.log('  Solid share      ' + wrap(SOLID_SHARE_NOTE, 4))
-  console.log('  Solid frontage   ' + wrap(SOLID_FRONTAGE_NOTE, 4))
 }
 
 // Mean of each metric over a set of point indices.

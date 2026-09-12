@@ -390,3 +390,68 @@ describe('spatial index — identical results, faster', () => {
     assert.equal(m.occlusivity, 0)
   })
 })
+
+describe('closed share — occlusivity\'s coverage counterpart, added 2026-09-12', () => {
+  // Both use the SAME continuity rule (an edge counts only where consecutive
+  // rays land on the same building, or on two within the touching tolerance).
+  // Occlusivity sums the real metres of each qualifying run; closed share
+  // counts what SHARE of the horizon those runs cover. This is the case that
+  // motivated adding it: replacing one long distant wall with several small
+  // near objects that together surround the vantage can move the two in
+  // OPPOSITE directions, because the near objects are individually small in
+  // metres while leaving almost nothing between them uncounted.
+  const slab = (cx, cy, hw, hh, height = 10) => ({
+    footprint: [
+      { x: cx - hw, y: cy - hh }, { x: cx + hw, y: cy - hh },
+      { x: cx + hw, y: cy + hh }, { x: cx - hw, y: cy + hh },
+    ],
+    height,
+  })
+  const full = { fov: 360, rayCount: 360 }
+
+  test('a near surround can raise closed share while occlusivity falls', () => {
+    // One long wall far to the north; everything else open.
+    const distant = [slab(0, 150, 60, 3)]
+    // Four short slabs close around the vantage, each separated from its
+    // neighbours by more than the touching tolerance so they stay four
+    // distinct runs rather than merging into one.
+    const R = 10
+    const near = [
+      slab(0, R, 5.5, 1),
+      slab(0, -R, 5.5, 1),
+      slab(R, 0, 1, 5.5),
+      slab(-R, 0, 1, 5.5),
+    ]
+
+    const before = castIsovist({ x: 0, y: 0 }, 0, distant, full)
+    const after = castIsovist({ x: 0, y: 0 }, 0, near, full)
+
+    assert.ok(
+      after.occlusivity < before.occlusivity,
+      `expected occlusivity to fall (${before.occlusivity} -> ${after.occlusivity})`
+    )
+    assert.ok(
+      after.closedShare > before.closedShare,
+      `expected closed share to rise (${before.closedShare} -> ${after.closedShare})`
+    )
+  })
+
+  test('closed share is bounded and reads 0 with nothing to hit', () => {
+    const m = castIsovist({ x: 0, y: 0 }, 0, [], full)
+    assert.equal(m.closedShare, 0)
+  })
+
+  test('a fully continuous ring reads closed share of 1', () => {
+    // Four abutting slabs whose corners touch within tolerance, so the whole
+    // horizon is one continuous run and nothing escapes it.
+    const a = 20
+    const ring = [
+      slab(0, a, a, 1),
+      slab(0, -a, a, 1),
+      slab(a, 0, 1, a),
+      slab(-a, 0, 1, a),
+    ]
+    const m = castIsovist({ x: 0, y: 0 }, 0, ring, full)
+    assert.equal(m.closedShare, 1)
+  })
+})

@@ -67,7 +67,6 @@ import {
   MIN_FACADE_HEIGHT_M,
   MIN_FACADE_LENGTH_M,
   PRESETS,
-  SOLID_FRONTAGE_NOTE,
   SOLID_SHARE_NOTE,
   defaultParams,
   describeElement,
@@ -622,6 +621,7 @@ export function DiagnosePage() {
         row('area_m2', 'Isovist area', (v) => `${Math.round(v).toLocaleString()} m²`),
         row('compactness', 'Compactness', (v) => v.toFixed(4)),
         row('occlusivity_m', 'Occlusivity', (v) => `${Math.round(v)} m`),
+        row('closed_share', 'Closed share (P9 only)', (v) => v.toFixed(4)),
         row('enclosure_ratio', 'Enclosure', (v) => v.toFixed(4)),
         row('solidity', 'Solidity (P9 only)', (v) => v.toFixed(4)),
         row('solid_share', 'Solid share (P9 only)', (v) => v.toFixed(4), false),
@@ -1359,10 +1359,7 @@ export function DiagnosePage() {
                   }}
                 />
 
-                <MetricCaveats
-                  solidShareNote={SOLID_SHARE_NOTE}
-                  solidFrontageNote={SOLID_FRONTAGE_NOTE}
-                />
+                <MetricCaveats solidShareNote={SOLID_SHARE_NOTE} />
               </div>
             </div>
 

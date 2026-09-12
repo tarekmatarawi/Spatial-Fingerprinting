@@ -312,7 +312,7 @@ export function recomputeField({
       // `n` vector, and never reach a weight fit. The typology assignment below
       // uses `n` alone, exactly as P6 does.
       solid_share: round(m.solidShare, 5),
-      solid_frontage_m: round(m.solidFrontage, 2),
+      closed_share: round(m.closedShare, 5),
       solidity: round(m.solidity, 5),
       n: normalised,
       zone: assignZone(normalised, centres, weights),

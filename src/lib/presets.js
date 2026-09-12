@@ -96,15 +96,6 @@ export const SOLID_SHARE_NOTE =
   'already end on a building at the 200 m sight line, leaving about two points of headroom. It ' +
   'rose for every additive intervention and fell for none — the sign is the finding, the size is not.'
 
-export const SOLID_FRONTAGE_NOTE =
-  'Reports how much built surface is IN VIEW, not how much was added, so a near object that hides ' +
-  'a far facade lowers it (kiosk −9.6%, market row −15.9%). Kept as a field because it is free to ' +
-  'compute, but it does not judge an intervention and is not a primary readout.'
-
-// Excluded from every pass/fail judgement — see SOLID_FRONTAGE_NOTE. Still
-// computed and still displayed as context, never as a verdict.
-export const NON_DIAGNOSTIC_METRICS = ['solidFrontage']
-
 // One tag, in the two forms it may take.
 export function normaliseExpectation(tag) {
   if (tag == null) return null
@@ -191,9 +182,9 @@ export const PRESETS = [
       // a dense city centre 98% of rays already end on a building, so the
       // measure is saturated here and has no room to register anything.
       solidShare: { direction: 'raise', diagnostic: false },
+      closedShare: 'lower',
       // Near columns replace far facade, and a near surface subtends less
       // arc than a distant one, so the metres fall even as coverage rises.
-      solidFrontage: 'lower',
       solidity: 'lower',
     },
     generate(p, anchor, rotationDeg = 0) {
@@ -250,7 +241,7 @@ export const PRESETS = [
       // direction; the point was never that a hull measure ignores obstacles,
       // only that it does not mistake fringe for collapse.
       solidShare: { direction: 'raise', diagnostic: false },
-      solidFrontage: 'lower',
+      closedShare: 'lower',
       solidity: 'lower',
     },
     generate(p, anchor, rotationDeg = 0) {
@@ -296,7 +287,7 @@ export const PRESETS = [
       enclosure: 'raise',
       // Saturated — see the colonnade's note. Rises, by 0.2%.
       solidShare: { direction: 'raise', diagnostic: false },
-      solidFrontage: 'lower',
+      closedShare: 'none',
       solidity: 'lower',
     },
     generate(p, anchor, rotationDeg = 0) {
@@ -340,7 +331,7 @@ export const PRESETS = [
       // The same robustness claim as the pergola, and it holds the same way:
       // compactness −49.3% against solidity −3.7% on five 400 mm trunks.
       solidShare: { direction: 'raise', diagnostic: false },
-      solidFrontage: 'lower',
+      closedShare: 'lower',
       solidity: 'lower',
     },
     generate(p, anchor, rotationDeg = 0) {
@@ -380,7 +371,7 @@ export const PRESETS = [
       enclosure: 'none',
       // Nothing reaches the slice, so every metric is untouched, new ones included.
       solidShare: { direction: 'none', diagnostic: false },
-      solidFrontage: 'none',
+      closedShare: 'none',
       solidity: 'none',
     },
     generate(p, anchor, rotationDeg = 0) {
@@ -427,7 +418,7 @@ export const PRESETS = [
       enclosure: 'raise',
       // Saturated — see the colonnade's note. Rises, by 0.2%.
       solidShare: { direction: 'raise', diagnostic: false },
-      solidFrontage: 'lower',
+      closedShare: 'none',
       solidity: 'lower',
     },
     generate(p, anchor, rotationDeg = 0) {
@@ -470,7 +461,7 @@ export const PRESETS = [
       occlusivity: 'none',
       enclosure: 'none',
       solidShare: { direction: 'none', diagnostic: false },
-      solidFrontage: 'none',
+      closedShare: 'none',
       solidity: 'none',
     },
     generate(p, anchor, rotationDeg = 0) {
@@ -534,10 +525,10 @@ PRESETS.push(
       enclosure: 'none',
       // Saturated — see the colonnade's note.
       solidShare: { direction: 'raise', diagnostic: false },
+      closedShare: 'none',
       // The prediction flagged as least confident, and it was wrong for the
       // same reason as the kiosk: near surface replaces far surface, and near
       // surface subtends fewer metres.
-      solidFrontage: 'lower',
       solidity: 'lower',
     },
     generate(p, anchor, rotationDeg = 0) {
@@ -606,8 +597,8 @@ PRESETS.push(
       enclosure: 'none',
       // Rays that met the facade still meet the building, just deeper in.
       solidShare: { direction: 'none', diagnostic: false },
+      closedShare: 'none',
       // Same coverage, subtended at a greater distance, so more metres: +0.4%.
-      solidFrontage: 'none',
       solidity: 'none',
     },
     // Generated against a host facade rather than in a free frame, so it takes
