@@ -424,11 +424,25 @@ function computeMetrics(vantage, rays, closed = false) {
   // metres but leave nothing between them uncounted.
   //
   // Closed share is therefore occlusivity's answer to "how much of what I see
-  // is unbroken wall" rather than "how long is that wall" — the coverage
-  // question solid share was meant to answer, asked with occlusivity's
-  // continuity rule instead of solid share's none. It is not saturated at this
-  // site the way solid share is: the baseline sits at 0.897, not 0.981, and
-  // both additive and subtractive interventions move it in both directions.
+  // is unbroken wall" rather than "how long is that wall". It is not saturated
+  // at this site the way solid share is: the baseline sits at 0.897, not 0.981,
+  // and interventions move it in both directions.
+  //
+  // IT IS NOT A COVERAGE MEASURE, and must not be described as one. It keeps
+  // occlusivity's continuity requirement, so like occlusivity it penalises
+  // fragmentation — by COUNT OF SEPARATE PIECES rather than by metres. The
+  // arithmetic is exact: each separate piece an intervention presents to the
+  // eye breaks the run twice, once at each silhouette edge, and returns one
+  // continuous pair per ray it spans beyond the first, so net per piece is
+  // (rays spanned − 3). A piece must cover more than about 3° to pay for
+  // itself. One 48 m wall raises it 1.5%; the same 48 m cut into twelve pieces
+  // lowers it 3.9%, and eight 0.25 m pergola posts lower it for the same reason
+  // — they span about one ray each and break sixteen pairs between them.
+  // test/isovist.test.js pins the monotonic fall across that series.
+  //
+  // The PAIR is what earns its keep, not the number alone: occlusivity falling
+  // while closed share rises means the drop was an artefact of nearness and the
+  // space really is more enclosed; both falling means real fragmentation.
   const closedShare = n > 0 ? closedEdges / n : 0
 
   const area = Math.abs(shoelace) / 2

@@ -281,9 +281,12 @@ export function MetricCaveats({ solidShareNote }) {
           <dt className="font-medium text-ink">Closed share (horizon) — reliable</dt>
           <dd className="text-ink-muted">
             Answers &ldquo;how much of what I see is unbroken wall&rdquo; rather than occlusivity&rsquo;s
-            &ldquo;how many metres of it&rdquo; &mdash; the two can move in opposite directions, because a
-            near object fills a large share of the horizon while remaining physically small. Not
-            saturated at this site: baseline 0.897, with genuine room to move either way.
+            &ldquo;how many metres of it&rdquo;. <strong className="font-medium text-ink">Not a coverage
+            measure</strong> &mdash; it keeps occlusivity&rsquo;s continuity rule, so many small pieces
+            LOWER it (eight pergola posts break sixteen runs and span about one ray each) while one
+            big mass raises it. Read the two together: occlusivity down with closed share up means
+            the drop was nearness, not fragmentation; both down means the view really did break up.
+            Baseline 0.897, not saturated.
           </dd>
         </div>
         <div>

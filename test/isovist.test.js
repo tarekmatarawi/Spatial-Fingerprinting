@@ -391,7 +391,7 @@ describe('spatial index — identical results, faster', () => {
   })
 })
 
-describe('closed share — occlusivity\'s coverage counterpart, added 2026-09-12', () => {
+describe('closed share — occlusivity in horizon units, added 2026-09-12', () => {
   // Both use the SAME continuity rule (an edge counts only where consecutive
   // rays land on the same building, or on two within the touching tolerance).
   // Occlusivity sums the real metres of each qualifying run; closed share
@@ -439,6 +439,44 @@ describe('closed share — occlusivity\'s coverage counterpart, added 2026-09-12
   test('closed share is bounded and reads 0 with nothing to hit', () => {
     const m = castIsovist({ x: 0, y: 0 }, 0, [], full)
     assert.equal(m.closedShare, 0)
+  })
+
+  test('it falls monotonically as the same wall is cut into more pieces', () => {
+    // THE CLAIM THE DISCLOSURE MAKES, PINNED. Closed share is not a coverage
+    // measure: it keeps occlusivity's continuity requirement, so it penalises
+    // fragmentation — by count of pieces rather than by metres. Each separate
+    // piece breaks the run twice, at its two silhouette edges, and gives back
+    // one pair per ray it spans beyond the first.
+    //
+    // Same total wall, same distance, same position; only the number of pieces
+    // changes. If this ever stops falling, the methods text above the Tier B
+    // table is wrong and a reader is being told to expect the opposite of what
+    // the tool does.
+    const TOTAL = 48
+    const DIST = 25
+    const GAP = 4
+    const shareFor = (pieces) => {
+      const each = TOTAL / pieces
+      const span = pieces * each + (pieces - 1) * GAP
+      const walls = []
+      for (let i = 0; i < pieces; i++) {
+        const cx = -span / 2 + each / 2 + i * (each + GAP)
+        walls.push(slab(cx, DIST, each / 2, 0.5))
+      }
+      return castIsovist({ x: 0, y: 0 }, 0, walls, full).closedShare
+    }
+
+    const series = [1, 2, 3, 4, 6, 8].map(shareFor)
+    for (let i = 1; i < series.length; i++) {
+      assert.ok(
+        series[i] <= series[i - 1],
+        `closed share rose when the wall was cut into more pieces: ${series.join(', ')}`
+      )
+    }
+    assert.ok(
+      series[series.length - 1] < series[0],
+      `eight pieces should read lower than one: ${series[0]} vs ${series[series.length - 1]}`
+    )
   })
 
   test('a fully continuous ring reads closed share of 1', () => {

@@ -183,11 +183,27 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             <B>Closed share</B> is the reliable replacement for occlusivity&rsquo;s blind spot.
             It uses the exact same continuity rule occlusivity does — an edge counts only where
             consecutive rays land on the same building, or on two that meet — but tallies what
-            SHARE of the horizon is unbroken wall rather than how many metres of it there are.
-            Standing among four pavilions close enough to surround a person can drop occlusivity by
-            two thirds while raising closed share, because the pavilions are individually small in
-            metres but leave nothing between them uncounted. It is not saturated here the way solid
-            share is: the baseline sits at 0.897, with real room to move in either direction.
+            SHARE of the horizon is unbroken wall rather than how many metres of it there are. It
+            is not saturated here the way solid share is: the baseline sits at 0.897, with real
+            room to move in either direction.
+          </p>
+          <p>
+            <B>It is NOT a coverage measure, and reading it as one will mislead you.</B> It keeps
+            occlusivity&rsquo;s continuity requirement, so like occlusivity it punishes
+            fragmentation — it simply punishes it by COUNT OF SEPARATE PIECES instead of by metres.
+            The arithmetic is exact and worth carrying: each separate piece an intervention
+            presents to the eye breaks the run twice, once at each of its silhouette edges, and
+            gives back one continuous pair for every ray it spans beyond the first. Net per piece =
+            <B> (rays it spans) − 3</B>. A piece must therefore cover more than about 3° of the
+            horizon to pay for itself — roughly a metre wide at 18 m. One big mass clears that
+            easily; eight pergola posts never can, and each costs two pairs for nothing.
+          </p>
+          <p>
+            <B>Read the two together and they separate two causes occlusivity alone conflates.</B>{' '}
+            Occlusivity falling with closed share RISING means the drop was an artefact of nearness
+            — the new surface is physically small but you really are more enclosed. Both falling
+            means genuine fragmentation: the view actually did break into more pieces. That is the
+            one diagnosis neither metre-counting nor coverage-counting can deliver alone.
           </p>
           <Ex
             title="Standing at the centre of four 12 × 12 m pavilions, 9 m tall, 14 m from each — surrounded on all sides"
@@ -199,11 +215,31 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             ]}
             verdict={
               'The same continuity rule, applied to the same rays, reaching opposite conclusions. ' +
-              'Occlusivity falls because four small pavilions are individually short in metres ' +
-              'where the distant facade they replaced was long. Closed share rises because those ' +
-              'pavilions leave almost none of the horizon uncounted. Enclosure and area settle ' +
-              'which one matches standing there: you are emphatically more enclosed, and ' +
-              'occlusivity alone would have reported the opposite.'
+              'Occlusivity falls because four pavilions are individually short in metres where the ' +
+              'distant facade they replaced was long. Closed share rises because each pavilion ' +
+              'spans about 46 rays and costs only the two breaks at its edges — net +43 apiece. ' +
+              'Enclosure and area settle which one matches standing there: you are emphatically ' +
+              'more enclosed, and occlusivity alone would have reported the opposite.'
+            }
+          />
+          <Ex
+            title="The counter-case: 48 m of screen wall, 18 m away, identical material and position — only the number of separate pieces changes"
+            rows={[
+              { label: 'one 48 m run', value: '+1.49%' },
+              { label: 'two 24 m runs', value: '+0.60%' },
+              { label: 'three 16 m runs', value: '0.00%' },
+              { label: 'four 12 m runs', value: '−0.60%' },
+              { label: 'eight 6 m runs', value: '−2.99%' },
+              { label: 'twelve 4 m runs', value: '−3.88%', flag: true },
+            ]}
+            verdict={
+              'Same square metres of wall, same distance, same place — the only variable is how ' +
+              'many pieces it is cut into, and closed share falls monotonically, crossing zero ' +
+              'between three pieces and four. This is why a pergola LOWERS it: eight posts of ' +
+              '0.25 m span about one ray each, so they gain nothing internally and break sixteen ' +
+              'pairs between them. Closed share is a measure of how unbroken your surroundings ' +
+              'are, not of how much of them is solid — solid share is the one that asks that, and ' +
+              'at this site it has no headroom to answer.'
             }
           />
           <p>
