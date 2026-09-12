@@ -180,30 +180,34 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             }
           />
           <p>
-            <B>Closed share</B> is the reliable replacement for occlusivity&rsquo;s blind spot.
-            It uses the exact same continuity rule occlusivity does — an edge counts only where
-            consecutive rays land on the same building, or on two that meet — but tallies what
-            SHARE of the horizon is unbroken wall rather than how many metres of it there are. It
-            is not saturated here the way solid share is: the baseline sits at 0.897, with real
-            room to move in either direction.
+            <B>Closed share</B> asks a simple question: <B>how much of what you can see is
+            unbroken wall?</B> Not how many metres of it — what fraction of the way round. It uses
+            occlusivity&rsquo;s own rule for what counts as &ldquo;unbroken&rdquo; (two neighbouring
+            sightlines must land on the same building, or on two that touch), and only changes the
+            unit. Unlike solid share it has room to move here: the baseline is 0.897, not 0.981.
           </p>
           <p>
-            <B>It is NOT a coverage measure, and reading it as one will mislead you.</B> It keeps
-            occlusivity&rsquo;s continuity requirement, so like occlusivity it punishes
-            fragmentation — it simply punishes it by COUNT OF SEPARATE PIECES instead of by metres.
-            The arithmetic is exact and worth carrying: each separate piece an intervention
-            presents to the eye breaks the run twice, once at each of its silhouette edges, and
-            gives back one continuous pair for every ray it spans beyond the first. Net per piece =
-            <B> (rays it spans) − 3</B>. A piece must therefore cover more than about 3° of the
-            horizon to pay for itself — roughly a metre wide at 18 m. One big mass clears that
-            easily; eight pergola posts never can, and each costs two pairs for nothing.
+            <B>The one thing to understand is what happens when you put something in front of a
+            wall</B> — because that is what almost every intervention does, and it is where people
+            expect this number to rise and are surprised when it falls.
+          </p>
+
+          <RunDiagram />
+
+          <p>
+            So the rule is <B>one big thing helps, many small things hurt</B>, and it is the
+            COUNT of separate pieces that decides it rather than how much material you added. Each
+            piece costs you two joins, at its left and right edge. It only pays that back if it is
+            wide enough to be a run in its own right — in this engine, wider than about 3° of your
+            view, which is roughly a metre across at 18 m away. A building clears that easily. A
+            250 mm pergola post never can, and a pergola has eight to twelve of them.
           </p>
           <p>
-            <B>Read the two together and they separate two causes occlusivity alone conflates.</B>{' '}
-            Occlusivity falling with closed share RISING means the drop was an artefact of nearness
-            — the new surface is physically small but you really are more enclosed. Both falling
-            means genuine fragmentation: the view actually did break into more pieces. That is the
-            one diagnosis neither metre-counting nor coverage-counting can deliver alone.
+            <B>Which is exactly why the pair is worth having.</B> Occlusivity falling{' '}
+            <B>while closed share rises</B> means nothing actually broke up — the new surface is
+            just physically smaller than the distant facade it hid, and you really are more
+            enclosed. <B>Both falling</B> means the view genuinely did fragment. Occlusivity on its
+            own cannot tell those two apart, because it reports the same drop for both.
           </p>
           <Ex
             title="Standing at the centre of four 12 × 12 m pavilions, 9 m tall, 14 m from each — surrounded on all sides"
@@ -223,23 +227,22 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             }
           />
           <Ex
-            title="The counter-case: 48 m of screen wall, 18 m away, identical material and position — only the number of separate pieces changes"
+            title="The same 48 m of wall, 18 m away, cut into more and more pieces — same material, same place, only the number of pieces changes"
             rows={[
-              { label: 'one 48 m run', value: '+1.49%' },
-              { label: 'two 24 m runs', value: '+0.60%' },
-              { label: 'three 16 m runs', value: '0.00%' },
-              { label: 'four 12 m runs', value: '−0.60%' },
-              { label: 'eight 6 m runs', value: '−2.99%' },
-              { label: 'twelve 4 m runs', value: '−3.88%', flag: true },
+              { label: 'left as one 48 m run', value: '+1.49%' },
+              { label: 'cut into two 24 m runs', value: '+0.60%' },
+              { label: 'cut into three 16 m runs', value: '0.00%' },
+              { label: 'cut into four 12 m runs', value: '−0.60%' },
+              { label: 'cut into eight 6 m runs', value: '−2.99%' },
+              { label: 'cut into twelve 4 m runs', value: '−3.88%', flag: true },
             ]}
             verdict={
-              'Same square metres of wall, same distance, same place — the only variable is how ' +
-              'many pieces it is cut into, and closed share falls monotonically, crossing zero ' +
-              'between three pieces and four. This is why a pergola LOWERS it: eight posts of ' +
-              '0.25 m span about one ray each, so they gain nothing internally and break sixteen ' +
-              'pairs between them. Closed share is a measure of how unbroken your surroundings ' +
-              'are, not of how much of them is solid — solid share is the one that asks that, and ' +
-              'at this site it has no headroom to answer.'
+              'Nothing is added or taken away between these six rows — the same wall is simply ' +
+              'divided up more finely each time, and the reading falls every time, turning ' +
+              'negative between three pieces and four. That is the whole behaviour in one table: ' +
+              'closed share is about how BROKEN UP your surroundings are, not how much of them is ' +
+              'solid. Solid share is the one that asks how much is solid, and at this site it has ' +
+              'no room left to answer.'
             }
           />
           <p>
@@ -470,6 +473,121 @@ function H({ children }) {
 
 function B({ children }) {
   return <strong className="font-medium text-ink">{children}</strong>
+}
+
+// Why closed share falls for a pergola and rises for a building, in plan.
+//
+// This exists because the sentence "it measures how much of your view is
+// unbroken wall" is understood by everyone and predicts the wrong answer for
+// half the library. A reader who has not thought about ray casting reasonably
+// expects that putting something in front of them raises a measure of how
+// enclosed they are, and for thin elements it does the opposite. Three plans
+// showing where the runs break is the shortest honest correction; the prose
+// around it took four attempts and still needed the picture.
+//
+// Drawn in plan, looking up the page: the red dot is where you stand, the thin
+// lines are sightlines, the heavy orange is wall that counts as one unbroken
+// run. Geometry is to scale with itself so the shadow widths are honest.
+// Where each sightline stops on the wide block, and where the two remaining
+// stretches of wall begin and end. Computed from the geometry rather than
+// eyeballed: the silhouette runs through the block's NEAR corners, which put
+// its shadow on the wall between x = 39.8 and x = 110.2.
+const BLOCK_HITS = { 45: 62.2, 60: 68.6, 75: 75, 90: 81.4, 105: 87.8 }
+
+function RunDiagram() {
+  const V = { x: 75, y: 100 } // where the viewer stands
+  const WALL_Y = 25
+  const rayTo = [15, 30, 45, 60, 75, 90, 105, 120, 135]
+
+  const Panel = ({ caption, obstacle, runs, blocked, verdict, tone }) => (
+    <figure className="min-w-0 flex-1">
+      <svg viewBox="0 0 150 118" className="w-full" role="img" aria-label={caption}>
+        {/* sightlines */}
+        {rayTo.map((x) => {
+          const stop = blocked?.(x)
+          return (
+            <line
+              key={x}
+              x1={V.x}
+              y1={V.y}
+              x2={stop ? stop.x : x}
+              y2={stop ? stop.y : WALL_Y}
+              className="stroke-line-strong"
+              strokeWidth="0.6"
+            />
+          )
+        })}
+        {/* the wall, drawn only where it still reads as one continuous run */}
+        {runs.map(([a, b], i) => (
+          <line
+            key={i}
+            x1={a}
+            y1={WALL_Y}
+            x2={b}
+            y2={WALL_Y}
+            className="stroke-primary"
+            strokeWidth="3.5"
+            strokeLinecap="butt"
+          />
+        ))}
+        {obstacle}
+        <circle cx={V.x} cy={V.y} r="2.6" className="fill-redline" />
+        <text
+          x={V.x}
+          y={V.y + 12}
+          textAnchor="middle"
+          className="fill-ink-faint"
+          style={{ fontSize: '7px' }}
+        >
+          you
+        </text>
+      </svg>
+      <figcaption className="mt-1">
+        <p className={`text-[11px] font-medium leading-snug ${tone}`}>{caption}</p>
+        <p className="mt-0.5 text-[10.5px] leading-snug text-ink-muted">{verdict}</p>
+      </figcaption>
+    </figure>
+  )
+
+  return (
+    <div className="my-3 rounded border border-line-strong/60 bg-surface px-3 py-3">
+      <div className="flex flex-wrap gap-x-4 gap-y-4">
+        <Panel
+          caption="A plain wall"
+          runs={[[15, 135]]}
+          verdict="Every sightline lands on the same wall. It is one unbroken run — the best this measure can score."
+          tone="text-ink"
+        />
+        <Panel
+          caption="A thin post in front of it"
+          obstacle={<rect x="73.5" y="58" width="3" height="6" className="fill-ink" />}
+          blocked={(x) => (x === 75 ? { x: 75, y: 64 } : null)}
+          runs={[
+            [15, 72],
+            [78, 135],
+          ]}
+          verdict="One sightline stops on the post. The wall behind is now seen as TWO runs instead of one — and the post is too narrow for any two sightlines to share it, so it is not a run itself. You lost a join and gained nothing."
+          tone="text-warn"
+        />
+        <Panel
+          caption="A building in front of it"
+          obstacle={<rect x="60" y="52" width="30" height="16" className="fill-ink" />}
+          blocked={(x) => (BLOCK_HITS[x] != null ? { x: BLOCK_HITS[x], y: 68 } : null)}
+          runs={[
+            [15, 39.8],
+            [110.2, 135],
+          ]}
+          verdict="It splits the wall in two as well — but it is wide enough that several sightlines land on it together, so it becomes its own unbroken run. Two joins lost, a whole new run gained."
+          tone="text-ink"
+        />
+      </div>
+      <p className="mt-3 border-t border-line pt-2 text-[10.5px] leading-relaxed text-ink-faint">
+        Plan view, looking up the page. Red dot: where you stand. Thin lines: sightlines. Heavy
+        orange: wall that counts as one unbroken run. A pergola is the middle case repeated eight
+        to twelve times over.
+      </p>
+    </div>
+  )
 }
 
 // A measured case, set apart from the prose around it.
