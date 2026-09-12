@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { LuFolderOpen, LuSave, LuTrash2 } from 'react-icons/lu'
+import { LuChevronRight, LuFolderOpen, LuSave, LuTrash2 } from 'react-icons/lu'
 
 import {
   EMPTY_SCENARIO_FILE,
@@ -47,6 +47,16 @@ export function ScenarioPanel({
   // Which saved scenario the sandbox currently came from, so saving again
   // updates it rather than making a near-duplicate under the same name.
   const [openId, setOpenId] = useState(null)
+
+  // Which saved scenarios are expanded. All start collapsed so a long list
+  // does not push the rest of the tool column down the page.
+  const [expanded, setExpanded] = useState(() => new Set())
+  const toggle = (id) =>
+    setExpanded((prev) => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      return next
+    })
 
   const canWrite = import.meta.env.DEV
 
@@ -146,8 +156,8 @@ export function ScenarioPanel({
       </div>
 
       <p className="mt-2 text-[11px] leading-relaxed text-ink-muted">
-        A scenario stores what you <span className="text-ink">drew</span>, the area you selected
-        and the character you diagnosed it against — nothing measured. Everything else is computed
+        A scenario stores what you <span className="text-ink">drew</span> and the character you
+        diagnosed it against — nothing measured. Opening one leaves your selected area as it is. Everything else is computed
         again when you open it, so a scenario cannot go quietly out of date with the plaza.
       </p>
 
@@ -211,9 +221,21 @@ export function ScenarioPanel({
         <ul className="mt-3 space-y-1.5 border-t border-line pt-2">
           {mine.map((s) => {
             const drift = scenarioDrift(s, provenance)
+            const isOpen = expanded.has(s.id)
             return (
               <li key={s.id} className="group">
                 <div className="flex items-start gap-2">
+                  <button
+                    type="button"
+                    onClick={() => toggle(s.id)}
+                    aria-expanded={isOpen}
+                    title={isOpen ? 'Collapse' : 'Show note and details'}
+                    className="shrink-0 rounded p-1 text-ink-faint transition-colors hover:text-primary"
+                  >
+                    <LuChevronRight
+                      className={`size-3.5 transition-transform duration-150 ${isOpen ? 'rotate-90' : ''}`}
+                    />
+                  </button>
                   <div className="min-w-0 flex-1">
                     <p
                       className={`truncate text-[12px] ${
@@ -227,8 +249,11 @@ export function ScenarioPanel({
                       {s.target_zone != null ? ` · zone ${s.target_zone}` : ''}
                       {' · '}
                       {(s.updated_at ?? s.created_at ?? '').slice(0, 10)}
+                      {/* Collapsed, the drift warning shrinks to a flag rather
+                          than vanishing — it matters most before opening. */}
+                      {!isOpen && drift.length > 0 && <span className="text-warn"> · outdated</span>}
                     </p>
-                    {s.note && (
+                    {isOpen && s.note && (
                       <p className="mt-0.5 text-[11px] leading-snug text-ink-muted">{s.note}</p>
                     )}
                     {/* Drift is stated on the scenario that has it, not in a
@@ -237,7 +262,7 @@ export function ScenarioPanel({
                         but its numbers are answers to a slightly different
                         question, and the only place that warning is any use is
                         next to the button that opens it. */}
-                    {drift.length > 0 && (
+                    {isOpen && drift.length > 0 && (
                       <p className="mt-0.5 text-[10px] leading-snug text-warn">
                         Saved before {drift.join(' and ')} — it will reopen and re-measure, but the
                         numbers will not be the ones it was named for.

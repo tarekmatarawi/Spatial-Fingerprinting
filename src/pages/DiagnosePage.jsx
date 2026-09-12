@@ -778,6 +778,14 @@ export function DiagnosePage() {
                 filename="konstablerwache-zone-map-selection"
                 target="svg[data-plan]"
                 className="mt-0"
+                actions={
+                  <InspectToggle
+                    on={inspecting}
+                    onChange={setInspecting}
+                    probed={probeIndex != null}
+                    onClear={() => setProbeIndex(null)}
+                  />
+                }
                 note={
                   `${field.point_count.toLocaleString()} points at ${field.spacing_m} m spacing, ` +
                   `cast 360° to 200 m. Drawn at the corpus window (${windowRadius.toFixed(1)} m ` +
@@ -855,25 +863,20 @@ export function DiagnosePage() {
                 </p>
               </Figure>
 
-              <InspectToggle
-                on={inspecting}
-                onChange={setInspecting}
-                probed={probeIndex != null}
-                onClear={() => setProbeIndex(null)}
-              />
+              <div className="min-w-0">
+                <SelectionPanel
+                  summary={summary}
+                  selection={selection}
+                  radius={radius}
+                  zoneNames={zoneNames}
+                  onClear={() => setSelection(null)}
+                />
 
-              <CellProbePanel
-                reading={probeBefore}
-                onClear={() => setProbeIndex(null)}
-              />
-
-              <SelectionPanel
-                summary={summary}
-                selection={selection}
-                radius={radius}
-                zoneNames={zoneNames}
-                onClear={() => setSelection(null)}
-              />
+                <CellProbePanel
+                  reading={probeBefore}
+                  onClear={() => setProbeIndex(null)}
+                />
+              </div>
             </div>
           </section>
         )}
@@ -1137,6 +1140,48 @@ export function DiagnosePage() {
                 filename={`konstablerwache-tier-b-${sandbox ? sandboxView : 'plan'}`}
                 target="svg[data-plan]"
                 className="mt-0"
+                // The same switch as on the zone map, and deliberately the same
+                // state: a reader who probes a cell above and scrolls down here
+                // is asking about that cell, not about a different one.
+                actions={
+                  <InspectToggle
+                    on={inspecting}
+                    onChange={(v) => {
+                      setInspecting(v)
+                      // Arming inspect while a footprint is half-drawn would
+                      // strand the vertices with no way to finish them.
+                      if (v) setDrawing(null)
+                    }}
+                    probed={probeIndex != null}
+                    onClear={() => setProbeIndex(null)}
+                  />
+                }
+                // The inspected cell sits directly under its own plan, so the
+                // numbers are read beside the crosshair they describe.
+                footer={
+                  probeAfter === 'built-over' ? (
+                    <div className="mt-4 rounded-lg border border-redline/40 bg-paper p-4">
+                      <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-redline">
+                        Inspected cell
+                      </p>
+                      <p className="mt-1.5 text-sm text-ink">
+                        <span className="font-medium">Built over.</span> An intervention now
+                        stands on this position, so it is no longer somewhere a person measures the
+                        square from and it has left the sample.
+                      </p>
+                      <p className="mt-1 text-xs text-ink-muted">
+                        It still appears on the as-surveyed map above, where it has its original
+                        reading.
+                      </p>
+                    </div>
+                  ) : (
+                    <CellProbePanel
+                      reading={probeAfter}
+                      before={probeBefore}
+                      onClear={() => setProbeIndex(null)}
+                    />
+                  )
+                }
                 note={
                   'The typology is not refitted: points are assigned to the frozen centres P6 ' +
                   'clustered from all eighteen plazas. The “as built” side is P6’s stored field, ' +
@@ -1312,21 +1357,6 @@ export function DiagnosePage() {
                   </span>
                 </p>
               </Figure>
-
-              {/* The same switch as on the zone map, and deliberately the same
-                  state: a reader who probes a cell above and scrolls down here
-                  is asking about that cell, not about a different one. */}
-              <InspectToggle
-                on={inspecting}
-                onChange={(v) => {
-                  setInspecting(v)
-                  // Arming inspect while a footprint is half-drawn would strand
-                  // the vertices with no way to finish them.
-                  if (v) setDrawing(null)
-                }}
-                probed={probeIndex != null}
-                onClear={() => setProbeIndex(null)}
-              />
 
               <div className="min-w-0">
                 <ToolTabs
@@ -1512,8 +1542,10 @@ export function DiagnosePage() {
                     setSelectedElementId(null)
                     setDrawing(null)
                     setMassError(null)
-                    setSelection(scenario.selection ?? null)
-                    if (scenario.radius_m != null) setRadius(scenario.radius_m)
+                    // The stored selection is NOT restored. Opening a scenario
+                    // is a question about what was drawn; dropping a saved ring
+                    // onto the maps looked like an area the reader had picked,
+                    // and replaced any area they actually had.
                     setTargetZone(scenario.target_zone ?? null)
                   }}
                 />
@@ -1550,33 +1582,6 @@ export function DiagnosePage() {
                     basic question and it does not need an intended type to
                     have an answer. */}
                 <MetricEffect effect={selectionEffect} />
-
-                {/* The single-cell counterpart to the table above. Both answer
-                    "what did this do", one averaged over a selection and one at
-                    a named position — and the pair is the point, because a mean
-                    over a selection can hide a large local effect entirely. */}
-                {probeAfter === 'built-over' ? (
-                  <div className="mt-4 rounded-lg border border-redline/40 bg-paper p-4">
-                    <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-redline">
-                      Inspected cell
-                    </p>
-                    <p className="mt-1.5 text-sm text-ink">
-                      <span className="font-medium">Built over.</span> An intervention now stands
-                      on this position, so it is no longer somewhere a person measures the square
-                      from and it has left the sample.
-                    </p>
-                    <p className="mt-1 text-xs text-ink-muted">
-                      It still appears on the as-surveyed map above, where it has its original
-                      reading.
-                    </p>
-                  </div>
-                ) : (
-                  <CellProbePanel
-                    reading={probeAfter}
-                    before={probeBefore}
-                    onClear={() => setProbeIndex(null)}
-                  />
-                )}
 
                 {!selection && (
                   <p className="mt-8 rounded-lg border border-line bg-surface p-4 text-sm text-ink-muted">
@@ -1745,7 +1750,20 @@ function RadiusControl({ value, onChange, disabled }) {
 // build something. A visible mode with a visible state is the honest version.
 function InspectToggle({ on, onChange, probed, onClear }) {
   return (
-    <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+    <div className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1">
+      <span className="font-mono text-[10px] text-ink-faint">
+        {on
+          ? 'clicking now reads one cell instead of selecting an area'
+          : 'read the four metrics at a single sampled position'}
+      </span>
+      {probed && !on && (
+        <button
+          onClick={onClear}
+          className="font-mono text-[11px] text-ink-faint underline underline-offset-2 hover:text-primary"
+        >
+          clear cell
+        </button>
+      )}
       <button
         onClick={() => onChange(!on)}
         aria-pressed={on}
@@ -1758,19 +1776,7 @@ function InspectToggle({ on, onChange, probed, onClear }) {
         <LuCrosshair aria-hidden className="h-3 w-3" />
         inspect a cell
       </button>
-      {probed && !on && (
-        <button
-          onClick={onClear}
-          className="font-mono text-[11px] text-ink-faint underline underline-offset-2 hover:text-primary"
-        >
-          clear the inspected cell
-        </button>
-      )}
-      <span className="font-mono text-[10px] text-ink-faint">
-        {on
-          ? 'clicking now reads one cell instead of selecting an area'
-          : 'read the four metrics at a single sampled position'}
-      </span>
+      <span aria-hidden className="mx-0.5 h-4 w-px bg-line" />
     </div>
   )
 }

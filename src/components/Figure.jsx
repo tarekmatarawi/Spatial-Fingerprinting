@@ -31,6 +31,13 @@ export function Figure({
   note,
   target = 'svg',
   className = 'mt-6',
+  // Extra controls that belong to the drawing (e.g. P9's "inspect a cell"),
+  // placed in the toolbar before the export buttons. Outside the export holder,
+  // so they never travel into a download.
+  actions = null,
+  // Content under the note (e.g. P9's inspected-cell readout). Also outside the
+  // export holder.
+  footer = null,
 }) {
   const holder = useRef(null)
   const [busy, setBusy] = useState(false)
@@ -122,7 +129,8 @@ export function Figure({
           <figcaption className="text-sm font-semibold text-ink">{title}</figcaption>
           {caption && <p className="mt-1 max-w-2xl text-xs leading-relaxed text-ink-muted">{caption}</p>}
         </div>
-        <div className="flex shrink-0 gap-1.5">
+        <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
+          {actions}
           <button
             onClick={downloadSVG}
             title="Vector — best for the thesis document"
@@ -146,6 +154,7 @@ export function Figure({
         {children}
       </div>
       {note && <p className="mt-3 border-t border-line pt-2 text-xs text-ink-faint">{note}</p>}
+      {footer}
     </figure>
   )
 }
