@@ -1,7 +1,118 @@
 {
   "generated_at": "2026-09-06T00:30:27.887Z",
   "k": 5,
-  "k_selection": null,
+  "k_selection": {
+    "range": [
+      2,
+      12
+    ],
+    "criterion": "smallest k whose mean silhouette is within 0.04 of the peak AND which resolves structure inside plazas (>= 2 zones per plaza, <= 5 single-zone plazas). Silhouette alone peaks where the clustering separates plazas rather than places within them, which is out of scope for P6 and leaves P9 without zone-level structure to diagnose.",
+    "silhouette_tolerance": 0.04,
+    "min_zones_per_plaza": 2,
+    "max_single_zone_plazas": 5,
+    "zone_presence_share": 0.05,
+    "single_zone_share": 0.9,
+    "silhouette_sample": 2500,
+    "restarts_per_k": 10,
+    "seed": 20260904,
+    "peak_k": 3,
+    "rule_choice": 3,
+    "rule_fell_back": true,
+    "chosen_k": 5,
+    "chosen_by": "existing zones.json",
+    "total_points": 11719,
+    "generated_at": "2026-09-13T11:41:19.022Z",
+    "diagnostics": [
+      {
+        "k": 2,
+        "inertia": 820.8729549795393,
+        "silhouette": 0.30155324909537123,
+        "singleZonePlazas": 13,
+        "zonesPerPlaza": 1.2777777777777777,
+        "siteCount": 18
+      },
+      {
+        "k": 3,
+        "inertia": 547.842655492808,
+        "silhouette": 0.372453435077524,
+        "singleZonePlazas": 12,
+        "zonesPerPlaza": 1.5555555555555556,
+        "siteCount": 18
+      },
+      {
+        "k": 4,
+        "inertia": 437.717115237389,
+        "silhouette": 0.3714579591822845,
+        "singleZonePlazas": 8,
+        "zonesPerPlaza": 1.7222222222222223,
+        "siteCount": 18
+      },
+      {
+        "k": 5,
+        "inertia": 366.5841428223902,
+        "silhouette": 0.3456763149341283,
+        "singleZonePlazas": 6,
+        "zonesPerPlaza": 2.2777777777777777,
+        "siteCount": 18
+      },
+      {
+        "k": 6,
+        "inertia": 314.80283031036737,
+        "silhouette": 0.305481146756159,
+        "singleZonePlazas": 5,
+        "zonesPerPlaza": 2.3333333333333335,
+        "siteCount": 18
+      },
+      {
+        "k": 7,
+        "inertia": 280.92394296312136,
+        "silhouette": 0.3265128358602686,
+        "singleZonePlazas": 5,
+        "zonesPerPlaza": 2.2222222222222223,
+        "siteCount": 18
+      },
+      {
+        "k": 8,
+        "inertia": 258.36403379391516,
+        "silhouette": 0.3110305557777339,
+        "singleZonePlazas": 2,
+        "zonesPerPlaza": 2.2777777777777777,
+        "siteCount": 18
+      },
+      {
+        "k": 9,
+        "inertia": 235.57021953918556,
+        "silhouette": 0.30110351793250295,
+        "singleZonePlazas": 2,
+        "zonesPerPlaza": 2.6666666666666665,
+        "siteCount": 18
+      },
+      {
+        "k": 10,
+        "inertia": 219.31050942833275,
+        "silhouette": 0.3056930293323444,
+        "singleZonePlazas": 2,
+        "zonesPerPlaza": 2.8333333333333335,
+        "siteCount": 18
+      },
+      {
+        "k": 11,
+        "inertia": 203.8834266075286,
+        "silhouette": 0.3008098982827805,
+        "singleZonePlazas": 2,
+        "zonesPerPlaza": 2.7777777777777777,
+        "siteCount": 18
+      },
+      {
+        "k": 12,
+        "inertia": 191.77916750292175,
+        "silhouette": 0.28894029298431967,
+        "singleZonePlazas": 1,
+        "zonesPerPlaza": 2.7777777777777777,
+        "siteCount": 18
+      }
+    ]
+  },
   "seed": 20260904,
   "restarts": 20,
   "weighted_by": {

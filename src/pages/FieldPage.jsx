@@ -262,13 +262,8 @@ export function FieldPage() {
                 {(zones.unweighted_agreement * 100).toFixed(1)}% of points in a corresponding zone, so
                 the typology is not an artefact of the weighting.
               </p>
-              {zones.k_selection && (
-                <p>
-                  <span className="font-medium text-ink">Choice of k.</span>{' '}
-                  {zones.k_selection.criterion} Mean silhouette peaks at k = 3, where 13 of 18 plazas
-                  come out as a single zone — that clustering separates plazas rather than places
-                  within them, which is not what this phase maps. k = {zones.k} was chosen instead.
-                </p>
+              {zones.k_selection?.diagnostics?.length > 0 && (
+                <KSelection selection={zones.k_selection} k={zones.k} />
               )}
               <p>
                 <span className="font-medium text-ink">Exclusions.</span> Points inside a building
@@ -279,6 +274,135 @@ export function FieldPage() {
           </details>
         </section>
       </div>
+    </div>
+  )
+}
+
+// How k was chosen, drawn from the diagnostics stored in zones.json.
+//
+// Every sentence here is derived from the stored table rather than typed, so
+// it cannot drift from the numbers after a re-run — an earlier version hard-
+// coded "13 of 18 plazas" from a grid that has since been re-sampled. Where the
+// stored selection rule, applied strictly, would pick a different k from the
+// one in use, the paragraph says so and names the criterion that is not met.
+function KSelection({ selection, k }) {
+  const d = selection.diagnostics
+  const tol = selection.silhouette_tolerance ?? 0.04
+  const minZones = selection.min_zones_per_plaza ?? 2
+  const maxSingle = selection.max_single_zone_plazas ?? 5
+  const singleShare = selection.single_zone_share ?? 0.9
+  const sites = d[0]?.siteCount ?? 18
+
+  const peak = d.reduce((a, b) => (b.silhouette > a.silhouette ? b : a))
+  const cutoff = peak.silhouette - tol
+  const tolerant = d.filter((r) => r.silhouette >= cutoff)
+  const chosen = d.find((r) => r.k === k)
+
+  const failures = (r) => [
+    ...(r.silhouette < cutoff ? ['silhouette'] : []),
+    ...(r.zonesPerPlaza < minZones ? ['zones per plaza'] : []),
+    ...(r.singleZonePlazas > maxSingle ? ['single-zone plazas'] : []),
+  ]
+
+  const inTolerance = chosen && chosen.silhouette >= cutoff
+  const mostZones = chosen && tolerant.every((r) => chosen.zonesPerPlaza >= r.zonesPerPlaza)
+  const fewestSingle = chosen && tolerant.every((r) => chosen.singleZonePlazas <= r.singleZonePlazas)
+  const chosenFails = chosen ? failures(chosen) : []
+  const list = (ks) => ks.map((r) => r.k).join(', ')
+
+  return (
+    <div>
+      <p>
+        <span className="font-medium text-ink">Choice of k.</span> k-means was run for k ={' '}
+        {selection.range[0]}–{selection.range[1]} over all{' '}
+        {selection.total_points?.toLocaleString()} points in the same weighted space, each k with{' '}
+        {selection.restarts_per_k} seeded restarts; silhouette is the mean over a fixed{' '}
+        {selection.silhouette_sample?.toLocaleString()}-point sample. Silhouette peaks at k ={' '}
+        {peak.k} ({peak.silhouette.toFixed(4)}), where {peak.singleZonePlazas} of {sites} plazas
+        come out as a single zone — that clustering separates plazas rather than places within
+        them, which is not what this phase maps.
+      </p>
+      {chosen && (
+        <p className="mt-3">
+          Within {tol} of the peak lie k = {list(tolerant)}.{' '}
+          {inTolerance ? (
+            <>
+              Of these, k = {k} {mostZones && fewestSingle
+                ? 'resolves the most structure inside plazas: the most zones per plaza and the fewest single-zone plazas'
+                : mostZones
+                  ? 'has the most zones per plaza'
+                  : fewestSingle
+                    ? 'has the fewest single-zone plazas'
+                    : 'is the one in use'}
+              {' '}({chosen.zonesPerPlaza.toFixed(2)} zones per plaza, {chosen.singleZonePlazas}{' '}
+              single-zone plazas).
+            </>
+          ) : (
+            <>k = {k} lies outside that band.</>
+          )}{' '}
+          {chosenFails.length > 0 && (
+            <>
+              It does not meet every stored criterion — {chosenFails.join(', ')}
+              {chosenFails.includes('single-zone plazas') &&
+                ` (${chosen.singleZonePlazas} against a limit of ${maxSingle})`}
+              {selection.rule_choice !== k &&
+                `, so the rule applied strictly ${selection.rule_fell_back ? 'meets no k and falls back to the silhouette peak,' : 'selects'} k = ${selection.rule_choice}`}
+              .
+            </>
+          )}
+        </p>
+      )}
+
+      <div className="mt-3 overflow-x-auto">
+        <table className="w-full border-collapse text-xs">
+          <thead>
+            <tr className="border-b border-line text-left">
+              {['k', 'inertia', 'silhouette', 'single-zone plazas', 'zones per plaza', 'criteria not met'].map((h, i) => (
+                <th
+                  key={h}
+                  className={`pb-1.5 font-mono text-[10px] font-normal uppercase tracking-wider text-ink-faint ${
+                    i > 0 && i < 5 ? 'text-right' : ''
+                  } ${i === 5 ? 'pl-4' : ''}`}
+                >
+                  {h}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {d.map((r) => {
+              const miss = failures(r)
+              const isChosen = r.k === k
+              return (
+                <tr
+                  key={r.k}
+                  className={`border-b border-line/60 last:border-0 ${isChosen ? 'bg-paper' : ''}`}
+                >
+                  <td className={`py-1 font-mono ${isChosen ? 'font-semibold text-ink' : 'text-ink-muted'}`}>
+                    {r.k}
+                    {isChosen && <span className="ml-1.5 text-[10px] font-normal text-primary">in use</span>}
+                    {r.k === peak.k && <span className="ml-1.5 text-[10px] font-normal text-ink-faint">peak</span>}
+                  </td>
+                  <td className="py-1 text-right font-mono tabular-nums">{r.inertia.toFixed(1)}</td>
+                  <td className={`py-1 text-right font-mono tabular-nums ${r.silhouette < cutoff ? 'text-ink-faint' : 'text-ink'}`}>
+                    {r.silhouette.toFixed(4)}
+                  </td>
+                  <td className="py-1 text-right font-mono tabular-nums">
+                    {r.singleZonePlazas} of {r.siteCount ?? sites}
+                  </td>
+                  <td className="py-1 text-right font-mono tabular-nums">{r.zonesPerPlaza.toFixed(2)}</td>
+                  <td className="py-1 pl-4 text-[11px] text-ink-faint">{miss.length ? miss.join(', ') : '—'}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p className="mt-2 font-mono text-[11px] text-ink-faint">
+        criteria: silhouette ≥ {cutoff.toFixed(4)} (peak − {tol}) · ≥ {minZones} zones per plaza
+        (a zone counts at ≥ {(selection.zone_presence_share * 100).toFixed(0)}% of the plaza&rsquo;s
+        points) · ≤ {maxSingle} single-zone plazas (one zone &gt; {(singleShare * 100).toFixed(0)}%)
+      </p>
     </div>
   )
 }

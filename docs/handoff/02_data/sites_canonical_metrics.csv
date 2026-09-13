@@ -1,0 +1,37 @@
+fov_mode,site_id,name,city,local_x_m,local_y_m,direction_deg,fov_deg,ray_count,area_m2,compactness,occlusivity_m,enclosure_ratio
+perceptual_120,Gendarmenmarkt-Berlin,Gendarmenmarkt,Berlin,71.82,12.68,234.5,120,120,12524,0.1262,193.8,0.1121
+perceptual_120,Hauptwache-Frankfurt am Main,Hauptwache,Frankfurt am Main,101.51,25.29,232.4,120,120,10180.95,0.2077,188.82,0.1748
+perceptual_120,Römerberg-Frankfurt am Main,Römerberg,Frankfurt am Main,-15.93,23.62,112.7,120,120,2939.94,0.2491,114.26,0.1786
+perceptual_120,Zeil-Frankfurt am Main,Zeil,Frankfurt am Main,35.92,-2.86,261.9,120,120,6625.39,0.3085,177.65,0.2639
+perceptual_120,Bebelplatz-Berlin,Bebelplatz,Berlin,357.31,-65.17,175.3,120,120,8645.75,0.3837,217.5,0.1887
+perceptual_120,Alexanderplatz-Berlin,Alexanderplatz,Berlin,112.96,-45.72,299,120,120,8815.28,0.4379,243.64,0.1988
+perceptual_120,Marienplatz-Munich,Marienplatz,Munich,-0.08,-0.36,121.2,120,120,5639.89,0.2274,192.93,0.2913
+perceptual_120,Odeonsplatz-Munich,Odeonsplatz,Munich,63.15,45.39,195.3,120,120,6903.19,0.1758,273.46,0.2053
+perceptual_120,Konstablerwache-Frankfurt am Main,Konstablerwache,Frankfurt am Main,-48.7,13.08,120.1,120,120,8798.21,0.1736,192.92,0.1319
+perceptual_120,Alter Markt-Cologne,Alter Markt,Cologne,72.7,-36.13,7.6,120,120,3752.07,0.2002,140.51,0.1829
+perceptual_120,Rathausmarkt-Hamburg,Rathausmarkt,Hamburg,101.06,-28.45,297.5,120,120,10151.25,0.4018,197.24,0.2895
+perceptual_120,Naschmarkt-Leipzig,Naschmarkt,Leipzig,36.05,-39.95,4.4,120,120,1759.02,0.1895,140.28,0.3145
+perceptual_120,Burgplatz-Düsseldorf,Burgplatz,Düsseldorf,85.07,2.27,31.1,120,120,9753.23,0.1363,122.22,0.159
+perceptual_120,Marktplatz-Heidelberg,Marktplatz,Heidelberg,45.57,-39.66,19.3,120,120,2357.17,0.6516,110.92,0.3036
+perceptual_120,Augustusplatz-Leipzig,Augustusplatz,Leipzig,134.1,-6.48,170.6,120,120,7924,0.2005,198.52,0.178
+perceptual_120,Hauptmarkt-Trier,Hauptmarkt,Trier,22.81,-52.67,6.4,120,120,4517.83,0.1758,114.14,0.2421
+perceptual_120,Herderplatz-Weimar,Herderplatz,Weimar,5.8,-4.15,89.6,120,120,2778.99,0.2428,147.56,0.1957
+perceptual_120,Theaterplatz-Weimar,Theaterplatz,Weimar,42.68,4.47,251.6,120,120,2693.41,0.1653,171.69,0.1701
+perceptual_360,Gendarmenmarkt-Berlin,Gendarmenmarkt,Berlin,71.82,12.68,234.5,360,360,30856.12,0.1286,602.92,0.1587
+perceptual_360,Hauptwache-Frankfurt am Main,Hauptwache,Frankfurt am Main,87.87,22.12,177.56,360,360,20936.65,0.11,622.93,0.1631
+perceptual_360,Römerberg-Frankfurt am Main,Römerberg,Frankfurt am Main,-7.85,10.21,201.94,360,360,9663.21,0.0806,330.77,0.1991
+perceptual_360,Zeil-Frankfurt am Main,Zeil,Frankfurt am Main,4.86,-11.98,102.19,360,360,10150.96,0.1083,396.51,0.3328
+perceptual_360,Bebelplatz-Berlin,Bebelplatz,Berlin,367.41,-133.46,347.58,360,360,25275.48,0.2031,395.37,0.2102
+perceptual_360,Alexanderplatz-Berlin,Alexanderplatz,Berlin,64.02,-33.44,51.68,360,360,21775.4,0.1728,497.91,0.2162
+perceptual_360,Marienplatz-Munich,Marienplatz,Munich,15.48,-1.9,109.41,360,360,7532.2,0.0749,364.06,0.3818
+perceptual_360,Odeonsplatz-Munich,Odeonsplatz,Munich,45.55,-2.5,32.58,360,360,14224.87,0.155,407.26,0.3402
+perceptual_360,Konstablerwache-Frankfurt am Main,Konstablerwache,Frankfurt am Main,-23.68,0.96,346.2,360,360,16698.05,0.1257,503.72,0.1886
+perceptual_360,Alter Markt-Cologne,Alter Markt,Cologne,68.65,-25.75,11.53,360,360,10886.49,0.0577,411.95,0.1965
+perceptual_360,Rathausmarkt-Hamburg,Rathausmarkt,Hamburg,108.65,-29.91,312.94,360,360,20141.25,0.1331,566.77,0.2256
+perceptual_360,Naschmarkt-Leipzig,Naschmarkt,Leipzig,36.85,-26.89,6.35,360,360,4020.21,0.1524,314.45,0.3841
+perceptual_360,Burgplatz-Düsseldorf,Burgplatz,Düsseldorf,105.92,8.12,270.89,360,360,46656.93,0.1481,272.07,0.1131
+perceptual_360,Marktplatz-Heidelberg,Marktplatz,Heidelberg,63.1,-16.47,87.06,360,360,3905.37,0.1565,267.22,0.2651
+perceptual_360,Augustusplatz-Leipzig,Augustusplatz,Leipzig,130.59,-19.93,175.11,360,360,33095.58,0.1412,571.94,0.1145
+perceptual_360,Hauptmarkt-Trier,Hauptmarkt,Trier,19.83,-13.51,176.32,360,360,10723.82,0.1028,283.54,0.1893
+perceptual_360,Herderplatz-Weimar,Herderplatz,Weimar,39.26,3.72,240.02,360,360,5648.63,0.057,304.47,0.2471
+perceptual_360,Theaterplatz-Weimar,Theaterplatz,Weimar,40.22,0.52,252.42,360,360,7804.35,0.0684,414.88,0.1583

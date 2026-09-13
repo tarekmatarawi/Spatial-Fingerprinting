@@ -2,8 +2,14 @@
 // P6 — clusters the pooled field points into a GLOBAL zone typology.
 //
 //   npm run zones                 diagnostics for k = 2..12, then fit the choice
-//   npm run zones -- --k=5        skip selection and fit a stated k
+//   npm run zones -- --k=5        fit a stated k (diagnostics are still computed
+//                                 and stored, so the choice can be argued from them)
 //   npm run zones -- --dry        report without writing
+//   npm run zones -- --diagnostics-only
+//                                 recompute the k = 2..12 table and store it in the
+//                                 existing zones.json WITHOUT refitting — centres,
+//                                 assignments and generated_at are left untouched,
+//                                 so saved P9 scenarios do not report a new typology
 //
 // GLOBAL, NOT PER-SITE. Every plaza's grid points go into one pool and one
 // clustering. A zone type therefore means the same thing everywhere: "zone 3 at
@@ -35,6 +41,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const read = (rel) => JSON.parse(fs.readFileSync(path.join(root, rel), 'utf8'))
 const args = process.argv.slice(2)
 const DRY = args.includes('--dry')
+const DIAGNOSTICS_ONLY = args.includes('--diagnostics-only')
 const K_ARG = args.find((a) => a.startsWith('--k='))?.split('=')[1]
 
 const K_MIN = 2
@@ -57,6 +64,9 @@ const SILHOUETTE_TOLERANCE = 0.04 // how far below the peak is still acceptable
 const MIN_ZONES_PER_PLAZA = 2.0 // the map must describe places, not plazas
 const MAX_SINGLE_ZONE_PLAZAS = 5 // at most this many plazas may be one zone
 const ZONE_PRESENCE_SHARE = 0.05
+// A plaza counts as "one zone" when a single zone holds more than this share of
+// its points.
+const SINGLE_ZONE_SHARE = 0.9
 
 // How much of the structure lies inside plazas rather than between them: how
 // many plazas are essentially one zone, and how many zones an average plaza
@@ -72,7 +82,7 @@ function withinPlazaStructure(assign, owner, k) {
   for (const id of ids) {
     const tally = bySite[id]
     const n = tally.reduce((a, b) => a + b, 0)
-    if (Math.max(...tally) / n > 0.9) uniform++
+    if (Math.max(...tally) / n > SINGLE_ZONE_SHARE) uniform++
     zoneSum += [...tally].filter((c) => c / n >= ZONE_PRESENCE_SHARE).length
   }
   return { uniform, perPlaza: zoneSum / ids.length, siteCount: ids.length }
@@ -227,6 +237,63 @@ function silhouette(points, assign, k, w, rng) {
   return total / idx.length
 }
 
+// ------------------------------------------------------------- k diagnostics
+
+// Inertia, silhouette and within-plaza structure for every k in range.
+function kDiagnostics(points, owner, w) {
+  const diagnostics = []
+  console.log(
+    '  k'.padEnd(6) + 'inertia'.padStart(11) + 'silhouette'.padStart(12) +
+      'single-zone plazas'.padStart(20) + 'zones/plaza'.padStart(13)
+  )
+  for (let k = K_MIN; k <= K_MAX; k++) {
+    const fit = bestOf(points, k, w, RESTARTS)
+    const sil = silhouette(points, fit.assign, k, w, mulberry32(SEED + k))
+    const { uniform, perPlaza, siteCount } = withinPlazaStructure(fit.assign, owner, k)
+    diagnostics.push({
+      k,
+      inertia: fit.inertia,
+      silhouette: sil,
+      singleZonePlazas: uniform,
+      zonesPerPlaza: perPlaza,
+      siteCount,
+    })
+    console.log(
+      `  ${k}`.padEnd(6) +
+        fit.inertia.toFixed(1).padStart(11) +
+        sil.toFixed(4).padStart(12) +
+        `${uniform} of ${siteCount}`.padStart(20) +
+        perPlaza.toFixed(1).padStart(13)
+    )
+  }
+  return diagnostics
+}
+
+// TWO criteria, because silhouette alone answers the wrong question here.
+//
+// Silhouette rewards well-separated clusters, and the best-separated structure
+// in this data lies BETWEEN plazas rather than within them: at its peak most
+// plazas come out as a single zone and the map simply restates which plaza you
+// are in. That is plaza-level typology, which docs/spec.md explicitly removes
+// from scope, and it would leave P9 — which diagnoses zone types, not
+// whole-plaza labels — with nothing to operate on.
+//
+// So the rule takes the smallest k whose silhouette stays within
+// SILHOUETTE_TOLERANCE of the peak AND which resolves real structure inside
+// plazas. Where no k meets every criterion it falls back to the silhouette
+// peak, and says so — the full table is stored so the choice can be re-argued.
+function ruleChoice(diagnostics) {
+  const best = diagnostics.reduce((a, b) => (b.silhouette > a.silhouette ? b : a))
+  const peak = best.silhouette
+  const viable = diagnostics.filter(
+    (d) =>
+      d.silhouette >= peak - SILHOUETTE_TOLERANCE &&
+      d.zonesPerPlaza >= MIN_ZONES_PER_PLAZA &&
+      d.singleZonePlazas <= MAX_SINGLE_ZONE_PLAZAS
+  )
+  return { k: viable.length ? viable[0].k : best.k, peak, peakK: best.k, viable }
+}
+
 // ---------------------------------------------------------------------- main
 
 function main() {
@@ -248,60 +315,66 @@ function main() {
   console.log(`Weighted space: ${METRICS.map((m, i) => `${m} ${w[i].toFixed(3)}`).join(' · ')}`)
   console.log(`Weights from analysis-panoramic.json (${weightsFile.inputs.participants.used} participants)\n`)
 
-  const rng = mulberry32(SEED)
   const unit = [1, 1, 1, 1]
 
-  let chosenK = K_ARG ? Number(K_ARG) : null
-  const diagnostics = []
+  // The diagnostics are ALWAYS computed, including when k is stated with --k.
+  // A forced k with no table beside it is a choice nobody can check; the table
+  // is what lets a reader see where the stated k sits against the alternatives.
+  const diagnostics = kDiagnostics(points, owner, w)
+  const rule = ruleChoice(diagnostics)
+  const chosenK = K_ARG ? Number(K_ARG) : rule.k
 
-  if (!chosenK) {
-    console.log(
-      '  k'.padEnd(6) + 'inertia'.padStart(11) + 'silhouette'.padStart(12) +
-        'single-zone plazas'.padStart(20) + 'zones/plaza'.padStart(13)
-    )
-    for (let k = K_MIN; k <= K_MAX; k++) {
-      const fit = bestOf(points, k, w, RESTARTS)
-      const sil = silhouette(points, fit.assign, k, w, mulberry32(SEED + k))
-      const { uniform, perPlaza, siteCount } = withinPlazaStructure(fit.assign, owner, k)
-      diagnostics.push({ k, inertia: fit.inertia, silhouette: sil, singleZonePlazas: uniform, zonesPerPlaza: perPlaza })
-      console.log(
-        `  ${k}`.padEnd(6) +
-          fit.inertia.toFixed(1).padStart(11) +
-          sil.toFixed(4).padStart(12) +
-          `${uniform} of ${siteCount}`.padStart(20) +
-          perPlaza.toFixed(1).padStart(13)
+  console.log(
+    `\n  Peak silhouette ${rule.peak.toFixed(4)} at k = ${rule.peakK}. ` +
+      (rule.viable.length
+        ? `The selection rule picks k = ${rule.k}.`
+        : `No k meets every criterion, so the rule falls back to the silhouette peak, k = ${rule.k}.`)
+  )
+  if (K_ARG) console.log(`  k = ${chosenK} was stated with --k and is the one fitted.`)
+
+  const kSelection = {
+    range: [K_MIN, K_MAX],
+    criterion:
+      'smallest k whose mean silhouette is within ' + SILHOUETTE_TOLERANCE + ' of the peak AND ' +
+      'which resolves structure inside plazas (>= ' + MIN_ZONES_PER_PLAZA + ' zones per plaza, ' +
+      '<= ' + MAX_SINGLE_ZONE_PLAZAS + ' single-zone plazas). Silhouette alone peaks where the ' +
+      'clustering separates plazas rather than places within them, which is out of scope for P6 ' +
+      'and leaves P9 without zone-level structure to diagnose.',
+    silhouette_tolerance: SILHOUETTE_TOLERANCE,
+    min_zones_per_plaza: MIN_ZONES_PER_PLAZA,
+    max_single_zone_plazas: MAX_SINGLE_ZONE_PLAZAS,
+    zone_presence_share: ZONE_PRESENCE_SHARE,
+    single_zone_share: SINGLE_ZONE_SHARE,
+    silhouette_sample: SILHOUETTE_SAMPLE,
+    restarts_per_k: RESTARTS,
+    seed: SEED,
+    peak_k: rule.peakK,
+    rule_choice: rule.k,
+    rule_fell_back: rule.viable.length === 0,
+    chosen_k: chosenK,
+    chosen_by: K_ARG ? 'stated (--k)' : 'selection rule',
+    total_points: points.length,
+    generated_at: new Date().toISOString(),
+    diagnostics,
+  }
+
+  if (DIAGNOSTICS_ONLY) {
+    const existing = read('src/data/zones.json')
+    if (existing.total_points !== points.length) {
+      throw new Error(
+        `zones.json was fitted on ${existing.total_points} points but the field files now hold ` +
+          `${points.length}. Refit with npm run zones before storing diagnostics for it.`
       )
     }
-
-    // TWO criteria, because silhouette alone answers the wrong question here.
-    //
-    // Silhouette rewards well-separated clusters, and the best-separated
-    // structure in this data lies BETWEEN plazas rather than within them: it
-    // peaks at k=3, where 13 of 18 plazas come out as a single zone and the map
-    // simply restates which plaza you are in. That is plaza-level typology,
-    // which docs/spec.md explicitly removes from scope, and it would leave P9 —
-    // which diagnoses zone types, not whole-plaza labels — with nothing to
-    // operate on.
-    //
-    // So k is chosen as the smallest value whose silhouette stays within
-    // SILHOUETTE_TOLERANCE of the peak AND which resolves real structure inside
-    // plazas. Both thresholds are stated here rather than tuned to an outcome,
-    // and the full diagnostic table is written to zones.json so the choice can
-    // be re-argued from the numbers.
-    const peak = Math.max(...diagnostics.map((d) => d.silhouette))
-    const viable = diagnostics.filter(
-      (d) =>
-        d.silhouette >= peak - SILHOUETTE_TOLERANCE &&
-        d.zonesPerPlaza >= MIN_ZONES_PER_PLAZA &&
-        d.singleZonePlazas <= MAX_SINGLE_ZONE_PLAZAS
-    )
-    chosenK = viable.length ? viable[0].k : diagnostics.reduce((a, b) => (b.silhouette > a.silhouette ? b : a)).k
-    const pick = diagnostics.find((d) => d.k === chosenK)
-    console.log(
-      `\n  Peak silhouette ${peak.toFixed(4)}. Chose k = ${chosenK} ` +
-        `(silhouette ${pick.silhouette.toFixed(4)}, within ${SILHOUETTE_TOLERANCE} of peak;\n` +
-        `  ${pick.singleZonePlazas} single-zone plazas, ${pick.zonesPerPlaza.toFixed(1)} zones per plaza).`
-    )
+    kSelection.chosen_k = existing.k
+    kSelection.chosen_by = K_ARG ? 'stated (--k)' : 'existing zones.json'
+    if (DRY) {
+      console.log('\n--dry: nothing written.')
+      return
+    }
+    writeJsonAtomic(path.join(root, 'src/data/zones.json'), { ...existing, k_selection: kSelection })
+    console.log(`\nStored the k = ${K_MIN}–${K_MAX} diagnostics in zones.json; the typology itself was not refitted.`)
+    return
   }
 
   const fit = bestOf(points, chosenK, w, RESTARTS * 2)
@@ -367,19 +440,7 @@ function main() {
   writeJsonAtomic(path.join(root, 'src/data/zones.json'), {
     generated_at: new Date().toISOString(),
     k: chosenK,
-    k_selection: diagnostics.length
-      ? {
-          range: [K_MIN, K_MAX],
-          criterion:
-            'smallest k whose mean silhouette is within ' + SILHOUETTE_TOLERANCE + ' of the peak AND ' +
-            'which resolves structure inside plazas (>= ' + MIN_ZONES_PER_PLAZA + ' zones per plaza, ' +
-            '<= ' + MAX_SINGLE_ZONE_PLAZAS + ' single-zone plazas). Silhouette alone peaks where the ' +
-            'clustering separates plazas rather than places within them, which is out of scope for P6 ' +
-            'and leaves P9 without zone-level structure to diagnose.',
-          zone_presence_share: ZONE_PRESENCE_SHARE,
-          diagnostics,
-        }
-      : null,
+    k_selection: kSelection,
     seed: SEED,
     restarts: RESTARTS * 2,
     weighted_by: { source: 'analysis-panoramic.json', weights: w, metrics: METRICS },
