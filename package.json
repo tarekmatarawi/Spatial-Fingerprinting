@@ -19,7 +19,8 @@
     "zones": "node scripts/compute-zones.mjs",
     "trials:matched-view": "node scripts/build-matched-view-trials.mjs",
     "matched-view:selftest": "node scripts/matched-view-selftest.mjs",
-    "validate:presets": "node scripts/validate-presets.mjs"
+    "validate:presets": "node scripts/validate-presets.mjs",
+    "figure:1-1": "node scripts/build-figure-1-1.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
@@ -37,6 +38,7 @@
     "three": "^0.185.1"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
