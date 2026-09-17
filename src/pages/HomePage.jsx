@@ -2,17 +2,45 @@ import { LuArrowRight, LuChevronRight } from 'react-icons/lu'
 import sites from '@/data/sites.json'
 import results from '@/data/results.json'
 import responses from '@/data/survey-responses-360.json'
-import { groupedPhases } from '@/lib/phases'
+import { fit, crossval } from '@/data/analysis-panoramic.json'
+import { total_points as fieldPoints, k as zoneCount } from '@/data/zones.json'
+import { markers as cloudMarkers, target_per_site as viewsPerCloud } from '@/data/view-clouds.json'
+import matchedViewSessions from '@/data/matched-view-responses.json'
+import { selection as trialSelection } from '@/data/matched-view-trials.json'
+import { scenarios } from '@/data/scenarios.json'
+import { groupedPhases, PHASES } from '@/lib/phases'
 import { activeSites } from '@/lib/site'
 import { FigureGround } from '@/components/FigureGround'
 
 // Researcher-facing landing: the platform's name, its one-line claim, a live
 // figure-ground drawing computed from the thesis's own data, and the nine-phase
-// journey grouped into setup, analysis, and design application. Participants never see this — their link goes straight to ?survey.
+// journey grouped into setup, analysis, and design application. Participants never see this — their links go straight to ?survey or ?matched-view-survey.
 
 // Only the perceptual (120°) layer — results.json also holds the panoramic
 // survey's 360° readings, which are not what this line is reporting.
 const perceptualReadings = results.filter((r) => r.fov_mode === 'perceptual_120')
+
+const pct = (v) => `${(v * 100).toFixed(1)}%`
+const plural = (n, one, many = `${one}s`) => `${n.toLocaleString()} ${n === 1 ? one : many}`
+
+// A P7 cloud is a plaza's canonical 120° reading plus its placed markers, and
+// it only counts once it reaches the target — the same rule the comparison page
+// uses before it will draw a matrix.
+function completeClouds(studySites) {
+  const perSite = new Map()
+  for (const m of cloudMarkers) perSite.set(m.site_id, (perSite.get(m.site_id) ?? 0) + 1)
+  const canonical = new Set(
+    perceptualReadings.filter((r) => r.canonical).map((r) => r.site_id)
+  )
+  let complete = 0
+  let views = 0
+  for (const s of studySites) {
+    const n = (perSite.get(s.id) ?? 0) + (canonical.has(s.id) ? 1 : 0)
+    views += n
+    if (n >= viewsPerCloud) complete++
+  }
+  return { complete, views }
+}
 
 const HERO_SITE =
   sites.find((s) => s.id === 'Gendarmenmarkt-Berlin') ??
@@ -25,6 +53,9 @@ export function HomePage() {
   const studySites = activeSites(sites)
   const buildingCount = studySites.reduce((sum, s) => sum + s.buildings.length, 0)
   const excludedCount = sites.length - studySites.length
+  const clouds = completeClouds(studySites)
+  const caseSiteName =
+    sites.find((s) => s.id === scenarios[0]?.site_id)?.name ?? 'Konstablerwache'
 
   // Live status per station, from the same JSON the tools read — the landing
   // reports the actual state of the study, not marketing copy.
@@ -35,7 +66,15 @@ export function HomePage() {
     viewer: `${perceptualReadings.length} saved isovist ${perceptualReadings.length === 1 ? 'reading' : 'readings'}`,
     survey: `${responses.length} ${responses.length === 1 ? 'response' : 'responses'} collected`,
     results: `${responses.length} ${responses.length === 1 ? 'session' : 'sessions'} to review`,
+    weights: `${plural(fit.n, 'triplet')} fitted · ${pct(crossval.mean_accuracy)} held-out vs ${pct(crossval.chance)} chance`,
+    field: `${plural(fieldPoints, 'field point')} · ${zoneCount} zone types`,
+    'cloud-comparison': `${clouds.complete} of ${studySites.length} clouds complete · ${plural(clouds.views, 'view')}`,
+    'matched-view': `${plural(matchedViewSessions.length, 'session')} collected · ${trialSelection.per_stratum * 2}-trial bank`,
+    diagnose: `${plural(scenarios.length, 'saved scenario')} · ${caseSiteName}`,
   }
+
+  const builtCount = PHASES.filter((p) => p.status === 'built').length
+  const allBuilt = builtCount === PHASES.length
 
   return (
     <div className="h-full overflow-y-auto">
@@ -92,8 +131,9 @@ export function HomePage() {
                 of Public Plazas.
               </p>
               <p className="mt-2 font-mono text-xs text-ink-faint">
-                {studySites.length} European plazas · 4 isovist metrics · triplet survey ·
-                maximum-likelihood weighting
+                {studySites.length} European plazas · 4 isovist metrics · panoramic triplet survey ·
+                maximum-likelihood weighting · {zoneCount}-type zone typology · view-cloud
+                comparison · matched-view validation · design diagnostic
               </p>
             </div>
           </div>
@@ -118,8 +158,15 @@ export function HomePage() {
             <h2 className="text-xl font-semibold tracking-tight text-ink">
               One pipeline, nine phases
             </h2>
-            <p className="hidden font-mono text-xs text-ink-faint sm:block">
-              validation-gated · built in order
+            <p className="hidden items-center gap-2 font-mono text-xs text-ink-faint sm:flex">
+              {allBuilt && (
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-ok-wash px-2.5 py-0.5 text-ok">
+                  <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-ok" />
+                  all {PHASES.length} built
+                </span>
+              )}
+              {!allBuilt && `${builtCount} of ${PHASES.length} built`}
+              <span>· validation-gated, built in order</span>
             </p>
           </div>
 
@@ -173,8 +220,9 @@ export function HomePage() {
 
         {/* ---- Record strip -------------------------------------------- */}
         <p className="mt-14 border-t border-line pt-5 font-mono text-xs leading-relaxed text-ink-faint">
-          Geometry engine compared against a Grasshopper reference point · phases gated in order ·
-          participant survey runs standalone at its own link
+          {allBuilt ? `All ${PHASES.length} phases built` : `${builtCount} of ${PHASES.length} phases built`}{' '}
+          · geometry engine compared against a Grasshopper reference point · phases gated in order ·
+          both participant surveys run standalone at their own links
         </p>
       </div>
     </div>

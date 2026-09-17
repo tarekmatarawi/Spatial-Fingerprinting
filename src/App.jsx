@@ -214,12 +214,12 @@ function ResearcherShell() {
         >
           <BrandMark />
           <span className="font-semibold tracking-tight text-ink">Spatial Fingerprinting</span>
-          <span className="hidden font-mono text-xs text-ink-faint xl:inline">
+          <span className="hidden font-mono text-xs text-ink-faint min-[1700px]:inline">
             isovist research platform
           </span>
         </a>
 
-        <div className="flex items-stretch">
+        <div className="flex shrink-0 items-stretch">
           <StepLink
             href="#/"
             active={route === 'home'}
@@ -235,7 +235,7 @@ function ResearcherShell() {
               <PhaseCluster key={group.id} group={group} route={route} />
             ) : (
               group.phases.map((p) => (
-                <span key={p.id} className="flex items-stretch">
+                <span key={p.id} className="flex shrink-0 items-stretch">
                   {/* Hairline connector — the stepper reads as one continuous
                       drawing-set index line, not nine separate tabs. */}
                   <span aria-hidden className="my-auto h-px w-3 shrink-0 bg-line-strong sm:w-4" />
@@ -479,7 +479,10 @@ function StepLink({ href, active, icon: Icon, code, label, title, planned = fals
           {code}
         </span>
       )}
-      <span className="hidden md:inline">{label}</span>
+      {/* The full bar needs ~1,480 px of labels. Below that, only the page you
+          are on keeps its name; the rest fall back to icon and code, so the bar
+          fits a laptop instead of running off the edge. */}
+      <span className={active ? 'hidden md:inline' : 'hidden min-[1500px]:inline'}>{label}</span>
       {active && <span className="absolute inset-x-1.5 bottom-0 h-0.5 bg-accent" />}
     </a>
   )
@@ -534,7 +537,7 @@ function PhaseCluster({ group, route }) {
   const Icon = current?.icon ?? group.phases[0].icon
 
   return (
-    <span data-phase-cluster className="relative flex items-stretch">
+    <span data-phase-cluster className="relative flex shrink-0 items-stretch">
       <span aria-hidden className="my-auto h-px w-3 shrink-0 bg-line-strong sm:w-4" />
       <button
         type="button"

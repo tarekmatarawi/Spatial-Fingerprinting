@@ -99,7 +99,7 @@ export const PHASES = [
     longName: 'Weight Fitting & Hypothesis Testing',
     journey: 'Weight fitting',
     blurb:
-      'Fit the four perceptual weights from the survey by maximum likelihood, with bootstrap CIs, cross-validation, ablation, and the H1–H3 tests.',
+      'Fit the four perceptual weights from the survey by maximum likelihood, with bootstrap CIs, cross-validation, ablation, and the five hypothesis tests.',
   },
   {
     id: 'field',
