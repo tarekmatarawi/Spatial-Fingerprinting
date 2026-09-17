@@ -547,7 +547,7 @@ Implemented in `scripts/compute-fields.mjs`:
 - **Cast:** 360°, 360 rays, 200 m, unflagged, through a per-site edge index (`compute-fields.mjs:178, 184-189`).
 - **Sites without a boundary** are skipped (`compute-fields.mjs:174-177`).
 
-Live (data): 11,719 points over 18 sites. Konstablerwache: 988 points inside the boundary, 21 rejected, 967 kept. **DISCREPANCY:** `docs/spec.md` P6 reports 11,580 points. The committed field files were regenerated 2026-09-06 (commit `dac2380`, Theaterplatz boundary change).
+Live (data): 11,719 points over 18 sites. Konstablerwache: 988 points inside the boundary, 21 rejected, 967 kept. **DISCREPANCY (resolved 2026-09-13):** `docs/spec.md` P6 reported 11,580 points. The committed field files were regenerated 2026-09-06 (commit `dac2380`, Theaterplatz boundary change); the spec now gives both figures.
 
 ### 6.2 Clustering
 
