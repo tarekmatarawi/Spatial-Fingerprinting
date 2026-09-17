@@ -441,7 +441,11 @@ export function DiagnosePage() {
       meanZone: assignZone(mean, zonesFile.centres, weights),
       onTarget,
       onTargetShare: onTarget / movedPoints.length,
-      distance: decompose(mean, zonesFile.centres[targetZone], weights).distance,
+      // Per point, then averaged — the same measure as the "was" figure it is
+      // printed beside. The distance of the shifted MEAN point is always the
+      // smaller of the two (it hides the spread of the points), so comparing it
+      // against diagnoseRegion showed an improvement with every slider at zero.
+      distance: diagnoseRegion(movedPoints, targetZone, zonesFile.centres, weights).distance,
       outsideEnvelope: METRICS.filter((m, k) => {
         const e = fieldIndex.observed_envelope[m]
         return mean[k] < e.min || mean[k] > e.max
@@ -1542,10 +1546,19 @@ export function DiagnosePage() {
                     setSelectedElementId(null)
                     setDrawing(null)
                     setMassError(null)
-                    // The stored selection is NOT restored. Opening a scenario
-                    // is a question about what was drawn; dropping a saved ring
-                    // onto the maps looked like an area the reader had picked,
-                    // and replaced any area they actually had.
+                    // The focus area the intervention was aimed at comes back
+                    // with it — the same proposal aimed at a different part of
+                    // the plaza is a different proposal. A scenario saved
+                    // without one leaves whatever area is currently picked.
+                    if (scenario.selection) {
+                      setSelection({ x: scenario.selection.x, y: scenario.selection.y })
+                      if (Number.isFinite(scenario.radius_m)) {
+                        setRadius(
+                          Math.min(MAX_RADIUS_M, Math.max(MIN_RADIUS_M, scenario.radius_m))
+                        )
+                      }
+                      setInspecting(false)
+                    }
                     setTargetZone(scenario.target_zone ?? null)
                   }}
                 />
