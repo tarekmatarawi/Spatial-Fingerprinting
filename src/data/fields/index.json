@@ -18,7 +18,7 @@
       "minSite": "Herderplatz-Weimar",
       "maxSite": "Bebelplatz-Berlin"
     },
-    "occlusivity": {
+    "closedPerimeter": {
       "min": 267.22,
       "max": 622.93,
       "minSite": "Marktplatz-Heidelberg",
@@ -44,7 +44,7 @@
       "minSite": "Herderplatz-Weimar",
       "maxSite": "Marktplatz-Heidelberg"
     },
-    "occlusivity": {
+    "closedPerimeter": {
       "min": -0.33271,
       "max": 1.44593,
       "minSite": "Hauptmarkt-Trier",
@@ -60,14 +60,14 @@
   "metrics": [
     "area",
     "compactness",
-    "occlusivity",
+    "closedPerimeter",
     "enclosure"
   ],
   "total_points": 11719,
   "out_of_range": {
     "area": 764,
     "compactness": 1631,
-    "occlusivity": 1296,
+    "closedPerimeter": 1296,
     "enclosure": 1331
   },
   "sites": [

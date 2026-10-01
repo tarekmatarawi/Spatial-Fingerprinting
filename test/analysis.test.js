@@ -168,7 +168,7 @@ describe('fingerprints — frozen normalisation bounds', () => {
     const SOURCE_KEYS = {
       area: 'area_m2',
       compactness: 'compactness',
-      occlusivity: 'occlusivity_m',
+      closedPerimeter: 'closed_perimeter_m',
       enclosure: 'enclosure_ratio',
     }
     for (const m of METRICS) {

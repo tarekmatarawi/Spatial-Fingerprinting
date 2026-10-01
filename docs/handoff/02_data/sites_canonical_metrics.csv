@@ -1,4 +1,4 @@
-fov_mode,site_id,name,city,local_x_m,local_y_m,direction_deg,fov_deg,ray_count,area_m2,compactness,occlusivity_m,enclosure_ratio
+fov_mode,site_id,name,city,local_x_m,local_y_m,direction_deg,fov_deg,ray_count,area_m2,compactness,closed_perimeter_m,enclosure_ratio
 perceptual_120,Gendarmenmarkt-Berlin,Gendarmenmarkt,Berlin,71.82,12.68,234.5,120,120,12524,0.1262,193.8,0.1121
 perceptual_120,Hauptwache-Frankfurt am Main,Hauptwache,Frankfurt am Main,101.51,25.29,232.4,120,120,10180.95,0.2077,188.82,0.1748
 perceptual_120,Römerberg-Frankfurt am Main,Römerberg,Frankfurt am Main,-15.93,23.62,112.7,120,120,2939.94,0.2491,114.26,0.1786

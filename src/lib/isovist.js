@@ -164,7 +164,7 @@ function buildingEdges(buildings, heightAware = false, eyeHeight = EYE_HEIGHT_M)
     for (let i = 0; i < ring.length; i++) {
       const a = ring[i]
       const c = ring[(i + 1) % ring.length]
-      // `building` travels with the edge so occlusivity can tell a run along
+      // `building` travels with the edge so closed perimeter can tell a run along
       // one facade from a jump between two — see computeMetrics.
       edges.push({ x1: a.x, y1: a.y, x2: c.x, y2: c.y, height: source.height, building: b })
     }
@@ -344,15 +344,15 @@ function raySegmentDistance(ox, oy, dx, dy, x1, y1, x2, y2) {
 }
 
 // Builds the polygon, then computes Area (shoelace), Perimeter, Compactness,
-// and Occlusivity (closed perimeter: the sum of edges that run along a single
+// and Closed perimeter (the sum of edges that run along a single
 // building's facade — both endpoints wall hits on the SAME building).
 //
 // For a wedge the vantage point leads the vertex list, closing the two side
 // edges of the cone; because that vertex is never a wall hit, those two closing
-// edges drop out of the occlusivity sum on their own. For a full 360° ring the
+// edges drop out of the closed perimeter sum on their own. For a full 360° ring the
 // ray endpoints already close the loop and the vantage point is omitted — there
 // the wrap-around edge from the last ray back to the first is a genuine
-// neighbouring pair and counts towards occlusivity like any other.
+// neighbouring pair and counts towards closed perimeter like any other.
 function computeMetrics(vantage, rays, closed = false) {
   const endpoints = rays.map((r) => ({
     x: r.point.x - vantage.x,
@@ -410,26 +410,26 @@ function computeMetrics(vantage, rays, closed = false) {
     }
   }
 
-  // CLOSED SHARE — the same continuity test as occlusivity, added 2026-09-12,
+  // CLOSED SHARE — the same continuity test as closed perimeter, added 2026-09-12,
   // but tallied as a FRACTION OF THE HORIZON rather than a length in metres.
   //
-  // Occlusivity answers "how many real metres of unbroken wall touch my view."
+  // Closed perimeter answers "how many real metres of unbroken wall touch my view."
   // That is the right question for comparing plazas of different sizes, but it
   // has a blind spot P9 is the first phase to expose: a near object and a far
   // one can pass the exact same continuity test and still disagree completely
   // once converted to metres, because a near surface is physically small no
   // matter how much of the horizon it fills. Four small pavilions built close
-  // enough to surround a person can drop occlusivity by two thirds while
+  // enough to surround a person can drop closed perimeter by two thirds while
   // raising closed share, because the pavilions are individually tiny in
   // metres but leave nothing between them uncounted.
   //
-  // Closed share is therefore occlusivity's answer to "how much of what I see
+  // Closed share is therefore closed perimeter's answer to "how much of what I see
   // is unbroken wall" rather than "how long is that wall". It is not saturated
   // at this site the way solid share is: the baseline sits at 0.897, not 0.981,
   // and interventions move it in both directions.
   //
   // IT IS NOT A COVERAGE MEASURE, and must not be described as one. It keeps
-  // occlusivity's continuity requirement, so like occlusivity it penalises
+  // closed perimeter's continuity requirement, so like closed perimeter it penalises
   // fragmentation — by COUNT OF SEPARATE PIECES rather than by metres. The
   // arithmetic is exact: each separate piece an intervention presents to the
   // eye breaks the run twice, once at each silhouette edge, and returns one
@@ -440,7 +440,7 @@ function computeMetrics(vantage, rays, closed = false) {
   // — they span about one ray each and break sixteen pairs between them.
   // test/isovist.test.js pins the monotonic fall across that series.
   //
-  // The PAIR is what earns its keep, not the number alone: occlusivity falling
+  // The PAIR is what earns its keep, not the number alone: closed perimeter falling
   // while closed share rises means the drop was an artefact of nearness and the
   // space really is more enclosed; both falling means real fragmentation.
   const closedShare = n > 0 ? closedEdges / n : 0
@@ -497,7 +497,7 @@ function computeMetrics(vantage, rays, closed = false) {
   // built. Per ray, with no pairing requirement between neighbours.
   //
   // This is the honest answer to "did this intervention add solid coverage",
-  // which occlusivity cannot give: closed perimeter credits an edge only where
+  // which closed perimeter cannot give: closed perimeter credits an edge only where
   // consecutive rays land on the same building, so a kiosk breaks continuity
   // with the facade behind it and scores negative despite adding real surface.
   // Solid share asks only whether each individual ray met something, so an
@@ -526,7 +526,7 @@ function computeMetrics(vantage, rays, closed = false) {
     area,
     perimeter,
     compactness,
-    occlusivity: closedPerimeter,
+    closedPerimeter: closedPerimeter,
     enclosureRatio,
     solidShare,
     closedShare,

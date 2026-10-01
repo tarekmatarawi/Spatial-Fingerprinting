@@ -3,7 +3,7 @@
 A research web platform for a master's thesis in urban design. It studies how the *geometry* of public plazas relates to how people *perceive* them:
 
 1. **18 real European plazas** stored as building footprints + heights, viewable as 3D models
-2. **Isovist metrics** — click any point in a plaza to compute isovist area, compactness, occlusivity, and enclosure ratio from that spot
+2. **Isovist metrics** — click any point in a plaza to compute isovist area, compactness, closed perimeter, and enclosure ratio from that spot
 3. **Perceptual survey** — participants judge which two of three plazas feel most spatially similar
 4. **Weight fitting** — maximum-likelihood estimation of how much each metric contributes to perceived similarity, with bootstrap CIs, cross-validation, and permutation tests
 5. **Zone typology and design application** — isovist fields sampled across each plaza, clustered into zone types, and used to diagnose and test a real design intervention

@@ -9,7 +9,7 @@ Before changing anything that feeds a later phase, respect what is frozen:
 - **The P8 trial bank** (`src/data/matched-view-trials.json`) must not be rebuilt: the 15 collected sessions would be marked stale.
 - **Scenarios** (`src/data/scenarios.json`) store what was drawn, never results. Loading one restores its elements, target zone and the selection circle (centre and radius) it was aimed at.
 
-Thesis-facing reference material lives in [docs/handoff/](docs/handoff/): methods, verified results, survey protocol, and a decision log. Known open issues are listed there (three hypothesis numberings in spec / app / stored analysis; P8 target sample size stated three ways; P8 storage endpoint not deployed; compactness and occlusivity rating correlations not yet settled at n = 46). When quoting a number, check it against the data files or re-run the app's own library functions — not against prose in the spec, which can lag the code.
+Thesis-facing reference material lives in [docs/handoff/](docs/handoff/): methods, verified results, survey protocol, and a decision log. Known open issues are listed there (three hypothesis numberings in spec / app / stored analysis; P8 target sample size stated three ways; P8 storage endpoint not deployed; compactness and closed perimeter rating correlations not yet settled at n = 46). When quoting a number, check it against the data files or re-run the app's own library functions — not against prose in the spec, which can lag the code.
 
 You are helping a student from an urban design university studio build a simple web app. They are not professional developers. Explain each step in simple terms as you go. Make development experience as simple and enjoyable as possible.
 

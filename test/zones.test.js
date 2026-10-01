@@ -318,12 +318,12 @@ describe('zones — Tier A flip distances', () => {
 
   test('an algebraically valid flip outside the corpus is reported unreachable', () => {
     // The case that nearly shipped as design guidance. Zone 4 (vast, regular)
-    // holds the LOWEST occlusivity coordinate of the five centres, so driving
-    // occlusivity far enough down makes it the nearest centre from anywhere —
+    // holds the LOWEST closed perimeter coordinate of the five centres, so driving
+    // closed perimeter far enough down makes it the nearest centre from anywhere —
     // the algebra is right and says −19.4. Nothing in the corpus sits below
     // −0.33, so as an instruction it describes nowhere.
     //
-    // The number must still be reported. "This target needs an occlusivity
+    // The number must still be reported. "This target needs a closed perimeter
     // lower than anywhere measured" is a finding about the target; a blank
     // would hide it.
     const tight = [0.05, 0.05, 0.5, 0.5]
@@ -331,11 +331,11 @@ describe('zones — Tier A flip distances', () => {
     assert.ok(raw !== null && raw < -1, `expected a large negative delta, got ${raw}`)
 
     const judged = flipDistances(tight, 4, CENTRES, WEIGHTS, fieldIndex.observed_envelope)
-    const occlusivity = judged.find((r) => r.metric === 'occlusivity')
-    assert.equal(occlusivity.reachable, false)
-    assert.equal(occlusivity.reason, 'outside-corpus')
-    assert.equal(occlusivity.delta, raw, 'the number is qualified, not discarded')
-    assert.ok(occlusivity.resulting < fieldIndex.observed_envelope.occlusivity.min)
+    const closedPerimeter = judged.find((r) => r.metric === 'closedPerimeter')
+    assert.equal(closedPerimeter.reachable, false)
+    assert.equal(closedPerimeter.reason, 'outside-corpus')
+    assert.equal(closedPerimeter.delta, raw, 'the number is qualified, not discarded')
+    assert.ok(closedPerimeter.resulting < fieldIndex.observed_envelope.closedPerimeter.min)
     assert.equal(judged.length, METRICS.length)
   })
 
@@ -391,7 +391,7 @@ describe('zones — units', () => {
   test('a real field point round-trips to its stored raw values', () => {
     const field = read('src/data/fields/konstablerwache-frankfurt-am-main.json')
     const p = field.points[0]
-    const raw = { area: p.area_m2, compactness: p.compactness, occlusivity: p.occlusivity_m, enclosure: p.enclosure_ratio }
+    const raw = { area: p.area_m2, compactness: p.compactness, closedPerimeter: p.closed_perimeter_m, enclosure: p.enclosure_ratio }
     METRICS.forEach((m, k) => {
       const back = denormalise(p.n[k], fieldIndex.bounds[m])
       const tolerance = Math.max(Math.abs(raw[m]) * 1e-3, 1e-4)

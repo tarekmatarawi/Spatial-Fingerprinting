@@ -9,7 +9,7 @@
 // placed by measured geometry. Nothing here feeds back into them.
 //
 // What it asks instead: for each of the four dimensions, does the plaza that
-// the engine calls larger / more compact / more occluded / more enclosed also
+// the engine calls larger / more compact / longer in closed perimeter / more enclosed also
 // read that way to the people who stood in it? Each plaza gets one mean rating
 // per scale from the participants who saw it, and that is correlated against
 // the computed value across the 18 plazas.
@@ -23,9 +23,9 @@
 // ------------------------------------------------------------------ direction
 //
 // The scales are bipolar and plain-language, and one of them runs BACKWARDS
-// relative to its metric. Occlusivity is metres of view-blocking edge, so more
+// relative to its metric. Closed perimeter is metres of view-blocking edge, so more
 // is more hidden — but the scale's 7 end reads "Clear sightlines, nothing
-// hidden", which is LESS occlusivity. A raw r of −0.6 there is strong
+// hidden", which is LESS closed perimeter. A raw r of −0.6 there is strong
 // agreement, not disagreement. EXPECTED_SIGN below encodes this once, and the
 // reported `aligned r` is the raw r multiplied by it, so all four numbers mean
 // the same thing: positive is agreement, negative is contradiction.
@@ -65,7 +65,7 @@ const RESPONSES = 'src/data/survey-responses-360.json'
 const EXPECTED_SIGN = {
   area: +1, // "Spacious and open" = large isovist
   compactness: +1, // "Compact, regular shape" = high 4πA/P²
-  occlusivity: -1, // "Clear sightlines, nothing hidden" = LOW occluding edge
+  closedPerimeter: -1, // "Clear sightlines, nothing hidden" = LOW closed perimeter
   enclosure: +1, // "Tall walls, strongly enclosed" = high subtended angle
 }
 
@@ -146,7 +146,7 @@ function fisherCI(r, n, sign = 1) {
 // correlation; it is blind to the possibility that a different 40 participants
 // would have produced different means. Watching the correlations move as the
 // sample grew from 20 to 30 to 40 showed exactly that: area and enclosure
-// barely shifted, while compactness went 0.23 → 0.12 → 0.52 and occlusivity
+// barely shifted, while compactness went 0.23 → 0.12 → 0.52 and closed perimeter
 // −0.53 → −0.49 → −0.18. Both intervals are reported, because they answer
 // different questions and a dimension is only well established when both are
 // narrow.
@@ -282,7 +282,7 @@ function main() {
     if (r.fov_mode !== FOV_MODE || r.canonical !== true) continue
     rawByMetric.area.set(r.site_id, r.area_m2)
     rawByMetric.compactness.set(r.site_id, r.compactness)
-    rawByMetric.occlusivity.set(r.site_id, r.occlusivity_m)
+    rawByMetric.closedPerimeter.set(r.site_id, r.closed_perimeter_m)
     rawByMetric.enclosure.set(r.site_id, r.enclosure_ratio)
   }
 
@@ -427,8 +427,8 @@ function main() {
 
   console.log(
     '\n  r and rho are ALIGNED: positive always means the ratings agree with the\n' +
-      '  geometry. Occlusivity\'s scale runs backwards (its 7 end is "clear\n' +
-      '  sightlines", i.e. LOW occlusivity), so its raw r is negated to match.\n' +
+      '  geometry. Closed perimeter\'s scale runs backwards (its 7 end is "clear\n' +
+      '  sightlines", i.e. LOW closed perimeter), so its raw r is negated to match.\n' +
       '  "ceiling" is split-half reliability — the most any measurement could\n' +
       '  correlate with these ratings, given how much the raters agreed.\n' +
       '  The two intervals answer different questions: (plazas) asks how well 18\n' +

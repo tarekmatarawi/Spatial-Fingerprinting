@@ -71,7 +71,7 @@ export const PRECEDENT_TOP_N = 5
 const SOURCE_KEYS = {
   area: 'area_m2',
   compactness: 'compactness',
-  occlusivity: 'occlusivity_m',
+  closedPerimeter: 'closed_perimeter_m',
   enclosure: 'enclosure_ratio',
 }
 
@@ -142,7 +142,7 @@ export function defaultHeading(vantage, centroid) {
 // One 120° reading, in the shape the corpus records are already in.
 //
 // The four metrics are named as they are in results.json and view-clouds.json
-// (`area_m2`, `occlusivity_m` …) so a probe and a corpus view are the same kind
+// (`area_m2`, `closed_perimeter_m` …) so a probe and a corpus view are the same kind
 // of object everywhere downstream — the readout below a render, the metric
 // table, the normalisation. A probe with its own field names would mean every
 // consumer carrying a branch for which of the two it was handed.
@@ -169,7 +169,7 @@ export function probeView({ vantage, headingRad, composed, index }) {
     direction_deg: round(normaliseDegrees((headingRad * 180) / Math.PI), 2),
     area_m2: round(m.area, 2),
     compactness: round(m.compactness, 4),
-    occlusivity_m: round(m.occlusivity, 2),
+    closed_perimeter_m: round(m.closedPerimeter, 2),
     enclosure_ratio: round(m.enclosureRatio, 4),
     fov_mode: PRECEDENT_FOV_MODE,
     fov_deg: PRECEDENT_FOV_DEG,
@@ -279,7 +279,7 @@ export function rankPrecedents({
     // Where the distance came from, per metric, on the whitened axes. Same
     // decomposition idea as the zone diagnosis one section up the page, and for
     // the same reason: "0.31 away" is not actionable, "0.31 away, three
-    // quarters of it occlusivity" is.
+    // quarters of it closed perimeter" is.
     contributions: probeW.map((v, k) => (v - point[k]) ** 2),
   }))
 

@@ -89,7 +89,7 @@ describe('sandbox — reproducing the field it edits', () => {
       for (const [, key] of [
         ['area', 'area_m2'],
         ['compactness', 'compactness'],
-        ['occlusivity', 'occlusivity_m'],
+        ['closedPerimeter', 'closed_perimeter_m'],
         ['enclosure', 'enclosure_ratio'],
       ]) {
         const relative = Math.abs(got[key] - stored[key]) / Math.max(Math.abs(stored[key]), 1e-6)
@@ -329,7 +329,7 @@ describe('sandbox — layer discipline', () => {
 // Demolition — the only move in the sandbox that makes an isovist LARGER.
 //
 // Added 2026-09-10. Every additive preset lowers area, compactness and
-// occlusivity together; measured across all nine, that is the single direction
+// closed perimeter together; measured across all nine, that is the single direction
 // they travel. So with additions alone, whole regions of the typology are
 // unreachable — "Vast, regular" in particular requires area to RISE, which
 // nothing you can build will do. Removing a building is the move that opens it.

@@ -49,7 +49,7 @@ The vantage points of the two layers are not the same point. Their separation pe
 
 Source: `src/data/results.json` (stored), via `buildFingerprints` and `src/data/sites.json`. CSV: `02_data/sites_canonical_metrics.csv`.
 
-| # | Plaza | City | 120° area m² | 120° compactness | 120° occlusivity m | 120° enclosure | 360° area m² | 360° compactness | 360° occlusivity m | 360° enclosure |
+| # | Plaza | City | 120° area m² | 120° compactness | 120° closed perimeter m | 120° enclosure | 360° area m² | 360° compactness | 360° closed perimeter m | 360° enclosure |
 |---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
 | 1 | Gendarmenmarkt | Berlin | 12524 | 0.1262 | 193.8 | 0.1121 | 30856.12 | 0.1286 | 602.92 | 0.1587 |
 | 2 | Hauptwache | Frankfurt am Main | 10180.95 | 0.2077 | 188.82 | 0.1748 | 20936.65 | 0.11 | 622.93 | 0.1631 |
@@ -70,7 +70,7 @@ Source: `src/data/results.json` (stored), via `buildFingerprints` and `src/data/
 | 17 | Herderplatz | Weimar | 2778.99 | 0.2428 | 147.56 | 0.1957 | 5648.63 | 0.057 | 304.47 | 0.2471 |
 | 18 | Theaterplatz | Weimar | 2693.41 | 0.1653 | 171.69 | 0.1701 | 7804.35 | 0.0684 | 414.88 | 0.1583 |
 
-Stored precision: area and occlusivity to 2 dp; compactness and enclosure to 4 dp.
+Stored precision: area and closed perimeter to 2 dp; compactness and enclosure to 4 dp.
 
 ### 1.2 Descriptive statistics per metric (n = 18 per cell)
 
@@ -82,7 +82,7 @@ Source: re-run over the table above. SD uses n − 1. Quartiles use linear inter
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | Area (m²) | 18 | 6486.642777777777 | 3290.5604048118244 | 1759.02 | 3142.9725 | 6764.29 | 8811.0125 | 12524 | 0.5072825061501413 |
 | Compactness | 18 | 0.25853888888888893 | 0.13346897034798624 | 0.1262 | 0.1758 | 0.2041 | 0.29365 | 0.6516 | 0.5162433045240888 |
-| Occlusivity (m) | 18 | 174.33666666666667 | 45.94769110245975 | 110.92 | 140.3375 | 183.235 | 196.38 | 273.46 | 0.26355724232305167 |
+| Closed perimeter (m) | 18 | 174.33666666666667 | 45.94769110245975 | 110.92 | 140.3375 | 183.235 | 196.38 | 273.46 | 0.26355724232305167 |
 | Enclosure | 18 | 0.21004444444444445 | 0.06000631557175238 | 0.1121 | 0.1756 | 0.1922 | 0.25845 | 0.3145 | 0.2856838976649235 |
 
 **`perceptual_360`**
@@ -91,7 +91,7 @@ Source: re-run over the table above. SD uses n − 1. Quartiles use linear inter
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | Area (m²) | 18 | 16666.420555555556 | 11564.488939511677 | 3905.37 | 8269.065 | 12555.68 | 21565.7125 | 46656.93 | 0.6938795826592046 |
 | Compactness | 18 | 0.1209 | 0.041610900721127504 | 0.057 | 0.08615 | 0.12715 | 0.151325 | 0.2031 | 0.3441761846247105 |
-| Occlusivity (m) | 18 | 418.26333333333343 | 117.10467223310745 | 267.22 | 318.53 | 401.885 | 502.2675 | 622.93 | 0.27997833637447084 |
+| Closed perimeter (m) | 18 | 418.26333333333343 | 117.10467223310745 | 267.22 | 318.53 | 401.885 | 502.2675 | 622.93 | 0.27997833637447084 |
 | Enclosure | 18 | 0.2269055555555555 | 0.08352857540085747 | 0.1131 | 0.169475 | 0.20465 | 0.2606 | 0.3841 | 0.3681204508031816 |
 
 The min and max in these tables are the frozen normalisation bounds for each layer (stored in `analysis-panoramic.json` → `bounds` for 360°, and `matched-view-trials.json` → `source.bounds` for 120°).
@@ -102,34 +102,34 @@ The min and max in these tables are the frozen normalisation bounds for each lay
 
 **`perceptual_360`** (the layer the fit and P6/P9 use)
 
-| Pearson r | Area | Compactness | Occlusivity | Enclosure |
+| Pearson r | Area | Compactness | Closed perimeter | Enclosure |
 |---|---:|---:|---:|---:|
 | Area | 1 | 0.45450186612088 | 0.39095537073001063 | −0.6443809838543789 |
 | Compactness | 0.45450186612088 | 1 | 0.12512879767805749 | 0.007003922837413463 |
-| Occlusivity | 0.39095537073001063 | 0.12512879767805749 | 1 | −0.35262040369263536 |
+| Closed perimeter | 0.39095537073001063 | 0.12512879767805749 | 1 | −0.35262040369263536 |
 | Enclosure | −0.6443809838543789 | 0.007003922837413463 | −0.35262040369263536 | 1 |
 
-| Spearman ρ | Area | Compactness | Occlusivity | Enclosure |
+| Spearman ρ | Area | Compactness | Closed perimeter | Enclosure |
 |---|---:|---:|---:|---:|
 | Area | 1 | 0.391124871001032 | 0.5335397316821465 | −0.6408668730650154 |
 | Compactness | 0.391124871001032 | 1 | 0.0010319917440660474 | 0.12280701754385964 |
-| Occlusivity | 0.5335397316821465 | 0.0010319917440660474 | 1 | −0.36429308565531476 |
+| Closed perimeter | 0.5335397316821465 | 0.0010319917440660474 | 1 | −0.36429308565531476 |
 | Enclosure | −0.6408668730650154 | 0.12280701754385964 | −0.36429308565531476 | 1 |
 
 **`perceptual_120`**
 
-| Pearson r | Area | Compactness | Occlusivity | Enclosure |
+| Pearson r | Area | Compactness | Closed perimeter | Enclosure |
 |---|---:|---:|---:|---:|
 | Area | 1 | −0.13165145905688597 | 0.5444103707531953 | −0.450494682739414 |
 | Compactness | −0.13165145905688597 | 1 | −0.017365883747177166 | 0.510294979768987 |
-| Occlusivity | 0.5444103707531953 | −0.017365883747177166 | 1 | −0.18707241555512946 |
+| Closed perimeter | 0.5444103707531953 | −0.017365883747177166 | 1 | −0.18707241555512946 |
 | Enclosure | −0.450494682739414 | 0.510294979768987 | −0.18707241555512946 | 1 |
 
-| Spearman ρ | Area | Compactness | Occlusivity | Enclosure |
+| Spearman ρ | Area | Compactness | Closed perimeter | Enclosure |
 |---|---:|---:|---:|---:|
 | Area | 1 | −0.12596800852672516 | 0.5830753353973168 | −0.4757481940144479 |
 | Compactness | −0.12596800852672516 | 1 | 0.09189469474490605 | 0.5885390562314208 |
-| Occlusivity | 0.5830753353973168 | 0.09189469474490605 | 1 | −0.12074303405572756 |
+| Closed perimeter | 0.5830753353973168 | 0.09189469474490605 | 1 | −0.12074303405572756 |
 | Enclosure | −0.4757481940144479 | 0.5885390562314208 | −0.12074303405572756 | 1 |
 
 **Same metric across the two layers** (computed now, n = 18): how well a site's 120° value tracks its 360° value.
@@ -138,7 +138,7 @@ The min and max in these tables are the frozen normalisation bounds for each lay
 |---|---:|---:|
 | Area | 0.7905603849622319 | 0.8637770897832817 |
 | Compactness | 0.39437672625918585 | 0.23954572113278882 |
-| Occlusivity | 0.6012147653578063 | 0.6656346749226006 |
+| Closed perimeter | 0.6012147653578063 | 0.6656346749226006 |
 | Enclosure | 0.7322827832314707 | 0.8637770897832817 |
 
 `src/lib/analysis/hypotheses.js:228` hard-codes "area ↔ enclosure r = −0.64". The computed 360° Pearson value above is −0.6443809838543789, which matches. The companion figure "63.9% of area is reconstructable from the other three" is `NOT RUN`: there is no code that computes it and it was not recomputed here.
@@ -235,7 +235,7 @@ This is the only fitted model in the repository. Source: `src/data/analysis-pano
 |---|---:|---:|
 | Area | 1.8161977055725425 | 0.3121969818048535 |
 | Compactness | 1.5991418304029197 | 0.27488596169781887 |
-| Occlusivity | 1.2014139828422046 | 0.2065181660513352 |
+| Closed perimeter | 1.2014139828422046 | 0.2065181660513352 |
 | Enclosure | 1.2007201001547354 | 0.20639889044599233 |
 
 Fit settings: `restarts` 5, `converged: true`.
@@ -260,7 +260,7 @@ Participant-level resampling, 1000 resamples, 0 failures. Each resample was warm
 |---|---:|---:|---:|---:|
 | Area | 0.3138697307028622 | 0.31075927896169114 | 0.19727276586799666 | 0.454548393305739 |
 | Compactness | 0.2728809968778426 | 0.27321302815611137 | 0.17934339769857233 | 0.36436362556455826 |
-| Occlusivity | 0.2051339093459107 | 0.205926022489423 | 0.11238918239195585 | 0.289325405629569 |
+| Closed perimeter | 0.2051339093459107 | 0.205926022489423 | 0.11238918239195585 | 0.289325405629569 |
 | Enclosure | 0.20811536307338463 | 0.2085692340882898 | 0.11565086927227057 | 0.2918858326775322 |
 
 ### 3.4 Held-out accuracy
@@ -305,14 +305,14 @@ All held-out figures are leave-one-plaza-out, 18 folds.
 | **Area only** vs full model | yes (stored) | Area-only LOPO 0.5219286558982159; full 0.526011945768111; mean fold Δ +0.004083289869894952. Paired over 18 folds: 9 wins, 6 losses, 3 ties. Exact two-sided sign test on the 15 non-tied folds: p = 0.6072387695312507. |
 | **Leave-one-metric-out** (the full model minus one metric) | yes (stored) | See the table below |
 | Equal weights (w = ¼ each) | `NOT RUN` | — |
-| Single-metric models other than area (compactness only, occlusivity only, enclosure only) | `NOT RUN` | — |
+| Single-metric models other than area (compactness only, closed perimeter only, enclosure only) | `NOT RUN` | — |
 
 Leave-one-metric-out, against the full-model LOPO accuracy of 0.526011945768111:
 
 | Metric removed | LOPO accuracy without it | Drop | Rank (largest drop = 1) |
 |---|---:|---:|---:|
 | Enclosure | 0.5026533111210827 | 0.023358634647028254 | 1 |
-| Occlusivity | 0.5057686389085434 | 0.020243306859567545 | 2 |
+| Closed perimeter | 0.5057686389085434 | 0.020243306859567545 | 2 |
 | Area | 0.5073027197290659 | 0.018709226039045013 | 3 |
 | Compactness | 0.5206325489446082 | 0.005379396823502747 | 4 |
 
@@ -346,7 +346,7 @@ It is reported here for completeness and is not used anywhere else in this docum
 |---|---:|---:|---|
 | Area | 1.6543410372802672 | 0.3872079635726146 | 0.19012633931811215 – 0.6674660779384601 |
 | Compactness | 0.8361419051876968 | 0.19570378602087773 | 0.011318119164369532 – 0.3275896951225935 |
-| Occlusivity | 1.0224502015111123 | 0.2393103063153093 | 0.07758422229298287 – 0.3864238931301149 |
+| Closed perimeter | 1.0224502015111123 | 0.2393103063153093 | 0.07758422229298287 – 0.3864238931301149 |
 | Enclosure | 0.7595539764208169 | 0.17777794409119826 | 0.01754588578946072 – 0.3383747462876008 |
 
 **Held-out accuracy and baselines:**
@@ -364,7 +364,7 @@ It is reported here for completeness and is not used anywhere else in this docum
 | Metric removed | Drop |
 |---|---:|
 | Area | 0.025305430459774347 |
-| Occlusivity | 0.01832403618893269 |
+| Closed perimeter | 0.01832403618893269 |
 | Compactness | 0.011733430616387042 |
 | Enclosure | 0.011410675215505706 |
 
@@ -376,7 +376,7 @@ Source: `src/data/rating-validation.json` (stored; `generated_at` 2026-09-02T06:
 - Each scale correlates, across n = 18 plazas, the mean 1–7 rating per plaza (41.27777777777778 ratings per plaza on average) against the raw computed `perceptual_360` metric.
 - Pearson p is a permutation p with 20,000 shuffles, then Holm-adjusted across the four scales.
 - The participant bootstrap uses 2000 resamples. Split-half reliability uses 2000 splits, Spearman–Brown corrected.
-- "Aligned" multiplies by the expected sign. Occlusivity's is −1 because its high rating anchor is "Clear sightlines, nothing hidden".
+- "Aligned" multiplies by the expected sign. Closed perimeter's is −1 because its high rating anchor is "Clear sightlines, nothing hidden".
 
 **Correlations and significance:**
 
@@ -384,7 +384,7 @@ Source: `src/data/rating-validation.json` (stored; `generated_at` 2026-09-02T06:
 |---|---:|---:|---|---:|---:|---:|---:|
 | Area | 0.7492826496021695 | 0.7492826496021695 | 0.4343514841216132 – 0.9009773208045824 | 0.00014999250037498125 | 0.00044997750112494374 | 0.8183694530443757 | 0.00004999750012499375 |
 | Compactness | 0.582058158603626 | 0.582058158603626 | 0.15816103821710903 – 0.824797087189609 | 0.012899355032248387 | 0.025798710064496775 | 0.5108359133126935 | 0.03134843257837108 |
-| Occlusivity | −0.22261509224597228 | 0.22261509224597228 | −0.272594025657234 – 0.6245776228026187 | 0.37258137093145344 | 0.37258137093145344 | 0.04643962848297214 | 0.8576571171441428 |
+| Closed perimeter | −0.22261509224597228 | 0.22261509224597228 | −0.272594025657234 – 0.6245776228026187 | 0.37258137093145344 | 0.37258137093145344 | 0.04643962848297214 | 0.8576571171441428 |
 | Enclosure | 0.8262998777106189 | 0.8262998777106189 | 0.5851697076504866 – 0.9331759558830152 | 0.00004999750012499375 | 0.000199990000499975 | 0.8679050567595459 | 0.00004999750012499375 |
 
 **Participant bootstrap and noise ceiling:**
@@ -393,7 +393,7 @@ Source: `src/data/rating-validation.json` (stored; `generated_at` 2026-09-02T06:
 |---|---|---:|---:|---:|
 | Area | 0.7097642606575824 – 0.7807557537932263 | 1 | 0.9894447963120552 | 0.7532686477652891 |
 | Compactness | 0.35673459698096827 – 0.7413819289597513 | 1 | 0.9488464976430857 | 0.597541952174636 |
-| Occlusivity | −0.20728056553663962 – 0.62126641961782 | 0.797 | 0.7734349476475476 | 0.2531294690702544 |
+| Closed perimeter | −0.20728056553663962 – 0.62126641961782 | 0.797 | 0.7734349476475476 | 0.2531294690702544 |
 | Enclosure | 0.7739222257168984 – 0.8496062277988611 | 1 | 0.9742150281362173 | 0.8371634829177902 |
 
 **Stability trajectory** (stored). Aligned r recomputed on the first n participants; the script orders them by `submitted_at`, falling back to `started_at`.
@@ -402,7 +402,7 @@ Source: `src/data/rating-validation.json` (stored; `generated_at` 2026-09-02T06:
 |---|---:|---:|---:|---:|
 | Area | 0.7199470043350147 | 0.7463274589148384 | 0.74105614773407 | 0.7492826496021695 |
 | Compactness | 0.2319832770160432 | 0.12899745786386024 | 0.15268958458608922 | 0.582058158603626 |
-| Occlusivity | −0.5733073706190658 | −0.5373225040255463 | −0.46230156676582784 | 0.22261509224597228 |
+| Closed perimeter | −0.5733073706190658 | −0.5373225040255463 | −0.46230156676582784 | 0.22261509224597228 |
 | Enclosure | 0.7268863950209866 | 0.7574837886218081 | 0.7751977372770688 | 0.8262998777106189 |
 
 ---
@@ -512,7 +512,7 @@ The breakdown per plaza was re-run from each field file's `zones` array. Re-assi
 
 Normalised values use `perceptual_360` bounds and are stored to 5 dp. Raw values are denormalised (re-run) with `fields/index.json` → `bounds`.
 
-| Zone | Name (from `describeZone`) | Points | Share of 11719 | n area | n compactness | n occlusivity | n enclosure | Area m² | Compactness | Occlusivity m | Enclosure |
+| Zone | Name (from `describeZone`) | Points | Share of 11719 | n area | n compactness | n closed perimeter | n enclosure | Area m² | Compactness | Closed perimeter m | Enclosure |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | 0 | Open, facade-rich | 4879 | 0.4163 | 0.49851 | 0.43447 | 0.81716 | 0.30783 | 25217.4501756 | 0.120476067 | 557.8919836 | 0.19652193 |
 | 1 | Open, regular | 1671 | 0.1426 | 0.45388 | 1.02019 | 0.43921 | 0.53569 | 23309.4480528 | 0.206049759 | 423.4513891 | 0.25827199 |
@@ -944,7 +944,7 @@ Re-run: `npm run matched-view:selftest`, exit 0, 25 of 25 checks passed. It simu
 
 **Canonical readings.** Source: `src/data/results.json` (stored).
 
-| Layer | Vantage (x, y) m | Heading ° | Area m² | Compactness | Occlusivity m | Enclosure |
+| Layer | Vantage (x, y) m | Heading ° | Area m² | Compactness | Closed perimeter m | Enclosure |
 |---|---|---:|---:|---:|---:|---:|
 | `perceptual_120` | (−48.7, 13.08) | 120.1 | 8798.21 | 0.1736 | 192.92 | 0.1319 |
 | `perceptual_360` | (−23.68, 0.96) | 346.2 (no effect at 360°) | 16698.05 | 0.1257 | 503.72 | 0.1886 |
@@ -955,7 +955,7 @@ Re-run: `npm run matched-view:selftest`, exit 0, 25 of 25 checks passed. It simu
 |---|---:|---:|---:|---:|---:|---:|
 | Area (m²) | 967 | 17535.56359875906 | 2808.49028851427 | 6045.07 | 16988.44 | 28635.2 |
 | Compactness | 967 | 0.10710810754912094 | 0.024324142873678945 | 0.05494 | 0.10829 | 0.21565 |
-| Occlusivity (m) | 967 | 493.21182006204737 | 52.79577235408616 | 233.74 | 490.92 | 710.78 |
+| Closed perimeter (m) | 967 | 493.21182006204737 | 52.79577235408616 | 233.74 | 490.92 | 710.78 |
 | Enclosure | 967 | 0.23127335056876946 | 0.04793267849004452 | 0.16162 | 0.21604 | 0.46024 |
 
 **P9-only diagnostics, height-aware baseline** (re-run: `recomputeField` with no elements, n = 967, 0 points dropped):
@@ -1046,7 +1046,7 @@ Percentage change is `(after − before) / before × 100`.
 
 **Metric % change over surviving points.** The P9-only metrics are closed share, solidity and solid share. Solid share is sign-only at this site.
 
-| Scenario | Area | Compactness | Occlusivity | Enclosure | Closed share | Solidity | Solid share |
+| Scenario | Area | Compactness | Closed perimeter | Enclosure | Closed share | Solidity | Solid share |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | Four Types, Two Halves | −36.08029022420033 | 15.736244090413521 | −18.859423269004417 | 6.47247065507754 | 3.0325122996064895 | 4.454369270086488 | 1.4921970018275288 |
 | Rooms in the Square | −43.28478543204067 | −21.88697156272789 | −28.980945851921234 | 27.951041440117148 | 2.7358970571274286 | −18.177768646906866 | 1.0826779441397616 |
@@ -1058,7 +1058,7 @@ Percentage change is `(after − before) / before × 100`.
 
 **Absolute means over surviving points** (before → after):
 
-| Scenario | Area m² | Compactness | Occlusivity m | Enclosure |
+| Scenario | Area m² | Compactness | Closed perimeter m | Enclosure |
 |---|---|---|---|---|
 | Four Types, Two Halves | 17573.83319912951 → 11233.143177366712 | 0.10719658324265496 → 0.12406529923830246 | 492.75626768226334 → 399.8252774755169 | 0.2321224700761697 → 0.24714652883569094 |
 | Rooms in the Square | 17340.201241134768 → 9834.53234042553 | 0.10815684397163104 → 0.08448458628841618 | 489.7117494089836 → 347.78865248226987 | 0.23685491725768312 → 0.3030583333333333 |
@@ -1110,7 +1110,7 @@ Percentage change is `(after − before) / before × 100`.
 
 **Metric % change in the selection** (same surviving points on both sides):
 
-| Scenario | Area | Compactness | Occlusivity | Enclosure | Closed share | Solidity | Solid share |
+| Scenario | Area | Compactness | Closed perimeter | Enclosure | Closed share | Solidity | Solid share |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | Four Types, Two Halves | −29.14127118699558 | 7.283669417432756 | −13.798177053092905 | 13.033712266955758 | 0.8647721914003564 | 0.17582063129000278 | 0.7966100897597553 |
 | Rooms in the Square | −48.191444964275604 | −23.37785145878852 | −34.015711548396574 | 37.69142334727118 | 2.7742432276885385 | −20.61861020744343 | 1.004422503781333 |

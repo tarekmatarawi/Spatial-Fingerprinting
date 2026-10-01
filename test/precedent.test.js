@@ -98,7 +98,7 @@ describe('height-aware and unflagged agree on the surveyed corpus', () => {
         // Exact equality, not a tolerance. The two casts should be walking the
         // same edge list; a tolerance here would let a real discrepancy hide
         // under it and would turn this from a gate into a reassurance.
-        for (const k of ['area', 'compactness', 'occlusivity', 'enclosureRatio']) {
+        for (const k of ['area', 'compactness', 'closedPerimeter', 'enclosureRatio']) {
           assert.equal(a[k], b[k], `${s.id} view ${view.viewNumber}: ${k} differs between modes`)
         }
         checked++
@@ -270,7 +270,7 @@ describe('ranking', () => {
     const wild = {
       area_m2: fieldIndex.bounds.area.max * 10,
       compactness: 0.15,
-      occlusivity_m: 300,
+      closed_perimeter_m: 300,
       enclosure_ratio: 0.2,
     }
     const ranked = rankPrecedents({ probe: wild, corpus, weights: WEIGHTS, excludeSiteId: null })

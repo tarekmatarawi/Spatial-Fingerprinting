@@ -62,14 +62,14 @@ export function partBlocks(part) {
 // this library — and both are worth stating in the methods, because they run
 // against what a designer would assume:
 //
-// 1. ADDING A FREESTANDING OBJECT LOWERS OCCLUSIVITY. Occlusivity here is
-//    CLOSED PERIMETER: it counts an isovist boundary edge only where two
+// 1. ADDING A FREESTANDING OBJECT LOWERS CLOSED PERIMETER. Closed perimeter counts an
+//    isovist boundary edge only where two
 //    consecutive rays land on the same building, or on two buildings within
 //    1.5 m of each other. Anything standing free in a square hides long runs of
 //    continuous facade behind it and contributes only its own short visible
 //    edges in exchange, so the total falls. Measured at Konstablerwache: a
 //    kiosk −8.4%, a market row −14.1%, a colonnade −9.0%. The intuition that
-//    "more built surface means more occlusivity" is wrong under this
+//    "more built surface means more closed perimeter" is wrong under this
 //    definition, and the tags now say so.
 //
 // 2. COMPACTNESS COLLAPSES UNDER SPARSE SLENDER OBSTACLES. A 250 mm post
@@ -168,13 +168,13 @@ export const PRESETS = [
       area: 'lower',
       compactness: 'lower',
       // Mechanically LOWER, which is the opposite of the architectural
-      // intuition that an arcade adds built surface. Occlusivity here is
-      // CLOSED PERIMETER: it counts an isovist edge only where consecutive
+      // intuition that an arcade adds built surface. Closed perimeter counts
+      // an isovist edge only where consecutive
       // rays land on the same building, or on two within 1.5 m. A colonnade
       // replaces a long continuous facade with separate columns four metres
       // apart, so those edges stop qualifying. Flagged as a prediction to be
       // tested rather than assumed.
-      occlusivity: 'lower',
+      closedPerimeter: 'lower',
       enclosure: 'raise',
       // Corrected after the second validation run. Solid share DOES rise —
       // it rose for every additive preset and fell for none, which is the sign
@@ -229,7 +229,7 @@ export const PRESETS = [
       // long radial edges to the perimeter. Area moves 2.5%, compactness halves.
       area: 'lower',
       compactness: 'lower',
-      occlusivity: 'lower',
+      closedPerimeter: 'lower',
       // The one metric the posts genuinely leave alone — too thin to shift a
       // mean over 360 rays. The roof, which is the whole point of a pergola, is
       // above the slice and contributes nothing at all.
@@ -282,8 +282,8 @@ export const PRESETS = [
       // Corrected after the first validation run. The kiosk's own edges DO
       // qualify as closed perimeter — and it still loses, because it hides far
       // more continuous facade than it contributes: −8.4% measured. Standing
-      // something free in a square SUBTRACTS occlusivity under this definition.
-      occlusivity: 'lower',
+      // something free in a square SUBTRACTS closed perimeter under this definition.
+      closedPerimeter: 'lower',
       enclosure: 'raise',
       // Saturated — see the colonnade's note. Rises, by 0.2%.
       solidShare: { direction: 'raise', diagnostic: false },
@@ -326,7 +326,7 @@ export const PRESETS = [
       // that genuinely ignores them.
       area: 'lower',
       compactness: 'lower',
-      occlusivity: 'lower',
+      closedPerimeter: 'lower',
       enclosure: 'none',
       // The same robustness claim as the pergola, and it holds the same way:
       // compactness −49.3% against solidity −3.7% on five 400 mm trunks.
@@ -367,7 +367,7 @@ export const PRESETS = [
       // The clearest demonstration in the library of what the slice cannot see.
       area: 'none',
       compactness: 'none',
-      occlusivity: 'none',
+      closedPerimeter: 'none',
       enclosure: 'none',
       // Nothing reaches the slice, so every metric is untouched, new ones included.
       solidShare: { direction: 'none', diagnostic: false },
@@ -399,7 +399,7 @@ export const PRESETS = [
     blurb:
       'A row of stalls, as a weekly market lays out. How closed the row reads depends on the ' +
       'gaps: stalls within 1.5 m of each other are counted as one continuous surface by the ' +
-      'occlusivity measure, wider gaps as separate objects.',
+      'closed perimeter measure, wider gaps as separate objects.',
     params: {
       length: { label: 'Row length', min: 6, max: 80, step: 1, default: 30, unit: 'm' },
       depth: { label: 'Stall depth', min: 1.5, max: 8, step: 0.5, default: 3, unit: 'm' },
@@ -412,9 +412,9 @@ export const PRESETS = [
       // Corrected after the first validation run. At the default 1 m gap the
       // stalls DO read as one continuous run under the 1.5 m touching
       // tolerance — and it still is not enough: the row hides a long stretch of
-      // the facade behind it, for a net −14.1%. The largest occlusivity loss of
+      // the facade behind it, for a net −14.1%. The largest closed perimeter loss of
       // any preset, produced by the intervention that adds the most surface.
-      occlusivity: 'lower',
+      closedPerimeter: 'lower',
       enclosure: 'raise',
       // Saturated — see the colonnade's note. Rises, by 0.2%.
       solidShare: { direction: 'raise', diagnostic: false },
@@ -458,7 +458,7 @@ export const PRESETS = [
       // boundary rather than only sitting on one side of it.
       area: 'none',
       compactness: 'none',
-      occlusivity: 'none',
+      closedPerimeter: 'none',
       enclosure: 'none',
       solidShare: { direction: 'none', diagnostic: false },
       closedShare: 'none',
@@ -514,7 +514,7 @@ PRESETS.push(
       compactness: 'lower',
       // Freestanding, so the same subtraction as every other object standing
       // clear in the square: it hides more continuous facade than it adds.
-      occlusivity: 'lower',
+      closedPerimeter: 'lower',
       // Corrected after the second validation run, and the most interesting
       // correction in the library: a screen wall makes the space LESS enclosed,
       // not more. Enclosure is a mean vertical angle, and a 2.4 m screen 8 m
@@ -591,7 +591,7 @@ PRESETS.push(
       // running along them stay on the same building and keep qualifying. The
       // fragmentation that costs every additive preset does not apply when the
       // new surface is part of the thing it was cut from.
-      occlusivity: 'raise',
+      closedPerimeter: 'raise',
       // Surfaces move further away, so the angle they rise to falls: -1.0%
       // averaged, -17% measured at the opening.
       enclosure: 'none',
@@ -709,7 +709,7 @@ export function nearestFacade(
 //
 // Piers stand on the ORIGINAL building line, spanning the opening. They are
 // part of the host building too, which is what makes this the one intervention
-// whose new surface does not fragment the occlusivity run.
+// whose new surface does not fragment the closed perimeter run.
 export function generateRecess(element, hostBuilding) {
   const ring = hostBuilding.footprint
   const p = element.params
@@ -992,7 +992,7 @@ export function elementParts(element) {
 // The only SUBTRACTIVE move in the library that removes a whole mass rather
 // than carving into one, and the only move of any kind that can make a plaza's
 // isovists LARGER. Every additive preset lowers area, compactness and
-// occlusivity together — measured across all nine, that is the single direction
+// closed perimeter together — measured across all nine, that is the single direction
 // they all travel — so with additions alone whole regions of the typology are
 // unreachable by construction. "Vast, regular" in particular requires area to
 // rise, which nothing you can build will do.

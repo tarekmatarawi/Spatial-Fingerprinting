@@ -845,21 +845,21 @@ function PrecedentDecomposition({ ranking }) {
 const SERIES = {
   area: COOL,
   compactness: OK,
-  occlusivity: NEG,
+  closedPerimeter: NEG,
   enclosure: ACCENT,
 }
 
 const RAW_KEYS = {
   area: 'area_m2',
   compactness: 'compactness',
-  occlusivity: 'occlusivity_m',
+  closedPerimeter: 'closed_perimeter_m',
   enclosure: 'enclosure_ratio',
 }
 
 const FORMAT_RAW = {
   area: (v) => `${Math.round(v).toLocaleString()} m²`,
   compactness: (v) => v.toFixed(3),
-  occlusivity: (v) => `${Math.round(v)} m`,
+  closedPerimeter: (v) => `${Math.round(v)} m`,
   enclosure: (v) => v.toFixed(3),
 }
 

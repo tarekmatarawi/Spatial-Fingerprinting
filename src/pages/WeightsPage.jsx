@@ -256,9 +256,9 @@ export function WeightsPage() {
 
           <Note label="Reading the columns">
             <span className="font-medium text-ink">r</span> is reported <em>aligned</em>, so positive
-            always means agreement. This matters for occlusivity, whose scale runs backwards
-            relative to its metric — its “7” end reads <em>clear sightlines, nothing hidden</em>,
-            which is <em>low</em> occlusivity.{' '}
+            always means agreement. Closed perimeter&rsquo;s scale is read as facade continuity, from
+            1 <em>edges broken up, many gaps between buildings</em> to 7 <em>long, unbroken building
+            fronts all around</em>, so a plaza with more closed perimeter should be rated higher.{' '}
             <span className="font-medium text-ink">Raters agreed</span> is split-half reliability:
             whether people agree with <em>each other</em>. It sets a ceiling, because no measurement
             can track a group average more closely than that average tracks itself — and it is what

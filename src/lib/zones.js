@@ -34,11 +34,11 @@ export function zoneColour(index) {
 // cluster indices, and they are computed rather than typed so they cannot drift
 // out of step with a re-run of `npm run zones`.
 export function describeZone(centre) {
-  const [area, compact, occl, enclosure] = centre
+  const [area, compact, closed, enclosure] = centre
   const size = area > 0.8 ? 'Vast' : area > 0.4 ? 'Open' : 'Tight'
   let character
   if (enclosure > 0.8) character = 'strongly enclosed'
-  else if (occl > 0.7) character = 'facade-rich'
+  else if (closed > 0.7) character = 'facade-rich'
   else if (compact > 0.9) character = 'regular'
   else if (compact < 0.35) character = 'irregular'
   else character = 'moderate'
@@ -248,14 +248,14 @@ export function flipDistance(point, targetZone, centres, weights, k) {
 // THE ALGEBRA ALONE IS NOT ENOUGH, and the reason is worth stating because it
 // nearly shipped. flipDistance answers a question about an infinite space: it
 // will report, correctly, that a tight irregular point becomes the vast regular
-// type once occlusivity falls by 19.4 normalised units. That is true, and as
+// type once closed perimeter falls by 19.4 normalised units. That is true, and as
 // design guidance it is nonsense — no measured position in any of the eighteen
 // plazas sits below −0.33, so the instruction describes nowhere.
 //
 // The `envelope` is the range each metric is actually observed to take across
 // all 11,719 field points (fields/index.json `observed_envelope`). A flip that
 // lands outside it is reported as out of reach WITH its number, not silently
-// dropped: "this would need an occlusivity lower than anywhere in the corpus"
+// dropped: "this would need a closed perimeter lower than anywhere in the corpus"
 // is a finding about the target, and hiding it would leave a blank where an
 // answer belongs.
 //

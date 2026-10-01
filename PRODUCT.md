@@ -16,7 +16,7 @@ Two secondary audiences exist on very different surfaces. Anonymous survey parti
 
 ## Product Purpose
 
-A research web platform testing whether geometric isovist metrics (area, compactness, occlusivity, enclosure ratio) computed from building footprints predict how people actually perceive the spatial similarity of public plazas. It carries the full pipeline: manual data entry of 18 real European plazas' geometry, a 3D viewer for each site, a ray-casting isovist engine, a perceptual triplet survey, maximum-likelihood weight fitting against survey responses, and a results dashboard with clustering and hypothesis tests. Success is a defensible thesis result — accuracy of the geometry engine matters more than speed of delivery.
+A research web platform testing whether geometric isovist metrics (area, compactness, closed perimeter, enclosure ratio) computed from building footprints predict how people actually perceive the spatial similarity of public plazas. It carries the full pipeline: manual data entry of 18 real European plazas' geometry, a 3D viewer for each site, a ray-casting isovist engine, a perceptual triplet survey, maximum-likelihood weight fitting against survey responses, and a results dashboard with clustering and hypothesis tests. Success is a defensible thesis result — accuracy of the geometry engine matters more than speed of delivery.
 
 ## Positioning
 

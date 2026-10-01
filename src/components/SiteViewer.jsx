@@ -487,11 +487,11 @@ export function SiteViewer({ active = true }) {
       // at 1 dp a reading cannot be recomputed from its own record, because at
       // sites with street openings a sub-degree rotation flips a ray between a
       // near facade and a 200 m escape — worth ~2% of area and ~12% of
-      // occlusivity. Position at 2 dp is already 1 cm and needs no widening.
+      // closed perimeter. Position at 2 dp is already 1 cm and needs no widening.
       direction_deg: direction == null ? 0 : round(((direction * 180) / Math.PI + 360) % 360, 2),
       area_m2: round(isovistResult.area, 2),
       compactness: round(isovistResult.compactness, 4),
-      occlusivity_m: round(isovistResult.occlusivity, 2),
+      closed_perimeter_m: round(isovistResult.closedPerimeter, 2),
       enclosure_ratio: round(isovistResult.enclosureRatio, 4),
       fov_mode: mode.id,
       fov_deg: mode.fov,
@@ -1293,7 +1293,7 @@ function MetricsPanel({ result }) {
       <dl className="divide-y divide-line/60 font-mono text-xs text-ink">
         <MetricRow label="Area" value={`${result.area.toFixed(1)} m²`} />
         <MetricRow label="Compactness" value={result.compactness.toFixed(4)} />
-        <MetricRow label="Occlusivity" value={`${result.occlusivity.toFixed(1)} m`} />
+        <MetricRow label="Closed perimeter" value={`${result.closedPerimeter.toFixed(1)} m`} />
         {/* Enclosure is a share of the 90° you could look up, so the angle it
             stands for is the readable half — 14°/18°/27° are where the
             classical enclosure thresholds sit, and reading them off directly
@@ -1341,7 +1341,7 @@ const RESULT_COLUMNS = [
   'direction_deg',
   'area_m2',
   'compactness',
-  'occlusivity_m',
+  'closed_perimeter_m',
   'enclosure_ratio',
   'saved_at',
 ]
@@ -1377,7 +1377,7 @@ function SavedResultsPanel({ results, onDelete, onLoad }) {
   const visible = filter === 'all' ? results : results.filter((r) => r.site_id === filter)
 
   return (
-    <div className="pointer-events-none absolute bottom-4 left-4 w-[42rem] max-w-[calc(100%-2rem)]">
+    <div className="pointer-events-none absolute bottom-4 left-4 w-[52rem] max-w-[calc(100%-2rem)]">
       <div className="pointer-events-auto rounded-xl border border-line bg-paper/95 shadow-sm backdrop-blur">
         <div className="flex items-center justify-between gap-2 px-4 py-2.5">
           <button
@@ -1422,29 +1422,51 @@ function SavedResultsPanel({ results, onDelete, onLoad }) {
               </p>
             ) : (
               <div className="max-h-56 overflow-auto">
-                <table className="w-full border-collapse font-mono text-xs text-ink">
-                  <thead>
-                    <tr className="text-left text-ink-muted">
-                      <th className="whitespace-nowrap px-2 py-1 font-medium">Plaza</th>
-                      <th className="whitespace-nowrap px-2 py-1 text-right font-medium">Area m²</th>
-                      <th className="whitespace-nowrap px-2 py-1 text-right font-medium">Compact.</th>
-                      <th className="whitespace-nowrap px-2 py-1 text-right font-medium">Occl. m</th>
-                      <th className="whitespace-nowrap px-2 py-1 text-right font-medium">Encl.</th>
-                      <th className="whitespace-nowrap px-2 py-1 text-right font-medium">Dir°</th>
-                      <th className="whitespace-nowrap px-2 py-1 font-medium">Saved</th>
-                      <th className="px-2 py-1 font-medium"></th>
+                {/* Fixed layout: every column has a set width, so the four
+                    metric columns stay equal and the table does not reflow
+                    as rows are filtered. Headers are bottom-aligned so the
+                    unit line sits level across them however the names wrap. */}
+                <table className="w-full min-w-[50rem] table-fixed border-collapse font-mono text-xs text-ink">
+                  <colgroup>
+                    <col />
+                    <col className="w-[3.5rem]" />
+                    <col className="w-[5.5rem]" />
+                    <col className="w-[5.5rem]" />
+                    <col className="w-[5.5rem]" />
+                    <col className="w-[5.5rem]" />
+                    <col className="w-[4rem]" />
+                    <col className="w-[7.5rem]" />
+                    <col className="w-[7rem]" />
+                  </colgroup>
+                  <thead className="font-sans">
+                    <tr className="text-left align-bottom text-ink-muted">
+                      <ColumnHead label="Plaza" />
+                      <ColumnHead label="View" unit="FOV" />
+                      <ColumnHead label="Area" unit="m²" numeric />
+                      <ColumnHead label="Compactness" unit="0–1" numeric />
+                      <ColumnHead label="Closed perimeter" unit="m" numeric />
+                      <ColumnHead label="Enclosure" unit="0–1" numeric />
+                      <ColumnHead label="Heading" unit="°" numeric />
+                      <ColumnHead label="Saved" />
+                      <th className="px-2 py-1.5" aria-label="Actions"></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {visible.map((r) => (
+                    {visible.map((r) => {
+                      const mode = FOV_MODES[r.fov_mode ?? 'perceptual_120']
+                      return (
                       <tr key={r.id} className="border-t border-line/60">
-                        <td className="whitespace-nowrap px-2 py-1 font-sans text-ink">{r.site_name}</td>
-                        <td className="whitespace-nowrap px-2 py-1 text-right">{r.area_m2.toFixed(2)}</td>
-                        <td className="whitespace-nowrap px-2 py-1 text-right">{r.compactness.toFixed(4)}</td>
-                        <td className="whitespace-nowrap px-2 py-1 text-right">{r.occlusivity_m.toFixed(2)}</td>
-                        <td className="whitespace-nowrap px-2 py-1 text-right">{r.enclosure_ratio.toFixed(4)}</td>
-                        <td className="whitespace-nowrap px-2 py-1 text-right">{r.direction_deg.toFixed(1)}</td>
-                        <td className="whitespace-nowrap px-2 py-1 text-ink-muted">{formatSavedAt(r.saved_at)}</td>
+                        <td className="truncate px-2 py-1 font-sans text-ink" title={r.site_name}>{r.site_name}</td>
+                        <td className="px-2 py-1 text-ink-muted" title={mode?.label}>{mode?.short ?? '—'}</td>
+                        <td className="px-2 py-1 text-right">{r.area_m2.toFixed(2)}</td>
+                        <td className="px-2 py-1 text-right">{r.compactness.toFixed(4)}</td>
+                        <td className="px-2 py-1 text-right">{r.closed_perimeter_m.toFixed(2)}</td>
+                        <td className="px-2 py-1 text-right">{r.enclosure_ratio.toFixed(4)}</td>
+                        {/* A 360° reading cannot depend on heading, so none is shown. */}
+                        <td className="px-2 py-1 text-right">
+                          {mode?.directional === false ? <span className="text-ink-faint">—</span> : r.direction_deg.toFixed(1)}
+                        </td>
+                        <td className="truncate px-2 py-1 text-ink-muted">{formatSavedAt(r.saved_at)}</td>
                         <td className="px-2 py-1 text-right whitespace-nowrap">
                           <button
                             onClick={() => onLoad(r)}
@@ -1461,7 +1483,8 @@ function SavedResultsPanel({ results, onDelete, onLoad }) {
                           </button>
                         </td>
                       </tr>
-                    ))}
+                      )
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -1474,6 +1497,16 @@ function SavedResultsPanel({ results, onDelete, onLoad }) {
 }
 
 // Compact local timestamp for the table (the full ISO string lives in the CSV).
+// A saved-results header cell: the name, with its unit on a quieter second line.
+function ColumnHead({ label, unit, numeric = false }) {
+  return (
+    <th className={`px-2 py-1.5 font-medium leading-tight ${numeric ? 'text-right' : ''}`}>
+      <span className="block">{label}</span>
+      <span className="block font-mono text-[10px] font-normal text-ink-faint">{unit ?? ' '}</span>
+    </th>
+  )
+}
+
 function formatSavedAt(iso) {
   const d = new Date(iso)
   if (Number.isNaN(d.getTime())) return iso

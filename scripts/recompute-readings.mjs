@@ -67,8 +67,8 @@ function main() {
     changes.push({
       site: r.site_id.split('-')[0].slice(0, 17),
       mode: r.fov_mode,
-      was: r.occlusivity_m,
-      now: m.occlusivity,
+      was: r.closed_perimeter_m,
+      now: m.closedPerimeter,
       areaWas: r.area_m2,
       areaNow: m.area,
     })
@@ -87,7 +87,7 @@ function main() {
     // has to get close enough to prove it was not tampered with.)
     next.push({
       ...r,
-      occlusivity_m: m.occlusivity,
+      closed_perimeter_m: m.closedPerimeter,
       enclosure_ratio: m.enclosureRatio,
       recomputed_at: new Date().toISOString(),
     })
@@ -100,7 +100,7 @@ function main() {
   for (const [mode, rows] of Object.entries(byLayer)) {
     console.log(`\n${mode} — ${rows.length} readings`)
     console.log(
-      '  plaza'.padEnd(20) + 'occl was'.padStart(10) + 'occl now'.padStart(10) + 'change'.padStart(9) + '   area drift'
+      '  plaza'.padEnd(20) + 'cp was'.padStart(10) + 'cp now'.padStart(10) + 'change'.padStart(9) + '   area drift'
     )
     for (const c of rows) {
       console.log(
@@ -113,7 +113,7 @@ function main() {
     }
     const mean = rows.reduce((s, c) => s + pct(c.now, c.was), 0) / rows.length
     const areaMean = rows.reduce((s, c) => s + Math.abs(pct(c.areaNow, c.areaWas)), 0) / rows.length
-    console.log(`  mean occlusivity change ${mean.toFixed(1)}%   mean |area drift| ${areaMean.toFixed(3)}%`)
+    console.log(`  mean closed perimeter change ${mean.toFixed(1)}%   mean |area drift| ${areaMean.toFixed(3)}%`)
   }
 
   if (dry) {
@@ -141,7 +141,7 @@ function main() {
       area: m.area,
       perimeter: m.perimeter,
       compactness: m.compactness,
-      occlusivity: m.occlusivity,
+      closedPerimeter: m.closedPerimeter,
       enclosureRatio: m.enclosureRatio,
     }
   })
@@ -149,7 +149,7 @@ function main() {
   golden._comment =
     'Golden snapshot of the 120 deg engine output for the 18 canonical vantage points. ' +
     'Re-cut 2026-08-27 for two deliberate engine corrections, both leaving area, perimeter ' +
-    'and compactness untouched. (1) OCCLUSIVITY now counts only edges running along ' +
+    'and compactness untouched. (1) CLOSED PERIMETER now counts only edges running along ' +
     'continuous facade — both ends on the same building, or on two that meet — rather than ' +
     'any edge whose two ends both happened to hit a wall; the old rule counted the gap ' +
     'across a street opening as closed perimeter, inflating it ~50% and making it unstable ' +

@@ -22,7 +22,7 @@ A tag grades the evidence that a reason was *given*. It does not say the reason 
 
 | # | Decision | Reason tag | Affects |
 |---|---|---|---|
-| D1 | Occlusivity = closed perimeter in metres, counting only edges along continuous facade | EVIDENCED | All occlusivity values; H3 |
+| D1 | Closed perimeter in metres, counting only edges along continuous facade | EVIDENCED | All closed perimeter values; H3 |
 | D2 | Enclosure = mean of atan(h/d)/(π/2) over **all** rays, open rays = 0 | EVIDENCED (with caveat) | All enclosure values; weights; H2 |
 | D3 | Survey stimulus changed from static images to interactive 360° panoramas | **UNKNOWN** | Which dataset is fitted; layer pairing |
 | D4 | P5 fits panoramic responses against `perceptual_360` readings at hand-placed panorama points | EVIDENCED | Weights, bounds, everything downstream |
@@ -37,18 +37,18 @@ A tag grades the evidence that a reason was *given*. It does not say the reason 
 
 ---
 
-## D1 — Occlusivity definition
+## D1 — Closed perimeter definition
 
 **What changed, in four stages.**
 
-1. **Spec, before implementation** (`9ae7233`, 2026-07-15). Occlusivity was written as Benedikt's ratio `1 − (ClosedPerimeter / Perimeter)`, with an open question. The spec noted the Grasshopper dataset "has Occlusivity values in the hundreds (e.g. 354.10, 598.13), which cannot be Benedikt's 0–1 ratio — likely an absolute closed-edge length in meters" (`9ae7233:docs/spec.md:101-103`).
+1. **Spec, before implementation** (`9ae7233`, 2026-07-15). The metric was first written as Benedikt's ratio `1 − (ClosedPerimeter / Perimeter)`, with an open question. The spec noted that the Grasshopper dataset reports this metric with values in the hundreds (e.g. 354.10, 598.13), which cannot be Benedikt's 0–1 ratio and are likely an absolute closed-edge length in metres (`9ae7233:docs/spec.md:101-103`).
 2. **First implementation** (`006db1a`, 2026-07-12; the spec caught up in `4a4b10d`, 2026-07-15). Closed perimeter in metres: "the sum of edges whose both endpoints are wall hits" (`006db1a:src/lib/isovist.js:97-101, 118`). Reason, **EVIDENCED**: "Do **not** implement `1 − Uv/Perimeter` (Benedikt's normalized ratio) — confirmed via reverse calculation that this does not match the existing 18-site dataset" (`4a4b10d:docs/spec.md:108`). The reverse calculation itself is not in the repo.
-3. **Correction** (spec in-text date 2026-08-27; committed `1dc4858` and `577c944`, 2026-09-04). An edge now counts only if both ends are wall hits **and** they lie on the same building **or** the edge between the two hit points is ≤ 1.5 m (`src/lib/isovist.js:16, 377-410`). Reason, **EVIDENCED**: "Occlusivity previously counted phantom facade across street gaps (inflating it ~50%)" (`1dc4858`). In more detail: "Where one ray stops on the building in front and the next slips past its corner into a side street to land on a different building 90 m away, the edge between those two hits crosses open street … Counting those inflated this metric by ~50% against Grasshopper on a matched point at Zeil (559 m vs 376 m; the same-building rule gives 355 m)". The comment also records instability: "the old rule swung 199→273 m across ray counts at one fixed point, and ~27% across a 1.2° rotation" (`isovist.js:381-395`). The 1.5 m tolerance: "narrower than any real gap a person could see through or walk down, and wider than the offset between two abutting footprints traced separately in OSM" (`isovist.js:11-15`).
+3. **Correction** (spec in-text date 2026-08-27; committed `1dc4858` and `577c944`, 2026-09-04). An edge now counts only if both ends are wall hits **and** they lie on the same building **or** the edge between the two hit points is ≤ 1.5 m (`src/lib/isovist.js:16, 377-410`). Reason, **EVIDENCED**: "Closed perimeter previously counted phantom facade across street gaps (inflating it ~50%)" (`1dc4858`). In more detail: "Where one ray stops on the building in front and the next slips past its corner into a side street to land on a different building 90 m away, the edge between those two hits crosses open street … Counting those inflated this metric by ~50% against Grasshopper on a matched point at Zeil (559 m vs 376 m; the same-building rule gives 355 m)". The comment also records instability: "the old rule swung 199→273 m across ray counts at one fixed point, and ~27% across a 1.2° rotation" (`isovist.js:381-395`). The 1.5 m tolerance: "narrower than any real gap a person could see through or walk down, and wider than the offset between two abutting footprints traced separately in OSM" (`isovist.js:11-15`).
 4. **Definition check against Grasshopper** (spec in-text date 2026-08-29; committed `577c944`). At one Zeil point, closed perimeter reproduces the reference 376.35 m, and Benedikt's raw occluding-radials length is ~2× too high (`docs/spec.md:110-118`).
 
 **What the live version computes.** Sum of isovist-polygon edge lengths where both vertices are wall hits and the hits are continuous (same building, or ≤ 1.5 m apart). Raw metres, not normalised by perimeter. **Live:** yes. Every stored reading was re-derived in place (`npm run recompute:readings`, `docs/spec.md:122`). Area, perimeter and compactness drift was 0.000%.
 
-**Affects.** Every occlusivity value, the bounds, the weights, P6 zones, P7/P8 and H3. The effect is visible in history: Gendarmenmarkt's `perceptual_360` occlusivity is 1128.93 m at `abc37b8:src/data/results.json` and 602.92 m now.
+**Affects.** Every closed perimeter value, the bounds, the weights, P6 zones, P7/P8 and H3. The effect is visible in history: Gendarmenmarkt's `perceptual_360` closed perimeter is 1128.93 m at `abc37b8:src/data/results.json` and 602.92 m now.
 
 **Caveats (EVIDENCED as limitations in the source).**
 - "This is agreement at a single point on a single site, not verification. … Two or three further Grasshopper runs … are needed before the engine can be described as validated rather than consistent" (`docs/spec.md:118`; softened in `577c944`).
@@ -124,7 +124,7 @@ A tag grades the evidence that a reason was *given*. It does not say the reason 
 
 **D5c — Separate bounds per `fov_mode`; 120° and 360° never share a distance. EVIDENCED** (`docs/spec.md:406-415`). The two layers "produc[e] non-interchangeable values". P7, P8 and the P9 precedent panel use `perceptual_120` bounds (`docs/spec.md:300`; `src/lib/analysis/clouds.js:33-35`; `docs/spec.md:388`, asserted in `test/precedent.test.js`).
 
-**D5d — Exception: P6 field points are normalised on the `perceptual_360` bounds, not their own pooled range. EVIDENCED** (`58cbd46`; `docs/spec.md:268-272, 417`). "The weights … were fitted against P5's normalisation; grid points include positions tight against walls with very small isovists, so a pooled field range is much wider, and reusing the weights on a rescaled axis would silently change what each weight means." Points outside 0–1 are kept unclipped, because "clipping would collapse genuinely distinct positions onto the boundary value". Out-of-range shares on the current 11,719-point grid: area 6.5%, compactness 13.9%, occlusivity 11.1%, enclosure 11.4% (`src/data/fields/index.json` → `out_of_range`; the spec's earlier 6.6 / 13.7 / 11.2 / 11.5% were from the pre-`dac2380` grid and were corrected 2026-09-13). Recorded in the data as `normalisation_source: "perceptual_360"`.
+**D5d — Exception: P6 field points are normalised on the `perceptual_360` bounds, not their own pooled range. EVIDENCED** (`58cbd46`; `docs/spec.md:268-272, 417`). "The weights … were fitted against P5's normalisation; grid points include positions tight against walls with very small isovists, so a pooled field range is much wider, and reusing the weights on a rescaled axis would silently change what each weight means." Points outside 0–1 are kept unclipped, because "clipping would collapse genuinely distinct positions onto the boundary value". Out-of-range shares on the current 11,719-point grid: area 6.5%, compactness 13.9%, closed perimeter 11.1%, enclosure 11.4% (`src/data/fields/index.json` → `out_of_range`; the spec's earlier 6.6 / 13.7 / 11.2 / 11.5% were from the pre-`dac2380` grid and were corrected 2026-09-13). Recorded in the data as `normalisation_source: "perceptual_360"`.
 
 **Affects.** Every weighted distance in P5–P9. Under D5d, P6 zones partly **extrapolate** beyond the surveyed range.
 
@@ -178,7 +178,7 @@ They were replaced by a construct-validation set (`docs/spec.md:235-246`; `src/l
 
 ## D9 — Which weight vector P6–P9 consume
 
-**What.** One vector: `fit.weights_normalised` from `src/data/analysis-panoramic.json` (generated 2026-09-02) = [0.3122, 0.2749, 0.2065, 0.2064] for area, compactness, occlusivity and enclosure. Verified identical in:
+**What.** One vector: `fit.weights_normalised` from `src/data/analysis-panoramic.json` (generated 2026-09-02) = [0.3122, 0.2749, 0.2065, 0.2064] for area, compactness, closed perimeter and enclosure. Verified identical in:
 
 | Phase | Where | Reason tag |
 |---|---|---|
@@ -257,7 +257,7 @@ Recorded in the codebase as known properties, not bugs.
 |---|---|
 | Engine agrees with Grasshopper at **one point on one site**; not validated | `docs/spec.md:118`; `577c944` |
 | Sight-line range fixed at 200 m. A 100 m variant "was built and tested … and is not carried", to stay comparable with the Grasshopper toolchain. The 100 m results are not in the repo. | `docs/spec.md:201` |
-| Stored headings are sensitive: "a sub-degree rotation can flip a single ray between a near facade and a 200 m escape" (~4% area, ~27% occlusivity at Herderplatz over 1.2°) | `docs/spec.md:439` |
+| Stored headings are sensitive: "a sub-degree rotation can flip a single ray between a near facade and a 200 m escape" (~4% area, ~27% closed perimeter at Herderplatz over 1.2°) | `docs/spec.md:439` |
 | Two canonical 120° vantages sit outside their plaza boundary (Marktplatz Heidelberg, Hauptmarkt Trier) | `docs/spec.md:298` |
 | Field points outside the surveyed range are kept unclipped (extrapolation) | `docs/spec.md:270, 285` |
 | Per-site zone percentages are imprecise for small plazas; point counts are shown beside every figure | `docs/spec.md:275` |

@@ -88,7 +88,7 @@ describe('probe — the readout reads, it does not re-measure', () => {
       const r = readCell(record, CENTRES, WEIGHTS, NAMES)
       assert.equal(r.metrics[0].raw, record.area_m2, `cell ${i} area`)
       assert.equal(r.metrics[1].raw, record.compactness, `cell ${i} compactness`)
-      assert.equal(r.metrics[2].raw, record.occlusivity_m, `cell ${i} occlusivity`)
+      assert.equal(r.metrics[2].raw, record.closed_perimeter_m, `cell ${i} closed perimeter`)
       assert.equal(r.metrics[3].raw, record.enclosure_ratio, `cell ${i} enclosure`)
       assert.equal(r.zone, field.zones[i], `cell ${i} zone`)
       assert.deepEqual(

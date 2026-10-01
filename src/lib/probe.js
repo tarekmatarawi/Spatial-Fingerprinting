@@ -99,7 +99,7 @@ export function readCell(record, centres, weights, zoneNames) {
   const metrics = [
     { key: 'area', label: 'Isovist area', raw: record.area_m2, unit: ' m²', decimals: 0 },
     { key: 'compactness', label: 'Compactness', raw: record.compactness, unit: '', decimals: 4 },
-    { key: 'occlusivity', label: 'Occlusivity', raw: record.occlusivity_m, unit: ' m', decimals: 1 },
+    { key: 'closedPerimeter', label: 'Closed perimeter', raw: record.closed_perimeter_m, unit: ' m', decimals: 1 },
     { key: 'enclosure', label: 'Enclosure', raw: record.enclosure_ratio, unit: '', decimals: 4 },
   ].map((m, i) => ({
     ...m,

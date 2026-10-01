@@ -514,7 +514,7 @@ function materialise(t, built, nameById, cloudFile) {
       direction_deg: marker.direction_deg,
       area_m2: marker.area_m2,
       compactness: marker.compactness,
-      occlusivity_m: marker.occlusivity_m,
+      closed_perimeter_m: marker.closed_perimeter_m,
       enclosure_ratio: marker.enclosure_ratio,
       fov_mode: marker.fov_mode ?? cloudFile.fov_mode,
       fov_deg: marker.fov_deg ?? cloudFile.fov_deg,

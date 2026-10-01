@@ -641,7 +641,7 @@ export function DiagnosePage() {
       rows: [
         row('area_m2', 'Isovist area', (v) => `${Math.round(v).toLocaleString()} m²`),
         row('compactness', 'Compactness', (v) => v.toFixed(4)),
-        row('occlusivity_m', 'Occlusivity', (v) => `${Math.round(v)} m`),
+        row('closed_perimeter_m', 'Closed perimeter', (v) => `${Math.round(v)} m`),
         row('closed_share', 'Closed share (P9 only)', (v) => v.toFixed(4)),
         row('enclosure_ratio', 'Enclosure', (v) => v.toFixed(4)),
         row('solidity', 'Solidity (P9 only)', (v) => v.toFixed(4)),
@@ -1403,7 +1403,7 @@ export function DiagnosePage() {
                       <span className="font-medium">Click any block around the square</span> to
                       take it away. This is the only move in the sandbox that makes the isovists{' '}
                       <span className="font-medium">larger</span> — every additive preset lowers
-                      area, compactness and occlusivity together, so some zone types cannot be
+                      area, compactness and closed perimeter together, so some zone types cannot be
                       reached by building at all.
                     </p>
                     <p className="mt-1.5 text-[11px] leading-relaxed text-ink-muted">
@@ -1910,7 +1910,7 @@ function SelectionPanel({ summary, selection, radius, zoneNames, onClear }) {
 const FORMAT_RAW = {
   area: (v) => `${Math.round(v).toLocaleString()} m²`,
   compactness: (v) => v.toFixed(4),
-  occlusivity: (v) => `${v.toFixed(1)} m`,
+  closedPerimeter: (v) => `${v.toFixed(1)} m`,
   enclosure: (v) => `${(v * 90).toFixed(1)}°`,
 }
 
@@ -2160,7 +2160,7 @@ function MetricGapFigure({ diagnosis }) {
 // sliders beneath it so the two read as one instrument. Four series from the
 // shared figure palette, which tokens.js records as separating under
 // protanopia and in greyscale.
-const SERIES = { area: COOL, compactness: OK, occlusivity: NEG, enclosure: ACCENT }
+const SERIES = { area: COOL, compactness: OK, closedPerimeter: NEG, enclosure: ACCENT }
 
 // The sensitivity curves.
 //

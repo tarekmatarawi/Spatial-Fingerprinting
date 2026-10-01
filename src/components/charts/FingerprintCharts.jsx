@@ -71,7 +71,7 @@ const signed = (v, d = 3) => `${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(d)}`
 const SHORT_LABEL = {
   area: 'Area',
   compactness: 'Compactness',
-  occlusivity: 'Occlusivity',
+  closedPerimeter: 'Closed perimeter',
   enclosure: 'Enclosure',
 }
 
@@ -1486,7 +1486,7 @@ export function ConcealmentComparison({ rows, significanceThreshold = 0.47 }) {
       title="H3 — which measured dimension tracks perceived concealment?"
       filename="h3-perceived-concealment"
       caption="All four metrics correlated against the same percept: how concealing participants judged each plaza to be. This is the comparison the hypothesis needs — not each metric against its own scale, but every metric against this one scale, so they can be ranked against each other."
-      note="Correlations across the 18 plazas between the metric and the reversed occlusivity rating (the “clear sightlines, nothing hidden” end becomes low concealment). Bars show strength, |r|; the exact signed value is printed beside each, and the direction is named in the row label. An association is not causal evidence and none is claimed: these are 18 squares, geometry and ratings were collected on the same plazas, and nothing was manipulated."
+      note="Correlations across the 18 plazas between the metric and the reversed closed perimeter rating (the “clear sightlines, nothing hidden” end becomes low concealment). Bars show strength, |r|; the exact signed value is printed beside each, and the direction is named in the row label. An association is not causal evidence and none is claimed: these are 18 squares, geometry and ratings were collected on the same plazas, and nothing was manipulated."
     >
       <svg
         viewBox={`0 0 ${W} ${H}`}
@@ -1499,7 +1499,7 @@ export function ConcealmentComparison({ rows, significanceThreshold = 0.47 }) {
           Correlation with perceived concealment, strongest first
         </text>
         <text x={20} y={41} fontSize={10.5} fill={MUTED} fontFamily={SANS}>
-          The metric named “occlusivity” is not the closest account of the percept it was named for.
+          Closed perimeter is not the closest account of perceived concealment.
         </text>
 
         {ticksFor(0, MAX, 6).map((t) => (
@@ -1558,7 +1558,7 @@ export function ConcealmentComparison({ rows, significanceThreshold = 0.47 }) {
 
         {rows.map((row, i) => {
           const top = pad.top + i * (ROW + GAP)
-          const focus = row.metric === 'occlusivity'
+          const focus = row.metric === 'closedPerimeter'
           return (
             <g key={row.metric}>
               <text
@@ -1624,7 +1624,7 @@ export function ConvergenceScatter({ ratings }) {
       title="Measured against perceived"
       filename="convergence-measured-vs-perceived"
       caption="For each dimension, every plaza's computed value against the mean rating participants gave it. A dimension where the metric captures the percept shows points climbing a line; one where it does not shows a cloud."
-      note="Correlations are aligned so positive always means agreement — occlusivity's scale runs backwards relative to its metric, so its raw sign is flipped to match. With 18 plazas, r must exceed about 0.47 to reach significance on its own."
+      note="Correlations are aligned so positive always means agreement. Closed perimeter is plotted on its facade-continuity reading (1 = edges broken up, many gaps between buildings; 7 = long, unbroken building fronts all around). With 18 plazas, r must exceed about 0.47 to reach significance on its own."
     >
       <svg
         viewBox={`0 0 ${CELL * 4} ${H}`}
@@ -1636,8 +1636,11 @@ export function ConvergenceScatter({ ratings }) {
         {ratings.scales.map((scale, panel) => {
           const ox = panel * CELL
           const pts = scale.per_site
+          // A scale stored with its high end at the metric's low end is plotted
+          // reflected (8 − rating), so every panel climbs where they agree.
+          const rated = (p) => (scale.expected_sign < 0 ? 8 - p.mean_rating : p.mean_rating)
           const xs = pts.map((p) => p.computed)
-          const ys = pts.map((p) => p.mean_rating)
+          const ys = pts.map(rated)
           const bx = [Math.min(...xs), Math.max(...xs)]
           const by = [1, 7]
           const sx = (v) =>
@@ -1691,7 +1694,7 @@ export function ConvergenceScatter({ ratings }) {
                 <circle
                   key={p.site_id}
                   cx={sx(p.computed)}
-                  cy={sy(p.mean_rating)}
+                  cy={sy(rated(p))}
                   r={3.4}
                   fill={strong ? COOL : MUTED}
                   stroke={PAPER}

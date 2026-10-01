@@ -45,7 +45,7 @@
         "r": 0.582058158603626
       }
     ],
-    "occlusivity": [
+    "closedPerimeter": [
       {
         "participants": 10,
         "plazas": 18,
@@ -453,8 +453,8 @@
       "pearson_p_holm": 0.025798710064496775
     },
     {
-      "metric": "occlusivity",
-      "label": "Occlusivity",
+      "metric": "closedPerimeter",
+      "label": "Closed perimeter",
       "anchors": {
         "low": "Views blocked, hidden corners",
         "high": "Clear sightlines, nothing hidden"

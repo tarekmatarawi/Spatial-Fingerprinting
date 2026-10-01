@@ -80,7 +80,7 @@ const ROTATION_DEG = 0
 const RAW_KEYS = {
   area: 'area_m2',
   compactness: 'compactness',
-  occlusivity: 'occlusivity_m',
+  closedPerimeter: 'closed_perimeter_m',
   enclosure: 'enclosure_ratio',
   solidShare: 'solid_share',
   closedShare: 'closed_share',
@@ -267,7 +267,7 @@ function report(preset, parts, blocking, effects, flags, dropped) {
 
 function fmt(metric, v) {
   if (metric === 'area') return Math.round(v).toLocaleString()
-  if (metric === 'occlusivity') return v.toFixed(1)
+  if (metric === 'closedPerimeter') return v.toFixed(1)
   return v.toFixed(4)
 }
 

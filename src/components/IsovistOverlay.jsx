@@ -4,7 +4,7 @@ import * as THREE from 'three'
 
 // Renders the live output of castIsovist(): a flat orange polygon for the
 // visible area (vantage point + ray endpoints, matching the fan used for the
-// Area/Perimeter/Compactness/Occlusivity formulas), a crisp outline along the
+// Area/Perimeter/Compactness/Closed perimeter formulas), a crisp outline along the
 // isovist edge, plus a redline ribbon that rises from the ground to each hit
 // building's height along wall-hit rays, breaking wherever a ray is "open"
 // (reaches 200m with no obstacle).

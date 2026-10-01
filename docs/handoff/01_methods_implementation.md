@@ -21,8 +21,8 @@ Conventions used below:
 | Projection | Equirectangular about the site centre. `x = (lon − lon₀)·111320·cos(lat₀)`, `y = (lat − lat₀)·110574`, in metres. X = east, Y = north, Z = up. | `src/lib/geo.js:7-20` |
 | Bearing convention | Radians, 0 = north (+Y), clockwise. Ray direction vector `(sin θ, cos θ)`. | `src/lib/isovist.js:5-7, 20-22, 86-87` |
 | Eye height | 1.6 m. Defined twice with the same value: once for the renderer/presets, once for the engine. | `src/lib/viewGeometry.js:13`; `src/lib/isovist.js:126` |
-| Metric order (everywhere) | `['area', 'compactness', 'occlusivity', 'enclosure']` | `src/lib/analysis/fingerprints.js:16` |
-| Stored field names | `area_m2`, `compactness`, `occlusivity_m`, `enclosure_ratio` | `src/lib/analysis/fingerprints.js:20-25` |
+| Metric order (everywhere) | `['area', 'compactness', 'closedPerimeter', 'enclosure']` | `src/lib/analysis/fingerprints.js:16` |
+| Stored field names | `area_m2`, `compactness`, `closed_perimeter_m`, `enclosure_ratio` | `src/lib/analysis/fingerprints.js:20-25` |
 | Seeded PRNG | mulberry32, seeded through FNV-1a `hashString` | `src/lib/triplets.js:30-48` (copied at `src/lib/matchedView.js:182-200`) |
 
 ---
@@ -76,7 +76,7 @@ All dev endpoints exist only under `npm run dev` (Vite `configureServer`). The d
 | Legacy `hypotheses` block (H1–H3) in `analysis-panoramic.json` | SUPERSEDED. It is written by `analyze.mjs:527-551` with the old statements, including "Enclosure carries the largest perceptual weight". The UI uses `buildHypotheses` (H1–H5) from `src/lib/analysis/hypotheses.js:84-233`. | `WeightsPage.jsx:51`. No reader of `analysis.hypotheses` in `src/`. |
 | `--source=archive` (static-photo survey × `perceptual_120`) | Selectable, not the reported fit. The default is `panoramic`. | `analyze.mjs:84-97`. No `analysis-archive.json` is committed. |
 | `scripts/perceived-holdout.mjs` (the leave-one-participant-out test of the rating blend cited in `analyze.mjs:34-36`) | NOT FOUND. Searched `scripts/`, and `git log --all -S"perceived-holdout"`: the only hit is the commit that added the comment (`70055ed`). The script was never committed. |
-| Pre-2026-08-27 occlusivity and enclosure formulas | SUPERSEDED (git history only). | See §3.3 and §3.4. |
+| Pre-2026-08-27 closed perimeter and enclosure formulas | SUPERSEDED (git history only). | See §3.3 and §3.4. |
 | `solid_frontage_m` (P9 diagnostic) | REMOVED in commit `7fb666f`. | Absent from `isovist.js:525-534`. |
 
 ---
@@ -110,7 +110,7 @@ For a 360° cast the direction has no effect on the metrics. `recompute-readings
 - **Two termination types only** (`isovist.js:92-110`):
   - `wall: true` — ray stopped on an edge. Records `point`, `distance = t`, `height` (edge height) and `building` (index of the source building in the list passed to the caster).
   - `wall: false` — no hit within range. The endpoint is placed at `range`, with `distance = range`, `height = null`, `building = null`.
-- **NOT FOUND: finer termination classes** (for example facade vs. street opening vs. range cap vs. ground change). Searched `src/lib/isovist.js` and every `castIsovist` caller. Only the `wall` boolean and the `building` index exist. Occlusivity and closed share derive "continuity" from `building` equality plus a 1.5 m tolerance (§3.3). They do not derive it from a termination class.
+- **NOT FOUND: finer termination classes** (for example facade vs. street opening vs. range cap vs. ground change). Searched `src/lib/isovist.js` and every `castIsovist` caller. Only the `wall` boolean and the `building` index exist. Closed perimeter and closed share derive "continuity" from `building` equality plus a 1.5 m tolerance (§3.3). They do not derive it from a termination class.
 
 ### 2.3 Obstacle set
 
@@ -203,7 +203,7 @@ The edge loop runs over `i = 0…n−1` with `b = verts[(i+1) % n]` (`isovist.js
   - LIVE: the 4πA/P² above, in every phase.
   - **`solidity = area / convexHullArea(verts)`** (`isovist.js:522-523`; Andrew monotone chain at `541-577`). This is a P9-only diagnostic that is returned by the engine but written only on P9 recompute records (`sandbox.js:316`). It never enters a fit, a field file or the typology.
 
-### 3.3 Occlusivity
+### 3.3 Closed perimeter
 
 **Implementation, quoted verbatim** (`src/lib/isovist.js:371-411`, comments removed, with `TOUCHING_TOLERANCE_M = 1.5` from line 16):
 
@@ -223,7 +223,7 @@ for (let i = 0; i < n; i++) {
 }
 ```
 
-It is returned as `occlusivity: closedPerimeter` (`isovist.js:529`).
+It is returned as `closedPerimeter` (`isovist.js:529`).
 
 **What is summed.** The Euclidean lengths of polygon edges between **consecutive** ray endpoints where both endpoints are wall hits **and** either:
 
@@ -237,26 +237,26 @@ In other words, closed perimeter. It is **not a ratio**, and there is no divisio
 - **360° ring:** the wrap-around edge e₃₅₉→e₀ counts if it qualifies.
 - **Building identity:** after a P9 recess, the host building's rewritten edges keep the host's index (`isovist.js:156-161`), so recess walls stay continuous with the facade.
 
-**Every occlusivity variant in the repository:**
+**Every closed perimeter variant in the repository:**
 
 | # | Variant | Status | Where |
 |---|---|---|---|
 | O1 | **Closed perimeter, continuity = same building OR edge ≤ 1.5 m** | **LIVE**. Present since commit `1dc4858`, unchanged in logic since (later commits `4a1321f`, `7fb666f`, `ce1fcb9` only restructured the `if` and added `closedEdges`). | `isovist.js:405-410` |
 | O2 | Closed perimeter, "both endpoints are wall hits", no continuity test | SUPERSEDED, git history only | `git show abc37b8:src/lib/isovist.js`, line 145: `if (a.wall && b.wall) closedPerimeter += edgeLen` |
 | O3 | `closed_share = closedEdges / n`: count of qualifying edges ÷ polygon vertex count, dimensionless | P9-only diagnostic. Same continuity test as O1. Written only on P9 recompute records (`sandbox.js:315`) and not used in any fit. For a wedge, `n` includes the vantage vertex (121). | `isovist.js:413-446` |
-| O4 | `solid_share = wallRays / rays.length` (no continuity requirement) | P9-only diagnostic, not an occlusivity variant as such, but documented in code as its complement | `isovist.js:496-506` |
+| O4 | `solid_share = wallRays / rays.length` (no continuity requirement) | P9-only diagnostic, not a closed perimeter variant as such, but documented in code as its complement | `isovist.js:496-506` |
 | O5 | O1 at 100 m range (`perceptual_360_r100`) | Declared, no readings exist | `recompute-readings.mjs:38` |
 | — | Benedikt normalised `1 − Uv/Perimeter`; Benedikt absolute; occluding radials; radials + range arc | **NOT FOUND as code.** Searched `src/`, `scripts/`, `test/`, `google-apps-script/` for `radial`, `Benedikt`, `occluding` (case-insensitive), and `git log --all -S"radials"`. They exist only as text: a hard-coded evidence string in `src/lib/analysis/hypotheses.js:176-179` ("Closed perimeter, Benedikt absolute, Benedikt normalised, occluding radials — none converge") and prose tables in `docs/spec.md`. No committed code computes them, and no committed data holds their values. |
 
 **Which variant produced the weight-fitting results.** O1.
 
-- `analysis-panoramic.json` (`generated_at` 2026-09-02T06:39:49Z, committed in `70055ed`) records occlusivity bounds min 267.22 (Marktplatz-Heidelberg), max 622.93 (Hauptwache) for layer `perceptual_360`. Its enclosure bounds are 0.1131–0.3841.
+- `analysis-panoramic.json` (`generated_at` 2026-09-02T06:39:49Z, committed in `70055ed`) records closed perimeter bounds min 267.22 (Marktplatz-Heidelberg), max 622.93 (Hauptwache) for layer `perceptual_360`. Its enclosure bounds are 0.1131–0.3841.
 - Those match `results.json` as committed in `1dc4858` (the O1 + atan-enclosure recompute): 267.22–622.93 and 0.1131–0.3841.
-- They do not match the pre-correction readings in `abc37b8`: occlusivity 516.35–1336.97, enclosure 0.2032–1.0239.
+- They do not match the pre-correction readings in `abc37b8`: closed perimeter 516.35–1336.97, enclosure 0.2032–1.0239.
 - `results.json` is unchanged in these values at HEAD, and its current `perceptual_360` min/max equal the analysis bounds exactly (data).
-- The fit reads stored `occlusivity_m`, not a live cast (`fingerprints.js:20-25`; `analyze.mjs:380-383`).
+- The fit reads stored `closed_perimeter_m`, not a live cast (`fingerprints.js:20-25`; `analyze.mjs:380-383`).
 
-**Recompute provenance.** `recompute-readings.mjs` rewrites only `occlusivity_m` and `enclosure_ratio` from the stored pose. Area and compactness are left as captured (`recompute-readings.mjs:76-93`). The script adds a `recomputed_at` field (`recompute-readings.mjs:92`), but no record in the committed `results.json` carries `recomputed_at` (data). NOT FOUND: an explanation of why the field is absent. Searched the git diff of `1dc4858` for `results.json` and `recomputed_at` references in `scripts/`.
+**Recompute provenance.** `recompute-readings.mjs` rewrites only `closed_perimeter_m` and `enclosure_ratio` from the stored pose. Area and compactness are left as captured (`recompute-readings.mjs:76-93`). The script adds a `recomputed_at` field (`recompute-readings.mjs:92`), but no record in the committed `results.json` carries `recomputed_at` (data). NOT FOUND: an explanation of why the field is absent. Searched the git diff of `1dc4858` for `results.json` and `recomputed_at` references in `scripts/`.
 
 ### 3.4 Enclosure ratio
 
@@ -287,9 +287,9 @@ The stored golden fixture for the 18 canonical 120° readings is `test/fixtures/
 
 | Record | Rounding |
 |---|---|
-| Canonical readings | `area_m2` 2 dp, `compactness` 4 dp, `occlusivity_m` 2 dp, `enclosure_ratio` 4 dp, `local_x/y` 2 dp, `direction_deg` 2 dp (`SiteViewer.jsx:484-495`) |
+| Canonical readings | `area_m2` 2 dp, `compactness` 4 dp, `closed_perimeter_m` 2 dp, `enclosure_ratio` 4 dp, `local_x/y` 2 dp, `direction_deg` 2 dp (`SiteViewer.jsx:484-495`) |
 | P7 markers | Same as canonical readings (`CloudComparisonPage.jsx:160-170`) |
-| P6 field points | `area_m2` 2 dp, `compactness` 5 dp, `occlusivity_m` 2 dp, `enclosure_ratio` 5 dp, normalised `n` 5 dp (`compute-fields.mjs:203, 215-223`) |
+| P6 field points | `area_m2` 2 dp, `compactness` 5 dp, `closed_perimeter_m` 2 dp, `enclosure_ratio` 5 dp, normalised `n` 5 dp (`compute-fields.mjs:203, 215-223`) |
 | P9 recompute | P6 rounding (`sandbox.js:300-319`) |
 
 Normalisation and fitting run on the rounded stored values.
@@ -347,11 +347,11 @@ Bounds are min–max over the 18 active sites' canonical readings in a given lay
 
 | Consumer | Bounds used | How obtained | Values (data) |
 |---|---|---|---|
-| P5 fit (`perceptual_360`) | `perceptual_360` | Computed in `analyze.mjs:383`; frozen into `analysis-panoramic.json.bounds` | area 3905.37–46656.93 m²; compactness 0.057–0.2031; occlusivity 267.22–622.93 m; enclosure 0.1131–0.3841 |
+| P5 fit (`perceptual_360`) | `perceptual_360` | Computed in `analyze.mjs:383`; frozen into `analysis-panoramic.json.bounds` | area 3905.37–46656.93 m²; compactness 0.057–0.2031; closed perimeter 267.22–622.93 m; enclosure 0.1131–0.3841 |
 | P6 field points | **`perceptual_360`** (deliberate cross-layer reuse) | **Recomputed from `results.json` at script run time** (`compute-fields.mjs:129`), not read from `analysis-panoramic.json`; written to `fields/index.json.bounds`; files carry `normalisation_source: 'perceptual_360'` (`compute-fields.mjs:267, 298`) | Identical to the P5 bounds |
 | P6 zones | Consume the stored `n` vectors | `compute-zones.mjs:304-312` | — |
 | P9 diagnosis and recompute | `fields/index.json.bounds` | `DiagnosePage.jsx:478, 602` | Identical to the P5 bounds |
-| P7 clouds, P8 bank, P9 precedent | `perceptual_120` | **Recomputed live** from `results.json` in `buildClouds` (`viewClouds.js:105`); P8 snapshots them into `matched-view-trials.json.source.bounds` (`build-matched-view-trials.mjs:223`); P9 precedent uses `corpus.bounds` from the same call (`precedent.js:192-218, 267`) | area 1759.02–12524 m²; compactness 0.1262–0.6516; occlusivity 110.92–273.46 m; enclosure 0.1121–0.3145 |
+| P7 clouds, P8 bank, P9 precedent | `perceptual_120` | **Recomputed live** from `results.json` in `buildClouds` (`viewClouds.js:105`); P8 snapshots them into `matched-view-trials.json.source.bounds` (`build-matched-view-trials.mjs:223`); P9 precedent uses `corpus.bounds` from the same call (`precedent.js:192-218, 267`) | area 1759.02–12524 m²; compactness 0.1262–0.6516; closed perimeter 110.92–273.46 m; enclosure 0.1121–0.3145 |
 | Rating validation | `perceptual_360` | `validate-ratings.mjs:59, 278` | Identical to the P5 bounds |
 
 Sharing:
@@ -366,7 +366,7 @@ Sharing:
 |---|---|---|
 | area | −0.02505 | 1.57499 |
 | compactness | −0.16316 | 2.24504 |
-| occlusivity | −0.33271 | 1.44593 |
+| closed perimeter | −0.33271 | 1.44593 |
 | enclosure | −0.14232 | 1.60987 |
 
 Field points outside [0, 1] out of 11,719 (data, `fields/index.json.out_of_range`):
@@ -375,7 +375,7 @@ Field points outside [0, 1] out of 11,719 (data, `fields/index.json.out_of_range
 |---|---|
 | area | 764 |
 | compactness | 1,631 |
-| occlusivity | 1,296 |
+| closed perimeter | 1,296 |
 | enclosure | 1,331 |
 
 ---
@@ -420,7 +420,7 @@ Live raw weights (data):
 |---|---|---|
 | area | 1.81620 | 0.31220 |
 | compactness | 1.59914 | 0.27489 |
-| occlusivity | 1.20141 | 0.20652 |
+| closed perimeter | 1.20141 | 0.20652 |
 | enclosure | 1.20072 | 0.20640 |
 
 NLL 543.94 over n = 552 triplets, `converged: true`.
@@ -465,7 +465,7 @@ Live 95% CIs (data):
 |---|---|
 | area | 0.197–0.455 |
 | compactness | 0.179–0.364 |
-| occlusivity | 0.112–0.289 |
+| closed perimeter | 0.112–0.289 |
 | enclosure | 0.116–0.292 |
 
 ### 5.6 Cross-validation
@@ -493,7 +493,7 @@ Live: p = 0.000999, null mean 0.3335 (data).
 | Metric removed | Drop in accuracy |
 |---|---|
 | enclosure | 2.34 pp |
-| occlusivity | 2.02 pp |
+| closed perimeter | 2.02 pp |
 | area | 1.87 pp |
 | compactness | 0.54 pp |
 
@@ -512,7 +512,7 @@ Live: p = 0.000999, null mean 0.3335 (data).
 |---|---|
 | H1 | LOPO accuracy > 1/3 and permutation p < 0.05 |
 | H2 | Count of scales with Holm p < 0.05 and aligned r > 0 |
-| H3 | Occlusivity Holm p ≥ 0.05 and reliability ≥ 0.4 |
+| H3 | Closed perimeter Holm p ≥ 0.05 and reliability ≥ 0.4 |
 | H4 | All bootstrap lower bounds > 0 |
 | H5 | "Supported" unless the sign test p < 0.05 with a positive mean delta |
 
@@ -526,7 +526,7 @@ NOT FOUND: code computing the −0.64 or 63.9% figures. Searched `src/lib/analys
 **Rating validation** (`scripts/validate-ratings.mjs`):
 
 - per scale, Pearson and Spearman r between per-plaza mean rating (1–7) and the raw computed metric across plazas;
-- aligned by `EXPECTED_SIGN` (occlusivity −1) (`validate-ratings.mjs:65-70, 352-354`);
+- aligned by `EXPECTED_SIGN` (closed perimeter −1) (`validate-ratings.mjs:65-70, 352-354`);
 - permutation p with 20,000 shuffles, Holm correction (`validate-ratings.mjs:110-124, 241-248, 396-397`);
 - Fisher CI (`validate-ratings.mjs:130-138`);
 - participant bootstrap, 2000 resamples (`validate-ratings.mjs:153-188`);
@@ -577,7 +577,7 @@ If no k qualifies, the silhouette argmax is used. `--k=N` fits the stated k inst
 
 **Live typology** (data, `zones.json`): k = 5, 11,719 points, restarts 20, seed 20260904, inertia 366.5841.
 
-| Zone | Points | Centre (area, compactness, occlusivity, enclosure) |
+| Zone | Points | Centre (area, compactness, closed perimeter, enclosure) |
 |---|---|---|
 | 0 | 4,879 | (0.49851, 0.43447, 0.81716, 0.30783) |
 | 1 | 1,671 | (0.45388, 1.02019, 0.43921, 0.53569) |
@@ -782,7 +782,7 @@ Live (data): 7 scenarios in `scenarios.json`, all stamped with zones `generated_
 - **Planar eye-height slice:** elements entirely below or above 1.6 m do not register. The UI note comes from `visibilityNote` (`presets.js:9-27, 1054-1067`).
 - **Pergola and tree row:** stated limitation that shade and overhead shelter are unmeasurable (`presets.js:223-224, 316-317`).
 - **Screen wall lowers enclosure:** a near low surface replaces a far tall one (`presets.js:510-511, 518-525`).
-- **Freestanding objects lower occlusivity** under the closed-perimeter definition. Compactness collapses under slender obstacles (`presets.js:58-87`).
+- **Freestanding objects lower closed perimeter.** Compactness collapses under slender obstacles (`presets.js:58-87`).
 - **`solid_share` saturated at this site:** sign only, flagged `diagnostic: false` (`presets.js:94-97`; `DiagnosePage.jsx:644`).
 - **`closed_share` penalises fragmentation by piece count:** net (rays spanned − 3) per piece; it is not a coverage measure (`isovist.js:431-445`).
 - **Whole plaza recomputed**, with no affected-region approximation (`sandbox.js:14-19`).
@@ -837,7 +837,7 @@ Array; 18 `perceptual_120` + 18 `perceptual_360` (data). Written by `SiteViewer.
 | `direction_deg` | compass degrees, 2 dp (0 for 360° if unaimed) |
 | `area_m2` | m², 2 dp |
 | `compactness` | –, 4 dp |
-| `occlusivity_m` | m, 2 dp |
+| `closed_perimeter_m` | m, 2 dp |
 | `enclosure_ratio` | –, 4 dp |
 | `fov_mode` | `perceptual_120` \| `perceptual_360` |
 | `fov_deg` | 120 \| 360 |
@@ -855,7 +855,7 @@ Written by `compute-fields.mjs:258-274`; `k` and `zones` added by `compute-zones
 
 **File-level:** `site_id`, `name`, `fov_mode: "field_360"`, `fov_deg: 360`, `ray_count: 360`, `range_m: 200`, `spacing_m`, `clearance_m`, `normalisation_source: "perceptual_360"`, `metrics`, `points_in_boundary`, `points_rejected`, `point_count`, `generated_at`, `k`, `points[]`, `zones[]` (zone index per point, same order).
 
-**`points[]`:** `x`, `y` (m, 2 dp); `area_m2` (m², 2 dp); `compactness` (5 dp); `occlusivity_m` (m, 2 dp); `enclosure_ratio` (5 dp); `n` (normalised 4-vector, 5 dp, unclamped).
+**`points[]`:** `x`, `y` (m, 2 dp); `area_m2` (m², 2 dp); `compactness` (5 dp); `closed_perimeter_m` (m, 2 dp); `enclosure_ratio` (5 dp); `n` (normalised 4-vector, 5 dp, unclamped).
 
 ### 9.4 `src/data/fields/index.json`
 
@@ -920,7 +920,7 @@ Written by `validate-ratings.mjs:530-545`.
 
 **`responses[]`:** `participant_id`, `triplet_id` (`"<pid>:<order>"`), `order` (0–11), `site_a`, `site_b`, `site_c`, `chosen_pair[2]`, `is_attention_check` (false), `shown_at`, `answered_at`, `duration_ms` (ms), `timestamp`.
 
-**`rating_responses[]`:** `participant_id`, `site_id`, `scale` (area \| compactness \| occlusivity \| enclosure), `value` (integer 1–7, canonical direction: 1 = `low` anchor, `survey360.js:149-177, 200-202`), `presentation_order`, `anchor_direction`, `task_type: "semantic_differential"`, `shown_at`, `answered_at`, `duration_ms`.
+**`rating_responses[]`:** `participant_id`, `site_id`, `scale` (area \| compactness \| closedPerimeter \| enclosure), `value` (integer 1–7, canonical direction: 1 = `low` anchor, `survey360.js:149-177, 200-202`), `presentation_order`, `anchor_direction`, `task_type: "semantic_differential"`, `shown_at`, `answered_at`, `duration_ms`.
 
 **Google Sheet row** (`Code.gs:59-89`): `timestamp`, `participant_id`, `started_at`, `finished_at` (Europe/Berlin display), `status`, `attention_check_passed`, `background`, `age_group`, `response_count`, `survey_version`, `median_seconds`, `rating_count`, `rated_sites`, `rated_site_ids`, `anchor_directions`, `payload_json` (the authoritative full record).
 
@@ -934,7 +934,7 @@ It is read only by `analyze.mjs --source=archive` and `test/analysis.test.js:40`
 
 **File-level** (`viewClouds.js:58-66`): `fov_mode: "perceptual_120"`, `fov_deg: 120`, `ray_count: 120`, `range_m: 200`, `target_per_site: 8`, `updated_at`, `markers[]`.
 
-**Marker** (`CloudComparisonPage.jsx:154-176`): `id`, `site_id`, `site_name`, `lat`, `lng` (6 dp), `local_x`, `local_y` (m, 2 dp), `direction_deg` (2 dp), `area_m2`, `compactness`, `occlusivity_m`, `enclosure_ratio` (reading rounding), `fov_mode`, `fov_deg`, `ray_count`, `range_m`, `placed_at`.
+**Marker** (`CloudComparisonPage.jsx:154-176`): `id`, `site_id`, `site_name`, `lat`, `lng` (6 dp), `local_x`, `local_y` (m, 2 dp), `direction_deg` (2 dp), `area_m2`, `compactness`, `closed_perimeter_m`, `enclosure_ratio` (reading rounding), `fov_mode`, `fov_deg`, `ray_count`, `range_m`, `placed_at`.
 
 ### 9.11 `src/data/matched-view-trials.json`: P8 frozen bank
 
@@ -944,7 +944,7 @@ Written by `build-matched-view-trials.mjs:209-252`.
 
 **Trial** (`build-matched-view-trials.mjs:525-540`): `trial_id` (`"ref:refIndex:B:C"`), `stratum`, `reference` view, `candidates[2]` views, `predictions{centroid, gaussian, chamfer: "a" \| "b"}`, `view_distances[2]` (whitened Euclidean), `margins{view, centroid, gaussian}` (÷ scale), `strength` (min margin).
 
-**View** (`:505-523`): `site_id`, `site_name`, `view_index` (0 = canonical), `origin`, `local_x`, `local_y`, `direction_deg`, `area_m2`, `compactness`, `occlusivity_m`, `enclosure_ratio`, `fov_mode`, `fov_deg`, `range_m`.
+**View** (`:505-523`): `site_id`, `site_name`, `view_index` (0 = canonical), `origin`, `local_x`, `local_y`, `direction_deg`, `area_m2`, `compactness`, `closed_perimeter_m`, `enclosure_ratio`, `fov_mode`, `fov_deg`, `range_m`.
 
 ### 9.12 `src/data/matched-view-responses.json`: P8 sessions
 
@@ -977,8 +977,8 @@ Browser storage uses the same element shapes under `localStorage["sf-p9-sandbox-
 
 ### 9.14 In-memory P9 recompute point (not persisted)
 
-From `sandbox.js:302-319`: `x`, `y`, `index` (into the P6 lattice), `area_m2`, `compactness`, `occlusivity_m`, `enclosure_ratio` (P6 rounding), `solid_share`, `closed_share`, `solidity` (5 dp, P9 only), `n` (5 dp), `zone`.
+From `sandbox.js:302-319`: `x`, `y`, `index` (into the P6 lattice), `area_m2`, `compactness`, `closed_perimeter_m`, `enclosure_ratio` (P6 rounding), `solid_share`, `closed_share`, `solidity` (5 dp, P9 only), `n` (5 dp), `zone`.
 
 ### 9.15 `test/fixtures/canonical-120.golden.json`
 
-`_comment`, `captured_at`, `fov: 120`, `rayCount: 120`, `rangeM: 200`, `readings[18]{site_id, local_x, local_y, direction_deg, area (m²), perimeter (m), compactness, occlusivity (m), enclosureRatio}`, full precision. Re-cut only by `recompute-readings.mjs:129-162`.
+`_comment`, `captured_at`, `fov: 120`, `rayCount: 120`, `rangeM: 200`, `readings[18]{site_id, local_x, local_y, direction_deg, area (m²), perimeter (m), compactness, closedPerimeter (m), enclosureRatio}`, full precision. Re-cut only by `recompute-readings.mjs:129-162`.

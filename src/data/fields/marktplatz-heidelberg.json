@@ -11,7 +11,7 @@
   "metrics": [
     "area",
     "compactness",
-    "occlusivity",
+    "closedPerimeter",
     "enclosure"
   ],
   "points_in_boundary": 256,
@@ -24,7 +24,7 @@
       "y": -5,
       "area_m2": 3634.68,
       "compactness": 0.18512,
-      "occlusivity_m": 240.82,
+      "closed_perimeter_m": 240.82,
       "enclosure_ratio": 0.37933,
       "n": [
         -0.00633,
@@ -38,7 +38,7 @@
       "y": -2.5,
       "area_m2": 3959.56,
       "compactness": 0.17008,
-      "occlusivity_m": 250.23,
+      "closed_perimeter_m": 250.23,
       "enclosure_ratio": 0.38377,
       "n": [
         0.00127,
@@ -52,7 +52,7 @@
       "y": 0,
       "area_m2": 4041.48,
       "compactness": 0.12818,
-      "occlusivity_m": 243.23,
+      "closed_perimeter_m": 243.23,
       "enclosure_ratio": 0.40457,
       "n": [
         0.00318,
@@ -66,7 +66,7 @@
       "y": -17.5,
       "area_m2": 3302.87,
       "compactness": 0.37738,
-      "occlusivity_m": 216.5,
+      "closed_perimeter_m": 216.5,
       "enclosure_ratio": 0.40039,
       "n": [
         -0.01409,
@@ -80,7 +80,7 @@
       "y": -15,
       "area_m2": 3265.4,
       "compactness": 0.385,
-      "occlusivity_m": 227.61,
+      "closed_perimeter_m": 227.61,
       "enclosure_ratio": 0.39218,
       "n": [
         -0.01497,
@@ -94,7 +94,7 @@
       "y": -12.5,
       "area_m2": 3266.01,
       "compactness": 0.36918,
-      "occlusivity_m": 227.51,
+      "closed_perimeter_m": 227.51,
       "enclosure_ratio": 0.37816,
       "n": [
         -0.01496,
@@ -108,7 +108,7 @@
       "y": -10,
       "area_m2": 3275.56,
       "compactness": 0.34182,
-      "occlusivity_m": 236.11,
+      "closed_perimeter_m": 236.11,
       "enclosure_ratio": 0.36887,
       "n": [
         -0.01473,
@@ -122,7 +122,7 @@
       "y": -7.5,
       "area_m2": 3399.42,
       "compactness": 0.23298,
-      "occlusivity_m": 243.76,
+      "closed_perimeter_m": 243.76,
       "enclosure_ratio": 0.35947,
       "n": [
         -0.01183,
@@ -136,7 +136,7 @@
       "y": -5,
       "area_m2": 3621.48,
       "compactness": 0.18872,
-      "occlusivity_m": 248.24,
+      "closed_perimeter_m": 248.24,
       "enclosure_ratio": 0.35995,
       "n": [
         -0.00664,
@@ -150,7 +150,7 @@
       "y": -2.5,
       "area_m2": 3933.62,
       "compactness": 0.17248,
-      "occlusivity_m": 264.13,
+      "closed_perimeter_m": 264.13,
       "enclosure_ratio": 0.3653,
       "n": [
         0.00066,
@@ -164,7 +164,7 @@
       "y": 0,
       "area_m2": 4155.19,
       "compactness": 0.11355,
-      "occlusivity_m": 255.62,
+      "closed_perimeter_m": 255.62,
       "enclosure_ratio": 0.38735,
       "n": [
         0.00584,
@@ -178,7 +178,7 @@
       "y": -32.5,
       "area_m2": 5039.25,
       "compactness": 0.13772,
-      "occlusivity_m": 291.51,
+      "closed_perimeter_m": 291.51,
       "enclosure_ratio": 0.33799,
       "n": [
         0.02652,
@@ -192,7 +192,7 @@
       "y": -30,
       "area_m2": 4589.05,
       "compactness": 0.14514,
-      "occlusivity_m": 257.97,
+      "closed_perimeter_m": 257.97,
       "enclosure_ratio": 0.33866,
       "n": [
         0.01599,
@@ -206,7 +206,7 @@
       "y": -27.5,
       "area_m2": 3837.99,
       "compactness": 0.18293,
-      "occlusivity_m": 258.33,
+      "closed_perimeter_m": 258.33,
       "enclosure_ratio": 0.34732,
       "n": [
         -0.00158,
@@ -220,7 +220,7 @@
       "y": -25,
       "area_m2": 3555.31,
       "compactness": 0.30951,
-      "occlusivity_m": 247.43,
+      "closed_perimeter_m": 247.43,
       "enclosure_ratio": 0.35432,
       "n": [
         -0.00819,
@@ -234,7 +234,7 @@
       "y": -22.5,
       "area_m2": 3463.37,
       "compactness": 0.34397,
-      "occlusivity_m": 242.64,
+      "closed_perimeter_m": 242.64,
       "enclosure_ratio": 0.35717,
       "n": [
         -0.01034,
@@ -248,7 +248,7 @@
       "y": -20,
       "area_m2": 3491.05,
       "compactness": 0.34198,
-      "occlusivity_m": 241.43,
+      "closed_perimeter_m": 241.43,
       "enclosure_ratio": 0.34996,
       "n": [
         -0.00969,
@@ -262,7 +262,7 @@
       "y": -17.5,
       "area_m2": 3449.34,
       "compactness": 0.3407,
-      "occlusivity_m": 243.01,
+      "closed_perimeter_m": 243.01,
       "enclosure_ratio": 0.34491,
       "n": [
         -0.01067,
@@ -276,7 +276,7 @@
       "y": -15,
       "area_m2": 3379.26,
       "compactness": 0.34126,
-      "occlusivity_m": 241.19,
+      "closed_perimeter_m": 241.19,
       "enclosure_ratio": 0.34447,
       "n": [
         -0.01231,
@@ -290,7 +290,7 @@
       "y": -12.5,
       "area_m2": 3372.68,
       "compactness": 0.32314,
-      "occlusivity_m": 241.21,
+      "closed_perimeter_m": 241.21,
       "enclosure_ratio": 0.34185,
       "n": [
         -0.01246,
@@ -304,7 +304,7 @@
       "y": -10,
       "area_m2": 3348.7,
       "compactness": 0.25552,
-      "occlusivity_m": 242.02,
+      "closed_perimeter_m": 242.02,
       "enclosure_ratio": 0.34083,
       "n": [
         -0.01302,
@@ -318,7 +318,7 @@
       "y": -7.5,
       "area_m2": 3449.74,
       "compactness": 0.22547,
-      "occlusivity_m": 257.2,
+      "closed_perimeter_m": 257.2,
       "enclosure_ratio": 0.33924,
       "n": [
         -0.01066,
@@ -332,7 +332,7 @@
       "y": -5,
       "area_m2": 3734.53,
       "compactness": 0.17558,
-      "occlusivity_m": 255,
+      "closed_perimeter_m": 255,
       "enclosure_ratio": 0.33964,
       "n": [
         -0.004,
@@ -346,7 +346,7 @@
       "y": -2.5,
       "area_m2": 4019.03,
       "compactness": 0.16725,
-      "occlusivity_m": 270.29,
+      "closed_perimeter_m": 270.29,
       "enclosure_ratio": 0.34799,
       "n": [
         0.00266,
@@ -360,7 +360,7 @@
       "y": 0,
       "area_m2": 4051.78,
       "compactness": 0.14717,
-      "occlusivity_m": 261.47,
+      "closed_perimeter_m": 261.47,
       "enclosure_ratio": 0.37113,
       "n": [
         0.00342,
@@ -374,7 +374,7 @@
       "y": -37.5,
       "area_m2": 5340.98,
       "compactness": 0.12185,
-      "occlusivity_m": 288.44,
+      "closed_perimeter_m": 288.44,
       "enclosure_ratio": 0.35871,
       "n": [
         0.03358,
@@ -388,7 +388,7 @@
       "y": -35,
       "area_m2": 5303.7,
       "compactness": 0.12013,
-      "occlusivity_m": 298.8,
+      "closed_perimeter_m": 298.8,
       "enclosure_ratio": 0.33606,
       "n": [
         0.03271,
@@ -402,7 +402,7 @@
       "y": -32.5,
       "area_m2": 5014.49,
       "compactness": 0.13934,
-      "occlusivity_m": 295.19,
+      "closed_perimeter_m": 295.19,
       "enclosure_ratio": 0.32299,
       "n": [
         0.02594,
@@ -416,7 +416,7 @@
       "y": -30,
       "area_m2": 4685.81,
       "compactness": 0.14706,
-      "occlusivity_m": 265.53,
+      "closed_perimeter_m": 265.53,
       "enclosure_ratio": 0.31962,
       "n": [
         0.01826,
@@ -430,7 +430,7 @@
       "y": -27.5,
       "area_m2": 4054.7,
       "compactness": 0.16435,
-      "occlusivity_m": 262.55,
+      "closed_perimeter_m": 262.55,
       "enclosure_ratio": 0.32076,
       "n": [
         0.00349,
@@ -444,7 +444,7 @@
       "y": -25,
       "area_m2": 3682.74,
       "compactness": 0.28006,
-      "occlusivity_m": 257.88,
+      "closed_perimeter_m": 257.88,
       "enclosure_ratio": 0.32302,
       "n": [
         -0.00521,
@@ -458,7 +458,7 @@
       "y": -22.5,
       "area_m2": 3597,
       "compactness": 0.30366,
-      "occlusivity_m": 253.03,
+      "closed_perimeter_m": 253.03,
       "enclosure_ratio": 0.3213,
       "n": [
         -0.00721,
@@ -472,7 +472,7 @@
       "y": -20,
       "area_m2": 3550.34,
       "compactness": 0.31646,
-      "occlusivity_m": 257.96,
+      "closed_perimeter_m": 257.96,
       "enclosure_ratio": 0.31818,
       "n": [
         -0.0083,
@@ -486,7 +486,7 @@
       "y": -17.5,
       "area_m2": 3507.53,
       "compactness": 0.31448,
-      "occlusivity_m": 262.83,
+      "closed_perimeter_m": 262.83,
       "enclosure_ratio": 0.31544,
       "n": [
         -0.00931,
@@ -500,7 +500,7 @@
       "y": -15,
       "area_m2": 3486.32,
       "compactness": 0.30973,
-      "occlusivity_m": 254.2,
+      "closed_perimeter_m": 254.2,
       "enclosure_ratio": 0.31389,
       "n": [
         -0.0098,
@@ -514,7 +514,7 @@
       "y": -12.5,
       "area_m2": 3442.76,
       "compactness": 0.30583,
-      "occlusivity_m": 250.84,
+      "closed_perimeter_m": 250.84,
       "enclosure_ratio": 0.31648,
       "n": [
         -0.01082,
@@ -528,7 +528,7 @@
       "y": -10,
       "area_m2": 3436.52,
       "compactness": 0.23529,
-      "occlusivity_m": 250.71,
+      "closed_perimeter_m": 250.71,
       "enclosure_ratio": 0.31699,
       "n": [
         -0.01097,
@@ -542,7 +542,7 @@
       "y": -7.5,
       "area_m2": 3534.1,
       "compactness": 0.19394,
-      "occlusivity_m": 254.01,
+      "closed_perimeter_m": 254.01,
       "enclosure_ratio": 0.31877,
       "n": [
         -0.00868,
@@ -556,7 +556,7 @@
       "y": -5,
       "area_m2": 3801.57,
       "compactness": 0.16203,
-      "occlusivity_m": 264.23,
+      "closed_perimeter_m": 264.23,
       "enclosure_ratio": 0.32402,
       "n": [
         -0.00243,
@@ -570,7 +570,7 @@
       "y": -2.5,
       "area_m2": 3988.84,
       "compactness": 0.15032,
-      "occlusivity_m": 270.28,
+      "closed_perimeter_m": 270.28,
       "enclosure_ratio": 0.33443,
       "n": [
         0.00195,
@@ -584,7 +584,7 @@
       "y": 0,
       "area_m2": 4151.75,
       "compactness": 0.13789,
-      "occlusivity_m": 250.91,
+      "closed_perimeter_m": 250.91,
       "enclosure_ratio": 0.35488,
       "n": [
         0.00576,
@@ -598,7 +598,7 @@
       "y": 2.5,
       "area_m2": 4186.52,
       "compactness": 0.06462,
-      "occlusivity_m": 257.53,
+      "closed_perimeter_m": 257.53,
       "enclosure_ratio": 0.39011,
       "n": [
         0.00658,
@@ -612,7 +612,7 @@
       "y": -37.5,
       "area_m2": 5602.9,
       "compactness": 0.12693,
-      "occlusivity_m": 297.68,
+      "closed_perimeter_m": 297.68,
       "enclosure_ratio": 0.35075,
       "n": [
         0.03971,
@@ -626,7 +626,7 @@
       "y": -35,
       "area_m2": 5272.56,
       "compactness": 0.11931,
-      "occlusivity_m": 299.29,
+      "closed_perimeter_m": 299.29,
       "enclosure_ratio": 0.32734,
       "n": [
         0.03198,
@@ -640,7 +640,7 @@
       "y": -32.5,
       "area_m2": 4992.76,
       "compactness": 0.13986,
-      "occlusivity_m": 304.12,
+      "closed_perimeter_m": 304.12,
       "enclosure_ratio": 0.31074,
       "n": [
         0.02544,
@@ -654,7 +654,7 @@
       "y": -30,
       "area_m2": 4707.1,
       "compactness": 0.14795,
-      "occlusivity_m": 265.57,
+      "closed_perimeter_m": 265.57,
       "enclosure_ratio": 0.30287,
       "n": [
         0.01875,
@@ -668,7 +668,7 @@
       "y": -27.5,
       "area_m2": 4319.24,
       "compactness": 0.14951,
-      "occlusivity_m": 269.12,
+      "closed_perimeter_m": 269.12,
       "enclosure_ratio": 0.30058,
       "n": [
         0.00968,
@@ -682,7 +682,7 @@
       "y": -25,
       "area_m2": 3812.95,
       "compactness": 0.24739,
-      "occlusivity_m": 267.83,
+      "closed_perimeter_m": 267.83,
       "enclosure_ratio": 0.30091,
       "n": [
         -0.00216,
@@ -696,7 +696,7 @@
       "y": -22.5,
       "area_m2": 3639.87,
       "compactness": 0.28754,
-      "occlusivity_m": 260.96,
+      "closed_perimeter_m": 260.96,
       "enclosure_ratio": 0.29959,
       "n": [
         -0.00621,
@@ -710,7 +710,7 @@
       "y": -20,
       "area_m2": 3596.44,
       "compactness": 0.29284,
-      "occlusivity_m": 268.11,
+      "closed_perimeter_m": 268.11,
       "enclosure_ratio": 0.29753,
       "n": [
         -0.00723,
@@ -724,7 +724,7 @@
       "y": -17.5,
       "area_m2": 3553.32,
       "compactness": 0.29188,
-      "occlusivity_m": 270.99,
+      "closed_perimeter_m": 270.99,
       "enclosure_ratio": 0.29781,
       "n": [
         -0.00823,
@@ -738,7 +738,7 @@
       "y": -15,
       "area_m2": 3546.89,
       "compactness": 0.27809,
-      "occlusivity_m": 268.9,
+      "closed_perimeter_m": 268.9,
       "enclosure_ratio": 0.29487,
       "n": [
         -0.00839,
@@ -752,7 +752,7 @@
       "y": -12.5,
       "area_m2": 3555.71,
       "compactness": 0.26602,
-      "occlusivity_m": 261.13,
+      "closed_perimeter_m": 261.13,
       "enclosure_ratio": 0.29535,
       "n": [
         -0.00818,
@@ -766,7 +766,7 @@
       "y": -10,
       "area_m2": 3544.39,
       "compactness": 0.21032,
-      "occlusivity_m": 262.92,
+      "closed_perimeter_m": 262.92,
       "enclosure_ratio": 0.29986,
       "n": [
         -0.00844,
@@ -780,7 +780,7 @@
       "y": -7.5,
       "area_m2": 3671.17,
       "compactness": 0.15948,
-      "occlusivity_m": 251.29,
+      "closed_perimeter_m": 251.29,
       "enclosure_ratio": 0.30369,
       "n": [
         -0.00548,
@@ -794,7 +794,7 @@
       "y": -5,
       "area_m2": 4034.78,
       "compactness": 0.10263,
-      "occlusivity_m": 258.83,
+      "closed_perimeter_m": 258.83,
       "enclosure_ratio": 0.30794,
       "n": [
         0.00303,
@@ -808,7 +808,7 @@
       "y": -2.5,
       "area_m2": 4083.35,
       "compactness": 0.13147,
-      "occlusivity_m": 256.58,
+      "closed_perimeter_m": 256.58,
       "enclosure_ratio": 0.32123,
       "n": [
         0.00416,
@@ -822,7 +822,7 @@
       "y": 0,
       "area_m2": 4279.9,
       "compactness": 0.09124,
-      "occlusivity_m": 251.14,
+      "closed_perimeter_m": 251.14,
       "enclosure_ratio": 0.34278,
       "n": [
         0.00876,
@@ -836,7 +836,7 @@
       "y": 2.5,
       "area_m2": 4321.6,
       "compactness": 0.0732,
-      "occlusivity_m": 265.18,
+      "closed_perimeter_m": 265.18,
       "enclosure_ratio": 0.37431,
       "n": [
         0.00974,
@@ -850,7 +850,7 @@
       "y": -37.5,
       "area_m2": 5649.76,
       "compactness": 0.12795,
-      "occlusivity_m": 286.59,
+      "closed_perimeter_m": 286.59,
       "enclosure_ratio": 0.34418,
       "n": [
         0.0408,
@@ -864,7 +864,7 @@
       "y": -35,
       "area_m2": 5345.16,
       "compactness": 0.1199,
-      "occlusivity_m": 294.64,
+      "closed_perimeter_m": 294.64,
       "enclosure_ratio": 0.3178,
       "n": [
         0.03368,
@@ -878,7 +878,7 @@
       "y": -32.5,
       "area_m2": 4979.91,
       "compactness": 0.13925,
-      "occlusivity_m": 305.16,
+      "closed_perimeter_m": 305.16,
       "enclosure_ratio": 0.30135,
       "n": [
         0.02513,
@@ -892,7 +892,7 @@
       "y": -30,
       "area_m2": 4885.73,
       "compactness": 0.13515,
-      "occlusivity_m": 273.86,
+      "closed_perimeter_m": 273.86,
       "enclosure_ratio": 0.29069,
       "n": [
         0.02293,
@@ -906,7 +906,7 @@
       "y": -27.5,
       "area_m2": 4352.93,
       "compactness": 0.13386,
-      "occlusivity_m": 267.82,
+      "closed_perimeter_m": 267.82,
       "enclosure_ratio": 0.28714,
       "n": [
         0.01047,
@@ -920,7 +920,7 @@
       "y": -25,
       "area_m2": 3914.75,
       "compactness": 0.22469,
-      "occlusivity_m": 275.16,
+      "closed_perimeter_m": 275.16,
       "enclosure_ratio": 0.28391,
       "n": [
         0.00022,
@@ -934,7 +934,7 @@
       "y": -22.5,
       "area_m2": 3747.02,
       "compactness": 0.24438,
-      "occlusivity_m": 276.68,
+      "closed_perimeter_m": 276.68,
       "enclosure_ratio": 0.28368,
       "n": [
         -0.0037,
@@ -948,7 +948,7 @@
       "y": -20,
       "area_m2": 3665.32,
       "compactness": 0.25062,
-      "occlusivity_m": 278.59,
+      "closed_perimeter_m": 278.59,
       "enclosure_ratio": 0.28211,
       "n": [
         -0.00561,
@@ -962,7 +962,7 @@
       "y": -17.5,
       "area_m2": 3609.39,
       "compactness": 0.25176,
-      "occlusivity_m": 277.51,
+      "closed_perimeter_m": 277.51,
       "enclosure_ratio": 0.28195,
       "n": [
         -0.00692,
@@ -976,7 +976,7 @@
       "y": -15,
       "area_m2": 3616.41,
       "compactness": 0.22549,
-      "occlusivity_m": 266.91,
+      "closed_perimeter_m": 266.91,
       "enclosure_ratio": 0.28354,
       "n": [
         -0.00676,
@@ -990,7 +990,7 @@
       "y": -12.5,
       "area_m2": 3636.48,
       "compactness": 0.19896,
-      "occlusivity_m": 264.2,
+      "closed_perimeter_m": 264.2,
       "enclosure_ratio": 0.2844,
       "n": [
         -0.00629,
@@ -1004,7 +1004,7 @@
       "y": -10,
       "area_m2": 3756.23,
       "compactness": 0.11902,
-      "occlusivity_m": 259.77,
+      "closed_perimeter_m": 259.77,
       "enclosure_ratio": 0.28638,
       "n": [
         -0.00349,
@@ -1018,7 +1018,7 @@
       "y": -7.5,
       "area_m2": 4000.47,
       "compactness": 0.11366,
-      "occlusivity_m": 268.18,
+      "closed_perimeter_m": 268.18,
       "enclosure_ratio": 0.2903,
       "n": [
         0.00222,
@@ -1032,7 +1032,7 @@
       "y": -5,
       "area_m2": 4250.77,
       "compactness": 0.10794,
-      "occlusivity_m": 263.31,
+      "closed_perimeter_m": 263.31,
       "enclosure_ratio": 0.29796,
       "n": [
         0.00808,
@@ -1046,7 +1046,7 @@
       "y": -2.5,
       "area_m2": 4475.81,
       "compactness": 0.10418,
-      "occlusivity_m": 259.52,
+      "closed_perimeter_m": 259.52,
       "enclosure_ratio": 0.31051,
       "n": [
         0.01334,
@@ -1060,7 +1060,7 @@
       "y": 0,
       "area_m2": 4548.27,
       "compactness": 0.0959,
-      "occlusivity_m": 251.99,
+      "closed_perimeter_m": 251.99,
       "enclosure_ratio": 0.33133,
       "n": [
         0.01504,
@@ -1074,7 +1074,7 @@
       "y": 2.5,
       "area_m2": 4414.72,
       "compactness": 0.08114,
-      "occlusivity_m": 256.53,
+      "closed_perimeter_m": 256.53,
       "enclosure_ratio": 0.36031,
       "n": [
         0.01191,
@@ -1088,7 +1088,7 @@
       "y": -37.5,
       "area_m2": 5563.21,
       "compactness": 0.12664,
-      "occlusivity_m": 297.5,
+      "closed_perimeter_m": 297.5,
       "enclosure_ratio": 0.33997,
       "n": [
         0.03878,
@@ -1102,7 +1102,7 @@
       "y": -35,
       "area_m2": 5311.95,
       "compactness": 0.11843,
-      "occlusivity_m": 313.75,
+      "closed_perimeter_m": 313.75,
       "enclosure_ratio": 0.31171,
       "n": [
         0.0329,
@@ -1116,7 +1116,7 @@
       "y": -32.5,
       "area_m2": 5211.56,
       "compactness": 0.11821,
-      "occlusivity_m": 310.26,
+      "closed_perimeter_m": 310.26,
       "enclosure_ratio": 0.29309,
       "n": [
         0.03055,
@@ -1130,7 +1130,7 @@
       "y": -30,
       "area_m2": 4941.17,
       "compactness": 0.132,
-      "occlusivity_m": 281.85,
+      "closed_perimeter_m": 281.85,
       "enclosure_ratio": 0.28094,
       "n": [
         0.02423,
@@ -1144,7 +1144,7 @@
       "y": -27.5,
       "area_m2": 4622.5,
       "compactness": 0.12146,
-      "occlusivity_m": 280.38,
+      "closed_perimeter_m": 280.38,
       "enclosure_ratio": 0.27598,
       "n": [
         0.01677,
@@ -1158,7 +1158,7 @@
       "y": -25,
       "area_m2": 4075.31,
       "compactness": 0.1771,
-      "occlusivity_m": 291.64,
+      "closed_perimeter_m": 291.64,
       "enclosure_ratio": 0.27358,
       "n": [
         0.00398,
@@ -1172,7 +1172,7 @@
       "y": -22.5,
       "area_m2": 3885.77,
       "compactness": 0.19215,
-      "occlusivity_m": 282.02,
+      "closed_perimeter_m": 282.02,
       "enclosure_ratio": 0.27226,
       "n": [
         -0.00046,
@@ -1186,7 +1186,7 @@
       "y": -20,
       "area_m2": 3841.03,
       "compactness": 0.13724,
-      "occlusivity_m": 274.57,
+      "closed_perimeter_m": 274.57,
       "enclosure_ratio": 0.27298,
       "n": [
         -0.0015,
@@ -1200,7 +1200,7 @@
       "y": -17.5,
       "area_m2": 3907.61,
       "compactness": 0.14358,
-      "occlusivity_m": 273.77,
+      "closed_perimeter_m": 273.77,
       "enclosure_ratio": 0.27287,
       "n": [
         0.00005,
@@ -1214,7 +1214,7 @@
       "y": -15,
       "area_m2": 3916.33,
       "compactness": 0.1427,
-      "occlusivity_m": 270.87,
+      "closed_perimeter_m": 270.87,
       "enclosure_ratio": 0.27433,
       "n": [
         0.00026,
@@ -1228,7 +1228,7 @@
       "y": -12.5,
       "area_m2": 3980.51,
       "compactness": 0.14981,
-      "occlusivity_m": 275.28,
+      "closed_perimeter_m": 275.28,
       "enclosure_ratio": 0.27552,
       "n": [
         0.00176,
@@ -1242,7 +1242,7 @@
       "y": -10,
       "area_m2": 4112.73,
       "compactness": 0.12814,
-      "occlusivity_m": 265.14,
+      "closed_perimeter_m": 265.14,
       "enclosure_ratio": 0.27776,
       "n": [
         0.00485,
@@ -1256,7 +1256,7 @@
       "y": -7.5,
       "area_m2": 4096.36,
       "compactness": 0.11766,
-      "occlusivity_m": 266.74,
+      "closed_perimeter_m": 266.74,
       "enclosure_ratio": 0.28255,
       "n": [
         0.00447,
@@ -1270,7 +1270,7 @@
       "y": -5,
       "area_m2": 4353.76,
       "compactness": 0.10317,
-      "occlusivity_m": 274,
+      "closed_perimeter_m": 274,
       "enclosure_ratio": 0.28899,
       "n": [
         0.01049,
@@ -1284,7 +1284,7 @@
       "y": -2.5,
       "area_m2": 4518.88,
       "compactness": 0.10684,
-      "occlusivity_m": 253.38,
+      "closed_perimeter_m": 253.38,
       "enclosure_ratio": 0.30099,
       "n": [
         0.01435,
@@ -1298,7 +1298,7 @@
       "y": 0,
       "area_m2": 4464.53,
       "compactness": 0.09631,
-      "occlusivity_m": 262.91,
+      "closed_perimeter_m": 262.91,
       "enclosure_ratio": 0.32062,
       "n": [
         0.01308,
@@ -1312,7 +1312,7 @@
       "y": 2.5,
       "area_m2": 4389.2,
       "compactness": 0.09032,
-      "occlusivity_m": 247.34,
+      "closed_perimeter_m": 247.34,
       "enclosure_ratio": 0.34939,
       "n": [
         0.01132,
@@ -1326,7 +1326,7 @@
       "y": -37.5,
       "area_m2": 5602.69,
       "compactness": 0.12268,
-      "occlusivity_m": 301.01,
+      "closed_perimeter_m": 301.01,
       "enclosure_ratio": 0.33279,
       "n": [
         0.0397,
@@ -1340,7 +1340,7 @@
       "y": -35,
       "area_m2": 5298.51,
       "compactness": 0.11048,
-      "occlusivity_m": 311.73,
+      "closed_perimeter_m": 311.73,
       "enclosure_ratio": 0.305,
       "n": [
         0.03259,
@@ -1354,7 +1354,7 @@
       "y": -32.5,
       "area_m2": 5232.61,
       "compactness": 0.10527,
-      "occlusivity_m": 334.74,
+      "closed_perimeter_m": 334.74,
       "enclosure_ratio": 0.28626,
       "n": [
         0.03105,
@@ -1368,7 +1368,7 @@
       "y": -30,
       "area_m2": 5004.13,
       "compactness": 0.08552,
-      "occlusivity_m": 278.19,
+      "closed_perimeter_m": 278.19,
       "enclosure_ratio": 0.27405,
       "n": [
         0.0257,
@@ -1382,7 +1382,7 @@
       "y": -27.5,
       "area_m2": 5034.88,
       "compactness": 0.08587,
-      "occlusivity_m": 279.6,
+      "closed_perimeter_m": 279.6,
       "enclosure_ratio": 0.26667,
       "n": [
         0.02642,
@@ -1396,7 +1396,7 @@
       "y": -25,
       "area_m2": 4465.57,
       "compactness": 0.12021,
-      "occlusivity_m": 289.55,
+      "closed_perimeter_m": 289.55,
       "enclosure_ratio": 0.26627,
       "n": [
         0.0131,
@@ -1410,7 +1410,7 @@
       "y": -22.5,
       "area_m2": 4291.88,
       "compactness": 0.13354,
-      "occlusivity_m": 285.39,
+      "closed_perimeter_m": 285.39,
       "enclosure_ratio": 0.26622,
       "n": [
         0.00904,
@@ -1424,7 +1424,7 @@
       "y": -20,
       "area_m2": 4194.1,
       "compactness": 0.14237,
-      "occlusivity_m": 292.98,
+      "closed_perimeter_m": 292.98,
       "enclosure_ratio": 0.26577,
       "n": [
         0.00675,
@@ -1438,7 +1438,7 @@
       "y": -17.5,
       "area_m2": 4061.05,
       "compactness": 0.14626,
-      "occlusivity_m": 285.3,
+      "closed_perimeter_m": 285.3,
       "enclosure_ratio": 0.26617,
       "n": [
         0.00364,
@@ -1452,7 +1452,7 @@
       "y": -15,
       "area_m2": 4037.88,
       "compactness": 0.14764,
-      "occlusivity_m": 274.01,
+      "closed_perimeter_m": 274.01,
       "enclosure_ratio": 0.26817,
       "n": [
         0.0031,
@@ -1466,7 +1466,7 @@
       "y": -12.5,
       "area_m2": 4119.17,
       "compactness": 0.13,
-      "occlusivity_m": 267.65,
+      "closed_perimeter_m": 267.65,
       "enclosure_ratio": 0.26805,
       "n": [
         0.005,
@@ -1480,7 +1480,7 @@
       "y": -10,
       "area_m2": 4039.81,
       "compactness": 0.12255,
-      "occlusivity_m": 288.72,
+      "closed_perimeter_m": 288.72,
       "enclosure_ratio": 0.27214,
       "n": [
         0.00314,
@@ -1494,7 +1494,7 @@
       "y": -7.5,
       "area_m2": 4164.53,
       "compactness": 0.11293,
-      "occlusivity_m": 274.8,
+      "closed_perimeter_m": 274.8,
       "enclosure_ratio": 0.27693,
       "n": [
         0.00606,
@@ -1508,7 +1508,7 @@
       "y": -5,
       "area_m2": 4275.54,
       "compactness": 0.10724,
-      "occlusivity_m": 251.03,
+      "closed_perimeter_m": 251.03,
       "enclosure_ratio": 0.28454,
       "n": [
         0.00866,
@@ -1522,7 +1522,7 @@
       "y": -2.5,
       "area_m2": 4447.16,
       "compactness": 0.1094,
-      "occlusivity_m": 252.2,
+      "closed_perimeter_m": 252.2,
       "enclosure_ratio": 0.29477,
       "n": [
         0.01267,
@@ -1536,7 +1536,7 @@
       "y": 0,
       "area_m2": 4361.74,
       "compactness": 0.10368,
-      "occlusivity_m": 262.87,
+      "closed_perimeter_m": 262.87,
       "enclosure_ratio": 0.31491,
       "n": [
         0.01067,
@@ -1550,7 +1550,7 @@
       "y": 2.5,
       "area_m2": 4121.92,
       "compactness": 0.10463,
-      "occlusivity_m": 257.51,
+      "closed_perimeter_m": 257.51,
       "enclosure_ratio": 0.34388,
       "n": [
         0.00507,
@@ -1564,7 +1564,7 @@
       "y": -37.5,
       "area_m2": 6086.63,
       "compactness": 0.08489,
-      "occlusivity_m": 323.32,
+      "closed_perimeter_m": 323.32,
       "enclosure_ratio": 0.32211,
       "n": [
         0.05102,
@@ -1578,7 +1578,7 @@
       "y": -35,
       "area_m2": 6130.59,
       "compactness": 0.08472,
-      "occlusivity_m": 326.58,
+      "closed_perimeter_m": 326.58,
       "enclosure_ratio": 0.29657,
       "n": [
         0.05205,
@@ -1592,7 +1592,7 @@
       "y": -32.5,
       "area_m2": 5611.9,
       "compactness": 0.08319,
-      "occlusivity_m": 333.45,
+      "closed_perimeter_m": 333.45,
       "enclosure_ratio": 0.2804,
       "n": [
         0.03992,
@@ -1606,7 +1606,7 @@
       "y": -30,
       "area_m2": 5525.93,
       "compactness": 0.08406,
-      "occlusivity_m": 296.54,
+      "closed_perimeter_m": 296.54,
       "enclosure_ratio": 0.26789,
       "n": [
         0.03791,
@@ -1620,7 +1620,7 @@
       "y": -27.5,
       "area_m2": 5061.66,
       "compactness": 0.08717,
-      "occlusivity_m": 290.28,
+      "closed_perimeter_m": 290.28,
       "enclosure_ratio": 0.26429,
       "n": [
         0.02705,
@@ -1634,7 +1634,7 @@
       "y": -25,
       "area_m2": 4711.54,
       "compactness": 0.11236,
-      "occlusivity_m": 299.04,
+      "closed_perimeter_m": 299.04,
       "enclosure_ratio": 0.26194,
       "n": [
         0.01886,
@@ -1648,7 +1648,7 @@
       "y": -22.5,
       "area_m2": 4326.78,
       "compactness": 0.12691,
-      "occlusivity_m": 287.7,
+      "closed_perimeter_m": 287.7,
       "enclosure_ratio": 0.26101,
       "n": [
         0.00986,
@@ -1662,7 +1662,7 @@
       "y": -20,
       "area_m2": 4182.34,
       "compactness": 0.1354,
-      "occlusivity_m": 282.15,
+      "closed_perimeter_m": 282.15,
       "enclosure_ratio": 0.26163,
       "n": [
         0.00648,
@@ -1676,7 +1676,7 @@
       "y": -17.5,
       "area_m2": 4008.16,
       "compactness": 0.14725,
-      "occlusivity_m": 268.15,
+      "closed_perimeter_m": 268.15,
       "enclosure_ratio": 0.26371,
       "n": [
         0.0024,
@@ -1690,7 +1690,7 @@
       "y": -15,
       "area_m2": 3849.4,
       "compactness": 0.15873,
-      "occlusivity_m": 269.5,
+      "closed_perimeter_m": 269.5,
       "enclosure_ratio": 0.26509,
       "n": [
         -0.00131,
@@ -1704,7 +1704,7 @@
       "y": -12.5,
       "area_m2": 3920.31,
       "compactness": 0.13257,
-      "occlusivity_m": 271.98,
+      "closed_perimeter_m": 271.98,
       "enclosure_ratio": 0.2672,
       "n": [
         0.00035,
@@ -1718,7 +1718,7 @@
       "y": -10,
       "area_m2": 3823.63,
       "compactness": 0.14057,
-      "occlusivity_m": 268.6,
+      "closed_perimeter_m": 268.6,
       "enclosure_ratio": 0.27053,
       "n": [
         -0.00191,
@@ -1732,7 +1732,7 @@
       "y": -7.5,
       "area_m2": 3884.39,
       "compactness": 0.1389,
-      "occlusivity_m": 272.05,
+      "closed_perimeter_m": 272.05,
       "enclosure_ratio": 0.27676,
       "n": [
         -0.00049,
@@ -1746,7 +1746,7 @@
       "y": -5,
       "area_m2": 4097.07,
       "compactness": 0.12195,
-      "occlusivity_m": 264.04,
+      "closed_perimeter_m": 264.04,
       "enclosure_ratio": 0.28526,
       "n": [
         0.00448,
@@ -1760,7 +1760,7 @@
       "y": -2.5,
       "area_m2": 4133.57,
       "compactness": 0.14019,
-      "occlusivity_m": 263.35,
+      "closed_perimeter_m": 263.35,
       "enclosure_ratio": 0.29469,
       "n": [
         0.00534,
@@ -1774,7 +1774,7 @@
       "y": 0,
       "area_m2": 4262.2,
       "compactness": 0.12095,
-      "occlusivity_m": 252.65,
+      "closed_perimeter_m": 252.65,
       "enclosure_ratio": 0.31215,
       "n": [
         0.00835,
@@ -1788,7 +1788,7 @@
       "y": 2.5,
       "area_m2": 4079.95,
       "compactness": 0.12617,
-      "occlusivity_m": 257.62,
+      "closed_perimeter_m": 257.62,
       "enclosure_ratio": 0.33454,
       "n": [
         0.00408,
@@ -1802,7 +1802,7 @@
       "y": 5,
       "area_m2": 4068.36,
       "compactness": 0.13879,
-      "occlusivity_m": 271.69,
+      "closed_perimeter_m": 271.69,
       "enclosure_ratio": 0.37297,
       "n": [
         0.00381,
@@ -1816,7 +1816,7 @@
       "y": -35,
       "area_m2": 6022.33,
       "compactness": 0.08468,
-      "occlusivity_m": 322.43,
+      "closed_perimeter_m": 322.43,
       "enclosure_ratio": 0.29579,
       "n": [
         0.04952,
@@ -1830,7 +1830,7 @@
       "y": -32.5,
       "area_m2": 5586.12,
       "compactness": 0.08418,
-      "occlusivity_m": 329.74,
+      "closed_perimeter_m": 329.74,
       "enclosure_ratio": 0.27888,
       "n": [
         0.03931,
@@ -1844,7 +1844,7 @@
       "y": -30,
       "area_m2": 5484.05,
       "compactness": 0.08476,
-      "occlusivity_m": 282.71,
+      "closed_perimeter_m": 282.71,
       "enclosure_ratio": 0.26805,
       "n": [
         0.03693,
@@ -1858,7 +1858,7 @@
       "y": -27.5,
       "area_m2": 4807.8,
       "compactness": 0.09189,
-      "occlusivity_m": 281.4,
+      "closed_perimeter_m": 281.4,
       "enclosure_ratio": 0.26421,
       "n": [
         0.02111,
@@ -1872,7 +1872,7 @@
       "y": -25,
       "area_m2": 4547,
       "compactness": 0.1183,
-      "occlusivity_m": 279.81,
+      "closed_perimeter_m": 279.81,
       "enclosure_ratio": 0.26226,
       "n": [
         0.01501,
@@ -1886,7 +1886,7 @@
       "y": -22.5,
       "area_m2": 4076.01,
       "compactness": 0.1525,
-      "occlusivity_m": 286.16,
+      "closed_perimeter_m": 286.16,
       "enclosure_ratio": 0.26303,
       "n": [
         0.00399,
@@ -1900,7 +1900,7 @@
       "y": -20,
       "area_m2": 3884.36,
       "compactness": 0.17636,
-      "occlusivity_m": 279.85,
+      "closed_perimeter_m": 279.85,
       "enclosure_ratio": 0.26278,
       "n": [
         -0.00049,
@@ -1914,7 +1914,7 @@
       "y": -17.5,
       "area_m2": 3771,
       "compactness": 0.20653,
-      "occlusivity_m": 272.74,
+      "closed_perimeter_m": 272.74,
       "enclosure_ratio": 0.2658,
       "n": [
         -0.00314,
@@ -1928,7 +1928,7 @@
       "y": -15,
       "area_m2": 3759.78,
       "compactness": 0.18101,
-      "occlusivity_m": 267.72,
+      "closed_perimeter_m": 267.72,
       "enclosure_ratio": 0.26657,
       "n": [
         -0.00341,
@@ -1942,7 +1942,7 @@
       "y": -12.5,
       "area_m2": 3729.83,
       "compactness": 0.18278,
-      "occlusivity_m": 268.03,
+      "closed_perimeter_m": 268.03,
       "enclosure_ratio": 0.26929,
       "n": [
         -0.00411,
@@ -1956,7 +1956,7 @@
       "y": -10,
       "area_m2": 3771.81,
       "compactness": 0.16503,
-      "occlusivity_m": 266.93,
+      "closed_perimeter_m": 266.93,
       "enclosure_ratio": 0.27203,
       "n": [
         -0.00312,
@@ -1970,7 +1970,7 @@
       "y": -7.5,
       "area_m2": 3857.67,
       "compactness": 0.16356,
-      "occlusivity_m": 272.16,
+      "closed_perimeter_m": 272.16,
       "enclosure_ratio": 0.27607,
       "n": [
         -0.00112,
@@ -1984,7 +1984,7 @@
       "y": -5,
       "area_m2": 4092.12,
       "compactness": 0.15273,
-      "occlusivity_m": 268.4,
+      "closed_perimeter_m": 268.4,
       "enclosure_ratio": 0.2852,
       "n": [
         0.00437,
@@ -1998,7 +1998,7 @@
       "y": -2.5,
       "area_m2": 4066.21,
       "compactness": 0.14994,
-      "occlusivity_m": 258.71,
+      "closed_perimeter_m": 258.71,
       "enclosure_ratio": 0.29613,
       "n": [
         0.00376,
@@ -2012,7 +2012,7 @@
       "y": 0,
       "area_m2": 4208.16,
       "compactness": 0.13838,
-      "occlusivity_m": 262.36,
+      "closed_perimeter_m": 262.36,
       "enclosure_ratio": 0.3105,
       "n": [
         0.00708,
@@ -2026,7 +2026,7 @@
       "y": 2.5,
       "area_m2": 4061.08,
       "compactness": 0.12252,
-      "occlusivity_m": 259.63,
+      "closed_perimeter_m": 259.63,
       "enclosure_ratio": 0.334,
       "n": [
         0.00364,
@@ -2040,7 +2040,7 @@
       "y": 5,
       "area_m2": 4019.15,
       "compactness": 0.15422,
-      "occlusivity_m": 262.9,
+      "closed_perimeter_m": 262.9,
       "enclosure_ratio": 0.36835,
       "n": [
         0.00266,
@@ -2054,7 +2054,7 @@
       "y": -35,
       "area_m2": 5611.28,
       "compactness": 0.11039,
-      "occlusivity_m": 312.93,
+      "closed_perimeter_m": 312.93,
       "enclosure_ratio": 0.30131,
       "n": [
         0.0399,
@@ -2068,7 +2068,7 @@
       "y": -32.5,
       "area_m2": 5414.28,
       "compactness": 0.11002,
-      "occlusivity_m": 341.79,
+      "closed_perimeter_m": 341.79,
       "enclosure_ratio": 0.28454,
       "n": [
         0.03529,
@@ -2082,7 +2082,7 @@
       "y": -30,
       "area_m2": 5027.66,
       "compactness": 0.11725,
-      "occlusivity_m": 278.5,
+      "closed_perimeter_m": 278.5,
       "enclosure_ratio": 0.27386,
       "n": [
         0.02625,
@@ -2096,7 +2096,7 @@
       "y": -27.5,
       "area_m2": 4735.5,
       "compactness": 0.14476,
-      "occlusivity_m": 282.33,
+      "closed_perimeter_m": 282.33,
       "enclosure_ratio": 0.26768,
       "n": [
         0.01942,
@@ -2110,7 +2110,7 @@
       "y": -25,
       "area_m2": 4431.12,
       "compactness": 0.1607,
-      "occlusivity_m": 291.32,
+      "closed_perimeter_m": 291.32,
       "enclosure_ratio": 0.26521,
       "n": [
         0.0123,
@@ -2124,7 +2124,7 @@
       "y": -22.5,
       "area_m2": 4120.98,
       "compactness": 0.19419,
-      "occlusivity_m": 279.43,
+      "closed_perimeter_m": 279.43,
       "enclosure_ratio": 0.26455,
       "n": [
         0.00504,
@@ -2138,7 +2138,7 @@
       "y": -20,
       "area_m2": 3888.56,
       "compactness": 0.22016,
-      "occlusivity_m": 283.96,
+      "closed_perimeter_m": 283.96,
       "enclosure_ratio": 0.26519,
       "n": [
         -0.00039,
@@ -2152,7 +2152,7 @@
       "y": -17.5,
       "area_m2": 3757.17,
       "compactness": 0.23809,
-      "occlusivity_m": 276.87,
+      "closed_perimeter_m": 276.87,
       "enclosure_ratio": 0.26735,
       "n": [
         -0.00347,
@@ -2166,7 +2166,7 @@
       "y": -15,
       "area_m2": 3743.02,
       "compactness": 0.20433,
-      "occlusivity_m": 270.47,
+      "closed_perimeter_m": 270.47,
       "enclosure_ratio": 0.27015,
       "n": [
         -0.0038,
@@ -2180,7 +2180,7 @@
       "y": -12.5,
       "area_m2": 3703.53,
       "compactness": 0.20459,
-      "occlusivity_m": 270.97,
+      "closed_perimeter_m": 270.97,
       "enclosure_ratio": 0.27336,
       "n": [
         -0.00472,
@@ -2194,7 +2194,7 @@
       "y": -10,
       "area_m2": 3777.18,
       "compactness": 0.18147,
-      "occlusivity_m": 272.48,
+      "closed_perimeter_m": 272.48,
       "enclosure_ratio": 0.27684,
       "n": [
         -0.003,
@@ -2208,7 +2208,7 @@
       "y": -7.5,
       "area_m2": 3842.39,
       "compactness": 0.17483,
-      "occlusivity_m": 266.85,
+      "closed_perimeter_m": 266.85,
       "enclosure_ratio": 0.28189,
       "n": [
         -0.00147,
@@ -2222,7 +2222,7 @@
       "y": -5,
       "area_m2": 4111.93,
       "compactness": 0.16113,
-      "occlusivity_m": 258.85,
+      "closed_perimeter_m": 258.85,
       "enclosure_ratio": 0.28616,
       "n": [
         0.00483,
@@ -2236,7 +2236,7 @@
       "y": -2.5,
       "area_m2": 4058.98,
       "compactness": 0.15021,
-      "occlusivity_m": 260.89,
+      "closed_perimeter_m": 260.89,
       "enclosure_ratio": 0.29786,
       "n": [
         0.00359,
@@ -2250,7 +2250,7 @@
       "y": 0,
       "area_m2": 4198.79,
       "compactness": 0.14137,
-      "occlusivity_m": 255.59,
+      "closed_perimeter_m": 255.59,
       "enclosure_ratio": 0.31255,
       "n": [
         0.00686,
@@ -2264,7 +2264,7 @@
       "y": 2.5,
       "area_m2": 4072.78,
       "compactness": 0.13447,
-      "occlusivity_m": 258.4,
+      "closed_perimeter_m": 258.4,
       "enclosure_ratio": 0.33371,
       "n": [
         0.00392,
@@ -2278,7 +2278,7 @@
       "y": 5,
       "area_m2": 4002.25,
       "compactness": 0.18,
-      "occlusivity_m": 264.94,
+      "closed_perimeter_m": 264.94,
       "enclosure_ratio": 0.36502,
       "n": [
         0.00227,
@@ -2292,7 +2292,7 @@
       "y": -35,
       "area_m2": 5503.07,
       "compactness": 0.12367,
-      "occlusivity_m": 301.84,
+      "closed_perimeter_m": 301.84,
       "enclosure_ratio": 0.31112,
       "n": [
         0.03737,
@@ -2306,7 +2306,7 @@
       "y": -32.5,
       "area_m2": 5340.46,
       "compactness": 0.1205,
-      "occlusivity_m": 290.61,
+      "closed_perimeter_m": 290.61,
       "enclosure_ratio": 0.29112,
       "n": [
         0.03357,
@@ -2320,7 +2320,7 @@
       "y": -30,
       "area_m2": 4963.45,
       "compactness": 0.12869,
-      "occlusivity_m": 280.1,
+      "closed_perimeter_m": 280.1,
       "enclosure_ratio": 0.27956,
       "n": [
         0.02475,
@@ -2334,7 +2334,7 @@
       "y": -27.5,
       "area_m2": 4668.6,
       "compactness": 0.15898,
-      "occlusivity_m": 275.48,
+      "closed_perimeter_m": 275.48,
       "enclosure_ratio": 0.27426,
       "n": [
         0.01785,
@@ -2348,7 +2348,7 @@
       "y": -25,
       "area_m2": 4572.9,
       "compactness": 0.16614,
-      "occlusivity_m": 271.74,
+      "closed_perimeter_m": 271.74,
       "enclosure_ratio": 0.27044,
       "n": [
         0.01561,
@@ -2362,7 +2362,7 @@
       "y": -22.5,
       "area_m2": 4162.16,
       "compactness": 0.19574,
-      "occlusivity_m": 279.99,
+      "closed_perimeter_m": 279.99,
       "enclosure_ratio": 0.27029,
       "n": [
         0.00601,
@@ -2376,7 +2376,7 @@
       "y": -20,
       "area_m2": 3913.53,
       "compactness": 0.22581,
-      "occlusivity_m": 275.6,
+      "closed_perimeter_m": 275.6,
       "enclosure_ratio": 0.27055,
       "n": [
         0.00019,
@@ -2390,7 +2390,7 @@
       "y": -17.5,
       "area_m2": 3825.97,
       "compactness": 0.2379,
-      "occlusivity_m": 274.33,
+      "closed_perimeter_m": 274.33,
       "enclosure_ratio": 0.27233,
       "n": [
         -0.00186,
@@ -2404,7 +2404,7 @@
       "y": -15,
       "area_m2": 3730.22,
       "compactness": 0.2104,
-      "occlusivity_m": 269.04,
+      "closed_perimeter_m": 269.04,
       "enclosure_ratio": 0.27613,
       "n": [
         -0.0041,
@@ -2418,7 +2418,7 @@
       "y": -12.5,
       "area_m2": 3717.03,
       "compactness": 0.21184,
-      "occlusivity_m": 265.51,
+      "closed_perimeter_m": 265.51,
       "enclosure_ratio": 0.27979,
       "n": [
         -0.00441,
@@ -2432,7 +2432,7 @@
       "y": -10,
       "area_m2": 3777.17,
       "compactness": 0.19057,
-      "occlusivity_m": 270.52,
+      "closed_perimeter_m": 270.52,
       "enclosure_ratio": 0.28408,
       "n": [
         -0.003,
@@ -2446,7 +2446,7 @@
       "y": -7.5,
       "area_m2": 3866.66,
       "compactness": 0.15758,
-      "occlusivity_m": 260.58,
+      "closed_perimeter_m": 260.58,
       "enclosure_ratio": 0.28981,
       "n": [
         -0.00091,
@@ -2460,7 +2460,7 @@
       "y": -5,
       "area_m2": 4063.18,
       "compactness": 0.15219,
-      "occlusivity_m": 257.63,
+      "closed_perimeter_m": 257.63,
       "enclosure_ratio": 0.29573,
       "n": [
         0.00369,
@@ -2474,7 +2474,7 @@
       "y": -2.5,
       "area_m2": 4100,
       "compactness": 0.15477,
-      "occlusivity_m": 258.64,
+      "closed_perimeter_m": 258.64,
       "enclosure_ratio": 0.30524,
       "n": [
         0.00455,
@@ -2488,7 +2488,7 @@
       "y": 0,
       "area_m2": 4207.61,
       "compactness": 0.14506,
-      "occlusivity_m": 250.65,
+      "closed_perimeter_m": 250.65,
       "enclosure_ratio": 0.3184,
       "n": [
         0.00707,
@@ -2502,7 +2502,7 @@
       "y": 2.5,
       "area_m2": 4116.53,
       "compactness": 0.13893,
-      "occlusivity_m": 249.81,
+      "closed_perimeter_m": 249.81,
       "enclosure_ratio": 0.33812,
       "n": [
         0.00494,
@@ -2516,7 +2516,7 @@
       "y": 5,
       "area_m2": 4008.13,
       "compactness": 0.18735,
-      "occlusivity_m": 254.32,
+      "closed_perimeter_m": 254.32,
       "enclosure_ratio": 0.36572,
       "n": [
         0.0024,
@@ -2530,7 +2530,7 @@
       "y": -35,
       "area_m2": 5484.78,
       "compactness": 0.128,
-      "occlusivity_m": 303.3,
+      "closed_perimeter_m": 303.3,
       "enclosure_ratio": 0.31881,
       "n": [
         0.03694,
@@ -2544,7 +2544,7 @@
       "y": -32.5,
       "area_m2": 5297.04,
       "compactness": 0.122,
-      "occlusivity_m": 286.34,
+      "closed_perimeter_m": 286.34,
       "enclosure_ratio": 0.29878,
       "n": [
         0.03255,
@@ -2558,7 +2558,7 @@
       "y": -30,
       "area_m2": 5102.63,
       "compactness": 0.11715,
-      "occlusivity_m": 265.61,
+      "closed_perimeter_m": 265.61,
       "enclosure_ratio": 0.28703,
       "n": [
         0.02801,
@@ -2572,7 +2572,7 @@
       "y": -27.5,
       "area_m2": 4675.55,
       "compactness": 0.16625,
-      "occlusivity_m": 276.14,
+      "closed_perimeter_m": 276.14,
       "enclosure_ratio": 0.28043,
       "n": [
         0.01802,
@@ -2586,7 +2586,7 @@
       "y": -25,
       "area_m2": 4502.66,
       "compactness": 0.16939,
-      "occlusivity_m": 267.34,
+      "closed_perimeter_m": 267.34,
       "enclosure_ratio": 0.27807,
       "n": [
         0.01397,
@@ -2600,7 +2600,7 @@
       "y": -22.5,
       "area_m2": 4247.25,
       "compactness": 0.18879,
-      "occlusivity_m": 267.56,
+      "closed_perimeter_m": 267.56,
       "enclosure_ratio": 0.27698,
       "n": [
         0.008,
@@ -2614,7 +2614,7 @@
       "y": -20,
       "area_m2": 3943.06,
       "compactness": 0.22382,
-      "occlusivity_m": 273.12,
+      "closed_perimeter_m": 273.12,
       "enclosure_ratio": 0.28031,
       "n": [
         0.00088,
@@ -2628,7 +2628,7 @@
       "y": -17.5,
       "area_m2": 3856.62,
       "compactness": 0.20625,
-      "occlusivity_m": 265.21,
+      "closed_perimeter_m": 265.21,
       "enclosure_ratio": 0.2827,
       "n": [
         -0.00114,
@@ -2642,7 +2642,7 @@
       "y": -15,
       "area_m2": 3831.57,
       "compactness": 0.20378,
-      "occlusivity_m": 264.3,
+      "closed_perimeter_m": 264.3,
       "enclosure_ratio": 0.28454,
       "n": [
         -0.00173,
@@ -2656,7 +2656,7 @@
       "y": -12.5,
       "area_m2": 3824.37,
       "compactness": 0.20159,
-      "occlusivity_m": 269.14,
+      "closed_perimeter_m": 269.14,
       "enclosure_ratio": 0.28908,
       "n": [
         -0.00189,
@@ -2670,7 +2670,7 @@
       "y": -10,
       "area_m2": 3855.2,
       "compactness": 0.16954,
-      "occlusivity_m": 264.67,
+      "closed_perimeter_m": 264.67,
       "enclosure_ratio": 0.29512,
       "n": [
         -0.00117,
@@ -2684,7 +2684,7 @@
       "y": -7.5,
       "area_m2": 3958.71,
       "compactness": 0.15832,
-      "occlusivity_m": 260.84,
+      "closed_perimeter_m": 260.84,
       "enclosure_ratio": 0.30121,
       "n": [
         0.00125,
@@ -2698,7 +2698,7 @@
       "y": -5,
       "area_m2": 4067.03,
       "compactness": 0.15859,
-      "occlusivity_m": 256.42,
+      "closed_perimeter_m": 256.42,
       "enclosure_ratio": 0.30761,
       "n": [
         0.00378,
@@ -2712,7 +2712,7 @@
       "y": -2.5,
       "area_m2": 4118.55,
       "compactness": 0.15869,
-      "occlusivity_m": 253.23,
+      "closed_perimeter_m": 253.23,
       "enclosure_ratio": 0.31574,
       "n": [
         0.00499,
@@ -2726,7 +2726,7 @@
       "y": 0,
       "area_m2": 4257.86,
       "compactness": 0.14733,
-      "occlusivity_m": 249.54,
+      "closed_perimeter_m": 249.54,
       "enclosure_ratio": 0.32826,
       "n": [
         0.00825,
@@ -2740,7 +2740,7 @@
       "y": 2.5,
       "area_m2": 4058.69,
       "compactness": 0.14142,
-      "occlusivity_m": 252.54,
+      "closed_perimeter_m": 252.54,
       "enclosure_ratio": 0.34626,
       "n": [
         0.00359,
@@ -2754,7 +2754,7 @@
       "y": 5,
       "area_m2": 4032.05,
       "compactness": 0.18847,
-      "occlusivity_m": 252.34,
+      "closed_perimeter_m": 252.34,
       "enclosure_ratio": 0.37007,
       "n": [
         0.00296,
@@ -2768,7 +2768,7 @@
       "y": -35,
       "area_m2": 5483.13,
       "compactness": 0.12796,
-      "occlusivity_m": 301.97,
+      "closed_perimeter_m": 301.97,
       "enclosure_ratio": 0.32729,
       "n": [
         0.03691,
@@ -2782,7 +2782,7 @@
       "y": -32.5,
       "area_m2": 5337.47,
       "compactness": 0.12326,
-      "occlusivity_m": 288.45,
+      "closed_perimeter_m": 288.45,
       "enclosure_ratio": 0.30682,
       "n": [
         0.0335,
@@ -2796,7 +2796,7 @@
       "y": -30,
       "area_m2": 5104.17,
       "compactness": 0.11827,
-      "occlusivity_m": 284.42,
+      "closed_perimeter_m": 284.42,
       "enclosure_ratio": 0.296,
       "n": [
         0.02804,
@@ -2810,7 +2810,7 @@
       "y": -27.5,
       "area_m2": 4626.92,
       "compactness": 0.16926,
-      "occlusivity_m": 266.09,
+      "closed_perimeter_m": 266.09,
       "enclosure_ratio": 0.29141,
       "n": [
         0.01688,
@@ -2824,7 +2824,7 @@
       "y": -25,
       "area_m2": 4509.76,
       "compactness": 0.17419,
-      "occlusivity_m": 266.05,
+      "closed_perimeter_m": 266.05,
       "enclosure_ratio": 0.28877,
       "n": [
         0.01414,
@@ -2838,7 +2838,7 @@
       "y": -22.5,
       "area_m2": 4186.02,
       "compactness": 0.18973,
-      "occlusivity_m": 272.95,
+      "closed_perimeter_m": 272.95,
       "enclosure_ratio": 0.28923,
       "n": [
         0.00656,
@@ -2852,7 +2852,7 @@
       "y": -20,
       "area_m2": 3988.29,
       "compactness": 0.21409,
-      "occlusivity_m": 267.2,
+      "closed_perimeter_m": 267.2,
       "enclosure_ratio": 0.29258,
       "n": [
         0.00194,
@@ -2866,7 +2866,7 @@
       "y": -17.5,
       "area_m2": 3888.26,
       "compactness": 0.19724,
-      "occlusivity_m": 268.9,
+      "closed_perimeter_m": 268.9,
       "enclosure_ratio": 0.29581,
       "n": [
         -0.0004,
@@ -2880,7 +2880,7 @@
       "y": -15,
       "area_m2": 3806.92,
       "compactness": 0.19915,
-      "occlusivity_m": 267.96,
+      "closed_perimeter_m": 267.96,
       "enclosure_ratio": 0.30019,
       "n": [
         -0.0023,
@@ -2894,7 +2894,7 @@
       "y": -12.5,
       "area_m2": 3808.72,
       "compactness": 0.17743,
-      "occlusivity_m": 266.72,
+      "closed_perimeter_m": 266.72,
       "enclosure_ratio": 0.30397,
       "n": [
         -0.00226,
@@ -2908,7 +2908,7 @@
       "y": -10,
       "area_m2": 3854.54,
       "compactness": 0.17243,
-      "occlusivity_m": 262.9,
+      "closed_perimeter_m": 262.9,
       "enclosure_ratio": 0.3111,
       "n": [
         -0.00119,
@@ -2922,7 +2922,7 @@
       "y": -7.5,
       "area_m2": 3988.04,
       "compactness": 0.16126,
-      "occlusivity_m": 256.13,
+      "closed_perimeter_m": 256.13,
       "enclosure_ratio": 0.31643,
       "n": [
         0.00193,
@@ -2936,7 +2936,7 @@
       "y": -5,
       "area_m2": 4119.6,
       "compactness": 0.15651,
-      "occlusivity_m": 258.88,
+      "closed_perimeter_m": 258.88,
       "enclosure_ratio": 0.32306,
       "n": [
         0.00501,
@@ -2950,7 +2950,7 @@
       "y": -2.5,
       "area_m2": 4159.47,
       "compactness": 0.16151,
-      "occlusivity_m": 250.34,
+      "closed_perimeter_m": 250.34,
       "enclosure_ratio": 0.33252,
       "n": [
         0.00594,
@@ -2964,7 +2964,7 @@
       "y": 0,
       "area_m2": 4330.3,
       "compactness": 0.13839,
-      "occlusivity_m": 245.49,
+      "closed_perimeter_m": 245.49,
       "enclosure_ratio": 0.34315,
       "n": [
         0.00994,
@@ -2978,7 +2978,7 @@
       "y": 2.5,
       "area_m2": 4112.38,
       "compactness": 0.11935,
-      "occlusivity_m": 251.14,
+      "closed_perimeter_m": 251.14,
       "enclosure_ratio": 0.36059,
       "n": [
         0.00484,
@@ -2992,7 +2992,7 @@
       "y": 5,
       "area_m2": 4088.5,
       "compactness": 0.11634,
-      "occlusivity_m": 254.05,
+      "closed_perimeter_m": 254.05,
       "enclosure_ratio": 0.38385,
       "n": [
         0.00428,
@@ -3006,7 +3006,7 @@
       "y": 7.5,
       "area_m2": 4127.61,
       "compactness": 0.11466,
-      "occlusivity_m": 247.76,
+      "closed_perimeter_m": 247.76,
       "enclosure_ratio": 0.4147,
       "n": [
         0.0052,
@@ -3020,7 +3020,7 @@
       "y": -35,
       "area_m2": 5737.8,
       "compactness": 0.132,
-      "occlusivity_m": 296.14,
+      "closed_perimeter_m": 296.14,
       "enclosure_ratio": 0.33752,
       "n": [
         0.04286,
@@ -3034,7 +3034,7 @@
       "y": -32.5,
       "area_m2": 5310.9,
       "compactness": 0.12213,
-      "occlusivity_m": 285.89,
+      "closed_perimeter_m": 285.89,
       "enclosure_ratio": 0.31719,
       "n": [
         0.03288,
@@ -3048,7 +3048,7 @@
       "y": -30,
       "area_m2": 5089.74,
       "compactness": 0.11633,
-      "occlusivity_m": 285.08,
+      "closed_perimeter_m": 285.08,
       "enclosure_ratio": 0.30596,
       "n": [
         0.0277,
@@ -3062,7 +3062,7 @@
       "y": -27.5,
       "area_m2": 4846.93,
       "compactness": 0.15327,
-      "occlusivity_m": 252.88,
+      "closed_perimeter_m": 252.88,
       "enclosure_ratio": 0.30271,
       "n": [
         0.02202,
@@ -3076,7 +3076,7 @@
       "y": -25,
       "area_m2": 4460.59,
       "compactness": 0.17404,
-      "occlusivity_m": 256.21,
+      "closed_perimeter_m": 256.21,
       "enclosure_ratio": 0.30268,
       "n": [
         0.01299,
@@ -3090,7 +3090,7 @@
       "y": -22.5,
       "area_m2": 4321.95,
       "compactness": 0.172,
-      "occlusivity_m": 261.65,
+      "closed_perimeter_m": 261.65,
       "enclosure_ratio": 0.30391,
       "n": [
         0.00974,
@@ -3104,7 +3104,7 @@
       "y": -20,
       "area_m2": 4076.31,
       "compactness": 0.17909,
-      "occlusivity_m": 268.62,
+      "closed_perimeter_m": 268.62,
       "enclosure_ratio": 0.30769,
       "n": [
         0.004,
@@ -3118,7 +3118,7 @@
       "y": -17.5,
       "area_m2": 3935.57,
       "compactness": 0.1676,
-      "occlusivity_m": 261.24,
+      "closed_perimeter_m": 261.24,
       "enclosure_ratio": 0.31318,
       "n": [
         0.00071,
@@ -3132,7 +3132,7 @@
       "y": -15,
       "area_m2": 3891.34,
       "compactness": 0.17179,
-      "occlusivity_m": 260.65,
+      "closed_perimeter_m": 260.65,
       "enclosure_ratio": 0.31769,
       "n": [
         -0.00033,
@@ -3146,7 +3146,7 @@
       "y": -12.5,
       "area_m2": 3894.81,
       "compactness": 0.16419,
-      "occlusivity_m": 254.96,
+      "closed_perimeter_m": 254.96,
       "enclosure_ratio": 0.32378,
       "n": [
         -0.00025,
@@ -3160,7 +3160,7 @@
       "y": -10,
       "area_m2": 3908.37,
       "compactness": 0.16859,
-      "occlusivity_m": 258.74,
+      "closed_perimeter_m": 258.74,
       "enclosure_ratio": 0.33165,
       "n": [
         0.00007,
@@ -3174,7 +3174,7 @@
       "y": -7.5,
       "area_m2": 3999.41,
       "compactness": 0.16025,
-      "occlusivity_m": 263.97,
+      "closed_perimeter_m": 263.97,
       "enclosure_ratio": 0.33905,
       "n": [
         0.0022,
@@ -3188,7 +3188,7 @@
       "y": -5,
       "area_m2": 4185.02,
       "compactness": 0.14614,
-      "occlusivity_m": 252.13,
+      "closed_perimeter_m": 252.13,
       "enclosure_ratio": 0.34695,
       "n": [
         0.00654,
@@ -3202,7 +3202,7 @@
       "y": -2.5,
       "area_m2": 4185.49,
       "compactness": 0.13765,
-      "occlusivity_m": 250.28,
+      "closed_perimeter_m": 250.28,
       "enclosure_ratio": 0.35468,
       "n": [
         0.00655,
@@ -3216,7 +3216,7 @@
       "y": 0,
       "area_m2": 4212.53,
       "compactness": 0.09217,
-      "occlusivity_m": 254.56,
+      "closed_perimeter_m": 254.56,
       "enclosure_ratio": 0.36633,
       "n": [
         0.00718,
@@ -3230,7 +3230,7 @@
       "y": 2.5,
       "area_m2": 4375.73,
       "compactness": 0.09582,
-      "occlusivity_m": 237.75,
+      "closed_perimeter_m": 237.75,
       "enclosure_ratio": 0.37987,
       "n": [
         0.011,
@@ -3244,7 +3244,7 @@
       "y": 5,
       "area_m2": 4397.98,
       "compactness": 0.12551,
-      "occlusivity_m": 240.29,
+      "closed_perimeter_m": 240.29,
       "enclosure_ratio": 0.40066,
       "n": [
         0.01152,
@@ -3258,7 +3258,7 @@
       "y": -35,
       "area_m2": 5785.54,
       "compactness": 0.12875,
-      "occlusivity_m": 306.93,
+      "closed_perimeter_m": 306.93,
       "enclosure_ratio": 0.34725,
       "n": [
         0.04398,
@@ -3272,7 +3272,7 @@
       "y": -32.5,
       "area_m2": 5263.2,
       "compactness": 0.12039,
-      "occlusivity_m": 293.39,
+      "closed_perimeter_m": 293.39,
       "enclosure_ratio": 0.33035,
       "n": [
         0.03176,
@@ -3286,7 +3286,7 @@
       "y": -30,
       "area_m2": 5016.37,
       "compactness": 0.1151,
-      "occlusivity_m": 292.79,
+      "closed_perimeter_m": 292.79,
       "enclosure_ratio": 0.32187,
       "n": [
         0.02599,
@@ -3300,7 +3300,7 @@
       "y": -27.5,
       "area_m2": 4818.76,
       "compactness": 0.15139,
-      "occlusivity_m": 257.96,
+      "closed_perimeter_m": 257.96,
       "enclosure_ratio": 0.3186,
       "n": [
         0.02137,
@@ -3314,7 +3314,7 @@
       "y": -25,
       "area_m2": 4690.05,
       "compactness": 0.1551,
-      "occlusivity_m": 255.31,
+      "closed_perimeter_m": 255.31,
       "enclosure_ratio": 0.31961,
       "n": [
         0.01835,
@@ -3328,7 +3328,7 @@
       "y": -22.5,
       "area_m2": 4378.95,
       "compactness": 0.17458,
-      "occlusivity_m": 259.59,
+      "closed_perimeter_m": 259.59,
       "enclosure_ratio": 0.32396,
       "n": [
         0.01108,
@@ -3342,7 +3342,7 @@
       "y": -20,
       "area_m2": 4156.71,
       "compactness": 0.16937,
-      "occlusivity_m": 261.58,
+      "closed_perimeter_m": 261.58,
       "enclosure_ratio": 0.32852,
       "n": [
         0.00588,
@@ -3356,7 +3356,7 @@
       "y": -17.5,
       "area_m2": 4008.89,
       "compactness": 0.15962,
-      "occlusivity_m": 266.4,
+      "closed_perimeter_m": 266.4,
       "enclosure_ratio": 0.33621,
       "n": [
         0.00242,
@@ -3370,7 +3370,7 @@
       "y": -15,
       "area_m2": 3895.77,
       "compactness": 0.16905,
-      "occlusivity_m": 262.7,
+      "closed_perimeter_m": 262.7,
       "enclosure_ratio": 0.34396,
       "n": [
         -0.00022,
@@ -3384,7 +3384,7 @@
       "y": -12.5,
       "area_m2": 3961.69,
       "compactness": 0.15448,
-      "occlusivity_m": 258.49,
+      "closed_perimeter_m": 258.49,
       "enclosure_ratio": 0.35257,
       "n": [
         0.00132,
@@ -3398,7 +3398,7 @@
       "y": -10,
       "area_m2": 4005.3,
       "compactness": 0.148,
-      "occlusivity_m": 267.7,
+      "closed_perimeter_m": 267.7,
       "enclosure_ratio": 0.36068,
       "n": [
         0.00234,
@@ -3412,7 +3412,7 @@
       "y": -7.5,
       "area_m2": 3967.63,
       "compactness": 0.13918,
-      "occlusivity_m": 266.62,
+      "closed_perimeter_m": 266.62,
       "enclosure_ratio": 0.36976,
       "n": [
         0.00146,
@@ -3426,7 +3426,7 @@
       "y": -5,
       "area_m2": 4325.21,
       "compactness": 0.09862,
-      "occlusivity_m": 256.4,
+      "closed_perimeter_m": 256.4,
       "enclosure_ratio": 0.37789,
       "n": [
         0.00982,
@@ -3440,7 +3440,7 @@
       "y": -32.5,
       "area_m2": 5518.34,
       "compactness": 0.12266,
-      "occlusivity_m": 286.93,
+      "closed_perimeter_m": 286.93,
       "enclosure_ratio": 0.34424,
       "n": [
         0.03773,
@@ -3454,7 +3454,7 @@
       "y": -30,
       "area_m2": 4989.26,
       "compactness": 0.11321,
-      "occlusivity_m": 302.86,
+      "closed_perimeter_m": 302.86,
       "enclosure_ratio": 0.33933,
       "n": [
         0.02535,
@@ -3468,7 +3468,7 @@
       "y": -27.5,
       "area_m2": 4766.01,
       "compactness": 0.14874,
-      "occlusivity_m": 250.55,
+      "closed_perimeter_m": 250.55,
       "enclosure_ratio": 0.33846,
       "n": [
         0.02013,
@@ -3482,7 +3482,7 @@
       "y": -25,
       "area_m2": 4647.65,
       "compactness": 0.15148,
-      "occlusivity_m": 265.3,
+      "closed_perimeter_m": 265.3,
       "enclosure_ratio": 0.34294,
       "n": [
         0.01736,
@@ -3496,7 +3496,7 @@
       "y": -22.5,
       "area_m2": 4492.43,
       "compactness": 0.13916,
-      "occlusivity_m": 254.41,
+      "closed_perimeter_m": 254.41,
       "enclosure_ratio": 0.3482,
       "n": [
         0.01373,
@@ -3510,7 +3510,7 @@
       "y": -20,
       "area_m2": 4309.19,
       "compactness": 0.15888,
-      "occlusivity_m": 253.26,
+      "closed_perimeter_m": 253.26,
       "enclosure_ratio": 0.35741,
       "n": [
         0.00945,
@@ -3524,7 +3524,7 @@
       "y": -17.5,
       "area_m2": 4204.1,
       "compactness": 0.1373,
-      "occlusivity_m": 253.53,
+      "closed_perimeter_m": 253.53,
       "enclosure_ratio": 0.36537,
       "n": [
         0.00699,
@@ -3538,7 +3538,7 @@
       "y": -15,
       "area_m2": 4038.98,
       "compactness": 0.13567,
-      "occlusivity_m": 256.56,
+      "closed_perimeter_m": 256.56,
       "enclosure_ratio": 0.37679,
       "n": [
         0.00313,
@@ -3552,7 +3552,7 @@
       "y": -32.5,
       "area_m2": 5554.56,
       "compactness": 0.11553,
-      "occlusivity_m": 271.7,
+      "closed_perimeter_m": 271.7,
       "enclosure_ratio": 0.36069,
       "n": [
         0.03858,
@@ -3566,7 +3566,7 @@
       "y": -30,
       "area_m2": 5184.34,
       "compactness": 0.10751,
-      "occlusivity_m": 241.18,
+      "closed_perimeter_m": 241.18,
       "enclosure_ratio": 0.36036,
       "n": [
         0.02992,
@@ -3580,7 +3580,7 @@
       "y": -27.5,
       "area_m2": 4748.28,
       "compactness": 0.12527,
-      "occlusivity_m": 236.54,
+      "closed_perimeter_m": 236.54,
       "enclosure_ratio": 0.36289,
       "n": [
         0.01972,
@@ -3594,7 +3594,7 @@
       "y": -25,
       "area_m2": 4737.58,
       "compactness": 0.12974,
-      "occlusivity_m": 239.38,
+      "closed_perimeter_m": 239.38,
       "enclosure_ratio": 0.36984,
       "n": [
         0.01947,

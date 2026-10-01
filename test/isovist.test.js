@@ -91,7 +91,7 @@ describe('120° perceptual layer — regression against committed canonical read
     assert.equal(golden.readings.length, 18)
     for (const g of golden.readings) {
       const m = recompute(g)
-      for (const key of ['area', 'perimeter', 'compactness', 'occlusivity', 'enclosureRatio']) {
+      for (const key of ['area', 'perimeter', 'compactness', 'closedPerimeter', 'enclosureRatio']) {
         assert.equal(
           m[key],
           g[key],
@@ -106,7 +106,7 @@ describe('120° perceptual layer — regression against committed canonical read
   // local_x/y to 2 dp, so recomputing re-casts from a very slightly different
   // pose than the one the researcher actually aimed. At sites with street
   // openings a sub-degree rotation can flip a single ray between a near facade
-  // and a 200 m escape, which moves area by ~2% and occlusivity by ~12%.
+  // and a 200 m escape, which moves area by ~2% and closed perimeter by ~12%.
   //
   // So the check is: does the stored reading lie somewhere inside the pose
   // window that rounding leaves open? If yes, the reading is sound. If no,
@@ -133,8 +133,8 @@ describe('120° perceptual layer — regression against committed canonical read
             )
             const err = Math.max(
               Math.abs(m.area - reading.area_m2) / reading.area_m2,
-              Math.abs(m.occlusivity - reading.occlusivity_m) /
-                Math.max(reading.occlusivity_m, 1e-9)
+              Math.abs(m.closedPerimeter - reading.closed_perimeter_m) /
+                Math.max(reading.closed_perimeter_m, 1e-9)
             )
             if (err < bestErr) bestErr = err
           }
@@ -163,15 +163,15 @@ describe('120° perceptual layer — regression against committed canonical read
     for (let d = 89.0; d <= 90.2; d += 0.1) {
       const m = castIsovist(at, (d * Math.PI) / 180, buildings)
       areas.push(m.area)
-      occs.push(m.occlusivity)
+      occs.push(m.closedPerimeter)
     }
     const spread = (v) => (Math.max(...v) - Math.min(...v)) / (Math.min(...v) || 1)
-    // Measured 2026-08-17: area ~3.9%, occlusivity ~27% across a 1.2° sweep.
+    // Measured 2026-08-17: area ~3.9%, closed perimeter ~27% across a 1.2° sweep.
     // Real geometry (rays escaping down side streets), not an engine fault —
-    // but it is why occlusivity's fitted weight deserves a caveat in P5.
+    // but it is why closed perimeter's fitted weight deserves a caveat in P5.
     assert.ok(spread(areas) < 0.08, `area spread ${spread(areas)} unexpectedly large`)
-    assert.ok(spread(occs) < 0.40, `occlusivity spread ${spread(occs)} unexpectedly large`)
-    assert.ok(spread(occs) > spread(areas), 'occlusivity is expected to be the volatile metric')
+    assert.ok(spread(occs) < 0.40, `closed perimeter spread ${spread(occs)} unexpectedly large`)
+    assert.ok(spread(occs) > spread(areas), 'closed perimeter is expected to be the volatile metric')
   })
 
   test('Gendarmenmarkt sits in the right order of magnitude vs the Grasshopper reference', () => {
@@ -181,7 +181,7 @@ describe('120° perceptual layer — regression against committed canonical read
     // This asserts the engine is in the same world as the reference, nothing more.
     const m = recompute(canonicalReadings.find((r) => r.site_id === 'Gendarmenmarkt-Berlin'))
     assert.ok(m.area > 8000 && m.area < 18000, `area ${m.area} far from reference 12437.9 m²`)
-    assert.ok(m.occlusivity > 150 && m.occlusivity < 600, `occlusivity ${m.occlusivity} implausible`)
+    assert.ok(m.closedPerimeter > 150 && m.closedPerimeter < 600, `closed perimeter ${m.closedPerimeter} implausible`)
     assert.ok(m.enclosureRatio > 0.1 && m.enclosureRatio < 0.8, `enclosure ${m.enclosureRatio}`)
     assert.ok(m.compactness > 0 && m.compactness <= 1, `compactness ${m.compactness} out of range`)
   })
@@ -201,7 +201,7 @@ describe('120° perceptual layer — regression against committed canonical read
       Math.abs(m.perimeter - expectedPerimeter) / expectedPerimeter < 0.01,
       `sector perimeter ${m.perimeter} vs expected ${expectedPerimeter} (the two radii must be included)`
     )
-    assert.equal(m.occlusivity, 0, 'open ground has no wall-to-wall edges')
+    assert.equal(m.closedPerimeter, 0, 'open ground has no wall-to-wall edges')
     assert.equal(m.enclosureRatio, 0, 'open ground has no wall hits')
   })
 
@@ -260,8 +260,8 @@ describe('360° field layer — geometric correctness', () => {
     // Fully enclosed: every adjacent vertex pair is wall-to-wall, so the closed
     // perimeter equals the whole perimeter — including the wrap-around edge.
     assert.ok(
-      Math.abs(m.occlusivity - m.perimeter) < 1e-6,
-      `occlusivity ${m.occlusivity} should equal perimeter ${m.perimeter} when fully enclosed`
+      Math.abs(m.closedPerimeter - m.perimeter) < 1e-6,
+      `closed perimeter ${m.closedPerimeter} should equal perimeter ${m.perimeter} when fully enclosed`
     )
   })
 
@@ -324,7 +324,7 @@ describe('360° field layer — geometric correctness', () => {
     const base = castIsovist(at, 0, buildings, full)
     for (const deg of [37, 90, 180, 271]) {
       const m = castIsovist(at, (deg * Math.PI) / 180, buildings, full)
-      for (const key of ['area', 'perimeter', 'compactness', 'occlusivity', 'enclosureRatio']) {
+      for (const key of ['area', 'perimeter', 'compactness', 'closedPerimeter', 'enclosureRatio']) {
         assert.ok(
           Math.abs(m[key] - base[key]) / Math.max(Math.abs(base[key]), 1e-9) < 0.02,
           `${key} moved by heading ${deg}°: ${m[key]} vs ${base[key]}`
@@ -360,7 +360,7 @@ describe('spatial index — identical results, faster', () => {
         const at = { x: x0 + ((x1 - x0) * (i + 0.5)) / 5, y: y0 + ((y1 - y0) * (i + 0.5)) / 5 }
         const brute = castIsovist(at, 0, buildings, full)
         const fast = castIsovist(at, 0, buildings, { ...full, index })
-        for (const key of ['area', 'perimeter', 'compactness', 'occlusivity', 'enclosureRatio']) {
+        for (const key of ['area', 'perimeter', 'compactness', 'closedPerimeter', 'enclosureRatio']) {
           assert.equal(fast[key], brute[key], `${site.name} ${key} differs at point ${i}`)
         }
       }
@@ -387,14 +387,14 @@ describe('spatial index — identical results, faster', () => {
     assert.equal(index.empty, true)
     const m = castIsovist({ x: 0, y: 0 }, 0, [], { ...full, index })
     assert.ok(m.area > 0, 'an unobstructed 360° isovist is the full range disc')
-    assert.equal(m.occlusivity, 0)
+    assert.equal(m.closedPerimeter, 0)
   })
 })
 
-describe('closed share — occlusivity in horizon units, added 2026-09-12', () => {
+describe('closed share — closed perimeter in horizon units, added 2026-09-12', () => {
   // Both use the SAME continuity rule (an edge counts only where consecutive
   // rays land on the same building, or on two within the touching tolerance).
-  // Occlusivity sums the real metres of each qualifying run; closed share
+  // Closed perimeter sums the real metres of each qualifying run; closed share
   // counts what SHARE of the horizon those runs cover. This is the case that
   // motivated adding it: replacing one long distant wall with several small
   // near objects that together surround the vantage can move the two in
@@ -409,7 +409,7 @@ describe('closed share — occlusivity in horizon units, added 2026-09-12', () =
   })
   const full = { fov: 360, rayCount: 360 }
 
-  test('a near surround can raise closed share while occlusivity falls', () => {
+  test('a near surround can raise closed share while closed perimeter falls', () => {
     // One long wall far to the north; everything else open.
     const distant = [slab(0, 150, 60, 3)]
     // Four short slabs close around the vantage, each separated from its
@@ -427,8 +427,8 @@ describe('closed share — occlusivity in horizon units, added 2026-09-12', () =
     const after = castIsovist({ x: 0, y: 0 }, 0, near, full)
 
     assert.ok(
-      after.occlusivity < before.occlusivity,
-      `expected occlusivity to fall (${before.occlusivity} -> ${after.occlusivity})`
+      after.closedPerimeter < before.closedPerimeter,
+      `expected closed perimeter to fall (${before.closedPerimeter} -> ${after.closedPerimeter})`
     )
     assert.ok(
       after.closedShare > before.closedShare,
@@ -443,7 +443,7 @@ describe('closed share — occlusivity in horizon units, added 2026-09-12', () =
 
   test('it falls monotonically as the same wall is cut into more pieces', () => {
     // THE CLAIM THE DISCLOSURE MAKES, PINNED. Closed share is not a coverage
-    // measure: it keeps occlusivity's continuity requirement, so it penalises
+    // measure: it keeps closed perimeter's continuity requirement, so it penalises
     // fragmentation — by count of pieces rather than by metres. Each separate
     // piece breaks the run twice, at its two silhouette edges, and gives back
     // one pair per ray it spans beyond the first.

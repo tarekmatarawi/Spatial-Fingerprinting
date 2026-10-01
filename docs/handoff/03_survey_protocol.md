@@ -69,7 +69,7 @@ Pixel sizes of the 18 active sites' images **as served during collection**, read
 | | Photograph | `perceptual_120` isovist | Match? |
 |---|---|---|---|
 | Position | Street View camera | Placed by eye in the 3D viewer to reproduce it | **Approximate.** Manual visual matching. No stated tolerance and no record of the Street View pano ID or coordinates. Two vantages lie outside their plaza boundary (`docs/spec.md:298`). |
-| Heading | Camera bearing | Placed by eye. Stored to 2 dp, or 1 dp for readings before 2026-08-17 (`docs/spec.md:439`) | **Approximate.** A 1.2° change moves occlusivity by ~27% at Herderplatz (`docs/spec.md:439`). |
+| Heading | Camera bearing | Placed by eye. Stored to 2 dp, or 1 dp for readings before 2026-08-17 (`docs/spec.md:439`) | **Approximate.** A 1.2° change moves closed perimeter by ~27% at Herderplatz (`docs/spec.md:439`). |
 | Horizontal FOV | `NOT FOUND` | 120° | **Unverified.** Then cropped to 8:5 in display, which removes an unknown share of the sides for images wider than 1.6 (`docs/street-view-photo-guide.md:27-28`). |
 | Vertical content | Image as cropped | Planar 2D isovist; enclosure uses building height over distance | Not comparable in kind |
 | Range | Unlimited, to the visible horizon | 200 m (`docs/spec.md:91`) | **Mismatch** wherever the view runs further than 200 m |
@@ -308,17 +308,17 @@ Four bipolar 7-point items, one per metric (`src/lib/survey360.js:149-177`). Val
 |---|---|---|---|
 | `area` | isovist area | Tight and confined | Spacious and open |
 | `compactness` | compactness | Irregular, stretched-out shape | Compact, regular shape |
-| `occlusivity` | occlusivity | Views blocked, hidden corners | Clear sightlines, nothing hidden |
+| `closedPerimeter` | closed perimeter | Views blocked, hidden corners | Clear sightlines, nothing hidden |
 | `enclosure` | enclosure ratio | Low walls, exposed to the sky | Tall walls, strongly enclosed |
 
-Occlusivity's 7 end reads as **low** occlusivity, so its expected correlation is negative (`scripts/validate-ratings.mjs:63-70`; `docs/spec.md:210`).
+The closed perimeter scale's 7 end reads as **low** closed perimeter, so its expected correlation is negative (`scripts/validate-ratings.mjs:63-70`; `docs/spec.md:210`).
 
 Presentation (`src/pages/SurveyPage.jsx:436-566`):
 
 - Each item is a row of **7 unlabelled buttons** between its two anchor texts. There are no numbers and no midpoint label. The selected button shows "●".
 - **Anchor side is randomised per participant, per item**, and fixed for the whole session (`survey360.js:194-208`). The drawn direction is stored as `anchor_direction` (`low_left` / `high_left`).
 - All four items for a plaza are on one screen, with the same interactive panorama at the same 4:3 framing as the triplet task (`SurveyPage.jsx:436-445, 477-484`).
-- Item order within the screen is fixed (area, compactness, occlusivity, enclosure).
+- Item order within the screen is fixed (area, compactness, closed perimeter, enclosure).
 - **Plazas rated**: only those the participant saw in their triplets, in random order (`survey360.js:179-192`). In practice this was 14–18 plazas per participant, 56–72 ratings.
 
 Screen text:
@@ -341,8 +341,8 @@ The instruction gives no definition of the anchors. Anchor wording deliberately 
 
 - Script: `scripts/validate-ratings.mjs` (`npm run validate:ratings`). For each item it correlates the per-plaza mean rating with the computed `perceptual_360` metric across 18 plazas. It reports a permutation p (20,000 shuffles) with Holm correction, a Fisher CI, a participant bootstrap (2,000), and Spearman–Brown split-half reliability (2,000 splits). Method summary: `01_methods_implementation.md` §5.7.
 - Output: `src/data/rating-validation.json` (full run, 2026-09-02). A quick n = 30 variant is `src/data/rating-validation-n30-quick.json`.
-- Results: `02_results_data.md` §3.8. Aligned r: area 0.75, compactness 0.58, occlusivity 0.22 (not significant), enclosure 0.83. Split-half reliability 0.77–0.99.
-- The ratings feed the spec's H1–H3 (`docs/spec.md:237-244`: reliability, convergence, occlusivity — all rating-based claims). **Numbering caveat:** the code's own hypothesis ids do not match the spec's. In `src/lib/analysis/hypotheses.js`, reliability is a separate `reliabilityPrecondition`, not a numbered hypothesis, and the ratings feed that plus code-`H2` and code-`H3` (same claims as spec H2/H3). Code-`H1` is "perceived similarity predicted by distance in the measured isovist space" (= spec's H4) and uses **no rating data** — see `04_decision_log.md` §U3 for the full renumbering.
+- Results: `02_results_data.md` §3.8. Aligned r: area 0.75, compactness 0.58, closed perimeter 0.22 (not significant), enclosure 0.83. Split-half reliability 0.77–0.99.
+- The ratings feed the spec's H1–H3 (`docs/spec.md:237-244`: reliability, convergence, closed perimeter — all rating-based claims). **Numbering caveat:** the code's own hypothesis ids do not match the spec's. In `src/lib/analysis/hypotheses.js`, reliability is a separate `reliabilityPrecondition`, not a numbered hypothesis, and the ratings feed that plus code-`H2` and code-`H3` (same claims as spec H2/H3). Code-`H1` is "perceived similarity predicted by distance in the measured isovist space" (= spec's H4) and uses **no rating data** — see `04_decision_log.md` §U3 for the full renumbering.
 
 **Anchor-position bias.** `validate-ratings.mjs:311-326` prints a check to the console only. It is **not stored** in `rating-validation.json`. Recomputed from the data for this document, mean value by drawn direction, descriptive only (not tested; direction is confounded with which plazas each participant rated):
 
@@ -351,7 +351,7 @@ The instruction gives no definition of the anchors. Anchor wording deliberately 
 | area | 262, 4.60 | 481, 4.88 | 0.28 |
 | compactness | 387, 3.84 | 356, 4.21 | 0.37 |
 | enclosure | 374, 4.63 | 369, 4.74 | 0.10 |
-| occlusivity | 348, 3.95 | 395, 4.02 | 0.07 |
+| closed perimeter | 348, 3.95 | 395, 4.02 | 0.07 |
 
 All four are below the script's own 0.5 warning threshold. Area's split is unbalanced (262 vs 481) because direction is drawn once per participant.
 

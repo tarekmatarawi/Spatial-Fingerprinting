@@ -13,14 +13,14 @@
 // LAYER SEPARATION: everything here is perceptual_120. Field-layer (360°) data
 // has its own bounds, computed in P6, and the two must never be mixed.
 
-export const METRICS = ['area', 'compactness', 'occlusivity', 'enclosure']
+export const METRICS = ['area', 'compactness', 'closedPerimeter', 'enclosure']
 export const FOV_MODE = 'perceptual_120'
 
 // results.json key → the short metric name used throughout the analysis.
 const SOURCE_KEYS = {
   area: 'area_m2',
   compactness: 'compactness',
-  occlusivity: 'occlusivity_m',
+  closedPerimeter: 'closed_perimeter_m',
   enclosure: 'enclosure_ratio',
 }
 
@@ -28,14 +28,14 @@ const SOURCE_KEYS = {
 export const METRIC_LABELS = {
   area: 'Isovist area',
   compactness: 'Compactness',
-  occlusivity: 'Occlusivity',
+  closedPerimeter: 'Closed perimeter',
   enclosure: 'Enclosure',
 }
 
 export const METRIC_UNITS = {
   area: 'm²',
   compactness: '',
-  occlusivity: 'm',
+  closedPerimeter: 'm',
   // A share of the 90 deg you could look up; multiply by 90 for the angle.
   enclosure: '',
 }
@@ -149,7 +149,7 @@ export function normaliseValue(value, bound) {
   return (value - bound.min) / (bound.max - bound.min)
 }
 
-// site_id → [area, compactness, occlusivity, enclosure] on the 0–1 scale.
+// site_id → [area, compactness, closed perimeter, enclosure] on the 0–1 scale.
 export function normalisedFingerprints(bySite, bounds) {
   const out = new Map()
   for (const [id, r] of bySite) {

@@ -126,7 +126,7 @@
     "metrics": [
       "area",
       "compactness",
-      "occlusivity",
+      "closedPerimeter",
       "enclosure"
     ]
   },

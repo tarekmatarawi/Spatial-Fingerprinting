@@ -57,15 +57,15 @@ describe('hypotheses — derivation from the analysis outputs', () => {
     // correlation could just mean participants were guessing, which would say
     // nothing about the metric.
     const hs = buildHypotheses(analysis, ratings)
-    const occ = ratings.scales.find((s) => s.metric === 'occlusivity')
+    const cp = ratings.scales.find((s) => s.metric === 'closedPerimeter')
     const h3 = hs.find((h) => h.id === 'H3')
-    if (occ.pearson_p_holm >= 0.05 && occ.reliability >= 0.4) {
+    if (cp.pearson_p_holm >= 0.05 && cp.reliability >= 0.4) {
       assert.equal(h3.verdict, VERDICT.SUPPORTED)
     } else {
       assert.equal(h3.verdict, VERDICT.NOT_SUPPORTED)
     }
 
-    const stripped = { ...ratings, scales: ratings.scales.map((s) => (s.metric === 'occlusivity' ? { ...s, reliability: 0.1 } : s)) }
+    const stripped = { ...ratings, scales: ratings.scales.map((s) => (s.metric === 'closedPerimeter' ? { ...s, reliability: 0.1 } : s)) }
     const weak = buildHypotheses(analysis, stripped).find((h) => h.id === 'H3')
     assert.equal(weak.verdict, VERDICT.NOT_SUPPORTED, 'unreliable raters must not count as evidence about the metric')
   })
@@ -111,7 +111,7 @@ describe('hypotheses — the H3 concealment comparison', () => {
 
     assert.deepEqual(
       rows.map((r) => r.metric),
-      ['compactness', 'area', 'occlusivity', 'enclosure']
+      ['compactness', 'area', 'closedPerimeter', 'enclosure']
     )
     // The figure quotes these; if the analysis is rerun and they move, the
     // caption in the thesis moves with them rather than silently disagreeing.
@@ -125,19 +125,19 @@ describe('hypotheses — the H3 concealment comparison', () => {
     }
   })
 
-  test('occlusivity matches the value the rating validation already reports', () => {
-    const occ = concealmentCorrelations(ratings).find((r) => r.metric === 'occlusivity')
-    const scale = ratings.scales.find((s) => s.metric === 'occlusivity')
-    // Perceived concealment is the reversed occlusivity rating, so the metric's
+  test('closed perimeter matches the value the rating validation already reports', () => {
+    const cp = concealmentCorrelations(ratings).find((r) => r.metric === 'closedPerimeter')
+    const scale = ratings.scales.find((s) => s.metric === 'closedPerimeter')
+    // Perceived concealment is the reversed closed perimeter rating, so the metric's
     // correlation with it is exactly the aligned r already in the record — one
     // number, computed twice, never allowed to differ.
-    assert.ok(Math.abs(occ.r - scale.pearson_aligned) < 1e-9)
+    assert.ok(Math.abs(cp.r - scale.pearson_aligned) < 1e-9)
   })
 
   test('the H3 claim is about ranking, and the ranking holds', () => {
     const rows = concealmentCorrelations(ratings)
-    const occ = rows.find((r) => r.metric === 'occlusivity')
-    const better = rows.filter((r) => r.aligned > occ.aligned).map((r) => r.metric)
+    const cp = rows.find((r) => r.metric === 'closedPerimeter')
+    const better = rows.filter((r) => r.aligned > cp.aligned).map((r) => r.metric)
     // The finding the figure exists to show: two other metrics track perceived
     // concealment more closely than the one named for it.
     assert.deepEqual(better, ['compactness', 'area'])

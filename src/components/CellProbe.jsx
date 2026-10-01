@@ -32,7 +32,7 @@ export function ProbeMarker({ cell, k = 1 }) {
 //
 // This is the layer that turns the panel from a table into an explanation. Every
 // metric beside it is a property of THIS shape — area is its area, compactness
-// its perimeter against that area, occlusivity the part of its edge that runs
+// its perimeter against that area, closed perimeter the part of its edge that runs
 // along continuous building. A reader who cannot see the shape has to take all
 // four on trust.
 //

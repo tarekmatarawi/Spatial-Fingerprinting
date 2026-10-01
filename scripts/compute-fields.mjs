@@ -161,7 +161,7 @@ function main() {
   // P9's Tier A needs this, and needs it badly. Its sensitivity answer — the
   // smallest change in one metric that would move a point into a target zone —
   // is exact algebra with no notion of plausibility, so it will happily report
-  // that a point becomes the vast, regular type if occlusivity drops by 19.4
+  // that a point becomes the vast, regular type if closed perimeter drops by 19.4
   // normalised units. That is true and it is worthless: nothing anywhere in the
   // corpus sits within nineteen corpus-widths of there. The envelope is what
   // lets Tier A separate "a demanding change" from "not a place that exists".
@@ -190,7 +190,7 @@ function main() {
       const raw = {
         area: m.area,
         compactness: m.compactness,
-        occlusivity: m.occlusivity,
+        closedPerimeter: m.closedPerimeter,
         enclosure: m.enclosureRatio,
       }
       const normalised = METRICS.map((k) => {
@@ -217,7 +217,7 @@ function main() {
         y: round(p.y, 2),
         area_m2: round(raw.area, 2),
         compactness: round(raw.compactness, 5),
-        occlusivity_m: round(raw.occlusivity, 2),
+        closed_perimeter_m: round(raw.closedPerimeter, 2),
         enclosure_ratio: round(raw.enclosure, 5),
         n: normalised,
       })

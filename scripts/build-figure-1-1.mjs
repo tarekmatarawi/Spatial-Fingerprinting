@@ -138,7 +138,8 @@ const h1 = Math.max(
     layer: 'point',
     title: 'Isovist metrics',
     lines: [
-      'Area · compactness · occlusivity · enclosure',
+      'Area · compactness ·',
+      'closed perimeter · enclosure',
       'One hand-placed 360° reading per plaza,',
       NUMBERS.plazas + ' plazas',
     ],

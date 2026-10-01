@@ -140,7 +140,7 @@ export function assembleSurvey(siteIds, participantId, length = TRIPLET_COUNT) {
 // The four bipolar scales, one per geometric metric.
 //
 // Anchors are deliberately plain language. A participant must never meet the
-// words "isovist", "compactness", "occlusivity" or "enclosure ratio" — naming
+// words "isovist", "compactness", "closed perimeter" or "enclosure ratio" — naming
 // the construct would teach them what to look for and turn a perceptual report
 // into a guess at the researcher's intent.
 //
@@ -160,8 +160,8 @@ export const RATING_SCALES = [
     high: 'Compact, regular shape',
   },
   {
-    id: 'occlusivity',
-    metric: 'occlusivity',
+    id: 'closedPerimeter',
+    metric: 'closedPerimeter',
     low: 'Views blocked, hidden corners',
     high: 'Clear sightlines, nothing hidden',
   },

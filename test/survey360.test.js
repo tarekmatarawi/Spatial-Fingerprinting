@@ -126,7 +126,7 @@ describe('survey — semantic differential', () => {
 
   test('four scales, plain language, no jargon reaches the participant', () => {
     assert.equal(RATING_SCALES.length, 4)
-    const banned = /isovist|compactness|occlusivity|enclosure ratio/i
+    const banned = /isovist|compactness|closed perimeter|enclosure ratio/i
     for (const s of RATING_SCALES) {
       assert.ok(s.low && s.high, s.id + ' needs both anchors')
       assert.ok(!banned.test(s.low), s.id + ' low anchor leaks jargon: ' + s.low)
@@ -134,7 +134,7 @@ describe('survey — semantic differential', () => {
     }
     assert.deepEqual(
       RATING_SCALES.map((s) => s.metric),
-      ['area', 'compactness', 'occlusivity', 'enclosure'],
+      ['area', 'compactness', 'closedPerimeter', 'enclosure'],
       'one scale per geometric metric, in metric order'
     )
   })

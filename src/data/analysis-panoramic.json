@@ -11,13 +11,13 @@
   "metrics": [
     "area",
     "compactness",
-    "occlusivity",
+    "closedPerimeter",
     "enclosure"
   ],
   "metric_labels": {
     "area": "Isovist area",
     "compactness": "Compactness",
-    "occlusivity": "Occlusivity",
+    "closedPerimeter": "Closed perimeter",
     "enclosure": "Enclosure"
   },
   "seeds": {
@@ -38,7 +38,7 @@
       "minSite": "Herderplatz-Weimar",
       "maxSite": "Bebelplatz-Berlin"
     },
-    "occlusivity": {
+    "closedPerimeter": {
       "min": 267.22,
       "max": 622.93,
       "minSite": "Marktplatz-Heidelberg",
@@ -895,8 +895,8 @@
         ]
       },
       {
-        "metric": "occlusivity",
-        "label": "Occlusivity",
+        "metric": "closedPerimeter",
+        "label": "Closed perimeter",
         "accuracyWithout": 0.5057686389085434,
         "drop": 0.020243306859567545,
         "perFold": [
@@ -1351,8 +1351,8 @@
         "rank": 1
       },
       {
-        "metric": "occlusivity",
-        "label": "Occlusivity",
+        "metric": "closedPerimeter",
+        "label": "Closed perimeter",
         "drop": 0.020243306859567545,
         "rank": 2
       },
@@ -1410,8 +1410,8 @@
             "rank": 1
           },
           {
-            "metric": "occlusivity",
-            "label": "Occlusivity",
+            "metric": "closedPerimeter",
+            "label": "Closed perimeter",
             "drop": 0.020243306859567545,
             "rank": 2
           },

@@ -132,7 +132,7 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
 
           <p>
             <B>Demolition, added after the first build.</B> Every additive preset in the library
-            lowers isovist area, compactness and occlusivity together — measured across all nine,
+            lowers isovist area, compactness and closed perimeter together — measured across all nine,
             that is the one direction they travel, because an object standing in a square can only
             ever shrink and complicate the view from it. That makes whole regions of the corpus
             typology unreachable by building alone: no addition can raise area, and several zone
@@ -150,7 +150,7 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             Compactness (4&pi;A/P²) collapses under sparse slender obstacles: a 250 mm post stops
             one ray while its neighbours run on a hundred metres, adding two long radial edges to
             the perimeter — and perimeter enters compactness squared. Measured here, a pergola
-            takes 2.5% off isovist area and 53% off compactness. Occlusivity has a matching blind
+            takes 2.5% off isovist area and 53% off compactness. Closed perimeter has a matching blind
             spot of its own: it counts real metres of unbroken wall, and a near object can fill
             most of the horizon while remaining physically small, so it can drop the metric sharply
             while the space feels far more enclosed. Diagnostics were added for this phase alone to
@@ -182,7 +182,7 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
           <p>
             <B>Closed share</B> asks a simple question: <B>how much of what you can see is
             unbroken wall?</B> Not how many metres of it — what fraction of the way round. It uses
-            occlusivity&rsquo;s own rule for what counts as &ldquo;unbroken&rdquo; (two neighbouring
+            closed perimeter&rsquo;s own rule for what counts as &ldquo;unbroken&rdquo; (two neighbouring
             sightlines must land on the same building, or on two that touch), and only changes the
             unit. Unlike solid share it has room to move here: the baseline is 0.897, not 0.981.
           </p>
@@ -203,27 +203,27 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             250 mm pergola post never can, and a pergola has eight to twelve of them.
           </p>
           <p>
-            <B>Which is exactly why the pair is worth having.</B> Occlusivity falling{' '}
+            <B>Which is exactly why the pair is worth having.</B> Closed perimeter falling{' '}
             <B>while closed share rises</B> means nothing actually broke up — the new surface is
             just physically smaller than the distant facade it hid, and you really are more
-            enclosed. <B>Both falling</B> means the view genuinely did fragment. Occlusivity on its
+            enclosed. <B>Both falling</B> means the view genuinely did fragment. Closed perimeter on its
             own cannot tell those two apart, because it reports the same drop for both.
           </p>
           <Ex
             title="Standing at the centre of four 12 × 12 m pavilions, 9 m tall, 14 m from each — surrounded on all sides"
             rows={[
-              { label: 'Occlusivity (metres of unbroken wall)', value: '499 m → 175 m  (−65%)', flag: true },
+              { label: 'Closed perimeter (metres of unbroken wall)', value: '499 m → 175 m  (−65%)', flag: true },
               { label: 'Closed share (share of horizon)', value: '0.917 → 0.958  (+5%)' },
               { label: 'Enclosure', value: '0.193 → 0.410  (+112%)' },
               { label: 'Isovist area', value: '−77%' },
             ]}
             verdict={
               'The same continuity rule, applied to the same rays, reaching opposite conclusions. ' +
-              'Occlusivity falls because four pavilions are individually short in metres where the ' +
+              'Closed perimeter falls because four pavilions are individually short in metres where the ' +
               'distant facade they replaced was long. Closed share rises because each pavilion ' +
               'spans about 46 rays and costs only the two breaks at its edges — net +43 apiece. ' +
               'Enclosure and area settle which one matches standing there: you are emphatically ' +
-              'more enclosed, and occlusivity alone would have reported the opposite.'
+              'more enclosed, and closed perimeter alone would have reported the opposite.'
             }
           />
           <Ex
@@ -353,7 +353,7 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             basin of the five types — about 6% of the reachable space, against 36% for &ldquo;Open,
             regular&rdquo; and 28% for &ldquo;Vast, regular.&rdquo; It still dominates every
             intervention tried here because it is the only type whose required direction (lower
-            area, lower compactness, lower occlusivity, higher enclosure) matches what adding an
+            area, lower compactness, lower closed perimeter, higher enclosure) matches what adding an
             object to an open square does to all four at once. Two solid sides of enclosure, built
             unbroken, is the threshold that escapes it — one hole in the enclosure returns a point
             to &ldquo;Tight, irregular&rdquo; immediately, which is why the four zone types other
@@ -365,10 +365,10 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             reasoning about the library.</B> The recessed arcade is the only intervention here that
             makes a zone type MORE itself. Cut into three separate facades around this square it
             takes &ldquo;Open, facade-rich&rdquo; from 68.0% of the plaza to 93.3%, raising
-            occlusivity 15.0%, isovist area 1.1% and solidity 1.2% together — the only move of the
+            closed perimeter 15.0%, isovist area 1.1% and solidity 1.2% together — the only move of the
             ten that improves three metrics at once, and the only additive one that raises area at
             all. It works because its piers stand on the ORIGINAL building line, so the surface it
-            adds extends the run of continuous edge that occlusivity counts instead of breaking it,
+            adds extends the run of continuous edge that closed perimeter counts instead of breaking it,
             which is exactly what every freestanding object does instead. The qualification matters
             as much as the finding: adding one 40 m freestanding colonnade alongside those three
             recesses inverts the result — zone 0 back to 29.4%, compactness −57.6% — because
@@ -382,7 +382,7 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             moved into open ground lower it 19.9%: a 28-point swing from position alone. Building
             against an obstruction that is already standing absorbs it into one silhouette, where
             the same mass in the open adds a second independent notch to the isovist. So the rule
-            above &mdash; that additive moves lower area, compactness and occlusivity together
+            above &mdash; that additive moves lower area, compactness and closed perimeter together
             &mdash; describes ISOLATED additions, and consolidating an existing interruption is
             outside it. That placement is also the only route found here to &ldquo;Open,
             regular&rdquo;: 0.3% of the plaza at baseline, 9.3% with the pavilions, 0.0% in the

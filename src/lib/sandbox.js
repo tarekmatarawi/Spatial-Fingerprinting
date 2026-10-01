@@ -291,7 +291,7 @@ export function recomputeField({
     const raw = {
       area: m.area,
       compactness: m.compactness,
-      occlusivity: m.occlusivity,
+      closedPerimeter: m.closedPerimeter,
       enclosure: m.enclosureRatio,
     }
     // Rounded to the same places P6 writes, so a sandbox point and a stored
@@ -305,7 +305,7 @@ export function recomputeField({
       index: i,
       area_m2: round(raw.area, 2),
       compactness: round(raw.compactness, 5),
-      occlusivity_m: round(raw.occlusivity, 2),
+      closed_perimeter_m: round(raw.closedPerimeter, 2),
       enclosure_ratio: round(raw.enclosure, 5),
       // P9-ONLY DIAGNOSTIC FIELDS. Carried on the recomputed point and nowhere
       // else: they are not written to src/data/fields/, not part of the frozen

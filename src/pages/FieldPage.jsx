@@ -429,7 +429,7 @@ function FieldMap({ field, geometry, metric, windowRadius }) {
   // a corpus-wide scale would flatten a small square to one flat tone.
   const range = useMemo(() => {
     if (metric === 'zones') return null
-    const key = { area: 'area_m2', compactness: 'compactness', occlusivity: 'occlusivity_m', enclosure: 'enclosure_ratio' }[metric]
+    const key = { area: 'area_m2', compactness: 'compactness', closedPerimeter: 'closed_perimeter_m', enclosure: 'enclosure_ratio' }[metric]
     const vals = field.points.map((p) => p[key])
     return { key, min: Math.min(...vals), max: Math.max(...vals) }
   }, [field, metric])

@@ -23,7 +23,7 @@ export function ToolTabs({ value, onChange, disabled }) {
     { id: 'preset', label: 'From library' },
     { id: 'recess', label: 'Carve a recess' },
     // The only move that can make a plaza's isovists LARGER. Every additive
-    // preset lowers area, compactness and occlusivity together, so without
+    // preset lowers area, compactness and closed perimeter together, so without
     // this whole regions of the typology cannot be reached at all.
     { id: 'demolish', label: 'Remove a building' },
   ]
@@ -249,7 +249,7 @@ export function ElementList({ elements, describe, selectedId, onSelect, onDelete
 //
 // They are NOT equally reliable and must never appear side by side as though
 // they were. Solidity replaces compactness cleanly; closed share replaces
-// occlusivity's blind spot cleanly; solid share is saturated at this site and
+// closed perimeter's blind spot cleanly; solid share is saturated at this site and
 // carries only its sign. Saying so beside the numbers is the only thing
 // stopping a reader from treating a 0.1% move as a result.
 //
@@ -280,11 +280,11 @@ export function MetricCaveats({ solidShareNote }) {
         <div>
           <dt className="font-medium text-ink">Closed share (horizon) — reliable</dt>
           <dd className="text-ink-muted">
-            Answers &ldquo;how much of what I see is unbroken wall&rdquo; rather than occlusivity&rsquo;s
+            Answers &ldquo;how much of what I see is unbroken wall&rdquo; rather than closed perimeter&rsquo;s
             &ldquo;how many metres of it&rdquo;. <strong className="font-medium text-ink">Not a coverage
-            measure</strong> &mdash; it keeps occlusivity&rsquo;s continuity rule, so many small pieces
+            measure</strong> &mdash; it keeps closed perimeter&rsquo;s continuity rule, so many small pieces
             LOWER it (eight pergola posts break sixteen runs and span about one ray each) while one
-            big mass raises it. Read the two together: occlusivity down with closed share up means
+            big mass raises it. Read the two together: closed perimeter down with closed share up means
             the drop was nearness, not fragmentation; both down means the view really did break up.
             Baseline 0.897, not saturated.
           </dd>

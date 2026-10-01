@@ -13,7 +13,7 @@
 //
 //   H1  the core claim — geometry predicts perceived similarity
 //   H2  are the measures valid — do they converge with judgement
-//   H3  the standout negative — occlusivity fails, and why
+//   H3  the standout negative — closed perimeter fails, and why
 //   H4  nuance — every dimension contributes
 //   H5  the limitation, and the study it implies
 //
@@ -90,7 +90,7 @@ export function buildHypotheses(analysis, ratings) {
   const relLo = Math.min(...reliabilities)
   const relHi = Math.max(...reliabilities)
 
-  const occ = byMetric.occlusivity
+  const cp = byMetric.closedPerimeter
   const weights = analysis.fit.weights_normalised
   const boots = analysis.bootstrap.per_metric
   const allWeightsNonZero = boots.every((b) => b.lo > 0)
@@ -152,25 +152,25 @@ export function buildHypotheses(analysis, ratings) {
       id: 'H3',
       group: 'The standout negative result',
       claim:
-        'Occlusivity does not converge with perceived concealment, and the divergence follows from its definition rather than its implementation.',
+        'Closed perimeter does not converge with perceived concealment, and the divergence follows from its definition rather than its implementation.',
       // Supported when the metric fails to converge WHILE participants agreed
       // among themselves — that pairing is what makes it a fact about the
       // formula rather than about the raters.
       verdict:
-        occ.pearson_p_holm >= 0.05 && occ.reliability >= RELIABILITY_FLOOR
+        cp.pearson_p_holm >= 0.05 && cp.reliability >= RELIABILITY_FLOOR
           ? VERDICT.SUPPORTED
           : VERDICT.NOT_SUPPORTED,
-      headline: `r = ${occ.pearson_aligned.toFixed(3)}, but raters agreed at ${occ.reliability.toFixed(2)}`,
+      headline: `r = ${cp.pearson_aligned.toFixed(3)}, but raters agreed at ${cp.reliability.toFixed(2)}`,
       why: 'Closed perimeter sums the solid facade you can see, so it grows with how much is visible rather than with what is concealed. A measure that rises with visibility is a poor candidate for a measure of hiddenness — an argument available from the definition alone, before any data.',
       evidence: [
         {
           label: 'Correlation with perceived concealment',
-          value: `${occ.pearson_aligned.toFixed(3)} (95% CI ${occ.participant_bootstrap.lo?.toFixed(2)} to ${occ.participant_bootstrap.hi?.toFixed(2)}, spans zero)`,
+          value: `${cp.pearson_aligned.toFixed(3)} (95% CI ${cp.participant_bootstrap.lo?.toFixed(2)} to ${cp.participant_bootstrap.hi?.toFixed(2)}, spans zero)`,
           ok: false,
         },
         {
           label: 'Raters agreed with each other',
-          value: `${occ.reliability.toFixed(2)} — the percept is real and stable`,
+          value: `${cp.reliability.toFixed(2)} — the percept is real and stable`,
           ok: true,
         },
         {
@@ -246,22 +246,22 @@ export function summariseVerdicts(hypotheses) {
 
 // H3, drawn rather than asserted.
 //
-// The claim under test is not "occlusivity is a weak metric" but something
-// sharper: that the metric NAMED occlusivity is not the best available account
-// of perceived concealment. Answering it needs all four metrics correlated
+// The claim under test is not "closed perimeter is a weak metric" but something
+// sharper: that closed perimeter is not the best available account of
+// perceived concealment. Answering it needs all four metrics correlated
 // against the SAME percept — the concealment scale — not each metric against
 // its own scale. That comparison is what the figure shows, and it is computed
 // here so the figure and any number quoted beside it come from one place.
 //
-// The occlusivity scale runs 1 = "views blocked, hidden corners" to 7 = "clear
+// The closed perimeter scale runs 1 = "views blocked, hidden corners" to 7 = "clear
 // sightlines, nothing hidden", so perceived concealment is the reversed rating.
 // Correlations are reported twice: `r` is the raw signed value against that
 // percept, `aligned` is |r| — the strength of the association, which is what
 // ranks the rows. Sign is carried separately and stated in the figure, because
-// "more compact reads as less concealing" and "more occluding reads as more
+// "more compact reads as less concealing" and "more closed perimeter reads as more
 // concealing" are both evidence about the same percept, in opposite directions.
 export function concealmentCorrelations(ratings) {
-  const scale = ratings.scales.find((s) => s.metric === 'occlusivity')
+  const scale = ratings.scales.find((s) => s.metric === 'closedPerimeter')
   if (!scale) return []
 
   // Reversed so that a larger number means "felt more concealing".
