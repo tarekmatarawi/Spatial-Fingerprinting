@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updated_at": "2026-10-13T08:47:19.282Z",
+ "updated_at": "2026-10-13T09:55:25.720Z",
  "scenarios": [
   {
    "id": "p9-four-types-two-halves",
@@ -726,11 +726,11 @@
   },
   {
    "id": "p9-market-room-and-passage",
-   "name": "Market Room and Passage",
+   "name": "Market Room and Passage 01",
    "note": "A market room for the Erzeugermarkt — held every Thursday and Saturday on the plaza in temporary stalls the model does not contain — placed beside the square’s main west–east movement line rather than across it. Two stall rows form the room’s long sides, a pavilion closes the east end, a solid screen returns the south-west corner, and a perforated screen faces the passage so the room reads as held while staying visually connected to the route; one clear opening is left on the passage side. A seating wall sits inside the room, and a recessed arcade is cut into the west facade at the Zeil entry to keep that edge continuous and covered. The room is on the south side, where the clear depth beside the passage is greater and no transport structure intrudes, and it stands clear of both underground station accesses and of the Zeil approach. The passage itself — in from the Zeil at the west, across the plaza between the two accesses — is left open, and is what the scenario asks to stay open and facade-rich while the room is asked to read as tight and strongly enclosed. The intent is to give the square two deliberate characters instead of one open field: open along the route people take from the Zeil and up out of the station, and closing as it turns toward the market. The perforated screen is kept in preference to a solid one as the better design argument, at a cost to the room’s compactness. The seating wall registers nothing at all: it stands below the measured eye-height slice, which is a documented limit of the instrument rather than a property of the design. The two station accesses have no geometry in the model, and their positions are indicative only.",
    "site_id": "Konstablerwache-Frankfurt am Main",
    "created_at": "2026-10-13T08:47:19.282Z",
-   "updated_at": "2026-10-13T08:47:19.282Z",
+   "updated_at": "2026-10-13T09:55:25.719Z",
    "elements": [
     {
      "id": "mrp-row-north",
@@ -842,6 +842,162 @@
      },
      "rotation_deg": 0,
      "placed_at": "2026-10-13T08:47:19.272Z"
+    }
+   ],
+   "selection": {
+    "x": -24,
+    "y": -18
+   },
+   "radius_m": 18,
+   "target_zone": 2,
+   "provenance": {
+    "zones_generated_at": "2026-09-06T00:30:27.887Z",
+    "zone_count": 5,
+    "weights": [
+     0.3121969818048535,
+     0.27488596169781887,
+     0.2065181660513352,
+     0.20639889044599233
+    ],
+    "field_spacing_m": 2.5,
+    "normalisation_source": "perceptual_360"
+   }
+  },
+  {
+   "id": "p9-market-room-and-passage-02",
+   "name": "Market Room and Passage 02",
+   "note": "A second reading of the same idea, drawn against the same selection and the same target as \"Market Room and Passage 01\" so the two can be set beside each other. The market spreads: three stall rows instead of two, carried north toward the middle of the plaza at an even pitch, with equal aisles between them and a cross-aisle at either end, so the stalls can be walked out of at both ends rather than only one. The stalls are shallower than in 01, which is what buys the aisle width back and leaves more of the plaza’s sampled ground standing. The pavilion steps east, clear of the aisles people use to move around the stalls, instead of closing hard against their ends. The solid screen moves out from the rows’ west ends to open the cross-aisle behind it, and the perforated screen still carries the market’s frontage onto the passage, with the seating wall set against its northern face so people sit in the screen’s shade looking out at the route. The recessed arcade at the Zeil entry is unchanged. Nothing here is asked of the passage that 01 did not already ask: it is left open, and the room is the part asked to read as tight and strongly enclosed. Two cautions carried over. The seating wall stands below the measured eye-height slice, so the instrument records nothing for it either way and its position is a design argument rather than a finding — as is the shade, which this model does not compute at all. And the room reaches its character through enclosure rather than through visible area or closed perimeter, both of which stay well short of the target type.",
+   "site_id": "Konstablerwache-Frankfurt am Main",
+   "created_at": "2026-10-13T09:55:25.719Z",
+   "updated_at": "2026-10-13T09:55:25.719Z",
+   "elements": [
+    {
+     "id": "mrp02-row-south",
+     "kind": "preset",
+     "preset": "marketRow",
+     "params": {
+      "length": 36,
+      "depth": 2.5,
+      "height": 3.5,
+      "gap_width": 1
+     },
+     "anchor": {
+      "x": -24,
+      "y": -28.75
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-10-13T09:55:25.712Z"
+    },
+    {
+     "id": "mrp02-row-mid",
+     "kind": "preset",
+     "preset": "marketRow",
+     "params": {
+      "length": 36,
+      "depth": 2.5,
+      "height": 3.5,
+      "gap_width": 1
+     },
+     "anchor": {
+      "x": -24,
+      "y": -19.5
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-10-13T09:55:25.712Z"
+    },
+    {
+     "id": "mrp02-row-north",
+     "kind": "preset",
+     "preset": "marketRow",
+     "params": {
+      "length": 36,
+      "depth": 2.5,
+      "height": 3.5,
+      "gap_width": 1
+     },
+     "anchor": {
+      "x": -24,
+      "y": -10.25
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-10-13T09:55:25.712Z"
+    },
+    {
+     "id": "mrp02-pavilion",
+     "kind": "preset",
+     "preset": "landmark",
+     "params": {
+      "size": 10,
+      "height": 9
+     },
+     "anchor": {
+      "x": 6,
+      "y": -18
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-10-13T09:55:25.712Z"
+    },
+    {
+     "id": "mrp02-screen-west",
+     "kind": "preset",
+     "preset": "screenWall",
+     "params": {
+      "length": 14,
+      "height": 5,
+      "perforation": 0
+     },
+     "anchor": {
+      "x": -46,
+      "y": -22
+     },
+     "rotation_deg": 90,
+     "placed_at": "2026-10-13T09:55:25.712Z"
+    },
+    {
+     "id": "mrp02-screen-passage",
+     "kind": "preset",
+     "preset": "screenWall",
+     "params": {
+      "length": 26,
+      "height": 5,
+      "perforation": 20
+     },
+     "anchor": {
+      "x": -29,
+      "y": -4.5
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-10-13T09:55:25.712Z"
+    },
+    {
+     "id": "mrp02-recess-zeil",
+     "kind": "recess",
+     "preset": "recessedArcade",
+     "params": {
+      "length": 24,
+      "depth": 3,
+      "pier_spacing": 5
+     },
+     "building": 164,
+     "edge": 9,
+     "t": 0.996,
+     "placed_at": "2026-10-13T09:55:25.712Z"
+    },
+    {
+     "id": "mrp02-lowwall-seating",
+     "kind": "preset",
+     "preset": "lowWall",
+     "params": {
+      "length": 26,
+      "height": 0.5,
+      "segments": 1
+     },
+     "anchor": {
+      "x": -29,
+      "y": -4
+     },
+     "rotation_deg": 0,
+     "placed_at": "2026-10-13T09:55:25.712Z"
     }
    ],
    "selection": {
