@@ -23,7 +23,7 @@ Together these four numbers are a plaza's *spatial fingerprint*. A perceptual su
 
 ## What the study found
 
-Eighteen European plazas, 46 survey participants, 552 similarity judgements and 2,972 ratings. Every figure below is read from the stored analysis files and shown on the `#/weights` page.
+Eighteen German plazas in ten cities, 46 survey participants, 552 similarity judgements and 2,972 ratings. Every figure below is read from the stored analysis files and shown on the `#/weights` page.
 
 | | Hypothesis | Verdict |
 | --- | --- | --- |
@@ -47,7 +47,7 @@ Each phase is a page in the app. P1–P4 form **Setup**, P5–P8 **Analysis**, a
 | **P3** | Perceptual Survey — Panoramic | `#/survey` (participants: `?survey`) | Participants pick which two of three plaza panoramas feel most alike, then rate each plaza on four scales |
 | **P4** | Survey Results Dashboard | `#/results` | Response quality and pooled pair coverage |
 | **P5** | Weight Fitting & Hypothesis Testing | `#/weights` | Maximum-likelihood weights with bootstrap intervals, cross-validation, ablation and the hypothesis tests |
-| **P6** | Isovist Field Mapping & Zone Typology | `#/field` | 11,719 grid points across the 18 plazas, clustered into five zone types |
+| **P6** | Isovist Field Mapping & Zone Typology | `#/field` | 11,719 grid points across the 18 plazas, clustered into five zone types that serve as a reference for diagnosing and comparing places within and across plazas |
 | **P7** | View-Cloud Comparison | `#/cloud-comparison` | Each plaza as a cloud of eight views (144 in all), compared by centroid, Gaussian and Chamfer distance |
 | **P8** | Matched-View Validation Survey | `#/matched-view` (participants: `?matched-view-survey`) | Do people agree with the view pairs the framework calls similar? Complete: 15 participants, 180 judgements |
 | **P9** | Design Diagnostic & Intervention | `#/diagnose` | Konstablerwache, Frankfurt: diagnose an area against a zone type, draw interventions and watch the zone map change; nine saved scenarios |
@@ -102,6 +102,8 @@ npm run recompute:readings    # re-derive stored readings after a deliberate eng
 The P3 survey saves each answer as it is given to a Google Sheet, through the Apps Script in `google-apps-script/Code.gs` (setup: [docs/survey-storage-setup.md](docs/survey-storage-setup.md)). Each participant has one row, updated as they go; new participants are added below the existing ones. `npm run sync:survey` copies the Sheet into `src/data/survey-responses-360.json` for analysis. P8 responses were collected through the development server into `src/data/matched-view-responses.json`.
 
 ## Project structure
+
+All data lives in `src/data/`: survey responses in `survey-responses-360.json` (P3) and `matched-view-responses.json` (P8); site data and readings in `sites.json`, `results.json` and `fields/`; frozen analysis outputs in `analysis-panoramic.json`, `rating-validation.json`, `zones.json` and `matched-view-trials.json`.
 
 ```
 src/
