@@ -1,4 +1,5 @@
-// The five hypotheses, derived from the two analysis outputs.
+// The precondition and the five hypotheses, derived from the two analysis
+// outputs.
 //
 // They span both files by nature, which is why this lives on its own rather
 // than inside either script: the convergence claims are answered by the rating
@@ -7,36 +8,26 @@
 // analysis layer, testable and stated once, instead of being re-derived in
 // whatever surface displays them.
 //
-// ORDER IS AN ARGUMENT, not a pipeline trace. The thesis asserts that a
-// geometric fingerprint predicts perceived similarity well enough to drive a
-// design diagnostic, so that claim leads. The sequence then runs:
+//   Precondition  each rating scale is reliable enough to test against (for H2 and H3)
+//   H1  weighted distance predicts the triplet choices above chance
+//   H2  each metric corresponds to its own rating scale
+//   H3  where a metric does not, the mismatch is systematic, not noisy ratings
+//   H4  the fitted model gives every metric a weight above zero
+//   H5  the four-metric model outperforms isovist area alone
 //
-//   H1  the core claim — geometry predicts perceived similarity
-//   H2  are the measures valid — do they converge with judgement
-//   H3  the standout negative — closed perimeter fails, and why
-//   H4  nuance — every dimension contributes
-//   H5  the limitation, and the study it implies
-//
-// Rater reliability is deliberately NOT a hypothesis. Split-half 0.77–0.99
-// says the instrument works and participants were not guessing — a data-quality
-// precondition, the kind of manipulation check that belongs in methods.
-// Leading with it would open the argument on a formality. It is exported below
-// as `RELIABILITY_PRECONDITION` so the same numbers still appear, in the place
-// they belong.
-//
-// Two points matter for reading the verdicts:
-//
-//   * A hypothesis is only "supported" when the evidence clears a stated
-//     threshold, never because a number merely points the right way. H5 in
-//     particular fails on a difference of +0.4 pp, which is real but nowhere
-//     near distinguishable from zero.
-//   * "Partly supported" is a real verdict, not a hedge. H2 asks whether four
-//     metrics converge with perception; three do and one does not, and
-//     collapsing that to a yes or a no would lose the finding.
+// A hypothesis is only "supported" when the evidence clears its stated rule,
+// never because a number merely points the right way. H5 shows why the
+// distinction matters: the full model is ahead of area alone, but not by a
+// margin the sign test can tell apart from chance, so it gets its own verdict
+// rather than being rounded up to support or down to a plain failure.
+
+import { METRIC_LABELS } from './fingerprints.js'
 
 export const VERDICT = {
   SUPPORTED: 'supported',
   PARTLY: 'partly',
+  // Not significant, but with the full model ahead — the direction H5 predicts.
+  DIRECTIONAL: 'not_significant_directional',
   NOT_SUPPORTED: 'not_supported',
 }
 
@@ -44,27 +35,40 @@ export const VERDICT = {
 // its own — quoted in the UI so a reader can see why 0.22 is not a finding.
 export const R_SIGNIFICANCE_18 = 0.47
 
-// Below this, participants disagreed with each other so much that no
-// measurement could track their mean — the metric is untested rather than
-// disproven.
-const RELIABILITY_FLOOR = 0.4
+// The precondition's threshold. Below this, participants disagreed with each
+// other so much that no measurement could track their mean — a metric tested
+// against such a scale would be untested rather than disproven.
+export const RELIABILITY_FLOOR = 0.4
+
+// The name of a rating scale where it differs from its metric's name.
+const SCALE_NAMES = {
+  closedPerimeter: 'perceived facade continuity',
+}
+// "Metric ↔ its scale", naming the scale only where its name is not the metric's.
+const pairLabel = (s) => {
+  const metric = METRIC_LABELS[s.metric] ?? s.label
+  return SCALE_NAMES[s.metric] ? `${metric} ↔ ${SCALE_NAMES[s.metric]}` : metric
+}
 
 const pct = (v) => (v == null ? null : v * 100)
+const matches = (s) => s.pearson_p_holm < 0.05 && s.pearson_aligned > 0
 
-// The reliability check, stated as a precondition rather than a hypothesis.
-// Reported in methods: it establishes that there is a stable shared percept for
-// the metrics to be tested against, without which none of H1–H5 could mean
-// anything — but establishing that your instrument works is not a finding.
+// The precondition for H2 and H3: every rating scale must reach a split-half
+// reliability of at least RELIABILITY_FLOOR. Without a stable shared percept a
+// failed correlation would say nothing about the metric.
 export function reliabilityPrecondition(ratings) {
   const values = ratings.scales.map((s) => s.reliability).filter((v) => v != null)
+  const lo = Math.min(...values)
   return {
-    label: 'Rater reliability',
-    lo: Math.min(...values),
+    id: 'Precondition',
+    label: 'Precondition for H2 and H3',
+    claim: `Each rating scale reaches a split-half reliability of at least ${RELIABILITY_FLOOR.toFixed(2).replace(/^0/, '')}.`,
+    lo,
     hi: Math.max(...values),
-    passes: Math.min(...values) >= RELIABILITY_FLOOR,
+    passes: values.length === ratings.scales.length && lo >= RELIABILITY_FLOOR,
     perScale: ratings.scales.map((s) => ({
       metric: s.metric,
-      label: s.label,
+      label: METRIC_LABELS[s.metric] ?? s.label,
       reliability: s.reliability,
       ratingsPerPlaza: s.ratings_per_plaza,
     })),
@@ -74,23 +78,17 @@ export function reliabilityPrecondition(ratings) {
       'other’s, so this measures whether observers agree with EACH OTHER — independent of whether ' +
       'any metric matches them.',
     why:
-      'A precondition, not a result. It confirms the instrument works and that participants were ' +
-      'not answering at random, which is what licenses treating a failed correlation as evidence ' +
-      'about a metric rather than about the raters. It also sets a ceiling: no measurement can ' +
-      'track a group mean more closely than that mean tracks itself.',
+      'It confirms the instrument works and that participants were not answering at random, which ' +
+      'is what licenses treating a failed correlation as evidence about a metric rather than about ' +
+      'the raters. It also sets a ceiling: no measurement can track a group mean more closely than ' +
+      'that mean tracks itself.',
   }
 }
 
 export function buildHypotheses(analysis, ratings) {
-  const byMetric = Object.fromEntries(ratings.scales.map((s) => [s.metric, s]))
-  const converging = ratings.scales.filter((s) => s.pearson_p_holm < 0.05 && s.pearson_aligned > 0)
-  const failing = ratings.scales.filter((s) => !(s.pearson_p_holm < 0.05 && s.pearson_aligned > 0))
+  const converging = ratings.scales.filter(matches)
+  const failing = ratings.scales.filter((s) => !matches(s))
 
-  const reliabilities = ratings.scales.map((s) => s.reliability).filter((v) => v != null)
-  const relLo = Math.min(...reliabilities)
-  const relHi = Math.max(...reliabilities)
-
-  const cp = byMetric.closedPerimeter
   const weights = analysis.fit.weights_normalised
   const boots = analysis.bootstrap.per_metric
   const allWeightsNonZero = boots.every((b) => b.lo > 0)
@@ -104,11 +102,38 @@ export function buildHypotheses(analysis, ratings) {
         ? VERDICT.NOT_SUPPORTED
         : VERDICT.PARTLY
 
+  // H3 is about the mismatches H2 leaves behind: each one must sit on a scale
+  // participants agreed on, which is what makes it a fact about the metric
+  // rather than about the raters. With no mismatch there is nothing to explain.
+  const h3Verdict =
+    failing.length > 0 && failing.every((s) => s.reliability != null && s.reliability >= RELIABILITY_FLOOR)
+      ? VERDICT.SUPPORTED
+      : VERDICT.NOT_SUPPORTED
+
+  // H5's rule: supported only if the sign test gives p < .05 with the full
+  // model ahead. Ahead means it won more of the decided folds than it lost.
+  const paired = analysis.crossval.paired
+  const ahead = paired.wins > paired.losses
+  const h5Verdict =
+    paired.signTestP < 0.05 && ahead
+      ? VERDICT.SUPPORTED
+      : ahead
+        ? VERDICT.DIRECTIONAL
+        : VERDICT.NOT_SUPPORTED
+
+  // Why H5 is hard to win in this corpus: area and enclosure index move
+  // together across the plazas. Computed from the per-plaza values the rating
+  // validation stored, so the figure quoted is the data's, not a remembered one.
+  const overlap = metricCorrelation(ratings, 'area', 'enclosure')
+  const overlapText = `${signed2(overlap.r)} across the ${overlap.n} plazas`
+
+  const spansZero = (ci) => ci?.lo != null && ci?.hi != null && ci.lo < 0 && ci.hi > 0
+
   return [
     {
       id: 'H1',
-      group: 'The core claim',
-      claim: 'Perceived similarity between urban squares is predicted by distance in the measured isovist space.',
+      claim:
+        'Weighted distance in the metric space predicts which two of three plazas people judge most similar at a rate above chance.',
       verdict:
         analysis.crossval.mean_accuracy > analysis.crossval.chance && analysis.permutation.p < 0.05
           ? VERDICT.SUPPORTED
@@ -122,7 +147,7 @@ export function buildHypotheses(analysis, ratings) {
           ok: true,
         },
         {
-          label: 'Against 1,000 label shuffles',
+          label: `Against ${analysis.permutation.permutations.toLocaleString()} label shuffles`,
           value: `null mean ${pct(analysis.permutation.null_mean).toFixed(1)}%, best ${pct(analysis.permutation.null_max).toFixed(1)}%, p = ${analysis.permutation.p.toFixed(4)}`,
           ok: true,
         },
@@ -132,100 +157,93 @@ export function buildHypotheses(analysis, ratings) {
 
     {
       id: 'H2',
-      group: 'Are the measures valid?',
-      claim:
-        'Computed isovist metrics converge with lay perceptual judgements of the same spatial properties.',
+      claim: 'Each metric corresponds to observers’ own ratings of the matching quality.',
       verdict: h2Verdict,
-      headline: `${converging.length} of ${ratings.scales.length} dimensions converge`,
-      why: 'This is the central untested assumption of the isovist tradition. Benedikt named these quantities after experiential concepts; whether they behave like those concepts has rarely been tested against actual perception.',
+      headline: `${converging.length} of ${ratings.scales.length} metrics match their rating scale`,
+      why: 'This is the central untested assumption of the isovist tradition. Benedikt named these quantities after experiential concepts; whether they behave like those concepts has rarely been tested against actual perception. The ratings never enter the weight fit, so this check can contradict it freely.',
       evidence: ratings.scales
         .slice()
         .sort((a, b) => b.pearson_aligned - a.pearson_aligned)
         .map((s) => ({
-          label: s.label,
+          label: pairLabel(s),
           value: `r = ${s.pearson_aligned.toFixed(3)}, p(Holm) ${s.pearson_p_holm.toFixed(4)}`,
-          ok: s.pearson_p_holm < 0.05 && s.pearson_aligned > 0,
+          ok: matches(s),
         })),
     },
 
     {
       id: 'H3',
-      group: 'The standout negative result',
       claim:
-        'Closed perimeter does not converge with perceived concealment, and the divergence follows from its definition rather than its implementation.',
-      // Supported when the metric fails to converge WHILE participants agreed
-      // among themselves — that pairing is what makes it a fact about the
-      // formula rather than about the raters.
-      verdict:
-        cp.pearson_p_holm >= 0.05 && cp.reliability >= RELIABILITY_FLOOR
-          ? VERDICT.SUPPORTED
-          : VERDICT.NOT_SUPPORTED,
-      headline: `r = ${cp.pearson_aligned.toFixed(3)}, but raters agreed at ${cp.reliability.toFixed(2)}`,
-      why: 'Closed perimeter sums the solid facade you can see, so it grows with how much is visible rather than with what is concealed. A measure that rises with visibility is a poor candidate for a measure of hiddenness — an argument available from the definition alone, before any data.',
-      evidence: [
-        {
-          label: 'Correlation with perceived concealment',
-          value: `${cp.pearson_aligned.toFixed(3)} (95% CI ${cp.participant_bootstrap.lo?.toFixed(2)} to ${cp.participant_bootstrap.hi?.toFixed(2)}, spans zero)`,
-          ok: false,
-        },
-        {
-          label: 'Raters agreed with each other',
-          value: `${cp.reliability.toFixed(2)} — the percept is real and stable`,
-          ok: true,
-        },
-        {
-          label: 'Alternative definitions tested',
-          value: 'Closed perimeter, Benedikt absolute, Benedikt normalised, occluding radials — none converge',
-        },
-      ],
+        'Where a metric does not match its rating scale, the mismatch is systematic and not due to inconsistent ratings.',
+      verdict: h3Verdict,
+      headline: failing.length
+        ? failing
+            .map((s) => `${METRIC_LABELS[s.metric] ?? s.label}: r = ${s.pearson_aligned.toFixed(3)}, raters agreed at ${s.reliability.toFixed(2)}`)
+            .join(' · ')
+        : 'No metric failed to match its scale',
+      why: 'A metric that fails to match its scale can fail for two reasons: the formula measures something other than what people perceive, or people did not perceive anything consistent. Only the first is a finding about the metric. Split-half reliability separates them — if raters agreed with each other on that scale, the shortfall belongs to the metric.',
+      evidence: failing.flatMap((s) => {
+        const ci = s.participant_bootstrap
+        return [
+          {
+            label: pairLabel(s),
+            value:
+              `r = ${s.pearson_aligned.toFixed(3)}, p(Holm) ${s.pearson_p_holm.toFixed(4)}` +
+              (ci?.lo != null && ci?.hi != null
+                ? ` (participant bootstrap 95% CI ${ci.lo.toFixed(2)} to ${ci.hi.toFixed(2)}${spansZero(ci) ? ', spans zero' : ''})`
+                : ''),
+            ok: false,
+          },
+          {
+            label: 'Raters agreed with each other',
+            value: `split-half ${s.reliability.toFixed(2)}, against the ${RELIABILITY_FLOOR.toFixed(2)} floor`,
+            ok: s.reliability >= RELIABILITY_FLOOR,
+          },
+        ]
+      }),
     },
 
     {
       id: 'H4',
-      group: 'Nuance',
-      claim: 'Perceived similarity draws on all four dimensions; none is idle.',
+      claim: 'The fitted model gives every metric a weight above zero.',
       verdict: allWeightsNonZero ? VERDICT.SUPPORTED : VERDICT.NOT_SUPPORTED,
-      headline: `Every interval clears zero (lowest ${lowestBound.toFixed(3)})`,
+      headline: `Every 95% interval clears zero (lowest ${lowestBound.toFixed(3)})`,
       why: 'If people collapsed spatial experience onto a single axis, the multi-parameter vocabulary urban design uses would be unwarranted. This is also the answerable form of "which dimension dominates" — a question whose answer changes under a different rescaling, and which 18 plazas cannot settle.',
       evidence: [
         ...analysis.metrics.map((m, i) => ({
-          label: analysis.metric_labels[m],
+          label: METRIC_LABELS[m] ?? analysis.metric_labels[m],
           value: `weight ${weights[i].toFixed(3)}, 95% CI ${boots[i].lo.toFixed(3)}–${boots[i].hi.toFixed(3)}`,
           ok: boots[i].lo > 0,
         })),
         {
           label: 'Cost of removing each',
-          value: ablation.map((r) => `${r.label.toLowerCase()} ${(r.drop * 100).toFixed(2)} pp`).join(' · '),
+          value: ablation
+            .map((r) => `${(METRIC_LABELS[r.metric] ?? r.label).toLowerCase()} ${(r.drop * 100).toFixed(2)} pp`)
+            .join(' · '),
         },
       ],
     },
 
     {
       id: 'H5',
-      group: 'The limitation, and the study it implies',
-      claim:
-        'In this corpus the four dimensions covary too closely for the ensemble to out-predict its strongest single dimension.',
-      // Stated as the corpus-composition claim it actually is. The old framing
-      // ("the fingerprint beats area alone") made a property of eighteen
-      // particular squares read as a verdict on the framework.
-      verdict:
-        analysis.crossval.paired.signTestP < 0.05 && analysis.crossval.paired.meanDelta > 0
-          ? VERDICT.NOT_SUPPORTED // the ensemble DID beat the baseline, so the limitation does not hold
-          : VERDICT.SUPPORTED,
-      headline: `${pct(analysis.crossval.mean_accuracy).toFixed(1)}% vs ${pct(analysis.crossval.area_only.mean_accuracy).toFixed(1)}% for area alone — a tie`,
-      why: 'Area and enclosure correlate −0.64 across these squares: larger plazas are systematically less enclosed, which is a fact about European urban form rather than about the metrics. The dimensions are individually valid (H2) and individually contributing (H4), yet overlap enough that measuring all four does not separate these plazas better than measuring one. That makes the next study obvious — a corpus sampled to break that correlation, with small-but-open and large-but-enclosed squares, is the direct test of whether the fingerprint carries independent value.',
+      claim: 'The combined four-metric model outperforms isovist area alone.',
+      rule: 'Supported only if the sign test gives p < .05 with the full model ahead.',
+      verdict: h5Verdict,
+      headline: `${pct(analysis.crossval.mean_accuracy).toFixed(1)}% vs ${pct(analysis.crossval.area_only.mean_accuracy).toFixed(1)}% for area alone, sign test p = ${paired.signTestP.toFixed(3)}`,
+      why: `The full model wins more folds than it loses, so the result points the way the hypothesis predicts, but the sign test cannot separate that margin from chance at 18 folds. Part of the reason is the corpus: area and enclosure index correlate ${overlapText}, because larger plazas here are systematically less enclosed, so knowing area already tells the model much of what enclosure index would add. A corpus sampled to break that correlation — small-but-open and large-but-enclosed squares — is the direct test of whether the fingerprint carries value beyond area.`,
       evidence: [
         {
-          label: 'Difference',
-          value: `+${(analysis.crossval.paired.meanDelta * 100).toFixed(2)} pp — 95% interval spans zero`,
+          label: 'Mean difference',
+          value: `${paired.meanDelta >= 0 ? '+' : '−'}${Math.abs(paired.meanDelta * 100).toFixed(2)} pp per fold, full model minus area alone`,
         },
         {
           label: 'Sign test',
-          value: `p = ${analysis.crossval.paired.signTestP.toFixed(3)}, winning ${analysis.crossval.paired.wins} of ${analysis.crossval.paired.wins + analysis.crossval.paired.losses} decided folds (${analysis.crossval.paired.ties} tied)`,
+          value: `p = ${paired.signTestP.toFixed(3)}, full model ahead in ${paired.wins} of ${paired.wins + paired.losses} decided folds (${paired.ties} tied)`,
+          ok: paired.signTestP < 0.05 && ahead,
         },
         {
           label: 'Why they overlap',
-          value: 'area ↔ enclosure r = −0.64; 63.9% of area is reconstructable from the other three',
+          value: `area ↔ enclosure index r = ${overlapText}`,
         },
       ],
     },
@@ -233,12 +251,13 @@ export function buildHypotheses(analysis, ratings) {
 }
 
 // Counts for the summary line, so a reader sees the shape of the result before
-// reading six cards.
+// reading five cards.
 export function summariseVerdicts(hypotheses) {
   const count = (v) => hypotheses.filter((h) => h.verdict === v).length
   return {
     supported: count(VERDICT.SUPPORTED),
     partly: count(VERDICT.PARTLY),
+    directional: count(VERDICT.DIRECTIONAL),
     notSupported: count(VERDICT.NOT_SUPPORTED),
     total: hypotheses.length,
   }
@@ -246,47 +265,61 @@ export function summariseVerdicts(hypotheses) {
 
 // H3, drawn rather than asserted.
 //
-// The claim under test is not "closed perimeter is a weak metric" but something
-// sharper: that closed perimeter is not the best available account of
-// perceived concealment. Answering it needs all four metrics correlated
-// against the SAME percept — the concealment scale — not each metric against
-// its own scale. That comparison is what the figure shows, and it is computed
-// here so the figure and any number quoted beside it come from one place.
+// Closed perimeter is the metric that does not match its scale. The figure asks
+// which of the four metrics tracks that percept — perceived facade continuity —
+// best. Answering it needs all four metrics correlated against the SAME scale,
+// not each metric against its own, and it is computed here so the figure and
+// any number quoted beside it come from one place.
 //
-// The closed perimeter scale runs 1 = "views blocked, hidden corners" to 7 = "clear
-// sightlines, nothing hidden", so perceived concealment is the reversed rating.
-// Correlations are reported twice: `r` is the raw signed value against that
-// percept, `aligned` is |r| — the strength of the association, which is what
-// ranks the rows. Sign is carried separately and stated in the figure, because
-// "more compact reads as less concealing" and "more closed perimeter reads as more
-// concealing" are both evidence about the same percept, in opposite directions.
-export function concealmentCorrelations(ratings) {
+// The ratings are stored as administered (see docs/handoff/05_closed_perimeter.md
+// §3.3), where 1 sits at the continuous-fronts end, so facade continuity is the
+// reflected rating, 8 − v. A constant offset does not change a correlation, so
+// it is computed here as −v. Correlations are reported twice: `r` is the raw
+// signed value against that percept, `aligned` is |r| — the strength of the
+// association, which is what ranks the rows. Sign is carried separately and
+// stated in the figure, because "more compact reads as more broken up" and "more
+// closed perimeter reads as more continuous" are both evidence about the same
+// percept, in opposite directions.
+export function facadeContinuityCorrelations(ratings) {
   const scale = ratings.scales.find((s) => s.metric === 'closedPerimeter')
   if (!scale) return []
 
-  // Reversed so that a larger number means "felt more concealing".
-  const concealment = new Map(scale.per_site.map((p) => [p.site_id, -p.mean_rating]))
+  // Reflected so that a larger number means "felt more continuous".
+  const continuity = new Map(scale.per_site.map((p) => [p.site_id, -p.mean_rating]))
 
   return ratings.scales
     .map((s) => {
-      const sites = s.per_site.filter((p) => concealment.has(p.site_id))
+      const sites = s.per_site.filter((p) => continuity.has(p.site_id))
       const r = pearsonR(
         sites.map((p) => p.normalised),
-        sites.map((p) => concealment.get(p.site_id))
+        sites.map((p) => continuity.get(p.site_id))
       )
       return {
         metric: s.metric,
-        label: s.label,
+        label: METRIC_LABELS[s.metric] ?? s.label,
         r,
         aligned: Math.abs(r),
         n: sites.length,
-        // Positive: more of this metric reads as more concealed. Negative: more
-        // of it reads as more open.
-        direction: r >= 0 ? 'more concealing' : 'more open',
+        // Positive: more of this metric reads as more continuous. Negative:
+        // more of it reads as more broken up.
+        direction: r >= 0 ? 'more continuous' : 'more broken up',
       }
     })
     .sort((a, b) => b.aligned - a.aligned)
 }
+
+// Pearson r between two metrics' computed per-plaza values, over the plazas
+// both scales cover.
+function metricCorrelation(ratings, a, b) {
+  const values = (m) => new Map((ratings.scales.find((s) => s.metric === m)?.per_site ?? []).map((p) => [p.site_id, p.computed]))
+  const va = values(a)
+  const vb = values(b)
+  const ids = [...va.keys()].filter((id) => vb.has(id))
+  return { r: pearsonR(ids.map((id) => va.get(id)), ids.map((id) => vb.get(id))), n: ids.length }
+}
+
+// Two decimals with a true minus sign, as the thesis prints correlations.
+const signed2 = (v) => `${v < 0 ? '−' : ''}${Math.abs(v).toFixed(2)}`
 
 // Local so this module has no dependency on the projection/figure layer — the
 // analysis must not need the drawing code to compute a number.

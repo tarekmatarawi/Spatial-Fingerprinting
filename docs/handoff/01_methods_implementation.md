@@ -70,13 +70,13 @@ All dev endpoints exist only under `npm run dev` (Vite `configureServer`). The d
 
 | Item | Status | Evidence |
 |---|---|---|
-| `assembleSurvey` in `src/lib/triplets.js:111-149` (27 items with an attention check) | DEAD. The live P3 uses `assembleSurvey` from `src/lib/survey360.js:117-136` (12 triplets, no check). | `SurveyPage.jsx:6-21` imports from `survey360`. No importer of `triplets.assembleSurvey` in `src/`, `scripts/` or `test/`. `buildBalancedPool`, `mulberry32` and `hashString` from `triplets.js` are still live. |
-| `scripts/compute-360.mjs` output `src/data/fingerprints-360.json` | DEAD. The file was deleted in commit `abc37b8` and nothing reads it. | `compute-360.mjs:128-144`. A grep for `fingerprints-360` finds only this script. |
+| `assembleSurvey` in `src/lib/triplets.js` (27 items with an attention check) | REMOVED. The live P3 uses `assembleSurvey` from `src/lib/survey360.js` (12 triplets, no check). | `buildBalancedPool`, `mulberry32` and `hashString` in `triplets.js` are still live. |
+| `scripts/compute-360.mjs` and its output `src/data/fingerprints-360.json` | REMOVED. The output was deleted in `abc37b8`; the script followed later. | Git history. |
 | Layer `perceptual_360_r100` (360°, 100 m range) | Declared, no data. | `fingerprints.js:51-63`; `recompute-readings.mjs:38`. `results.json` holds 18 `perceptual_120` and 18 `perceptual_360` canonical readings and no other layer (data). |
-| Legacy `hypotheses` block (H1–H3) in `analysis-panoramic.json` | SUPERSEDED. It is written by `analyze.mjs:527-551` with the old statements, including "Enclosure carries the largest perceptual weight". The UI uses `buildHypotheses` (H1–H5) from `src/lib/analysis/hypotheses.js:84-233`. | `WeightsPage.jsx:51`. No reader of `analysis.hypotheses` in `src/`. |
+| `hypotheses` block in `analysis-panoramic.json` | UNUSED. Its statement text was removed; the numeric fields it held are kept as stored. `analyze.mjs` no longer writes the block. The UI derives the precondition and H1–H5 with `buildHypotheses` and `reliabilityPrecondition` in `src/lib/analysis/hypotheses.js:59-246`. | `WeightsPage.jsx:56`. No reader of `analysis.hypotheses` in `src/`. |
 | `--source=archive` (static-photo survey × `perceptual_120`) | Selectable, not the reported fit. The default is `panoramic`. | `analyze.mjs:84-97`. No `analysis-archive.json` is committed. |
 | `scripts/perceived-holdout.mjs` (the leave-one-participant-out test of the rating blend cited in `analyze.mjs:34-36`) | NOT FOUND. Searched `scripts/`, and `git log --all -S"perceived-holdout"`: the only hit is the commit that added the comment (`70055ed`). The script was never committed. |
-| Pre-2026-08-27 closed perimeter and enclosure formulas | SUPERSEDED (git history only). | See §3.3 and §3.4. |
+| Pre-2026-08-27 closed perimeter and enclosure index formulas | SUPERSEDED (git history only). | See §3.3 and §3.4. |
 | `solid_frontage_m` (P9 diagnostic) | REMOVED in commit `7fb666f`. | Absent from `isovist.js:525-534`. |
 
 ---
@@ -152,12 +152,12 @@ Site defaults are 32 m at Gendarmenmarkt and 12 m at the other 17 sites. Resolve
 
 What height affects:
 
-- **Unflagged mode (P1–P8):** height enters **only** the enclosure term (§3.4). Sightline blocking ignores height.
+- **Unflagged mode (P1–P8):** height enters **only** the enclosure index term (§3.4). Sightline blocking ignores height.
 - **Height-aware mode:** see §2.5.
 
 ### 2.5 Height-aware ray-cast mode
 
-**What differs.** With `heightAware: true`, a building (or sandbox part) contributes edges only if `base ≤ eyeHeight` and `top > eyeHeight`, where `base = source.base ?? 0` and `top = source.height ?? Infinity` (`isovist.js:146-154`; the equivalent rule for sandbox parts is `partBlocks`, `src/lib/presets.js:37-39`). Nothing else changes: the same intersection test, the same metrics. The enclosure angle still uses the full `top` height (§3.4). The engine default is `false` (`isovist.js:51`), and an index built in one mode is rejected in the other (`isovist.js:65-71`).
+**What differs.** With `heightAware: true`, a building (or sandbox part) contributes edges only if `base ≤ eyeHeight` and `top > eyeHeight`, where `base = source.base ?? 0` and `top = source.height ?? Infinity` (`isovist.js:146-154`; the equivalent rule for sandbox parts is `partBlocks`, `src/lib/presets.js:37-39`). Nothing else changes: the same intersection test, the same metrics. The enclosure index angle still uses the full `top` height (§3.4). The engine default is `false` (`isovist.js:51`), and an index built in one mode is rejected in the other (`isovist.js:65-71`).
 
 **Which phases use it.** Only P9, through `HEIGHT_AWARE = true` (`sandbox.js:59`):
 
@@ -246,19 +246,19 @@ In other words, closed perimeter. It is **not a ratio**, and there is no divisio
 | O3 | `closed_share = closedEdges / n`: count of qualifying edges ÷ polygon vertex count, dimensionless | P9-only diagnostic. Same continuity test as O1. Written only on P9 recompute records (`sandbox.js:315`) and not used in any fit. For a wedge, `n` includes the vantage vertex (121). | `isovist.js:413-446` |
 | O4 | `solid_share = wallRays / rays.length` (no continuity requirement) | P9-only diagnostic, not a closed perimeter variant as such, but documented in code as its complement | `isovist.js:496-506` |
 | O5 | O1 at 100 m range (`perceptual_360_r100`) | Declared, no readings exist | `recompute-readings.mjs:38` |
-| — | Benedikt normalised `1 − Uv/Perimeter`; Benedikt absolute; occluding radials; radials + range arc | **NOT FOUND as code.** Searched `src/`, `scripts/`, `test/`, `google-apps-script/` for `radial`, `Benedikt`, `occluding` (case-insensitive), and `git log --all -S"radials"`. They exist only as text: a hard-coded evidence string in `src/lib/analysis/hypotheses.js:176-179` ("Closed perimeter, Benedikt absolute, Benedikt normalised, occluding radials — none converge") and prose tables in `docs/spec.md`. No committed code computes them, and no committed data holds their values. |
+| — | Benedikt normalised `1 − Uv/Perimeter`; Benedikt absolute; occluding radials; radials + range arc | **NOT FOUND as code.** Searched `src/`, `scripts/`, `test/`, `google-apps-script/` for `radial`, `Benedikt`, `occluding` (case-insensitive), and `git log --all -S"radials"`. They exist only as prose tables in `docs/spec.md`. No committed code computes them, and no committed data holds their values. |
 
 **Which variant produced the weight-fitting results.** O1.
 
-- `analysis-panoramic.json` (`generated_at` 2026-09-02T06:39:49Z, committed in `70055ed`) records closed perimeter bounds min 267.22 (Marktplatz-Heidelberg), max 622.93 (Hauptwache) for layer `perceptual_360`. Its enclosure bounds are 0.1131–0.3841.
-- Those match `results.json` as committed in `1dc4858` (the O1 + atan-enclosure recompute): 267.22–622.93 and 0.1131–0.3841.
-- They do not match the pre-correction readings in `abc37b8`: closed perimeter 516.35–1336.97, enclosure 0.2032–1.0239.
+- `analysis-panoramic.json` (`generated_at` 2026-09-02T06:39:49Z, committed in `70055ed`) records closed perimeter bounds min 267.22 (Marktplatz-Heidelberg), max 622.93 (Hauptwache) for layer `perceptual_360`. Its enclosure index bounds are 0.1131–0.3841.
+- Those match `results.json` as committed in `1dc4858` (the O1 + atan enclosure index recompute): 267.22–622.93 and 0.1131–0.3841.
+- They do not match the pre-correction readings in `abc37b8`: closed perimeter 516.35–1336.97, enclosure index 0.2032–1.0239.
 - `results.json` is unchanged in these values at HEAD, and its current `perceptual_360` min/max equal the analysis bounds exactly (data).
 - The fit reads stored `closed_perimeter_m`, not a live cast (`fingerprints.js:20-25`; `analyze.mjs:380-383`).
 
 **Recompute provenance.** `recompute-readings.mjs` rewrites only `closed_perimeter_m` and `enclosure_ratio` from the stored pose. Area and compactness are left as captured (`recompute-readings.mjs:76-93`). The script adds a `recomputed_at` field (`recompute-readings.mjs:92`), but no record in the committed `results.json` carries `recomputed_at` (data). NOT FOUND: an explanation of why the field is absent. Searched the git diff of `1dc4858` for `results.json` and `recomputed_at` references in `scripts/`.
 
-### 3.4 Enclosure ratio
+### 3.4 Enclosure index
 
 **Formula (code)** (`isovist.js:474-483`):
 
@@ -271,7 +271,7 @@ e_i = 0                          otherwise (open rays included in N)
 - `N = rays.length`: 120 or 360.
 - `h_i` is the height of the hit edge, which is the building's effective height, measured **from the ground** (`isovist.js:158, 169`).
 - `d_i` is the horizontal hit distance in metres.
-- **Eye height is not subtracted.** The formula uses `h_i`, not `h_i − 1.6`. **DISCREPANCY:** the comment at `src/lib/viewGeometry.js:10-12` says 1.6 m is "the standing eye height the enclosure metric's vertical angles already assume". No such offset appears in `isovist.js:474-483`.
+- **Eye height is not subtracted.** The formula uses `h_i`, not `h_i − 1.6`: the angle is atan(h/d) from ground level (`isovist.js:476-485`). The comments beside `EYE_HEIGHT_M` (`isovist.js:122-128`, `viewGeometry.js:8-14`) say so; 1.6 m is the height-aware slice and the P7 render camera, not part of this metric.
 - In P9 height-aware casts, `h_i = part.top`; a part's `base` does not enter the angle (`sandbox.js:161-162`).
 - **Units:** dimensionless in [0, 1]. ×90 gives mean degrees.
 - **Function:** `computeMetrics`, `src/lib/isovist.js`.
@@ -347,11 +347,11 @@ Bounds are min–max over the 18 active sites' canonical readings in a given lay
 
 | Consumer | Bounds used | How obtained | Values (data) |
 |---|---|---|---|
-| P5 fit (`perceptual_360`) | `perceptual_360` | Computed in `analyze.mjs:383`; frozen into `analysis-panoramic.json.bounds` | area 3905.37–46656.93 m²; compactness 0.057–0.2031; closed perimeter 267.22–622.93 m; enclosure 0.1131–0.3841 |
+| P5 fit (`perceptual_360`) | `perceptual_360` | Computed in `analyze.mjs:383`; frozen into `analysis-panoramic.json.bounds` | area 3905.37–46656.93 m²; compactness 0.057–0.2031; closed perimeter 267.22–622.93 m; enclosure index 0.1131–0.3841 |
 | P6 field points | **`perceptual_360`** (deliberate cross-layer reuse) | **Recomputed from `results.json` at script run time** (`compute-fields.mjs:129`), not read from `analysis-panoramic.json`; written to `fields/index.json.bounds`; files carry `normalisation_source: 'perceptual_360'` (`compute-fields.mjs:267, 298`) | Identical to the P5 bounds |
 | P6 zones | Consume the stored `n` vectors | `compute-zones.mjs:304-312` | — |
 | P9 diagnosis and recompute | `fields/index.json.bounds` | `DiagnosePage.jsx:478, 602` | Identical to the P5 bounds |
-| P7 clouds, P8 bank, P9 precedent | `perceptual_120` | **Recomputed live** from `results.json` in `buildClouds` (`viewClouds.js:105`); P8 snapshots them into `matched-view-trials.json.source.bounds` (`build-matched-view-trials.mjs:223`); P9 precedent uses `corpus.bounds` from the same call (`precedent.js:192-218, 267`) | area 1759.02–12524 m²; compactness 0.1262–0.6516; closed perimeter 110.92–273.46 m; enclosure 0.1121–0.3145 |
+| P7 clouds, P8 bank, P9 precedent | `perceptual_120` | **Recomputed live** from `results.json` in `buildClouds` (`viewClouds.js:105`); P8 snapshots them into `matched-view-trials.json.source.bounds` (`build-matched-view-trials.mjs:223`); P9 precedent uses `corpus.bounds` from the same call (`precedent.js:192-218, 267`) | area 1759.02–12524 m²; compactness 0.1262–0.6516; closed perimeter 110.92–273.46 m; enclosure index 0.1121–0.3145 |
 | Rating validation | `perceptual_360` | `validate-ratings.mjs:59, 278` | Identical to the P5 bounds |
 
 Sharing:
@@ -367,7 +367,7 @@ Sharing:
 | area | −0.02505 | 1.57499 |
 | compactness | −0.16316 | 2.24504 |
 | closed perimeter | −0.33271 | 1.44593 |
-| enclosure | −0.14232 | 1.60987 |
+| enclosure index | −0.14232 | 1.60987 |
 
 Field points outside [0, 1] out of 11,719 (data, `fields/index.json.out_of_range`):
 
@@ -376,7 +376,7 @@ Field points outside [0, 1] out of 11,719 (data, `fields/index.json.out_of_range
 | area | 764 |
 | compactness | 1,631 |
 | closed perimeter | 1,296 |
-| enclosure | 1,331 |
+| enclosure index | 1,331 |
 
 ---
 
@@ -421,7 +421,7 @@ Live raw weights (data):
 | area | 1.81620 | 0.31220 |
 | compactness | 1.59914 | 0.27489 |
 | closed perimeter | 1.20141 | 0.20652 |
-| enclosure | 1.20072 | 0.20640 |
+| enclosure index | 1.20072 | 0.20640 |
 
 NLL 543.94 over n = 552 triplets, `converged: true`.
 
@@ -457,7 +457,7 @@ Settings, `DEFAULT_FIT` (`fit.js:11-41`):
 - **Resamples:** `DEFAULT_RESAMPLES = 1000` (`resample.js:15`), or 100 with `--quick` (`analyze.mjs:435`). Live: 1000, 0 failures (data).
 - **Fit per draw:** warm start from the full-data raw weights, with the other `DEFAULT_FIT` settings (`resample.js:69`).
 - **Seed:** 20260817 (`resample.js:16`).
-- **Reported statistics:** mean, median, and 2.5/97.5 percentiles with linear interpolation, on **normalised** weights (`resample.js:33-41, 75, 85-95`). The enclosure-lead statistics (`resample.js:78-83, 97-112`) feed only the superseded H3 block.
+- **Reported statistics:** mean, median, and 2.5/97.5 percentiles with linear interpolation, on **normalised** weights (`resample.js:31-38, 70-85`).
 
 Live 95% CIs (data):
 
@@ -466,7 +466,7 @@ Live 95% CIs (data):
 | area | 0.197–0.455 |
 | compactness | 0.179–0.364 |
 | closed perimeter | 0.112–0.289 |
-| enclosure | 0.116–0.292 |
+| enclosure index | 0.116–0.292 |
 
 ### 5.6 Cross-validation
 
@@ -492,7 +492,7 @@ Live: p = 0.000999, null mean 0.3335 (data).
 
 | Metric removed | Drop in accuracy |
 |---|---|
-| enclosure | 2.34 pp |
+| enclosure index | 2.34 pp |
 | closed perimeter | 2.02 pp |
 | area | 1.87 pp |
 | compactness | 0.54 pp |
@@ -506,22 +506,20 @@ Live: p = 0.000999, null mean 0.3335 (data).
 
 ### 5.7 Hypotheses and rating validation (as used by the UI)
 
-**Live verdict rules** are in `buildHypotheses` (`hypotheses.js:84-233`); reliability is treated as a precondition (`hypotheses.js:58-82`):
+**Live verdict rules** are in `buildHypotheses` (`hypotheses.js:88-245`); the precondition is `reliabilityPrecondition` (`hypotheses.js:59-86`):
 
-| Hypothesis | Rule |
-|---|---|
-| H1 | LOPO accuracy > 1/3 and permutation p < 0.05 |
-| H2 | Count of scales with Holm p < 0.05 and aligned r > 0 |
-| H3 | Closed perimeter Holm p ≥ 0.05 and reliability ≥ 0.4 |
-| H4 | All bootstrap lower bounds > 0 |
-| H5 | "Supported" unless the sign test p < 0.05 with a positive mean delta |
+| | Claim | Rule | Verdict (stored data) |
+|---|---|---|---|
+| Precondition (for H2 and H3) | Each rating scale reaches a split-half reliability of at least .40 | Every scale's reliability ≥ `RELIABILITY_FLOOR` (0.4) | Met |
+| H1 | Weighted distance in the metric space predicts which two of three plazas people judge most similar at a rate above chance | LOPO accuracy > 1/3 and permutation p < 0.05 | Supported |
+| H2 | Each metric corresponds to observers' own ratings of the matching quality | Count of scales with Holm p < 0.05 and aligned r > 0 | Partially supported (3 of 4) |
+| H3 | Where a metric does not match its rating scale, the mismatch is systematic and not due to inconsistent ratings | Every scale failing H2 has reliability ≥ 0.4 | Supported |
+| H4 | The fitted model gives every metric a weight above zero | All bootstrap lower bounds > 0 | Supported |
+| H5 | The combined four-metric model outperforms isovist area alone | Supported only if sign test p < 0.05 with wins > losses; wins > losses without significance is "not statistically supported, in the predicted direction" | Not statistically supported, in the predicted direction |
 
-Several evidence strings in `hypotheses.js` are hard-coded rather than computed:
+`test/hypotheses.test.js` pins these verdicts against the stored analysis.
 
-- `hypotheses.js:228`: "area ↔ enclosure r = −0.64; 63.9% of area is reconstructable from the other three";
-- `hypotheses.js:178`: the alternative-definitions list.
-
-NOT FOUND: code computing the −0.64 or 63.9% figures. Searched `src/lib/analysis/`, `scripts/`, and `src/pages/WeightsPage.jsx` for `0.64` and `63.9`. **DISCREPANCY:** `docs/spec.md` lists H1–H6; the code implements H1–H5, with a different mapping.
+One evidence string in `hypotheses.js` is hard-coded rather than computed: `hypotheses.js:240`, "area ↔ enclosure index r = −0.64" (and the same figure in H5's explanation). The computed 360° Pearson value is −0.644 (`02_results_data.md` §1). The "spans zero" note on H3's interval is derived from the stored participant-bootstrap bounds.
 
 **Rating validation** (`scripts/validate-ratings.mjs`):
 
@@ -577,7 +575,7 @@ If no k qualifies, the silhouette argmax is used. `--k=N` fits the stated k inst
 
 **Live typology** (data, `zones.json`): k = 5, 11,719 points, restarts 20, seed 20260904, inertia 366.5841.
 
-| Zone | Points | Centre (area, compactness, closed perimeter, enclosure) |
+| Zone | Points | Centre (area, compactness, closed perimeter, enclosure index) |
 |---|---|---|
 | 0 | 4,879 | (0.49851, 0.43447, 0.81716, 0.30783) |
 | 1 | 1,671 | (0.45388, 1.02019, 0.43921, 0.53569) |
@@ -781,7 +779,7 @@ Live (data): 7 scenarios in `scenarios.json`, all stamped with zones `generated_
 
 - **Planar eye-height slice:** elements entirely below or above 1.6 m do not register. The UI note comes from `visibilityNote` (`presets.js:9-27, 1054-1067`).
 - **Pergola and tree row:** stated limitation that shade and overhead shelter are unmeasurable (`presets.js:223-224, 316-317`).
-- **Screen wall lowers enclosure:** a near low surface replaces a far tall one (`presets.js:510-511, 518-525`).
+- **Screen wall lowers enclosure index:** a near low surface replaces a far tall one (`presets.js:510-511, 518-525`).
 - **Freestanding objects lower closed perimeter.** Compactness collapses under slender obstacles (`presets.js:58-87`).
 - **`solid_share` saturated at this site:** sign only, flagged `diagnostic: false` (`presets.js:94-97`; `DiagnosePage.jsx:644`).
 - **`closed_share` penalises fragmentation by piece count:** net (rays spanned − 3) per piece; it is not a coverage measure (`isovist.js:431-445`).
@@ -867,7 +865,7 @@ Written by `compute-zones.mjs:440-454`: `generated_at`, `k`, `k_selection` (see 
 
 ### 9.6 `src/data/analysis-panoramic.json`
 
-Written by `analyze.mjs:478-559`. The `-n30` file is the same schema, produced with `--limit=30`.
+Written by `analyze.mjs:478-559`. A `--limit=N` run writes the same schema to `analysis-panoramic-nN.json`.
 
 | Field | Contents |
 |---|---|
@@ -885,7 +883,7 @@ Written by `analyze.mjs:478-559`. The `-n30` file is the same schema, produced w
 | `crossval{chance, mean_accuracy, per_fold[{site, n, accuracy}], area_only{…}, paired{perFold, wins, losses, ties, meanDelta, signTestP}}` | |
 | `permutation{permutations, p, null_mean, null_min, null_max, null_95}` | |
 | `ablation{fullAccuracy, results[{metric, label, accuracyWithout, drop, perFold}], ranked}` | |
-| `hypotheses{H1, H2, H3}` | Superseded, §1.4 |
+| `hypotheses{H1, H2, H3}` | Numeric fields only, unused; see §1.4 |
 
 ### 9.7 `src/data/rating-validation.json`
 
@@ -920,7 +918,7 @@ Written by `validate-ratings.mjs:530-545`.
 
 **`responses[]`:** `participant_id`, `triplet_id` (`"<pid>:<order>"`), `order` (0–11), `site_a`, `site_b`, `site_c`, `chosen_pair[2]`, `is_attention_check` (false), `shown_at`, `answered_at`, `duration_ms` (ms), `timestamp`.
 
-**`rating_responses[]`:** `participant_id`, `site_id`, `scale` (area \| compactness \| closedPerimeter \| enclosure), `value` (integer 1–7, canonical direction: 1 = `low` anchor, `survey360.js:149-177, 200-202`), `presentation_order`, `anchor_direction`, `task_type: "semantic_differential"`, `shown_at`, `answered_at`, `duration_ms`.
+**`rating_responses[]`:** `participant_id`, `site_id`, `scale` (area \| compactness \| closedPerimeter \| enclosure index), `value` (integer 1–7, canonical direction: 1 = `low` anchor, `survey360.js:149-177, 200-202`), `presentation_order`, `anchor_direction`, `task_type: "semantic_differential"`, `shown_at`, `answered_at`, `duration_ms`.
 
 **Google Sheet row** (`Code.gs:59-89`): `timestamp`, `participant_id`, `started_at`, `finished_at` (Europe/Berlin display), `status`, `attention_check_passed`, `background`, `age_group`, `response_count`, `survey_version`, `median_seconds`, `rating_count`, `rated_sites`, `rated_site_ids`, `anchor_directions`, `payload_json` (the authoritative full record).
 
@@ -981,4 +979,4 @@ From `sandbox.js:302-319`: `x`, `y`, `index` (into the P6 lattice), `area_m2`, `
 
 ### 9.15 `test/fixtures/canonical-120.golden.json`
 
-`_comment`, `captured_at`, `fov: 120`, `rayCount: 120`, `rangeM: 200`, `readings[18]{site_id, local_x, local_y, direction_deg, area (m²), perimeter (m), compactness, closedPerimeter (m), enclosureRatio}`, full precision. Re-cut only by `recompute-readings.mjs:129-162`.
+`_comment`, `captured_at`, `fov: 120`, `rayCount: 120`, `rangeM: 200`, `readings[18]{site_id, local_x, local_y, direction_deg, area (m²), perimeter (m), compactness, closedPerimeter (m), enclosureIndex}`, full precision. Re-cut only by `recompute-readings.mjs:129-162`.

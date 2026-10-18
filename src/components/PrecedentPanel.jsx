@@ -45,9 +45,9 @@ const ViewRender = lazy(() =>
 //
 // THE HEADING SAYS "CLOSEST PRECEDENT VIEW", NOT "CLOSEST VALIDATED PRECEDENT
 // VIEW", and the difference is deliberate. What P8 tested is that when the
-// weighted space calls two views similar, people tend to agree — at 15 of an
-// intended ~40 participants, significant on the measure adjudication and NOT
-// significant on the agreement stratum's participant-level test. "Validated"
+// weighted space calls two views similar, people tend to agree — at 15
+// participants, significant on the measure adjudication and NOT significant on
+// the agreement stratum's participant-level test. "Validated"
 // in a heading would be read as a property of the match on screen, which is
 // exactly the claim the study has not yet earned. The evidence block below
 // carries the live numbers and says which half is which; the heading stays a
@@ -593,8 +593,7 @@ function Evidence({ evidence }) {
       <h4 className="text-xs font-semibold text-ink">What backs this comparison</h4>
       <p className="mt-1 text-[11px] leading-relaxed text-ink-muted">
         P8 put pairs of these views in front of participants and asked which was more like a
-        reference. It is the reason to take a ranking in this space seriously at all — and it is
-        still running.
+        reference. It is the reason to take a ranking in this space seriously at all.
       </p>
 
       <dl className="mt-2.5 space-y-2">

@@ -2,7 +2,7 @@
 //
 // Everything else on the diagnose page is a MEAN OVER AN AREA, and means hide
 // the thing a designer most needs to see. The same intervention raised
-// enclosure 50% within 20 m of itself and 4.9% beyond it; a colonnade takes 30%
+// the enclosure index 50% within 20 m of itself and 4.9% beyond it; a colonnade takes 30%
 // off compactness plaza-wide while area moves 3%. Both of those are invisible
 // in an aggregate and obvious at a point. Until now the only way to interrogate
 // a single position was to write a script against the library, which is not a
@@ -100,7 +100,7 @@ export function readCell(record, centres, weights, zoneNames) {
     { key: 'area', label: 'Isovist area', raw: record.area_m2, unit: ' m²', decimals: 0 },
     { key: 'compactness', label: 'Compactness', raw: record.compactness, unit: '', decimals: 4 },
     { key: 'closedPerimeter', label: 'Closed perimeter', raw: record.closed_perimeter_m, unit: ' m', decimals: 1 },
-    { key: 'enclosure', label: 'Enclosure', raw: record.enclosure_ratio, unit: '', decimals: 4 },
+    { key: 'enclosure', label: 'Enclosure index', raw: record.enclosure_ratio, unit: '', decimals: 4 },
   ].map((m, i) => ({
     ...m,
     n: record.n?.[i],

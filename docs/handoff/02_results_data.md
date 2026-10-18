@@ -12,7 +12,7 @@ The re-run scripts are in the session scratchpad and are not committed:
 - `r2_p6_p9.mjs` — zone breakdown per plaza (§5.1), cloud matrices (§6.1), matched-view analysis (§7), Konstablerwache and scenario recompute (§8);
 - `r3.mjs` — the n = 30 reproduction check (§3.7).
 
-Full-precision matrices and long tables are exported to `docs/handoff/02_data/` as CSV. Where a table in this file is rounded for width, it says so and names the CSV.
+Full-precision matrices and long tables are exported to `docs/handoff/02_data/` as CSV (kept locally, not in the repository). Where a table in this file is rounded for width, it says so and names the CSV.
 
 `NOT RUN` means no stored output exists and the result was not produced for this document.
 
@@ -49,7 +49,7 @@ The vantage points of the two layers are not the same point. Their separation pe
 
 Source: `src/data/results.json` (stored), via `buildFingerprints` and `src/data/sites.json`. CSV: `02_data/sites_canonical_metrics.csv`.
 
-| # | Plaza | City | 120° area m² | 120° compactness | 120° closed perimeter m | 120° enclosure | 360° area m² | 360° compactness | 360° closed perimeter m | 360° enclosure |
+| # | Plaza | City | 120° area m² | 120° compactness | 120° closed perimeter m | 120° enclosure index | 360° area m² | 360° compactness | 360° closed perimeter m | 360° enclosure index |
 |---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
 | 1 | Gendarmenmarkt | Berlin | 12524 | 0.1262 | 193.8 | 0.1121 | 30856.12 | 0.1286 | 602.92 | 0.1587 |
 | 2 | Hauptwache | Frankfurt am Main | 10180.95 | 0.2077 | 188.82 | 0.1748 | 20936.65 | 0.11 | 622.93 | 0.1631 |
@@ -70,7 +70,7 @@ Source: `src/data/results.json` (stored), via `buildFingerprints` and `src/data/
 | 17 | Herderplatz | Weimar | 2778.99 | 0.2428 | 147.56 | 0.1957 | 5648.63 | 0.057 | 304.47 | 0.2471 |
 | 18 | Theaterplatz | Weimar | 2693.41 | 0.1653 | 171.69 | 0.1701 | 7804.35 | 0.0684 | 414.88 | 0.1583 |
 
-Stored precision: area and closed perimeter to 2 dp; compactness and enclosure to 4 dp.
+Stored precision: area and closed perimeter to 2 dp; compactness and enclosure index to 4 dp.
 
 ### 1.2 Descriptive statistics per metric (n = 18 per cell)
 
@@ -83,7 +83,7 @@ Source: re-run over the table above. SD uses n − 1. Quartiles use linear inter
 | Area (m²) | 18 | 6486.642777777777 | 3290.5604048118244 | 1759.02 | 3142.9725 | 6764.29 | 8811.0125 | 12524 | 0.5072825061501413 |
 | Compactness | 18 | 0.25853888888888893 | 0.13346897034798624 | 0.1262 | 0.1758 | 0.2041 | 0.29365 | 0.6516 | 0.5162433045240888 |
 | Closed perimeter (m) | 18 | 174.33666666666667 | 45.94769110245975 | 110.92 | 140.3375 | 183.235 | 196.38 | 273.46 | 0.26355724232305167 |
-| Enclosure | 18 | 0.21004444444444445 | 0.06000631557175238 | 0.1121 | 0.1756 | 0.1922 | 0.25845 | 0.3145 | 0.2856838976649235 |
+| Enclosure index | 18 | 0.21004444444444445 | 0.06000631557175238 | 0.1121 | 0.1756 | 0.1922 | 0.25845 | 0.3145 | 0.2856838976649235 |
 
 **`perceptual_360`**
 
@@ -92,7 +92,7 @@ Source: re-run over the table above. SD uses n − 1. Quartiles use linear inter
 | Area (m²) | 18 | 16666.420555555556 | 11564.488939511677 | 3905.37 | 8269.065 | 12555.68 | 21565.7125 | 46656.93 | 0.6938795826592046 |
 | Compactness | 18 | 0.1209 | 0.041610900721127504 | 0.057 | 0.08615 | 0.12715 | 0.151325 | 0.2031 | 0.3441761846247105 |
 | Closed perimeter (m) | 18 | 418.26333333333343 | 117.10467223310745 | 267.22 | 318.53 | 401.885 | 502.2675 | 622.93 | 0.27997833637447084 |
-| Enclosure | 18 | 0.2269055555555555 | 0.08352857540085747 | 0.1131 | 0.169475 | 0.20465 | 0.2606 | 0.3841 | 0.3681204508031816 |
+| Enclosure index | 18 | 0.2269055555555555 | 0.08352857540085747 | 0.1131 | 0.169475 | 0.20465 | 0.2606 | 0.3841 | 0.3681204508031816 |
 
 The min and max in these tables are the frozen normalisation bounds for each layer (stored in `analysis-panoramic.json` → `bounds` for 360°, and `matched-view-trials.json` → `source.bounds` for 120°).
 
@@ -102,35 +102,35 @@ The min and max in these tables are the frozen normalisation bounds for each lay
 
 **`perceptual_360`** (the layer the fit and P6/P9 use)
 
-| Pearson r | Area | Compactness | Closed perimeter | Enclosure |
+| Pearson r | Area | Compactness | Closed perimeter | Enclosure index |
 |---|---:|---:|---:|---:|
 | Area | 1 | 0.45450186612088 | 0.39095537073001063 | −0.6443809838543789 |
 | Compactness | 0.45450186612088 | 1 | 0.12512879767805749 | 0.007003922837413463 |
 | Closed perimeter | 0.39095537073001063 | 0.12512879767805749 | 1 | −0.35262040369263536 |
-| Enclosure | −0.6443809838543789 | 0.007003922837413463 | −0.35262040369263536 | 1 |
+| Enclosure index | −0.6443809838543789 | 0.007003922837413463 | −0.35262040369263536 | 1 |
 
-| Spearman ρ | Area | Compactness | Closed perimeter | Enclosure |
+| Spearman ρ | Area | Compactness | Closed perimeter | Enclosure index |
 |---|---:|---:|---:|---:|
 | Area | 1 | 0.391124871001032 | 0.5335397316821465 | −0.6408668730650154 |
 | Compactness | 0.391124871001032 | 1 | 0.0010319917440660474 | 0.12280701754385964 |
 | Closed perimeter | 0.5335397316821465 | 0.0010319917440660474 | 1 | −0.36429308565531476 |
-| Enclosure | −0.6408668730650154 | 0.12280701754385964 | −0.36429308565531476 | 1 |
+| Enclosure index | −0.6408668730650154 | 0.12280701754385964 | −0.36429308565531476 | 1 |
 
 **`perceptual_120`**
 
-| Pearson r | Area | Compactness | Closed perimeter | Enclosure |
+| Pearson r | Area | Compactness | Closed perimeter | Enclosure index |
 |---|---:|---:|---:|---:|
 | Area | 1 | −0.13165145905688597 | 0.5444103707531953 | −0.450494682739414 |
 | Compactness | −0.13165145905688597 | 1 | −0.017365883747177166 | 0.510294979768987 |
 | Closed perimeter | 0.5444103707531953 | −0.017365883747177166 | 1 | −0.18707241555512946 |
-| Enclosure | −0.450494682739414 | 0.510294979768987 | −0.18707241555512946 | 1 |
+| Enclosure index | −0.450494682739414 | 0.510294979768987 | −0.18707241555512946 | 1 |
 
-| Spearman ρ | Area | Compactness | Closed perimeter | Enclosure |
+| Spearman ρ | Area | Compactness | Closed perimeter | Enclosure index |
 |---|---:|---:|---:|---:|
 | Area | 1 | −0.12596800852672516 | 0.5830753353973168 | −0.4757481940144479 |
 | Compactness | −0.12596800852672516 | 1 | 0.09189469474490605 | 0.5885390562314208 |
 | Closed perimeter | 0.5830753353973168 | 0.09189469474490605 | 1 | −0.12074303405572756 |
-| Enclosure | −0.4757481940144479 | 0.5885390562314208 | −0.12074303405572756 | 1 |
+| Enclosure index | −0.4757481940144479 | 0.5885390562314208 | −0.12074303405572756 | 1 |
 
 **Same metric across the two layers** (computed now, n = 18): how well a site's 120° value tracks its 360° value.
 
@@ -139,9 +139,9 @@ The min and max in these tables are the frozen normalisation bounds for each lay
 | Area | 0.7905603849622319 | 0.8637770897832817 |
 | Compactness | 0.39437672625918585 | 0.23954572113278882 |
 | Closed perimeter | 0.6012147653578063 | 0.6656346749226006 |
-| Enclosure | 0.7322827832314707 | 0.8637770897832817 |
+| Enclosure index | 0.7322827832314707 | 0.8637770897832817 |
 
-`src/lib/analysis/hypotheses.js:228` hard-codes "area ↔ enclosure r = −0.64". The computed 360° Pearson value above is −0.6443809838543789, which matches. The companion figure "63.9% of area is reconstructable from the other three" is `NOT RUN`: there is no code that computes it and it was not recomputed here.
+`src/lib/analysis/hypotheses.js:240` hard-codes "area ↔ enclosure index r = −0.64". The computed 360° Pearson value above is −0.6443809838543789, which matches.
 
 ---
 
@@ -236,7 +236,7 @@ This is the only fitted model in the repository. Source: `src/data/analysis-pano
 | Area | 1.8161977055725425 | 0.3121969818048535 |
 | Compactness | 1.5991418304029197 | 0.27488596169781887 |
 | Closed perimeter | 1.2014139828422046 | 0.2065181660513352 |
-| Enclosure | 1.2007201001547354 | 0.20639889044599233 |
+| Enclosure index | 1.2007201001547354 | 0.20639889044599233 |
 
 Fit settings: `restarts` 5, `converged: true`.
 
@@ -261,7 +261,7 @@ Participant-level resampling, 1000 resamples, 0 failures. Each resample was warm
 | Area | 0.3138697307028622 | 0.31075927896169114 | 0.19727276586799666 | 0.454548393305739 |
 | Compactness | 0.2728809968778426 | 0.27321302815611137 | 0.17934339769857233 | 0.36436362556455826 |
 | Closed perimeter | 0.2051339093459107 | 0.205926022489423 | 0.11238918239195585 | 0.289325405629569 |
-| Enclosure | 0.20811536307338463 | 0.2085692340882898 | 0.11565086927227057 | 0.2918858326775322 |
+| Enclosure index | 0.20811536307338463 | 0.2085692340882898 | 0.11565086927227057 | 0.2918858326775322 |
 
 ### 3.4 Held-out accuracy
 
@@ -305,18 +305,18 @@ All held-out figures are leave-one-plaza-out, 18 folds.
 | **Area only** vs full model | yes (stored) | Area-only LOPO 0.5219286558982159; full 0.526011945768111; mean fold Δ +0.004083289869894952. Paired over 18 folds: 9 wins, 6 losses, 3 ties. Exact two-sided sign test on the 15 non-tied folds: p = 0.6072387695312507. |
 | **Leave-one-metric-out** (the full model minus one metric) | yes (stored) | See the table below |
 | Equal weights (w = ¼ each) | `NOT RUN` | — |
-| Single-metric models other than area (compactness only, closed perimeter only, enclosure only) | `NOT RUN` | — |
+| Single-metric models other than area (compactness only, closed perimeter only, enclosure index only) | `NOT RUN` | — |
 
 Leave-one-metric-out, against the full-model LOPO accuracy of 0.526011945768111:
 
 | Metric removed | LOPO accuracy without it | Drop | Rank (largest drop = 1) |
 |---|---:|---:|---:|
-| Enclosure | 0.5026533111210827 | 0.023358634647028254 | 1 |
+| Enclosure index | 0.5026533111210827 | 0.023358634647028254 | 1 |
 | Closed perimeter | 0.5057686389085434 | 0.020243306859567545 | 2 |
 | Area | 0.5073027197290659 | 0.018709226039045013 | 3 |
 | Compactness | 0.5206325489446082 | 0.005379396823502747 | 4 |
 
-The stored legacy H3 block also holds one bootstrap-derived figure (n = 1000). Enclosure had the largest weight in a share of 0.045 of draws. Its lead over the next-largest weight had mean −0.1281390701990168 and 95% interval [−0.31294925685280944, 0.017315593933345023]. The block's verdict string is `"disagreement"`. Methods doc §1.4 records that this block is superseded.
+The unused `hypotheses` block of `analysis-panoramic.json` also stores one bootstrap-derived figure (n = 1000): enclosure index had the largest weight in a share of 0.045 of draws, and its lead over the next-largest weight had mean −0.1281390701990168 and 95% interval [−0.31294925685280944, 0.017315593933345023]. No current hypothesis uses it (methods doc §1.4).
 
 ### 3.6 Robustness runs
 
@@ -326,11 +326,11 @@ The stored legacy H3 block also holds one bootstrap-derived figure (n = 1000). E
 | L1 or Minkowski distance | `NOT RUN`. Searched `src/`, `scripts/`, `test/` and `git log --all -S"minkowski"`: no implementation. |
 | Rank normalisation | `NOT RUN`. No implementation. `docs/spec.md` states a weight ordering under rank normalisation, but no committed code or data produces it. |
 | Unweighted (equal-weight) *clustering* of the field layer | Run. Reported in §5, not here, because it does not refit the choice model. |
-| Sample-size sensitivity (`--limit=30`) | Run and stored (§3.7), but it does not reproduce from the current data. |
+| Sample-size sensitivity (`--limit=30`) | Run (§3.7), but it does not reproduce from the current data. The output file has been deleted. |
 
 ### 3.7 Stored subset fit: first 30 participants
 
-Source: `src/data/analysis-panoramic-n30.json` (stored; `generated_at` 2026-08-29T15:55:17.667Z), n = 360 triplets from 30 participants.
+Source: `src/data/analysis-panoramic-n30.json` (`generated_at` 2026-08-29T15:55:17.667Z; since deleted from the repository as unused, readable in git history), n = 360 triplets from 30 participants.
 
 **This result does not reproduce from the committed response file (re-run).**
 
@@ -347,7 +347,7 @@ It is reported here for completeness and is not used anywhere else in this docum
 | Area | 1.6543410372802672 | 0.3872079635726146 | 0.19012633931811215 – 0.6674660779384601 |
 | Compactness | 0.8361419051876968 | 0.19570378602087773 | 0.011318119164369532 – 0.3275896951225935 |
 | Closed perimeter | 1.0224502015111123 | 0.2393103063153093 | 0.07758422229298287 – 0.3864238931301149 |
-| Enclosure | 0.7595539764208169 | 0.17777794409119826 | 0.01754588578946072 – 0.3383747462876008 |
+| Enclosure index | 0.7595539764208169 | 0.17777794409119826 | 0.01754588578946072 – 0.3383747462876008 |
 
 **Held-out accuracy and baselines:**
 
@@ -366,7 +366,7 @@ It is reported here for completeness and is not used anywhere else in this docum
 | Area | 0.025305430459774347 |
 | Closed perimeter | 0.01832403618893269 |
 | Compactness | 0.011733430616387042 |
-| Enclosure | 0.011410675215505706 |
+| Enclosure index | 0.011410675215505706 |
 
 ### 3.8 Rating validation — same 46 participants, not part of the fit
 
@@ -376,7 +376,7 @@ Source: `src/data/rating-validation.json` (stored; `generated_at` 2026-09-02T06:
 - Each scale correlates, across n = 18 plazas, the mean 1–7 rating per plaza (41.27777777777778 ratings per plaza on average) against the raw computed `perceptual_360` metric.
 - Pearson p is a permutation p with 20,000 shuffles, then Holm-adjusted across the four scales.
 - The participant bootstrap uses 2000 resamples. Split-half reliability uses 2000 splits, Spearman–Brown corrected.
-- "Aligned" multiplies by the expected sign. Closed perimeter's is −1 because its high rating anchor is "Clear sightlines, nothing hidden".
+- "Aligned" multiplies by the expected sign. Closed perimeter's is −1 because its ratings are stored with value 1 at the continuous-fronts end (`05_closed_perimeter.md` §3.3). Reported as perceived facade continuity, the reflected rating (8 − v) gives the same aligned r.
 
 **Correlations and significance:**
 
@@ -385,7 +385,7 @@ Source: `src/data/rating-validation.json` (stored; `generated_at` 2026-09-02T06:
 | Area | 0.7492826496021695 | 0.7492826496021695 | 0.4343514841216132 – 0.9009773208045824 | 0.00014999250037498125 | 0.00044997750112494374 | 0.8183694530443757 | 0.00004999750012499375 |
 | Compactness | 0.582058158603626 | 0.582058158603626 | 0.15816103821710903 – 0.824797087189609 | 0.012899355032248387 | 0.025798710064496775 | 0.5108359133126935 | 0.03134843257837108 |
 | Closed perimeter | −0.22261509224597228 | 0.22261509224597228 | −0.272594025657234 – 0.6245776228026187 | 0.37258137093145344 | 0.37258137093145344 | 0.04643962848297214 | 0.8576571171441428 |
-| Enclosure | 0.8262998777106189 | 0.8262998777106189 | 0.5851697076504866 – 0.9331759558830152 | 0.00004999750012499375 | 0.000199990000499975 | 0.8679050567595459 | 0.00004999750012499375 |
+| Enclosure index | 0.8262998777106189 | 0.8262998777106189 | 0.5851697076504866 – 0.9331759558830152 | 0.00004999750012499375 | 0.000199990000499975 | 0.8679050567595459 | 0.00004999750012499375 |
 
 **Participant bootstrap and noise ceiling:**
 
@@ -394,7 +394,7 @@ Source: `src/data/rating-validation.json` (stored; `generated_at` 2026-09-02T06:
 | Area | 0.7097642606575824 – 0.7807557537932263 | 1 | 0.9894447963120552 | 0.7532686477652891 |
 | Compactness | 0.35673459698096827 – 0.7413819289597513 | 1 | 0.9488464976430857 | 0.597541952174636 |
 | Closed perimeter | −0.20728056553663962 – 0.62126641961782 | 0.797 | 0.7734349476475476 | 0.2531294690702544 |
-| Enclosure | 0.7739222257168984 – 0.8496062277988611 | 1 | 0.9742150281362173 | 0.8371634829177902 |
+| Enclosure index | 0.7739222257168984 – 0.8496062277988611 | 1 | 0.9742150281362173 | 0.8371634829177902 |
 
 **Stability trajectory** (stored). Aligned r recomputed on the first n participants; the script orders them by `submitted_at`, falling back to `started_at`.
 
@@ -403,7 +403,7 @@ Source: `src/data/rating-validation.json` (stored; `generated_at` 2026-09-02T06:
 | Area | 0.7199470043350147 | 0.7463274589148384 | 0.74105614773407 | 0.7492826496021695 |
 | Compactness | 0.2319832770160432 | 0.12899745786386024 | 0.15268958458608922 | 0.582058158603626 |
 | Closed perimeter | −0.5733073706190658 | −0.5373225040255463 | −0.46230156676582784 | 0.22261509224597228 |
-| Enclosure | 0.7268863950209866 | 0.7574837886218081 | 0.7751977372770688 | 0.8262998777106189 |
+| Enclosure index | 0.7268863950209866 | 0.7574837886218081 | 0.7751977372770688 | 0.8262998777106189 |
 
 ---
 
@@ -512,7 +512,7 @@ The breakdown per plaza was re-run from each field file's `zones` array. Re-assi
 
 Normalised values use `perceptual_360` bounds and are stored to 5 dp. Raw values are denormalised (re-run) with `fields/index.json` → `bounds`.
 
-| Zone | Name (from `describeZone`) | Points | Share of 11719 | n area | n compactness | n closed perimeter | n enclosure | Area m² | Compactness | Closed perimeter m | Enclosure |
+| Zone | Name (from `describeZone`) | Points | Share of 11719 | n area | n compactness | n closed perimeter | n enclosure index | Area m² | Compactness | Closed perimeter m | Enclosure index |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | 0 | Open, facade-rich | 4879 | 0.4163 | 0.49851 | 0.43447 | 0.81716 | 0.30783 | 25217.4501756 | 0.120476067 | 557.8919836 | 0.19652193 |
 | 1 | Open, regular | 1671 | 0.1426 | 0.45388 | 1.02019 | 0.43921 | 0.53569 | 23309.4480528 | 0.206049759 | 423.4513891 | 0.25827199 |
@@ -835,10 +835,9 @@ With the live full-precision weights:
 
 ## 7. P8 matched-view validation
 
-**Status: run, interim.**
+**Status: complete.**
 
 - 15 participants completed the instrument against a frozen bank.
-- The stated recruitment target is 30–50 participants (the bank-sizing comment at `scripts/build-matched-view-trials.mjs:89-101`).
 - The deployed endpoint is not configured (`MATCHED_VIEW_ENDPOINT_URL = ''`, `src/lib/surveyEndpoint.js:28`). All 15 responses are in the local dev file.
 
 Source: `src/data/matched-view-trials.json` and `src/data/matched-view-responses.json` (stored). The analysis was re-run with `analyseMatchedView` (`src/lib/analysis/matchedView.js:355-399`), the same function the researcher page uses.
@@ -944,7 +943,7 @@ Re-run: `npm run matched-view:selftest`, exit 0, 25 of 25 checks passed. It simu
 
 **Canonical readings.** Source: `src/data/results.json` (stored).
 
-| Layer | Vantage (x, y) m | Heading ° | Area m² | Compactness | Closed perimeter m | Enclosure |
+| Layer | Vantage (x, y) m | Heading ° | Area m² | Compactness | Closed perimeter m | Enclosure index |
 |---|---|---:|---:|---:|---:|---:|
 | `perceptual_120` | (−48.7, 13.08) | 120.1 | 8798.21 | 0.1736 | 192.92 | 0.1319 |
 | `perceptual_360` | (−23.68, 0.96) | 346.2 (no effect at 360°) | 16698.05 | 0.1257 | 503.72 | 0.1886 |
@@ -956,7 +955,7 @@ Re-run: `npm run matched-view:selftest`, exit 0, 25 of 25 checks passed. It simu
 | Area (m²) | 967 | 17535.56359875906 | 2808.49028851427 | 6045.07 | 16988.44 | 28635.2 |
 | Compactness | 967 | 0.10710810754912094 | 0.024324142873678945 | 0.05494 | 0.10829 | 0.21565 |
 | Closed perimeter (m) | 967 | 493.21182006204737 | 52.79577235408616 | 233.74 | 490.92 | 710.78 |
-| Enclosure | 967 | 0.23127335056876946 | 0.04793267849004452 | 0.16162 | 0.21604 | 0.46024 |
+| Enclosure index | 967 | 0.23127335056876946 | 0.04793267849004452 | 0.16162 | 0.21604 | 0.46024 |
 
 **P9-only diagnostics, height-aware baseline** (re-run: `recomputeField` with no elements, n = 967, 0 points dropped):
 
@@ -994,7 +993,7 @@ The file holds **7** scenarios. The note on "Four Types, Two Halves" (`scenarios
 |---|---|---|---|---|---|---|---|---|
 | Four Types, Two Halves | No (reachability demo) | 8 (4 demolish, 2 landmark, 2 screenWall) | yes | 0 / 0 | 4 (buildings 144, 102, 60, 89) | none | (−23.69, 1.03), 20 m | null |
 | Rooms in the Square | Yes | 4 (4 landmark) | yes | 0 / 0 | 0 | none | (−25, 8), 35 m | 2 Tight, strongly enclosed |
-| Market Hall | Yes | 3 (1 freehand, 2 landmark) | yes | 0 / 0 | 0 | none | (−25, 8), 35 m | 2 |
+| Central Hall | Yes | 3 (1 freehand, 2 landmark) | yes | 0 / 0 | 0 | none | (−25, 8), 35 m | 2 |
 | Colonnaded Edge | Yes | 4 (3 recess, 1 colonnade) | yes | 3 / 3 | 0 | none | (−25, 8), 45 m | 0 Open, facade-rich |
 | Shaded Grove | Yes | 5 (2 treeRow, 2 colonnade, 1 plinth) | yes | 0 / 0 | 0 | none | (−34, 4), 35 m | 2 |
 | Bridging the Level Break | Yes | 7 (3 freehand, 3 plinth, 1 screenWall) | yes | 0 / 0 | 0 | none | (7, 9), 35 m | 2 |
@@ -1006,7 +1005,7 @@ The file holds **7** scenarios. The note on "Four Types, Two Halves" (`scenarios
 |---|---|
 | Four Types, Two Halves | landmark size 8 h 8.406 at (−38.845, 6.028) rot 36.134° and at (−38.845, −3.972) rot −36.134°; screenWall length 41.41439051017761 h 7.585078339571693 perf 0 at (−47.929, 20.575) rot −45.852° and at (−47.929, −18.519) rot 45.852° |
 | Rooms in the Square | landmark 12×12: h 8 at (−56, 14), h 9 at (−30, 5), h 7.5 at (−4, 15), h 8.5 at (16, 0); rot 0 |
-| Market Hall | freehand 4-corner mass h 8; landmark 6×6 h 4 at (−63, 4) and (13, 4) |
+| Central Hall | freehand 4-corner mass h 8; landmark 6×6 h 4 at (−63, 4) and (13, 4) |
 | Colonnaded Edge | recessedArcade length 28 depth 4 pier_spacing 5 on buildings 63, 89, 164; colonnade length 40 depth 4 spacing 4 h 6 at (19, 8) rot 90° |
 | Shaded Grove | treeRow length 42 spacing 6 clearance 2.5 canopy_diameter 7 canopy_height 5 at (−34, 22) and (−34, −14); colonnade length 30 depth 4 spacing 5 h 6 at (−34, 10) and (−34, −2); plinth size 20 h 0.9 sides_open 2 at (10, 4) |
 | Bridging the Level Break | freehand 4-corner masses h 6.5, 7, 6; plinth size 10 h 0.9 sides_open 2 at (−2, −20), (−4, 19), (−18.5, 11); screenWall length 20 h 2.6 perf 0 at (9, 0) rot 90° |
@@ -1036,7 +1035,7 @@ Percentage change is `(after − before) / before × 100`.
 |---|---:|---:|---:|---|---|---|---|---|
 | Four Types, Two Halves | 919 | 48 | 490 | 0.6804550155118925 → 0.25571273122959737 | 0.0031023784901758012 → 0.05331882480957562 | 0.10134436401240951 → 0.24047878128400435 | 0.21509824198552224 → 0.4504896626768226 | 0 → 0 |
 | Rooms in the Square | 846 | 121 | 592 | 0.6804550155118925 → 0.02009456264775414 | 0.0031023784901758012 → 0 | 0.10134436401240951 → 0.1867612293144208 | 0.21509824198552224 → 0.793144208037825 | 0 → 0 |
-| Market Hall | 749 | 218 | 486 | 0.6804550155118925 → 0.04539385847797063 | 0.0031023784901758012 → 0 | 0.10134436401240951 → 0.45660881174899864 | 0.21509824198552224 → 0.4979973297730307 | 0 → 0 |
+| Central Hall | 749 | 218 | 486 | 0.6804550155118925 → 0.04539385847797063 | 0.0031023784901758012 → 0 | 0.10134436401240951 → 0.45660881174899864 | 0.21509824198552224 → 0.4979973297730307 | 0 → 0 |
 | Colonnaded Edge | 957 | 10 | 493 | 0.6804550155118925 → 0.2936259143155695 | 0.0031023784901758012 → 0.0010449320794148381 | 0.10134436401240951 → 0.009404388714733543 | 0.21509824198552224 → 0.6959247648902821 | 0 → 0 |
 | Shaded Grove | 940 | 27 | 715 | 0.6804550155118925 → 0.02127659574468085 | 0.0031023784901758012 → 0 | 0.10134436401240951 → 0.0010638297872340426 | 0.21509824198552224 → 0.9776595744680852 | 0 → 0 |
 | Bridging the Level Break | 880 | 87 | 566 | 0.6804550155118925 → 0.10227272727272728 | 0.0031023784901758012 → 0.09318181818181819 | 0.10134436401240951 → 0.23068181818181818 | 0.21509824198552224 → 0.5738636363636364 | 0 → 0 |
@@ -1046,11 +1045,11 @@ Percentage change is `(after − before) / before × 100`.
 
 **Metric % change over surviving points.** The P9-only metrics are closed share, solidity and solid share. Solid share is sign-only at this site.
 
-| Scenario | Area | Compactness | Closed perimeter | Enclosure | Closed share | Solidity | Solid share |
+| Scenario | Area | Compactness | Closed perimeter | Enclosure index | Closed share | Solidity | Solid share |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | Four Types, Two Halves | −36.08029022420033 | 15.736244090413521 | −18.859423269004417 | 6.47247065507754 | 3.0325122996064895 | 4.454369270086488 | 1.4921970018275288 |
 | Rooms in the Square | −43.28478543204067 | −21.88697156272789 | −28.980945851921234 | 27.951041440117148 | 2.7358970571274286 | −18.177768646906866 | 1.0826779441397616 |
-| Market Hall | −43.17525981999671 | −2.13337541740346 | −27.74576568330729 | 28.17738012629877 | 3.238463403406084 | −4.717347971561454 | 0.7020422716632095 |
+| Central Hall | −43.17525981999671 | −2.13337541740346 | −27.74576568330729 | 28.17738012629877 | 3.238463403406084 | −4.717347971561454 | 0.7020422716632095 |
 | Colonnaded Edge | −5.157318791157468 | −57.637719023051005 | 7.258202367117683 | −0.190754763581713 | −3.5166283316214595 | −4.288589987017537 | 0.1671829173899401 |
 | Shaded Grove | −19.28112158830149 | −84.54072973382465 | −20.02494251583503 | 2.6678999033591486 | −10.059783201719478 | −17.481682781448065 | 0.32148594025710553 |
 | Bridging the Level Break | −33.70295366570045 | 9.65843449435893 | −21.5440920920205 | 13.4940700180277 | 2.5067937675804357 | −3.768456123554336 | 0.794765409698848 |
@@ -1058,11 +1057,11 @@ Percentage change is `(after − before) / before × 100`.
 
 **Absolute means over surviving points** (before → after):
 
-| Scenario | Area m² | Compactness | Closed perimeter m | Enclosure |
+| Scenario | Area m² | Compactness | Closed perimeter m | Enclosure index |
 |---|---|---|---|---|
 | Four Types, Two Halves | 17573.83319912951 → 11233.143177366712 | 0.10719658324265496 → 0.12406529923830246 | 492.75626768226334 → 399.8252774755169 | 0.2321224700761697 → 0.24714652883569094 |
 | Rooms in the Square | 17340.201241134768 → 9834.53234042553 | 0.10815684397163104 → 0.08448458628841618 | 489.7117494089836 → 347.78865248226987 | 0.23685491725768312 → 0.3030583333333333 |
-| Market Hall | 17650.894712950612 → 10030.075060080122 | 0.1079493057409879 → 0.10564634178905197 | 488.6870360480641 → 353.0970761014688 | 0.24306484646194945 → 0.3115541522029374 |
+| Central Hall | 17650.894712950612 → 10030.075060080122 | 0.1079493057409879 → 0.10564634178905197 | 488.6870360480641 → 353.0970761014688 | 0.24306484646194945 → 0.3115541522029374 |
 | Colonnaded Edge | 17478.73684430513 → 16577.30266457682 | 0.10701733542319744 → 0.04533498432601887 | 492.7101776384536 → 528.4720794148376 | 0.23171988505747115 → 0.23127786833855796 |
 | Shaded Grove | 17544.053446808528 → 14161.363170212777 | 0.10714661702127651 → 0.016564085106382978 | 492.9803510638299 → 394.26131914893625 | 0.2318410531914893 → 0.23802634042553186 |
 | Bridging the Level Break | 17558.76796590911 → 11640.944534090911 | 0.10679137499999995 → 0.11710575000000015 | 494.73144318181835 → 388.14604545454534 | 0.2313024431818182 → 0.2625145568181815 |
@@ -1074,7 +1073,7 @@ Percentage change is `(after − before) / before × 100`.
 |---|---|---|---|
 | Four Types, Two Halves | 0.8965603373231763 → 0.9237486398258951 | 0.3923924156692053 → 0.4098710228509244 | 0.9694566050054427 → 0.9839228073993529 |
 | Rooms in the Square | 0.898525851063829 → 0.9231085933806135 | 0.3953830732860515 → 0.3235112529550828 | 0.9710271631205692 → 0.9815402600472817 |
-| Market Hall | 0.8941589185580767 → 0.9231159279038716 | 0.3908002403204271 → 0.37236483311081414 | 0.9672676101468632 → 0.9740582376502007 |
+| Central Hall | 0.8941589185580767 → 0.9231159279038716 | 0.3908002403204271 → 0.37236483311081414 | 0.9672676101468632 → 0.9740582376502007 |
 | Colonnaded Edge | 0.8973703134796222 → 0.8658131347962374 | 0.3932658307210029 → 0.37640027168234064 | 0.9703298223615493 → 0.971952048066878 |
 | Shaded Grove | 0.8968558617021265 → 0.8066341063829795 | 0.3920302765957443 → 0.32349678723404285 | 0.9697489042553218 → 0.9728665106383 |
 | Bridging the Level Break | 0.8965436363636353 → 0.9190181363636379 | 0.39178299999999955 → 0.3770188295454547 | 0.9699274318181849 → 0.9776360795454562 |
@@ -1087,12 +1086,12 @@ Percentage change is `(after − before) / before × 100`.
 | Scenario | Selected | Surviving | Swallowed | Target | Weighted distance before → after | On-target points before → after | On-target share before → after | Driving metric before → after |
 |---|---:|---:|---:|---|---|---|---|---|
 | Four Types, Two Halves | 208 | 179 | 29 | none | — | — | — | — |
-| Rooms in the Square | 558 | 479 | 79 | Z2 | 0.35517245127664365 → 0.2712115517873171 | 34 → 111 | 0.06093189964157706 → 0.23173277661795408 | enclosure → compactness |
-| Market Hall | 558 | 358 | 200 | Z2 | 0.35517245127664365 → 0.2090554460360981 | 34 → 261 | 0.06093189964157706 → 0.729050279329609 | enclosure → compactness |
+| Rooms in the Square | 558 | 479 | 79 | Z2 | 0.35517245127664365 → 0.2712115517873171 | 34 → 111 | 0.06093189964157706 → 0.23173277661795408 | enclosure index → compactness |
+| Central Hall | 558 | 358 | 200 | Z2 | 0.35517245127664365 → 0.2090554460360981 | 34 → 261 | 0.06093189964157706 → 0.729050279329609 | enclosure index → compactness |
 | Colonnaded Edge | 826 | 826 | 0 | Z0 | 0.1952787075441362 → 0.3258795732567089 | 599 → 238 | 0.725181598062954 → 0.288135593220339 | area → compactness |
-| Shaded Grove | 591 | 564 | 27 | Z2 | 0.3568374808065688 → 0.5110211919403356 | 43 → 0 | 0.0727580372250423 → 0 | enclosure → compactness |
-| Bridging the Level Break | 422 | 336 | 86 | Z2 | 0.36784463042386495 → 0.3210837702901939 | 19 → 104 | 0.045023696682464455 → 0.30952380952380953 | enclosure → enclosure |
-| Zeil Terminus | 751 | 657 | 94 | Z2 | 0.3466137847547759 → 0.4458304739781748 | 84 → 39 | 0.1118508655126498 → 0.0593607305936073 | enclosure → compactness |
+| Shaded Grove | 591 | 564 | 27 | Z2 | 0.3568374808065688 → 0.5110211919403356 | 43 → 0 | 0.0727580372250423 → 0 | enclosure index → compactness |
+| Bridging the Level Break | 422 | 336 | 86 | Z2 | 0.36784463042386495 → 0.3210837702901939 | 19 → 104 | 0.045023696682464455 → 0.30952380952380953 | enclosure index → enclosure index |
+| Zeil Terminus | 751 | 657 | 94 | Z2 | 0.3466137847547759 → 0.4458304739781748 | 84 → 39 | 0.1118508655126498 → 0.0593607305936073 | enclosure index → compactness |
 
 "Before" distances and shares are over all selected points; "after" figures are over surviving points. "Four Types, Two Halves" has no target zone, so the diagnosis does not apply.
 
@@ -1102,7 +1101,7 @@ Percentage change is `(after − before) / before × 100`.
 |---|---|---|---|---|---|
 | Four Types, Two Halves | 0.9711538461538461 → 0.3463687150837989 | 0 → 0.027932960893854747 | 0 → 0.16201117318435754 | 0.028846153846153848 → 0.46368715083798884 | 0 → 0 |
 | Rooms in the Square | 0.8512544802867383 → 0 | 0 → 0 | 0.06093189964157706 → 0.23173277661795408 | 0.08781362007168458 → 0.7682672233820459 | 0 → 0 |
-| Market Hall | 0.8512544802867383 → 0 | 0 → 0 | 0.06093189964157706 → 0.729050279329609 | 0.08781362007168458 → 0.2709497206703911 | 0 → 0 |
+| Central Hall | 0.8512544802867383 → 0 | 0 → 0 | 0.06093189964157706 → 0.729050279329609 | 0.08781362007168458 → 0.2709497206703911 | 0 → 0 |
 | Colonnaded Edge | 0.725181598062954 → 0.288135593220339 | 0 → 0 | 0.08958837772397095 → 0.002421307506053269 | 0.18523002421307505 → 0.7094430992736077 | 0 → 0 |
 | Shaded Grove | 0.7648054145516074 → 0 | 0 → 0 | 0.0727580372250423 → 0 | 0.16243654822335024 → 1 | 0 → 0 |
 | Bridging the Level Break | 0.8033175355450237 → 0.03869047619047619 | 0.0071090047393364926 → 0.19345238095238096 | 0.045023696682464455 → 0.30952380952380953 | 0.14454976303317535 → 0.4583333333333333 | 0 → 0 |
@@ -1110,11 +1109,11 @@ Percentage change is `(after − before) / before × 100`.
 
 **Metric % change in the selection** (same surviving points on both sides):
 
-| Scenario | Area | Compactness | Closed perimeter | Enclosure | Closed share | Solidity | Solid share |
+| Scenario | Area | Compactness | Closed perimeter | Enclosure index | Closed share | Solidity | Solid share |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | Four Types, Two Halves | −29.14127118699558 | 7.283669417432756 | −13.798177053092905 | 13.033712266955758 | 0.8647721914003564 | 0.17582063129000278 | 0.7966100897597553 |
 | Rooms in the Square | −48.191444964275604 | −23.37785145878852 | −34.015711548396574 | 37.69142334727118 | 2.7742432276885385 | −20.61861020744343 | 1.004422503781333 |
-| Market Hall | −46.559362992464386 | 4.135795077449212 | −34.819964404812616 | 44.21799324725531 | 3.0282670103216756 | 5.017606235531388 | 0.27856261689676903 |
+| Central Hall | −46.559362992464386 | 4.135795077449212 | −34.819964404812616 | 44.21799324725531 | 3.0282670103216756 | 5.017606235531388 | 0.27856261689676903 |
 | Colonnaded Edge | −5.046524848227424 | −60.369761259684296 | 7.105015213584691 | −0.8126127518512877 | −3.738670257343499 | −4.459326563354318 | 0.14679554621246324 |
 | Shaded Grove | −21.523408640240802 | −86.24660831658758 | −22.509803161998608 | 5.058273830798781 | −11.049085088744052 | −18.52780134070617 | 0.31237600976276075 |
 | Bridging the Level Break | −43.14581825406682 | 26.042328483751675 | −35.78368974856237 | 32.050520999206654 | 3.4708407444704714 | 3.7753759407374687 | 0.9308988717540715 |

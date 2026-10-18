@@ -631,7 +631,7 @@
     },
     {
       "metric": "enclosure",
-      "label": "Enclosure",
+      "label": "Enclosure index",
       "anchors": {
         "low": "Low walls, exposed to the sky",
         "high": "Tall walls, strongly enclosed"

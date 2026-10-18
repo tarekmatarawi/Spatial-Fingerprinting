@@ -167,7 +167,7 @@ export function CloudComparisonPage() {
         area_m2: round(result.area, 2),
         compactness: round(result.compactness, 4),
         closed_perimeter_m: round(result.closedPerimeter, 2),
-        enclosure_ratio: round(result.enclosureRatio, 4),
+        enclosure_ratio: round(result.enclosureIndex, 4),
         fov_mode: CLOUD_FOV_MODE,
         fov_deg: CLOUD_FOV_DEG,
         ray_count: CLOUD_RAY_COUNT,
@@ -1264,7 +1264,7 @@ function ViewPanel({ site, geometry, marker, index }) {
             <dd className="tabular-nums text-ink-muted">{Math.round(marker.closed_perimeter_m)} m</dd>
           </div>
           <div className="flex justify-between">
-            <dt>enclosure</dt>
+            <dt>enclosure index</dt>
             <dd className="tabular-nums text-ink-muted">{marker.enclosure_ratio.toFixed(3)}</dd>
           </div>
         </dl>

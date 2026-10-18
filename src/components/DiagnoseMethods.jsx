@@ -214,7 +214,7 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             rows={[
               { label: 'Closed perimeter (metres of unbroken wall)', value: '499 m → 175 m  (−65%)', flag: true },
               { label: 'Closed share (share of horizon)', value: '0.917 → 0.958  (+5%)' },
-              { label: 'Enclosure', value: '0.193 → 0.410  (+112%)' },
+              { label: 'Enclosure index', value: '0.193 → 0.410  (+112%)' },
               { label: 'Isovist area', value: '−77%' },
             ]}
             verdict={
@@ -222,7 +222,7 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
               'Closed perimeter falls because four pavilions are individually short in metres where the ' +
               'distant facade they replaced was long. Closed share rises because each pavilion ' +
               'spans about 46 rays and costs only the two breaks at its edges — net +43 apiece. ' +
-              'Enclosure and area settle which one matches standing there: you are emphatically ' +
+              'Enclosure index and area settle which one matches standing there: you are emphatically ' +
               'more enclosed, and closed perimeter alone would have reported the opposite.'
             }
           />
@@ -318,30 +318,30 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
 
           <H>Two findings that look like the tool is wrong, and are not</H>
           <p>
-            <B>A short, close object can raise enclosure where a tall, distant one lowers it — from
+            <B>A short, close object can raise the enclosure index where a tall, distant one lowers it — from
             the same intervention.</B> The engine casts one flat ray per horizontal direction and
-            stops at the first thing it meets; the enclosure angle for that direction comes from
+            stops at the first thing it meets; the angle that direction adds to the enclosure index comes from
             whatever was hit, never from anything behind it. So screening a distant facade with a
             near object does not add the two together — it SWAPS one angle for the other, and
             whichever is bigger wins. For an object of height <i>h</i> at distance <i>d</i> in
-            front of a facade of height <i>H</i> at distance <i>D</i>, enclosure rises only where{' '}
+            front of a facade of height <i>H</i> at distance <i>D</i>, the enclosure index rises only where{' '}
             <code className="font-mono text-xs">d &lt; D·h/H</code>; beyond that distance the same
             intervention lowers it. Measured at a colonnade near Konstablerwache&rsquo;s centre:
-            enclosure rose 22&ndash;36% within 12 m of it and fell slightly beyond about 20 m. This
+            the enclosure index rose 22&ndash;36% within 12 m of it and fell slightly beyond about 20 m. This
             is not a defect — a real eye cannot see through a solid near object either — but it
-            means &ldquo;enclosure went up nearby&rdquo; and &ldquo;enclosure went up across the
+            means &ldquo;the enclosure index went up nearby&rdquo; and &ldquo;it went up across the
             selection&rdquo; can be opposite findings from one intervention, and the selection
             radius decides which one a reader sees.
           </p>
           <p>
             <B>Thin, discrete elements cannot reach &ldquo;Tight, strongly enclosed&rdquo; at any
-            height or spacing.</B> That zone&rsquo;s centre needs both high enclosure AND a
-            SMOOTH isovist. A colonnade closes the enclosure gap easily but serrates the isovist
+            height or spacing.</B> That zone&rsquo;s centre needs both a high enclosure index AND a
+            SMOOTH isovist. A colonnade closes the enclosure index gap easily but serrates the isovist
             outline into dozens of long radial spikes — measured near Konstablerwache&rsquo;s
             centre, closing the column spacing to its minimum turned a 1,179 m perimeter into
             4,357 m while area fell by two thirds, driving compactness from 0.13 to 0.003. Height
-            moves enclosure and nothing else; it cannot touch compactness, which is pure plan
-            geometry. A solid wall of the same run reaches the enclosed type at lower enclosure
+            moves the enclosure index and nothing else; it cannot touch compactness, which is pure plan
+            geometry. A solid wall of the same run reaches the enclosed type at a lower enclosure index
             than the tallest colonnade manages, because it does not fragment the outline. The
             corpus typology can tell &ldquo;enclosed and smooth&rdquo; from &ldquo;enclosed and
             serrated&rdquo;; it has no way to credit a rhythm of columns with reading as a
@@ -353,7 +353,7 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             basin of the five types — about 6% of the reachable space, against 36% for &ldquo;Open,
             regular&rdquo; and 28% for &ldquo;Vast, regular.&rdquo; It still dominates every
             intervention tried here because it is the only type whose required direction (lower
-            area, lower compactness, lower closed perimeter, higher enclosure) matches what adding an
+            area, lower compactness, lower closed perimeter, higher enclosure index) matches what adding an
             object to an open square does to all four at once. Two solid sides of enclosure, built
             unbroken, is the threshold that escapes it — one hole in the enclosure returns a point
             to &ldquo;Tight, irregular&rdquo; immediately, which is why the four zone types other
@@ -389,9 +389,9 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
             displaced control.
           </p>
           <p>
-            <B>Height moves enclosure and nothing else, measured rather than argued.</B> Holding
+            <B>Height moves the enclosure index and nothing else, measured rather than argued.</B> Holding
             footprint and position fixed and varying only height, a 20 &times; 20 m mass gives
-            isovist area −18.1% at both 8 m and 15 m, compactness +5.9% at both, and enclosure
+            isovist area −18.1% at both 8 m and 15 m, compactness +5.9% at both, and enclosure index
             9.9% against 16.9% &mdash; +47.5% against +67.4% within 25 m of it. The other three
             metrics are pure plan geometry, which follows from how the engine is built; this is
             the controlled measurement of it rather than the inference.
@@ -424,9 +424,8 @@ export function DiagnoseMethods({ site, field, fieldIndex, zonesFile, corpus, ev
           </p>
           {evidence && (
             <p>
-              <B>What P8 established, and what it did not.</B> The matched-view study is interim:{' '}
-              {evidence.participants} of an intended ~40 participants,{' '}
-              {evidence.judgements} judgements. On the agreement stratum participants matched the
+              <B>What P8 established, and what it did not.</B> The matched-view study is complete:{' '}
+              {evidence.participants} participants, {evidence.judgements} judgements. On the agreement stratum participants matched the
               framework&rsquo;s prediction{' '}
               {(evidence.agreement.accuracy * 100).toFixed(1)}% of {evidence.agreement.n} times —
               above chance on the pooled binomial (p ={' '}

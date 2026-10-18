@@ -30,8 +30,8 @@
 // the drawn view. It says a measured position exists that is close to it in the
 // weighted space, which is a lookup, not evidence. What P8 tested is the
 // separate and much narrower claim that when this space says two views are
-// alike, people agree — and it tested it on 15 of an intended ~40 participants,
-// with one stratum short of significance. The page states those numbers live
+// alike, people agree — and it tested it on 15 participants, with one stratum
+// short of significance. The page states those numbers live
 // from the analysis rather than repeating a remembered figure; see
 // `precedentEvidence` at the foot of this file.
 
@@ -170,7 +170,7 @@ export function probeView({ vantage, headingRad, composed, index }) {
     area_m2: round(m.area, 2),
     compactness: round(m.compactness, 4),
     closed_perimeter_m: round(m.closedPerimeter, 2),
-    enclosure_ratio: round(m.enclosureRatio, 4),
+    enclosure_ratio: round(m.enclosureIndex, 4),
     fov_mode: PRECEDENT_FOV_MODE,
     fov_deg: PRECEDENT_FOV_DEG,
     ray_count: PRECEDENT_RAY_COUNT,
@@ -295,7 +295,7 @@ export function rankPrecedents({
     // span. Named rather than counted, because which metric extrapolates is the
     // interesting part: an out-of-range area means a drawn space larger than
     // any surveyed view, which is a different caution from an out-of-range
-    // enclosure.
+    // enclosure index.
     outOfRange: METRICS.filter((_, k) => probeN[k] < 0 || probeN[k] > 1),
     ranked,
     pooled: pool.length,
@@ -337,15 +337,15 @@ export function segmentLabelFits(share, barWidth) {
 
 // P8's result, read LIVE from the analysis rather than written down here.
 //
-// The temptation is to put "63%, p = 0.15" in a string and move on. That number
-// is from 15 of an intended ~40 participants and will change with every batch
-// of responses; a hard-coded copy would keep saying 63% after the sample had
-// doubled, and the page would be making a false claim about its own data in the
-// most credible-looking way available — a specific figure to two significant
-// figures, in the researcher's own interface.
+// The temptation is to put "63%, p = 0.15" in a string and move on. Reading it
+// from the analysis instead means the page and the analysis can never disagree:
+// a hard-coded copy would keep asserting itself if the responses were ever
+// re-scored, and the page would be making a false claim about its own data in
+// the most credible-looking way available — a specific figure to two
+// significant figures, in the researcher's own interface.
 //
-// The wording is as careful as the numbers. P8 is INTERIM. Its agreement
-// stratum is not significant by the defensible test, and the phrase "validated
+// The wording is as careful as the numbers. P8's agreement stratum is not
+// significant by the defensible test, and the phrase "validated
 // precedent" in this panel's title is doing real work that it has not fully
 // earned yet: what it means is "a view from the corpus P8 tested", not "a view
 // people have confirmed is similar". `status` below is what the panel prints,
@@ -393,8 +393,8 @@ export function precedentEvidence(analysis) {
     // without misrepresenting the study.
     status: significant
       ? 'People agreed with this space where the framework predicted they would.'
-      : 'Interim: people agreed with the framework more often than chance in the sample so far, ' +
-        'but not by enough to rule out chance on the test that counts each participant once.',
+      : 'People agreed with the framework more often than chance, but not by enough to rule ' +
+        'out chance on the test that counts each participant once.',
   }
 }
 

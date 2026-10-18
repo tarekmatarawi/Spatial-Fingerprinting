@@ -492,7 +492,7 @@ export function SiteViewer({ active = true }) {
       area_m2: round(isovistResult.area, 2),
       compactness: round(isovistResult.compactness, 4),
       closed_perimeter_m: round(isovistResult.closedPerimeter, 2),
-      enclosure_ratio: round(isovistResult.enclosureRatio, 4),
+      enclosure_ratio: round(isovistResult.enclosureIndex, 4),
       fov_mode: mode.id,
       fov_deg: mode.fov,
       ray_count: mode.rays,
@@ -1294,13 +1294,13 @@ function MetricsPanel({ result }) {
         <MetricRow label="Area" value={`${result.area.toFixed(1)} m²`} />
         <MetricRow label="Compactness" value={result.compactness.toFixed(4)} />
         <MetricRow label="Closed perimeter" value={`${result.closedPerimeter.toFixed(1)} m`} />
-        {/* Enclosure is a share of the 90° you could look up, so the angle it
+        {/* The enclosure index is a share of the 90° you could look up, so the angle it
             stands for is the readable half — 14°/18°/27° are where the
             classical enclosure thresholds sit, and reading them off directly
             beats converting 0.1594 in your head. */}
         <MetricRow
-          label="Enclosure"
-          value={`${result.enclosureRatio.toFixed(4)}  ·  ${(result.enclosureRatio * 90).toFixed(1)}°`}
+          label="Enclosure index"
+          value={`${result.enclosureIndex.toFixed(4)}  ·  ${(result.enclosureIndex * 90).toFixed(1)}°`}
         />
       </dl>
     </div>
@@ -1445,7 +1445,7 @@ function SavedResultsPanel({ results, onDelete, onLoad }) {
                       <ColumnHead label="Area" unit="m²" numeric />
                       <ColumnHead label="Compactness" unit="0–1" numeric />
                       <ColumnHead label="Closed perimeter" unit="m" numeric />
-                      <ColumnHead label="Enclosure" unit="0–1" numeric />
+                      <ColumnHead label="Enclosure index" unit="0–1" numeric />
                       <ColumnHead label="Heading" unit="°" numeric />
                       <ColumnHead label="Saved" />
                       <th className="px-2 py-1.5" aria-label="Actions"></th>

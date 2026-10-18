@@ -53,7 +53,7 @@ import { METRICS, METRIC_LABELS, buildFingerprints, FOV_MODES } from '../src/lib
 import { PAIRS, N_METRICS, pairProbabilities } from '../src/lib/analysis/model.js'
 import { fitWeights } from '../src/lib/analysis/fit.js'
 import { selectTriplets, summarise } from '../src/lib/analysis/exclusions.js'
-import { bootstrapWeights, ENCLOSURE_INDEX } from '../src/lib/analysis/resample.js'
+import { bootstrapWeights } from '../src/lib/analysis/resample.js'
 import {
   leaveOnePlazaOut,
   areaOnlyBaseline,
@@ -63,7 +63,7 @@ import {
   DEFAULT_SEED,
   CHANCE,
 } from '../src/lib/analysis/crossval.js'
-import { leaveOneMetricOut, assessH3 } from '../src/lib/analysis/ablation.js'
+import { leaveOneMetricOut } from '../src/lib/analysis/ablation.js'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const read = (rel) => JSON.parse(fs.readFileSync(path.join(root, rel), 'utf8'))
@@ -280,7 +280,7 @@ function runSelfTest(fingerprints, siteIds) {
 
   console.log('\nGATE 3 — ablation sanity (a zero-weight metric costs nothing)')
   {
-    const truth = [0.4, 0.4, 0.2, 0.0] // enclosure genuinely irrelevant here
+    const truth = [0.4, 0.4, 0.2, 0.0] // enclosure index genuinely irrelevant here
     const scaled = truth.map((w) => w * 12)
     const rng = mulberry32(1234)
     const triplets = syntheticTriplets(fingerprints, siteIds, {
@@ -473,8 +473,6 @@ async function main() {
   })
   console.log(`  null mean ${pct(permutation.nullMean)}, 95th ${pct(permutation.null95)}, p ${permutation.p.toExponential(2)}`)
 
-  const h3 = assessH3(bootstrap, ablation, ENCLOSURE_INDEX)
-
   const output = {
     analysis_version: ANALYSIS_VERSION,
     generated_at: new Date().toISOString(),
@@ -523,32 +521,10 @@ async function main() {
       null_max: permutation.nullMax,
       null_95: permutation.null95,
     },
+    // The hypothesis verdicts are not written here. They are derived from this
+    // file and rating-validation.json by src/lib/analysis/hypotheses.js, so
+    // there is one statement of each rule.
     ablation,
-    hypotheses: {
-      H1: {
-        statement:
-          'The weighted four-metric model predicts perceived similarity better than chance.',
-        accuracy: loo.meanAccuracy,
-        chance: CHANCE,
-        p: permutation.p,
-        supported: loo.meanAccuracy > CHANCE && permutation.p < 0.05,
-      },
-      H2: {
-        statement:
-          'A four-metric framework predicts perceptual similarity more accurately than isovist area alone.',
-        full: loo.meanAccuracy,
-        area_only: baseline.meanAccuracy,
-        mean_delta: paired.meanDelta,
-        wins: paired.wins,
-        losses: paired.losses,
-        p: paired.signTestP,
-        supported: paired.meanDelta > 0 && paired.signTestP != null && paired.signTestP < 0.05,
-      },
-      H3: {
-        statement: 'Enclosure carries the largest perceptual weight of the four metrics.',
-        ...h3,
-      },
-    },
   }
 
   // One file per source, so the panoramic result and the archived static-photo
@@ -558,11 +534,8 @@ async function main() {
   const outFile = `src/data/analysis-${sourceArg}${limitArg ? `-n${records.length}` : ''}${QUICK ? '-quick' : ''}.json`
   writeJsonAtomic(path.join(root, outFile), output)
 
-  console.log('\nHypotheses')
-  console.log(`  H1 ${output.hypotheses.H1.supported ? 'supported' : 'NOT supported'} — accuracy ${pct(loo.meanAccuracy)} vs chance ${pct(CHANCE)}, p ${permutation.p.toExponential(2)}`)
-  console.log(`  H2 ${output.hypotheses.H2.supported ? 'supported' : 'NOT supported'} — ${pct(loo.meanAccuracy)} vs area-only ${pct(baseline.meanAccuracy)}, p ${paired.signTestP?.toExponential(2)}`)
-  console.log(`  H3 ${h3.verdict} — enclosure largest in ${pct(h3.weightEvidence.largestShare)} of draws, ablation rank ${h3.ablationEvidence.rank}/4`)
   console.log(`\nWrote ${outFile}`)
+  console.log('Hypothesis verdicts are read from this file on the #/weights page (src/lib/analysis/hypotheses.js).')
 }
 
 await main()

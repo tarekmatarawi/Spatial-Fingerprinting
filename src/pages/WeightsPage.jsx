@@ -11,7 +11,7 @@ import {
   buildHypotheses,
   summariseVerdicts,
   reliabilityPrecondition,
-  concealmentCorrelations,
+  facadeContinuityCorrelations,
   VERDICT,
   R_SIGNIFICANCE_18,
 } from '@/lib/analysis/hypotheses'
@@ -21,7 +21,7 @@ import {
   DimensionLoadings,
   ScatterMatrix,
   PairedFoldChart,
-  ConcealmentComparison,
+  FacadeContinuityComparison,
   ConvergenceScatter,
   MetricCorrelation,
 } from '@/components/charts/FingerprintCharts'
@@ -30,7 +30,7 @@ import {
 //
 // The page is ordered the way the argument runs, not the way the pipeline
 // runs: what was fitted, whether it predicts anything, whether people perceive
-// what was measured, and only then the six hypotheses those three sections
+// what was measured, and only then the five hypotheses those three sections
 // answer. A reader who stops after the first screen should still have the
 // weights and the accuracy.
 //
@@ -43,7 +43,12 @@ const pct = (v) => `${(v * 100).toFixed(1)}%`
 
 const VERDICT_STYLE = {
   [VERDICT.SUPPORTED]: { label: 'Supported', cls: 'bg-ok-wash text-ok', Icon: LuCheck },
-  [VERDICT.PARTLY]: { label: 'Partly supported', cls: 'bg-warn-wash text-warn', Icon: LuMinus },
+  [VERDICT.PARTLY]: { label: 'Partially supported', cls: 'bg-warn-wash text-warn', Icon: LuMinus },
+  [VERDICT.DIRECTIONAL]: {
+    label: 'Not statistically supported, in the predicted direction',
+    cls: 'bg-warn-wash text-warn',
+    Icon: LuMinus,
+  },
   [VERDICT.NOT_SUPPORTED]: { label: 'Not supported', cls: 'bg-redline-wash text-redline', Icon: LuX },
 }
 
@@ -63,7 +68,7 @@ export function WeightsPage() {
     () => buildFingerprints(readings, siteIds, analysis.fov_mode).fingerprints,
     [siteIds]
   )
-  const concealment = useMemo(() => concealmentCorrelations(ratings), [])
+  const continuity = useMemo(() => facadeContinuityCorrelations(ratings), [])
 
   // One plaza is selected across every figure on the page, so a line in the
   // profile chart, a dot on the map and a point in the scatterplot matrix read
@@ -130,7 +135,7 @@ export function WeightsPage() {
           </Note>
 
           <Note label="Weight and ablation cost measure different things">
-            Compactness carries the second-largest weight yet costs least to remove; enclosure
+            Compactness carries the second-largest weight yet costs least to remove; enclosure index
             carries the smallest weight yet costs most. Weight says how strongly a dimension is used
             when all four are present. Ablation says how much worse the model gets without it. A
             dimension that overlaps with others can be heavily used and still replaceable.
@@ -172,7 +177,7 @@ export function WeightsPage() {
               label="Against area alone"
               value={pct(analysis.crossval.mean_accuracy)}
               compare={`vs ${pct(analysis.crossval.area_only.mean_accuracy)} for area alone`}
-              detail={`sign test p = ${analysis.crossval.paired.signTestP.toFixed(3)} — a tie`}
+              detail={`sign test p = ${analysis.crossval.paired.signTestP.toFixed(3)} — not significant`}
               tone="no"
             />
           </div>
@@ -188,10 +193,10 @@ export function WeightsPage() {
           <p className="mt-3 max-w-2xl text-sm text-ink-muted">
             The model beats chance decisively — no shuffled-label run out of{' '}
             {analysis.permutation.permutations.toLocaleString()} reached this accuracy. It does not
-            beat isovist area used on its own: the full model wins{' '}
-            {analysis.crossval.paired.wins} of{' '}
-            {analysis.crossval.paired.wins + analysis.crossval.paired.losses} decided folds, which is
-            a coin flip.
+            beat isovist area used on its own by a margin the sign test can detect: the full model
+            wins {analysis.crossval.paired.wins} of{' '}
+            {analysis.crossval.paired.wins + analysis.crossval.paired.losses} decided folds, ahead
+            but not significantly (H5).
           </p>
 
           <PairedFoldChart crossval={analysis.crossval} names={names} {...link} />
@@ -228,7 +233,7 @@ export function WeightsPage() {
                     const ok = s.pearson_p_holm < 0.05 && s.pearson_aligned > 0
                     return (
                       <tr key={s.metric} className="border-b border-line">
-                        <td className="py-2 pr-3 text-ink">{s.label}</td>
+                        <td className="py-2 pr-3 text-ink">{METRIC_LABELS[s.metric] ?? s.label}</td>
                         <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-ink">
                           {s.pearson_aligned.toFixed(3)}
                         </td>
@@ -269,48 +274,29 @@ export function WeightsPage() {
           <ConvergenceScatter ratings={ratings} />
 
           <p className="mt-8 max-w-2xl text-sm text-ink-muted">
-            The table above asks each metric about its own scale. H3 asks a harder question — of
-            the four dimensions, which best tracks a single percept, concealment? Answering it
-            needs every metric correlated against the <em>same</em> ratings, which is the figure
-            below.
+            The table above asks each metric about its own scale. Closed perimeter is the one that
+            does not match, and H3 asks whether that mismatch is systematic. One way to see it: of
+            the four metrics, which best tracks perceived facade continuity? Answering that needs
+            every metric correlated against the <em>same</em> ratings, which is the figure below.
           </p>
 
-          <ConcealmentComparison rows={concealment} significanceThreshold={R_SIGNIFICANCE_18} />
-
-          <div className="mt-8 rounded-lg border border-line bg-surface p-4">
-            <h3 className="text-sm font-semibold text-ink">
-              Precondition — rater reliability {precondition.lo.toFixed(2)}–{precondition.hi.toFixed(2)}
-            </h3>
-            <p className="mt-2 max-w-2xl text-sm text-ink-muted">{precondition.statement}</p>
-            <p className="mt-2 max-w-2xl text-sm text-ink-muted">{precondition.why}</p>
-            <dl className="mt-3 flex flex-wrap gap-x-6 gap-y-1 font-mono text-xs text-ink-faint">
-              {precondition.perScale.map((s) => (
-                <div key={s.metric}>
-                  <dt className="inline">{s.label.toLowerCase()} </dt>
-                  <dd className="inline text-ink-muted">{s.reliability?.toFixed(2)}</dd>
-                </div>
-              ))}
-            </dl>
-            <p className="mt-3 text-xs text-ink-faint">
-              Reported here rather than as a hypothesis: it establishes that the instrument works
-              and that participants were not guessing, which is a data-quality check rather than a
-              finding about urban space.
-            </p>
-          </div>
+          <FacadeContinuityComparison rows={continuity} significanceThreshold={R_SIGNIFICANCE_18} />
         </Section>
 
         <Section n="04" title="The five hypotheses">
           <p className="max-w-2xl text-sm text-ink-muted">
-            Ordered as the argument runs, not as the pipeline runs: the core claim first, then
-            whether the measures are valid, the standout negative result, the nuance, and finally
-            the limitation and the study it implies.
+            A precondition first, because H2 and H3 compare metrics against rating scales and that
+            comparison only means something if raters agreed with each other. Then the five
+            hypotheses, each with the rule its verdict is read from.
           </p>
           <p className="mt-3 font-mono text-xs text-ink-faint">
-            {summary.supported} supported · {summary.partly} partly · {summary.notSupported} not
-            supported
+            {summary.supported} supported · {summary.partly} partially supported ·{' '}
+            {summary.directional} not statistically supported, in the predicted direction
+            {summary.notSupported > 0 ? ` · ${summary.notSupported} not supported` : ''}
           </p>
 
           <div className="mt-5 space-y-4">
+            <PreconditionCard p={precondition} />
             {hypotheses.map((h) => (
               <HypothesisCard key={h.id} h={h} />
             ))}
@@ -498,6 +484,46 @@ function FoldChart({ folds, names }) {
   )
 }
 
+// The precondition for H2 and H3, drawn as a card in the same list so it is
+// read before the hypotheses that depend on it.
+function PreconditionCard({ p }) {
+  const style = p.passes
+    ? { label: 'Met', cls: 'bg-ok-wash text-ok', Icon: LuCheck }
+    : { label: 'Not met', cls: 'bg-redline-wash text-redline', Icon: LuX }
+  const { Icon } = style
+
+  return (
+    <article className="rounded-lg border border-line bg-surface p-5">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <p className="font-mono text-xs font-semibold tracking-wider text-primary">{p.label}</p>
+          <p className="mt-2 max-w-[54ch] font-medium leading-snug text-ink">{p.claim}</p>
+        </div>
+        <span
+          className={`inline-flex shrink-0 items-center gap-1.5 rounded px-2 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider ${style.cls}`}
+        >
+          <Icon aria-hidden className="h-3 w-3" />
+          {style.label}
+        </span>
+      </div>
+
+      <p className="mt-3 font-mono text-sm tabular-nums text-ink">
+        split-half {p.lo.toFixed(2)}–{p.hi.toFixed(2)} across the four scales
+      </p>
+      <dl className="mt-2 flex flex-wrap gap-x-6 gap-y-1 font-mono text-xs text-ink-faint">
+        {p.perScale.map((s) => (
+          <div key={s.metric}>
+            <dt className="inline">{s.label.toLowerCase()} </dt>
+            <dd className="inline text-ink-muted">{s.reliability?.toFixed(2)}</dd>
+          </div>
+        ))}
+      </dl>
+      <p className="mt-3 max-w-2xl text-sm text-ink-muted">{p.statement}</p>
+      <p className="mt-2 max-w-2xl text-sm text-ink-muted">{p.why}</p>
+    </article>
+  )
+}
+
 function HypothesisCard({ h }) {
   const [open, setOpen] = useState(false)
   const style = VERDICT_STYLE[h.verdict]
@@ -508,13 +534,15 @@ function HypothesisCard({ h }) {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <p className="font-mono text-xs font-semibold tracking-wider text-primary">{h.id}</p>
-          <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-ink-faint">
-            {h.group}
-          </p>
           <p className="mt-2 max-w-[54ch] font-medium leading-snug text-ink">{h.claim}</p>
+          {h.rule && (
+            <p className="mt-1.5 max-w-[54ch] text-xs leading-snug text-ink-muted">
+              Rule: {h.rule}
+            </p>
+          )}
         </div>
         <span
-          className={`inline-flex shrink-0 items-center gap-1.5 rounded px-2 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider ${style.cls}`}
+          className={`inline-flex max-w-[22rem] shrink-0 items-center gap-1.5 rounded px-2 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider ${style.cls}`}
         >
           <Icon aria-hidden className="h-3 w-3" />
           {style.label}

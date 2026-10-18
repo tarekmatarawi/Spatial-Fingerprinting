@@ -126,7 +126,7 @@ describe('survey — semantic differential', () => {
 
   test('four scales, plain language, no jargon reaches the participant', () => {
     assert.equal(RATING_SCALES.length, 4)
-    const banned = /isovist|compactness|closed perimeter|enclosure ratio/i
+    const banned = /isovist|compactness|closed perimeter|enclosure (index|ratio)/i
     for (const s of RATING_SCALES) {
       assert.ok(s.low && s.high, s.id + ' needs both anchors')
       assert.ok(!banned.test(s.low), s.id + ' low anchor leaks jargon: ' + s.low)
@@ -159,5 +159,17 @@ describe('survey — semantic differential', () => {
   test('the scale is 1..7', () => {
     assert.equal(RATING_MIN, 1)
     assert.equal(RATING_MAX, 7)
+  })
+})
+
+describe('survey — facade continuity wording keeps the stored polarity', () => {
+  test('unbroken fronts is value 1, the end the original "views blocked" sat at', () => {
+    // The 46 panoramic_v1 sessions stored 1 = "Views blocked, hidden corners".
+    // New sessions go into the same Sheet column, so the corresponding new
+    // anchor must be stored as 1 too — otherwise old and new ratings would
+    // mean opposite things and the closed perimeter correlation would flip.
+    const scale = RATING_SCALES.find((s) => s.metric === 'closedPerimeter')
+    assert.equal(scale.low, 'Long, unbroken building fronts all around')
+    assert.equal(scale.high, 'Edges broken up, many gaps between buildings')
   })
 })

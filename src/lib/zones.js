@@ -104,7 +104,7 @@ export function assignZone(point, centres, weights) {
 // instead of only reporting a number.
 //
 // `gap` is SIGNED and is the plain normalised difference, not the weighted
-// squared term: a designer needs to know that enclosure is 0.30 BELOW the
+// squared term: a designer needs to know that the enclosure index is 0.30 BELOW the
 // target, and the squared term has thrown the direction away. Both are
 // reported because they answer different questions — share says which metric
 // to attend to, gap says which way to move it.

@@ -20,7 +20,7 @@ Four participant-facing instruments exist in the history. **The thesis uses the 
 | Static-photo triplet survey | none (no `survey_version` field) | `?survey` until `abc37b8` | one Street View image per plaza | 27 triplets (26 + 1 attention check) | 56 | 2026-08-06 → 2026-08-19 | Archived. Paired with `perceptual_120` only by `--source=archive` (`scripts/analyze.mjs:84-97`). Not the reported fit. |
 | 360° pilot | `pilot_360_area_matched` | `?pilot-360` (`0218a43`) | equirectangular panorama | 15 triplets | 2 | 2026-08-19 → 08-22 | Feasibility only. File deleted in `abc37b8`, readable at `abc37b8^:src/data/pilot-360-responses.json`. |
 | **360° panoramic survey (P3)** | `panoramic_v1` | `?survey` (`src/App.jsx:162`) | equirectangular panorama | 12 triplets, then semantic differential | **46** | 2026-08-22 → 2026-09-02 | **Live.** Source of the P5 weights and the rating validation. |
-| Matched-view survey (P8) | `matched_view_v1` | `?matched-view-survey` (`src/App.jsx:171`) | rendered untextured massing view, 120° | 12 two-alternative forced choices | 15 | 2026-09-09 | Interim validation. See §5. |
+| Matched-view survey (P8) | `matched_view_v1` | `?matched-view-survey` (`src/App.jsx:171`) | rendered untextured massing view, 120° | 12 two-alternative forced choices | 15 | 2026-09-09 | Complete. See §5. |
 
 Sources: record counts and dates from `src/data/survey-responses.json`, `src/data/survey-responses-360.json` and `src/data/matched-view-responses.json`. Pilot details are from `02_results_data.md` §4.2.
 
@@ -71,7 +71,7 @@ Pixel sizes of the 18 active sites' images **as served during collection**, read
 | Position | Street View camera | Placed by eye in the 3D viewer to reproduce it | **Approximate.** Manual visual matching. No stated tolerance and no record of the Street View pano ID or coordinates. Two vantages lie outside their plaza boundary (`docs/spec.md:298`). |
 | Heading | Camera bearing | Placed by eye. Stored to 2 dp, or 1 dp for readings before 2026-08-17 (`docs/spec.md:439`) | **Approximate.** A 1.2° change moves closed perimeter by ~27% at Herderplatz (`docs/spec.md:439`). |
 | Horizontal FOV | `NOT FOUND` | 120° | **Unverified.** Then cropped to 8:5 in display, which removes an unknown share of the sides for images wider than 1.6 (`docs/street-view-photo-guide.md:27-28`). |
-| Vertical content | Image as cropped | Planar 2D isovist; enclosure uses building height over distance | Not comparable in kind |
+| Vertical content | Image as cropped | Planar 2D isovist; enclosure index uses building height over distance | Not comparable in kind |
 | Range | Unlimited, to the visible horizon | 200 m (`docs/spec.md:91`) | **Mismatch** wherever the view runs further than 200 m |
 | Eye height | Street View camera, roughly 2.5 m (`NOT FOUND` in repo) | Planar; no eye height | — |
 
@@ -85,7 +85,7 @@ Pixel sizes of the 18 active sites' images **as served during collection**, read
 
 The only upload path is the admin field labelled "360° panorama (survey stimulus)", which states "equirectangular 2:1 · saved as panoramas/{slug}.jpg" (`src/pages/AdminPage.jsx:601-641`).
 
-**Standing point.** One panorama per plaza. The camera position rule is `NOT FOUND`. `scripts/compute-360.mjs:13-18` says only: "the survey's panoramas are shot from points central to each plaza, not from the Street View camera position at the plaza edge, so each reading has to sit where its panorama was taken."
+**Standing point.** One panorama per plaza. The camera position rule is `NOT FOUND`. The since-deleted `scripts/compute-360.mjs` (lines 13-18, in git history) said only: "the survey's panoramas are shot from points central to each plaza, not from the Street View camera position at the plaza edge, so each reading has to sit where its panorama was taken."
 
 **View direction.** The participant chooses it by dragging, with yaw free through 360°. The **opening** direction is meant to be each site's 120° survey heading. That only works when `pano_north_offset_deg` is set on the site (`src/lib/survey360.js:74-88`, `src/pages/SurveyPage.jsx:46-50`). **No site in `src/data/sites.json` has `pano_north_offset_deg`.** Every panorama therefore opens on the centre column of its own image, which faces an arbitrary, uncontrolled compass bearing (`src/lib/survey360.js:78-81`; `src/components/PanoramaViewer.jsx:112-119`).
 
@@ -125,9 +125,9 @@ Runtime processing (`src/components/PanoramaViewer.jsx`):
 | | Panorama as shown | `perceptual_360` isovist | Match? |
 |---|---|---|---|
 | Position | Panorama camera | Hand-placed; 0.0–69.0 m from the 120° vantage (§1.3) | **Approximate**, method `NOT FOUND` |
-| Heading | Free; opens at an uncalibrated image centre | Irrelevant: a 360° isovist does not depend on heading (`compute-360.mjs:20-22`) | Consistent in principle |
+| Heading | Free; opens at an uncalibrated image centre | Irrelevant: a 360° isovist does not depend on heading (the deleted `compute-360.mjs:20-22`, in git history) | Consistent in principle |
 | Horizontal FOV | 75° window, freely rotatable over 360° | 360°, 360 rays | **Match only if the participant looks all the way round.** Panning is not logged, so how much of the 360° each participant viewed is unknown. |
-| Vertical | Up to ≈42° above horizontal (mouse), ≈30° (touch) | Enclosure = mean of atan(h/d)/(π/2) over all rays (`docs/spec.md:123`) | **Partial mismatch.** Any building edge rising above ≈42° (h/d > 0.9), or ≈30° on touch (h/d > 0.58), counts in enclosure but cannot be seen on screen. |
+| Vertical | Up to ≈42° above horizontal (mouse), ≈30° (touch) | Enclosure index = mean of atan(h/d)/(π/2) over all rays (`docs/spec.md:123`) | **Partial mismatch.** Any building edge rising above ≈42° (h/d > 0.9), or ≈30° on touch (h/d > 0.58), counts in enclosure index but cannot be seen on screen. |
 | Range | Unlimited | 200 m | Mismatch past 200 m |
 | Obstacles | Everything photographed: trees, kiosks, vehicles, people, market stalls | Building footprints only | **Mismatch**, not quantified |
 | Time and conditions | `NOT FOUND` per image | — | Uncontrolled |
@@ -308,10 +308,10 @@ Four bipolar 7-point items, one per metric (`src/lib/survey360.js:149-177`). Val
 |---|---|---|---|
 | `area` | isovist area | Tight and confined | Spacious and open |
 | `compactness` | compactness | Irregular, stretched-out shape | Compact, regular shape |
-| `closedPerimeter` | closed perimeter | Views blocked, hidden corners | Clear sightlines, nothing hidden |
-| `enclosure` | enclosure ratio | Low walls, exposed to the sky | Tall walls, strongly enclosed |
+| `closedPerimeter` | closed perimeter (reported as perceived facade continuity) | `panoramic_v1` (the 46): Views blocked, hidden corners · `panoramic_v2` (later sessions): Long, unbroken building fronts all around | `panoramic_v1`: Clear sightlines, nothing hidden · `panoramic_v2`: Edges broken up, many gaps between buildings |
+| `enclosure` | enclosure index | Low walls, exposed to the sky | Tall walls, strongly enclosed |
 
-The closed perimeter scale's 7 end reads as **low** closed perimeter, so its expected correlation is negative (`scripts/validate-ratings.mjs:63-70`; `docs/spec.md:210`).
+The table gives the item text as shown to participants, by `survey_version`. Both versions store the same polarity, so their values share one Sheet column and are directly comparable. The closed perimeter item's stored value 1 sits at the continuous-fronts end, so its expected correlation with the raw rating is negative (`scripts/validate-ratings.mjs:63-70`; `docs/spec.md:210`). It is reported as **perceived facade continuity**, 1 = "edges broken up, many gaps between buildings", 7 = "long, unbroken building fronts all around", with ratings reflected (8 − v); see `05_closed_perimeter.md` §3.
 
 Presentation (`src/pages/SurveyPage.jsx:436-566`):
 
@@ -340,9 +340,9 @@ The instruction gives no definition of the anchors. Anchor wording deliberately 
 **Yes, as a validation separate from the weight fit.** The ratings never enter the weights (`docs/spec.md:203-208`).
 
 - Script: `scripts/validate-ratings.mjs` (`npm run validate:ratings`). For each item it correlates the per-plaza mean rating with the computed `perceptual_360` metric across 18 plazas. It reports a permutation p (20,000 shuffles) with Holm correction, a Fisher CI, a participant bootstrap (2,000), and Spearman–Brown split-half reliability (2,000 splits). Method summary: `01_methods_implementation.md` §5.7.
-- Output: `src/data/rating-validation.json` (full run, 2026-09-02). A quick n = 30 variant is `src/data/rating-validation-n30-quick.json`.
-- Results: `02_results_data.md` §3.8. Aligned r: area 0.75, compactness 0.58, closed perimeter 0.22 (not significant), enclosure 0.83. Split-half reliability 0.77–0.99.
-- The ratings feed the spec's H1–H3 (`docs/spec.md:237-244`: reliability, convergence, closed perimeter — all rating-based claims). **Numbering caveat:** the code's own hypothesis ids do not match the spec's. In `src/lib/analysis/hypotheses.js`, reliability is a separate `reliabilityPrecondition`, not a numbered hypothesis, and the ratings feed that plus code-`H2` and code-`H3` (same claims as spec H2/H3). Code-`H1` is "perceived similarity predicted by distance in the measured isovist space" (= spec's H4) and uses **no rating data** — see `04_decision_log.md` §U3 for the full renumbering.
+- Output: `src/data/rating-validation.json` (full run, 2026-09-02). A quick n = 30 variant existed and has been deleted as unused.
+- Results: `02_results_data.md` §3.8. Aligned r: area 0.75, compactness 0.58, closed perimeter 0.22 (not significant), enclosure index 0.83. Split-half reliability 0.77–0.99.
+- The ratings feed the precondition (split-half reliability ≥ .40 on every scale), H2 (each metric corresponds to its own rating scale) and H3 (where a metric does not, the mismatch is systematic and not due to inconsistent ratings). H1, H4 and H5 use no rating data. One numbering is used throughout: `src/lib/analysis/hypotheses.js`, `docs/spec.md` (P5) and `01_methods_implementation.md` §5.7.
 
 **Anchor-position bias.** `validate-ratings.mjs:311-326` prints a check to the console only. It is **not stored** in `rating-validation.json`. Recomputed from the data for this document, mean value by drawn direction, descriptive only (not tested; direction is confounded with which plazas each participant rated):
 
@@ -413,7 +413,7 @@ Neither question is required: Finish is always enabled. Stored as `background` (
 
 ### 5.1 Status
 
-**Built, gate passed, run on an interim sample, not deployed for remote collection.**
+**Built, gate passed, complete with 15 participants. Not deployed for remote collection.**
 
 - Built in `49a4c9f` (2026-09-09). Participant route `?matched-view-survey` (`src/App.jsx:171`); researcher route `#/matched-view`.
 - Gate: `test/matchedView.test.js` and `npm run matched-view:selftest` pass (`02_results_data.md` §7.3).
@@ -486,23 +486,16 @@ Frozen bank `src/data/matched-view-trials.json`, built by `npm run trials:matche
 - **Per participant:** 6 per stratum, seeded draw, strata interleaved, left/right position randomised per trial (`matchedView.js:211-248`).
 - **Selection bias is stated:** the discriminating accuracy estimates *decisive* disagreements only (`docs/spec.md:331`).
 
-### 5.5 Target sample size
+### 5.5 Sample size
 
-The documents give three figures:
+n = 15 participants, 180 judgements, 90 per stratum. **No power analysis: `NOT FOUND`.**
 
-- 40, in `src/lib/matchedView.js:66-69` ("At 40 participants this collects 240 judgements per stratum") and `docs/spec.md:327`;
-- "~40", in `docs/spec.md:390` ("at 15 of an intended ~40 participants");
-- 30–50, in `scripts/build-matched-view-trials.mjs:91-94`.
-
-**No power analysis: `NOT FOUND`.** Current n = 15.
-
-### 5.6 What remains before it could run remotely
+### 5.6 If the instrument were ever run remotely
 
 1. **Deploy storage.** Create the Sheet and deploy `google-apps-script/MatchedView.gs`, following its header (`:9-23`). Set a real `READ_TOKEN` (`:40`, still the placeholder in the repo). Paste the `/exec` URL into `MATCHED_VIEW_ENDPOINT_URL`, then rebuild and redeploy.
 2. **Add a sync path.** `package.json` has no `sync:matched-view` script. Remote responses would have to be copied into `src/data/matched-view-responses.json` by hand, or a script written on the pattern of `scripts/sync-survey-360.js`.
 3. **Consent and information text** (§4.3), shared with P3.
-4. **Recruitment** for the remaining ~25 participants toward the 40 target. Channel `NOT FOUND`.
-5. **Freeze discipline.** Do not rebuild the bank. A rebuild marks the 15 existing sessions stale (`src/lib/analysis/matchedView.js:138-178`).
+4. **Freeze discipline.** Do not rebuild the bank. A rebuild marks the 15 existing sessions stale (`src/lib/analysis/matchedView.js:138-178`).
 
 ---
 
@@ -516,7 +509,7 @@ The documents give three figures:
 | 4 | Panorama source, capture conditions and camera position method unknown | 360° | §1.2 |
 | 5 | Panoramas open at an uncalibrated image centre (`pano_north_offset_deg` unset everywhere) | 360° | §1.2 |
 | 6 | Viewing behaviour not logged: how much of the 360° was seen is unknown, yet the isovist is 360° | 360° | §1.2 |
-| 7 | Upper facades above ≈42° (≈30° on touch) count in enclosure but cannot be seen | 360° | §1.2 |
+| 7 | Upper facades above ≈42° (≈30° on touch) count in enclosure index but cannot be seen | 360° | §1.2 |
 | 8 | Unequal panorama resolution: 2176 vs 2560 px effective width | 360° | §1.2 |
 | 9 | Instrument changed mid-collection: yaw fix after session 1, touch pitch after session 7, city caption after session 26; device type not recorded | 360° | §2.7 |
 | 10 | "Judge by sense of space, not style" shown once, on the intro only | 360° | §2.2 |
@@ -524,7 +517,7 @@ The documents give three figures:
 | 12 | Photo FOV unknown; 8:5 crop; heading and position placed by eye | static | §1.1 |
 | 13 | One stimulus file (Konstablerwache) replaced after the static study | static | §1.1 |
 | 14 | Obstacles in photos (trees, stalls, people) absent from the building-only isovist | all photographic | §1.1–1.2 |
-| 15 | P8 interim sessions collected via a local dev server before commit | P8 | §5.1 |
+| 15 | P8 sessions collected via a local dev server before commit | P8 | §5.1 |
 | 16 | Survey response file bundled into the public site build | 360° | §4.4 |
 
 ---

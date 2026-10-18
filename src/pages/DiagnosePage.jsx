@@ -612,7 +612,7 @@ export function DiagnosePage() {
 
   // What the intervention did to the metrics themselves, at the selected area.
   //
-  // Deliberately NOT gated on an intended zone type. "Did enclosure go up here"
+  // Deliberately NOT gated on an intended zone type. "Did the enclosure index go up here"
   // is a question about geometry with an answer either way; requiring an
   // intention first is what previously made that answer unreachable — the only
   // sandbox readout on the page needed a target zone, and the only per-metric
@@ -643,7 +643,7 @@ export function DiagnosePage() {
         row('compactness', 'Compactness', (v) => v.toFixed(4)),
         row('closed_perimeter_m', 'Closed perimeter', (v) => `${Math.round(v)} m`),
         row('closed_share', 'Closed share (P9 only)', (v) => v.toFixed(4)),
-        row('enclosure_ratio', 'Enclosure', (v) => v.toFixed(4)),
+        row('enclosure_ratio', 'Enclosure index', (v) => v.toFixed(4)),
         row('solidity', 'Solidity (P9 only)', (v) => v.toFixed(4)),
         row('solid_share', 'Solid share (P9 only)', (v) => v.toFixed(4), false),
       ],
@@ -1027,7 +1027,7 @@ export function DiagnosePage() {
                 <span className="font-medium">
                   This tests the number, not the building.
                 </span>{' '}
-                It asks a hypothetical — "what if enclosure were higher here?" — without drawing
+                It asks a hypothetical — "what if the enclosure index were higher here?" — without drawing
                 anything. It exists to point at the one or two dimensions worth focusing an actual
                 design move on, before you go build one in Tier B below. It cannot tell you HOW to
                 raise a number: the four metrics come from one shared geometry, so a real move (a
@@ -1903,7 +1903,7 @@ function SelectionPanel({ summary, selection, radius, zoneNames, onClear }) {
 
 // Each metric printed in the unit its own literature uses, because normalised
 // 0–1 values are the space the model works in and not a language a designer
-// thinks in. Enclosure is shown in DEGREES: the metric is a share of the 90°
+// thinks in. The enclosure index is shown in DEGREES: the metric is a share of the 90°
 // you could look up, and the classical enclosure thresholds — 45°, 27°, 18°,
 // 14° — are all stated as angles, so degrees is the form that can be argued
 // with rather than merely reported.

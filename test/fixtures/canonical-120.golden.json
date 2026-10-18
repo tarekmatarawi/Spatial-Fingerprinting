@@ -1,5 +1,5 @@
 {
-  "_comment": "Golden snapshot of the 120 deg engine output for the 18 canonical vantage points. Re-cut 2026-08-27 for two deliberate engine corrections, both leaving area, perimeter and compactness untouched. (1) CLOSED PERIMETER now counts only edges running along continuous facade — both ends on the same building, or on two that meet — rather than any edge whose two ends both happened to hit a wall; the old rule counted the gap across a street opening as closed perimeter, inflating it ~50% and making it unstable to ray count and sub-degree rotation. (2) ENCLOSURE is now the mean subtended angle over ALL rays as a share of 90 deg, not the mean h/d over wall-hit rays only: openings contribute 0 instead of being excluded (they are the absence of enclosure, not missing data), and the arctangent bounds each direction so one tall near building cannot dominate the ring. Regenerate ONLY with a deliberate, reviewed engine change: npm run recompute:readings",
+  "_comment": "Golden snapshot of the 120 deg engine output for the 18 canonical vantage points. Re-cut 2026-08-27 for two deliberate engine corrections, both leaving area, perimeter and compactness untouched. (1) CLOSED PERIMETER now counts only edges running along continuous facade — both ends on the same building, or on two that meet — rather than any edge whose two ends both happened to hit a wall; the old rule counted the gap across a street opening as closed perimeter, inflating it ~50% and making it unstable to ray count and sub-degree rotation. (2) ENCLOSURE INDEX is now the mean subtended angle over ALL rays as a share of 90 deg, not the mean h/d over wall-hit rays only: openings contribute 0 instead of being excluded (they are the absence of enclosure, not missing data), and the arctangent bounds each direction so one tall near building cannot dominate the ring. Regenerate ONLY with a deliberate, reviewed engine change: npm run recompute:readings",
   "captured_at": "2026-08-27T12:45:25.595Z",
   "fov": 120,
   "rayCount": 120,
@@ -14,7 +14,7 @@
       "perimeter": 1116.6495179903434,
       "compactness": 0.12621742497046534,
       "closedPerimeter": 193.79751048389969,
-      "enclosureRatio": 0.11211148843841588
+      "enclosureIndex": 0.11211148843841588
     },
     {
       "site_id": "Hauptwache-Frankfurt am Main",
@@ -25,7 +25,7 @@
       "perimeter": 784.8969796685011,
       "compactness": 0.20766951120874713,
       "closedPerimeter": 188.81852332810428,
-      "enclosureRatio": 0.17483161369624697
+      "enclosureIndex": 0.17483161369624697
     },
     {
       "site_id": "Römerberg-Frankfurt am Main",
@@ -36,7 +36,7 @@
       "perimeter": 385.08322785245804,
       "compactness": 0.24913765134320323,
       "closedPerimeter": 114.25864999565847,
-      "enclosureRatio": 0.17855676433215703
+      "enclosureIndex": 0.17855676433215703
     },
     {
       "site_id": "Zeil-Frankfurt am Main",
@@ -47,7 +47,7 @@
       "perimeter": 519.5142236516594,
       "compactness": 0.30847938320326207,
       "closedPerimeter": 177.65114792328518,
-      "enclosureRatio": 0.2639026963668217
+      "enclosureIndex": 0.2639026963668217
     },
     {
       "site_id": "Bebelplatz-Berlin",
@@ -58,7 +58,7 @@
       "perimeter": 532.1089335420162,
       "compactness": 0.3837172923296483,
       "closedPerimeter": 217.5014135345598,
-      "enclosureRatio": 0.1886857943383808
+      "enclosureIndex": 0.1886857943383808
     },
     {
       "site_id": "Alexanderplatz-Berlin",
@@ -69,7 +69,7 @@
       "perimeter": 502.97504296956856,
       "compactness": 0.43787779287914796,
       "closedPerimeter": 243.6354085080607,
-      "enclosureRatio": 0.19883200724681874
+      "enclosureIndex": 0.19883200724681874
     },
     {
       "site_id": "Marienplatz-Munich",
@@ -80,7 +80,7 @@
       "perimeter": 558.2872094761011,
       "compactness": 0.2273866354661081,
       "closedPerimeter": 192.92947273153646,
-      "enclosureRatio": 0.2912921638152298
+      "enclosureIndex": 0.2912921638152298
     },
     {
       "site_id": "Odeonsplatz-Munich",
@@ -91,7 +91,7 @@
       "perimeter": 702.4309090359421,
       "compactness": 0.1758135453767785,
       "closedPerimeter": 273.463689311565,
-      "enclosureRatio": 0.2052596791848132
+      "enclosureIndex": 0.2052596791848132
     },
     {
       "site_id": "Konstablerwache-Frankfurt am Main",
@@ -102,7 +102,7 @@
       "perimeter": 798.1526708155694,
       "compactness": 0.17355307358671962,
       "closedPerimeter": 192.9193016869099,
-      "enclosureRatio": 0.13186299713009023
+      "enclosureIndex": 0.13186299713009023
     },
     {
       "site_id": "Alter Markt-Cologne",
@@ -113,7 +113,7 @@
       "perimeter": 485.27796359583436,
       "compactness": 0.20021632836803566,
       "closedPerimeter": 140.51274962502436,
-      "enclosureRatio": 0.18288516941334648
+      "enclosureIndex": 0.18288516941334648
     },
     {
       "site_id": "Rathausmarkt-Hamburg",
@@ -124,7 +124,7 @@
       "perimeter": 563.429956255196,
       "compactness": 0.40183649950568634,
       "closedPerimeter": 197.23878186591557,
-      "enclosureRatio": 0.28950695932928705
+      "enclosureIndex": 0.28950695932928705
     },
     {
       "site_id": "Naschmarkt-Leipzig",
@@ -135,7 +135,7 @@
       "perimeter": 341.53147785990166,
       "compactness": 0.18950454890301355,
       "closedPerimeter": 140.28254485961577,
-      "enclosureRatio": 0.31452804413392776
+      "enclosureIndex": 0.31452804413392776
     },
     {
       "site_id": "Burgplatz-Düsseldorf",
@@ -146,7 +146,7 @@
       "perimeter": 948.2755158751729,
       "compactness": 0.1362979220790565,
       "closedPerimeter": 122.21667278474496,
-      "enclosureRatio": 0.15897727469661416
+      "enclosureIndex": 0.15897727469661416
     },
     {
       "site_id": "Marktplatz-Heidelberg",
@@ -157,7 +157,7 @@
       "perimeter": 213.2057457252773,
       "compactness": 0.6516320521996383,
       "closedPerimeter": 110.92214153136104,
-      "enclosureRatio": 0.3036105010313315
+      "enclosureIndex": 0.3036105010313315
     },
     {
       "site_id": "Augustusplatz-Leipzig",
@@ -168,7 +168,7 @@
       "perimeter": 704.8012647551868,
       "compactness": 0.2004568251440465,
       "closedPerimeter": 198.52179731830483,
-      "enclosureRatio": 0.17802996621891967
+      "enclosureIndex": 0.17802996621891967
     },
     {
       "site_id": "Hauptmarkt-Trier",
@@ -179,7 +179,7 @@
       "perimeter": 568.3481346955863,
       "compactness": 0.17575617688946144,
       "closedPerimeter": 114.13659547237887,
-      "enclosureRatio": 0.24207920412292408
+      "enclosureIndex": 0.24207920412292408
     },
     {
       "site_id": "Herderplatz-Weimar",
@@ -190,7 +190,7 @@
       "perimeter": 379.2164567882493,
       "compactness": 0.2428411046820178,
       "closedPerimeter": 147.5596442311694,
-      "enclosureRatio": 0.19570050910294992
+      "enclosureIndex": 0.19570050910294992
     },
     {
       "site_id": "Theaterplatz-Weimar",
@@ -201,7 +201,7 @@
       "perimeter": 452.4383617763145,
       "compactness": 0.16534568658661428,
       "closedPerimeter": 171.68816540192137,
-      "enclosureRatio": 0.17012211860332452
+      "enclosureIndex": 0.17012211860332452
     }
   ]
 }

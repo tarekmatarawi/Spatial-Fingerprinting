@@ -1,5 +1,5 @@
 // Unified ray-casting engine (P2 — Spatial Analysis): one shared ray pass produces both the
-// isovist polygon and the enclosure ratio, per the "radiate" method (Benedikt
+// isovist polygon and the enclosure index, per the "radiate" method (Benedikt
 // 1979) matching the Decoding Spaces Grasshopper component.
 //
 // All points are in local metres on the Z-up ground plane (X = east, Y =
@@ -120,9 +120,11 @@ export function castIsovist(
 }
 
 // Standing eye height, and the band of space the cast actually samples when
-// height-aware mode is on. Matches EYE_HEIGHT_M in viewGeometry.js, which is
-// the height the enclosure metric's vertical angles already assume; it is
-// duplicated rather than imported so this module stays free of dependencies.
+// height-aware mode is on. Matches EYE_HEIGHT_M in viewGeometry.js, the height
+// P7's rendered views stand at; it is duplicated rather than imported so this
+// module stays free of dependencies. The enclosure index does NOT use it: its
+// angle is atan(h / d) with h the full building height, measured from ground
+// level, so no eye height is subtracted.
 export const EYE_HEIGHT_M = 1.6
 
 // A building's own edges, or the explicit edge list it supplies instead.
@@ -448,7 +450,7 @@ function computeMetrics(vantage, rays, closed = false) {
   const area = Math.abs(shoelace) / 2
   const compactness = perimeter > 0 ? (4 * Math.PI * area) / (perimeter * perimeter) : 0
 
-  // Enclosure: the mean angle the built edge rises to around you, as a share of
+  // Enclosure index: the mean angle the built edge rises to around you, as a share of
   // the 90° you could in principle look up. 0 = open sky all round, 1 = sheer
   // wall in every direction.
   //
@@ -467,11 +469,11 @@ function computeMetrics(vantage, rays, closed = false) {
   // difference between h/d = 4 and h/d = 8 suggests. Because these are averaged
   // over the ring, an unbounded term also lets one tall building close by
   // dominate the whole figure; the arctangent saturates instead, so height
-  // still raises enclosure (doubling every building raises it ~1.7x) without
+  // still raises the enclosure index (doubling every building raises it ~1.7x) without
   // any single direction swamping the rest. The classical enclosure thresholds
   // are stated as angles too — 45°, 27°, 18°, 14° — so this also puts the
   // measure in the units its own literature uses.
-  const enclosureRatio = rays.length
+  const enclosureIndex = rays.length
     ? rays.reduce(
         (sum, r) =>
           sum +
@@ -527,7 +529,7 @@ function computeMetrics(vantage, rays, closed = false) {
     perimeter,
     compactness,
     closedPerimeter: closedPerimeter,
-    enclosureRatio,
+    enclosureIndex,
     solidShare,
     closedShare,
     solidity,

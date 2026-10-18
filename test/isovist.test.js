@@ -91,7 +91,7 @@ describe('120° perceptual layer — regression against committed canonical read
     assert.equal(golden.readings.length, 18)
     for (const g of golden.readings) {
       const m = recompute(g)
-      for (const key of ['area', 'perimeter', 'compactness', 'closedPerimeter', 'enclosureRatio']) {
+      for (const key of ['area', 'perimeter', 'compactness', 'closedPerimeter', 'enclosureIndex']) {
         assert.equal(
           m[key],
           g[key],
@@ -182,7 +182,7 @@ describe('120° perceptual layer — regression against committed canonical read
     const m = recompute(canonicalReadings.find((r) => r.site_id === 'Gendarmenmarkt-Berlin'))
     assert.ok(m.area > 8000 && m.area < 18000, `area ${m.area} far from reference 12437.9 m²`)
     assert.ok(m.closedPerimeter > 150 && m.closedPerimeter < 600, `closed perimeter ${m.closedPerimeter} implausible`)
-    assert.ok(m.enclosureRatio > 0.1 && m.enclosureRatio < 0.8, `enclosure ${m.enclosureRatio}`)
+    assert.ok(m.enclosureIndex > 0.1 && m.enclosureIndex < 0.8, `enclosure index ${m.enclosureIndex}`)
     assert.ok(m.compactness > 0 && m.compactness <= 1, `compactness ${m.compactness} out of range`)
   })
 
@@ -202,7 +202,7 @@ describe('120° perceptual layer — regression against committed canonical read
       `sector perimeter ${m.perimeter} vs expected ${expectedPerimeter} (the two radii must be included)`
     )
     assert.equal(m.closedPerimeter, 0, 'open ground has no wall-to-wall edges')
-    assert.equal(m.enclosureRatio, 0, 'open ground has no wall hits')
+    assert.equal(m.enclosureIndex, 0, 'open ground has no wall hits')
   })
 
   test('ray bearings span the wedge inclusively, first to last', () => {
@@ -265,7 +265,7 @@ describe('360° field layer — geometric correctness', () => {
     )
   })
 
-  test('square courtyard: enclosure matches the analytic mean subtended angle', () => {
+  test('square courtyard: enclosure index matches the analytic mean subtended angle', () => {
     const a = 40
     const height = 20
     const rayCount = 1440
@@ -279,14 +279,14 @@ describe('360° field layer — geometric correctness', () => {
     }
     expected /= rayCount
     assert.ok(
-      Math.abs(m.enclosureRatio - expected) / expected < 0.01,
-      `enclosure ${m.enclosureRatio} vs analytic ${expected}`
+      Math.abs(m.enclosureIndex - expected) / expected < 0.01,
+      `enclosure index ${m.enclosureIndex} vs analytic ${expected}`
     )
   })
 
   // The two properties the angular form exists for, asserted directly rather
   // than left implicit in the plaza numbers.
-  test('an opening lowers enclosure instead of being ignored', () => {
+  test('an opening lowers the enclosure index instead of being ignored', () => {
     const height = 20
     const walled = castIsovist({ x: 0, y: 0 }, 0, courtyard(40, height), { fov: 360, rayCount: 720 })
     // Same room with one of its four sides removed: the missing side is now
@@ -294,16 +294,16 @@ describe('360° field layer — geometric correctness', () => {
     const threeSided = courtyard(40, height).slice(0, 3)
     const open = castIsovist({ x: 0, y: 0 }, 0, threeSided, { fov: 360, rayCount: 720 })
     assert.ok(
-      open.enclosureRatio < walled.enclosureRatio * 0.85,
-      `removing a whole side should visibly lower enclosure: ${open.enclosureRatio} vs ${walled.enclosureRatio}`
+      open.enclosureIndex < walled.enclosureIndex * 0.85,
+      `removing a whole side should visibly lower enclosure: ${open.enclosureIndex} vs ${walled.enclosureIndex}`
     )
   })
 
-  test('enclosure still rises with height, but saturates rather than scaling', () => {
+  test('enclosure index still rises with height, but saturates rather than scaling', () => {
     const at = { x: 0, y: 0 }
     const opts = { fov: 360, rayCount: 720 }
-    const low = castIsovist(at, 0, courtyard(40, 10), opts).enclosureRatio
-    const high = castIsovist(at, 0, courtyard(40, 20), opts).enclosureRatio
+    const low = castIsovist(at, 0, courtyard(40, 10), opts).enclosureIndex
+    const high = castIsovist(at, 0, courtyard(40, 20), opts).enclosureIndex
     assert.ok(high > low, 'taller walls must read as more enclosed')
     // Bounded above by the ratio it replaced: doubling height must not double
     // the figure, or one tall building near the vantage point would dominate
@@ -312,7 +312,7 @@ describe('360° field layer — geometric correctness', () => {
       high < low * 2,
       `doubling height should saturate, not scale: ${low} -> ${high}`
     )
-    assert.ok(high <= 1 && low >= 0, 'enclosure must stay within 0..1')
+    assert.ok(high <= 1 && low >= 0, 'enclosure index must stay within 0..1')
   })
 
   test('rotating the heading does not change any 360° metric', () => {
@@ -324,7 +324,7 @@ describe('360° field layer — geometric correctness', () => {
     const base = castIsovist(at, 0, buildings, full)
     for (const deg of [37, 90, 180, 271]) {
       const m = castIsovist(at, (deg * Math.PI) / 180, buildings, full)
-      for (const key of ['area', 'perimeter', 'compactness', 'closedPerimeter', 'enclosureRatio']) {
+      for (const key of ['area', 'perimeter', 'compactness', 'closedPerimeter', 'enclosureIndex']) {
         assert.ok(
           Math.abs(m[key] - base[key]) / Math.max(Math.abs(base[key]), 1e-9) < 0.02,
           `${key} moved by heading ${deg}°: ${m[key]} vs ${base[key]}`
@@ -360,7 +360,7 @@ describe('spatial index — identical results, faster', () => {
         const at = { x: x0 + ((x1 - x0) * (i + 0.5)) / 5, y: y0 + ((y1 - y0) * (i + 0.5)) / 5 }
         const brute = castIsovist(at, 0, buildings, full)
         const fast = castIsovist(at, 0, buildings, { ...full, index })
-        for (const key of ['area', 'perimeter', 'compactness', 'closedPerimeter', 'enclosureRatio']) {
+        for (const key of ['area', 'perimeter', 'compactness', 'closedPerimeter', 'enclosureIndex']) {
           assert.equal(fast[key], brute[key], `${site.name} ${key} differs at point ${i}`)
         }
       }

@@ -83,7 +83,7 @@ export function MassPanel({
           <span className="w-10 text-right font-mono text-xs tabular-nums">{massHeight} m</span>
         </span>
       </label>
-      {/* Enclosure is an ANGLE, so a height only means something against the
+      {/* The enclosure index is an ANGLE, so a height only means something against the
           heights already around it. Naming the eaves line turns the slider from
           a number into a judgement a designer can make. */}
       <p className="mt-1 font-mono text-[10px] text-ink-faint">
@@ -352,7 +352,7 @@ export function SandboxDiagnosisCompare({ before, after, zoneNames, targetZone }
 // What the intervention did to the four numbers, at the selected area.
 //
 // ADDED 2026-09-10, after a real failure of the page rather than of the engine.
-// A colonnade raises enclosure sharply nearby — measured at Konstablerwache,
+// A colonnade raises the enclosure index sharply nearby — measured at Konstablerwache,
 // +19% within 5 m at only 3 m of column height, every point in the band rising
 // — and there was NOWHERE ON THIS PAGE THAT SAID SO. The metric decomposition
 // figure above reads from P6's stored field, so it shows the plaza as surveyed
@@ -366,7 +366,7 @@ export function SandboxDiagnosisCompare({ before, after, zoneNames, targetZone }
 // and the change. Raw units, because a designer checks a number against a
 // drawing, not against a 0–1 scale.
 //
-// IT DOES NOT NEED AN INTENDED ZONE TYPE. "What did this do to enclosure here"
+// IT DOES NOT NEED AN INTENDED ZONE TYPE. "What did this do to the enclosure index here"
 // is a question about geometry and has an answer whether or not an intention
 // has been stated — gating it behind the zone picker, as the comparison beside
 // it is gated, is part of what made the answer unreachable.

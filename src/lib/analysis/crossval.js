@@ -1,5 +1,5 @@
 // P5 — leave-one-plaza-out cross-validation, the permutation null, and the
-// area-only baseline that H2 is stated against.
+// area-only baseline that H5 is stated against.
 //
 // A fold holds out every triplet naming one site, fits on the remainder, and
 // predicts the held-out ones. This is deliberately harsher than leaving out
@@ -79,10 +79,9 @@ export function leaveOnePlazaOut(triplets, siteIds, options = {}) {
 
 // The same procedure restricted to isovist area.
 //
-// H2 states that the four-metric framework predicts perceptual similarity more
-// accurately than isovist area alone. The comparator therefore differs from the
-// full model in exactly one respect — which metrics it may use — and is fitted
-// and cross-validated by the identical procedure on the identical responses.
+// H5 states that the combined four-metric model outperforms isovist area alone.
+// The comparator therefore differs from the full model in exactly one respect —
+// which metrics it may use — and is fitted and cross-validated by the identical procedure on the identical responses.
 export function areaOnlyBaseline(triplets, siteIds, options = {}) {
   return leaveOnePlazaOut(maskTriplets(triplets, [AREA_INDEX]), siteIds, options)
 }

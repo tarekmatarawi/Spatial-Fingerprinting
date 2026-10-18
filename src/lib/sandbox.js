@@ -96,7 +96,7 @@ export function validateMass(mass) {
 // expects.
 //
 // Only parts that straddle eye height are handed to the caster. The engine is a
-// planar slice at 1.6 m and consults height only for the enclosure angle, so
+// planar slice at 1.6 m and consults height only for the enclosure index, so
 // without this filter a 300 mm planter rim would block a sightline as
 // completely as a tower, and a pergola roof four metres up would block along
 // its whole footprint. See lib/presets.js for the rule and its consequences.
@@ -292,7 +292,7 @@ export function recomputeField({
       area: m.area,
       compactness: m.compactness,
       closedPerimeter: m.closedPerimeter,
-      enclosure: m.enclosureRatio,
+      enclosure: m.enclosureIndex,
     }
     // Rounded to the same places P6 writes, so a sandbox point and a stored
     // point are the same number when the geometry is the same — otherwise an

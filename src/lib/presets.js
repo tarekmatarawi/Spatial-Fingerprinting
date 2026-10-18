@@ -10,7 +10,7 @@
 //
 // The ray-caster is a PLANAR SLICE AT EYE HEIGHT. `castIsovist` stops a ray at
 // the first footprint edge it meets and consults height only for the enclosure
-// angle — so without the base/top pair below, a 300 mm planter edge would block
+// index — so without the base/top pair below, a 300 mm planter edge would block
 // sightlines as completely as a cathedral, and a pergola roof four metres up
 // would block nothing while its own footprint blocked everything.
 //
@@ -322,7 +322,7 @@ export const PRESETS = [
       //
       // Corrected after the first validation run: five 400 mm trunks are not
       // nothing. They take 4% off area and HALVE compactness, by the same
-      // radial-edge mechanism as the pergola's posts. Enclosure is the only one
+      // radial-edge mechanism as the pergola's posts. The enclosure index is the only one
       // that genuinely ignores them.
       area: 'lower',
       compactness: 'lower',
@@ -508,7 +508,7 @@ PRESETS.push(
     },
     // A KNOWN LIMITATION, documented rather than worked around.
     limitation:
-      "A screen wall LOWERS enclosure, which is worth understanding rather than distrusting. Enclosure is the mean angle the built edge rises to: a 2.4 m screen 8 m away subtends atan(2.4/8) = 16.7 degrees, while the 20 m facade it hides at 60 m subtended atan(20/60) = 18.4 degrees. Putting something low in front of something tall genuinely reduces the angle you look up to, even though it adds a surface. Raise the screen above about 3.5 m at this distance and the sign reverses.",
+      "A screen wall LOWERS the enclosure index, which is worth understanding rather than distrusting. The enclosure index is the mean angle the built edge rises to: a 2.4 m screen 8 m away subtends atan(2.4/8) = 16.7 degrees, while the 20 m facade it hides at 60 m subtended atan(20/60) = 18.4 degrees. Putting something low in front of something tall genuinely reduces the angle you look up to, even though it adds a surface. Raise the screen above about 3.5 m at this distance and the sign reverses.",
     expected: {
       area: 'lower',
       compactness: 'lower',
@@ -517,7 +517,7 @@ PRESETS.push(
       closedPerimeter: 'lower',
       // Corrected after the second validation run, and the most interesting
       // correction in the library: a screen wall makes the space LESS enclosed,
-      // not more. Enclosure is a mean vertical angle, and a 2.4 m screen 8 m
+      // not more. The enclosure index is a mean vertical angle, and a 2.4 m screen 8 m
       // away subtends atan(2.4/8) = 16.7 deg, where the 20 m facade it hides at
       // 60 m subtended atan(20/60) = 18.4 deg. Standing something low in front
       // of something tall lowers the angle the built edge rises to. Measured
@@ -580,7 +580,7 @@ PRESETS.push(
       // the predicted DIRECTION and three fell short of the 2% threshold, not
       // because the mechanism is wrong but because one 24 m recess on one
       // facade is diluted across 598 points spread over a 35 m radius. Measured
-      // at a vantage standing in the opening itself, enclosure falls 17%.
+      // at a vantage standing in the opening itself, the enclosure index falls 17%.
       // Tagged by what the standard measurement shows, with the local figures
       // recorded here so the dilution is not mistaken for absence.
       area: 'none',

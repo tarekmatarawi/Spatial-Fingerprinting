@@ -18,7 +18,7 @@
     "area": "Isovist area",
     "compactness": "Compactness",
     "closedPerimeter": "Closed perimeter",
-    "enclosure": "Enclosure"
+    "enclosure": "Enclosure index"
   },
   "seeds": {
     "fit": 20260817,
@@ -1120,7 +1120,7 @@
       },
       {
         "metric": "enclosure",
-        "label": "Enclosure",
+        "label": "Enclosure index",
         "accuracyWithout": 0.5026533111210827,
         "drop": 0.023358634647028254,
         "perFold": [
@@ -1346,7 +1346,7 @@
     "ranked": [
       {
         "metric": "enclosure",
-        "label": "Enclosure",
+        "label": "Enclosure index",
         "drop": 0.023358634647028254,
         "rank": 1
       },
@@ -1369,66 +1369,5 @@
         "rank": 4
       }
     ]
-  },
-  "hypotheses": {
-    "H1": {
-      "statement": "The weighted four-metric model predicts perceived similarity better than chance.",
-      "accuracy": 0.526011945768111,
-      "chance": 0.3333333333333333,
-      "p": 0.000999000999000999,
-      "supported": true
-    },
-    "H2": {
-      "statement": "A four-metric framework predicts perceptual similarity more accurately than isovist area alone.",
-      "full": 0.526011945768111,
-      "area_only": 0.5219286558982159,
-      "mean_delta": 0.004083289869894952,
-      "wins": 9,
-      "losses": 6,
-      "p": 0.6072387695312507,
-      "supported": false
-    },
-    "H3": {
-      "statement": "Enclosure carries the largest perceptual weight of the four metrics.",
-      "verdict": "disagreement",
-      "weightEvidence": {
-        "passes": false,
-        "largestShare": 0.045,
-        "leadMean": -0.1281390701990168,
-        "leadLo": -0.31294925685280944,
-        "leadHi": 0.017315593933345023
-      },
-      "ablationEvidence": {
-        "passes": true,
-        "rank": 1,
-        "drop": 0.023358634647028254,
-        "ranking": [
-          {
-            "metric": "enclosure",
-            "label": "Enclosure",
-            "drop": 0.023358634647028254,
-            "rank": 1
-          },
-          {
-            "metric": "closedPerimeter",
-            "label": "Closed perimeter",
-            "drop": 0.020243306859567545,
-            "rank": 2
-          },
-          {
-            "metric": "area",
-            "label": "Isovist area",
-            "drop": 0.018709226039045013,
-            "rank": 3
-          },
-          {
-            "metric": "compactness",
-            "label": "Compactness",
-            "drop": 0.005379396823502747,
-            "rank": 4
-          }
-        ]
-      }
-    }
   }
 }

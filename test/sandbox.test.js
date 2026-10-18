@@ -165,9 +165,9 @@ describe('sandbox — the gate: an edit changes the zone map', () => {
     assert.ok(Math.abs(diff.afterShares.reduce((s, v) => s + v, 0) - 1) < 1e-9)
   })
 
-  test('a wall raises enclosure at the points that can see it', () => {
+  test('a wall raises the enclosure index at the points that can see it', () => {
     // Direction, not only difference. A mass 24 m tall dropped into open ground
-    // must RAISE enclosure nearby; if the sign came out the other way the
+    // must RAISE the enclosure index nearby; if the sign came out the other way the
     // arithmetic would still "change the map" and be entirely wrong.
     const near = after.points.filter((p) => {
       const dx = p.x - -20
@@ -182,7 +182,7 @@ describe('sandbox — the gate: an edit changes the zone map', () => {
     }
     assert.ok(
       raised / near.length > 0.9,
-      `only ${raised} of ${near.length} nearby points gained enclosure from a 24 m wall`
+      `only ${raised} of ${near.length} nearby points gained enclosure index from a 24 m wall`
     )
   })
 

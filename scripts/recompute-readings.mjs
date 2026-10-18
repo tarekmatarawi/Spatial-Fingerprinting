@@ -88,7 +88,7 @@ function main() {
     next.push({
       ...r,
       closed_perimeter_m: m.closedPerimeter,
-      enclosure_ratio: m.enclosureRatio,
+      enclosure_ratio: m.enclosureIndex,
       recomputed_at: new Date().toISOString(),
     })
   }
@@ -142,7 +142,7 @@ function main() {
       perimeter: m.perimeter,
       compactness: m.compactness,
       closedPerimeter: m.closedPerimeter,
-      enclosureRatio: m.enclosureRatio,
+      enclosureIndex: m.enclosureIndex,
     }
   })
   golden.captured_at = new Date().toISOString()
@@ -153,7 +153,7 @@ function main() {
     'continuous facade — both ends on the same building, or on two that meet — rather than ' +
     'any edge whose two ends both happened to hit a wall; the old rule counted the gap ' +
     'across a street opening as closed perimeter, inflating it ~50% and making it unstable ' +
-    'to ray count and sub-degree rotation. (2) ENCLOSURE is now the mean subtended angle ' +
+    'to ray count and sub-degree rotation. (2) ENCLOSURE INDEX is now the mean subtended angle ' +
     'over ALL rays as a share of 90 deg, not the mean h/d over wall-hit rays only: openings ' +
     'contribute 0 instead of being excluded (they are the absence of enclosure, not missing ' +
     'data), and the arctangent bounds each direction so one tall near building cannot ' +

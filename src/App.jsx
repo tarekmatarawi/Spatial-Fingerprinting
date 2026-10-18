@@ -2,7 +2,6 @@ import { Component, lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { LuBox, LuHouse, LuChevronDown } from 'react-icons/lu'
 import { PHASES, groupedPhases, phaseTitle } from '@/lib/phases'
-import { PhasePlaceholder } from '@/pages/PhasePlaceholder'
 
 // A reload that cannot be served from cache: the query string makes the
 // request URL unique, so neither the browser's disk cache nor a CDN in front
@@ -133,11 +132,6 @@ const MatchedViewSurvey = lazyWithReload(() =>
 
 const ROUTES = ['home', ...PHASES.map((p) => p.id)]
 
-// Phases that are still to be built get a station and a route, but land on a
-// placeholder. Better an honest empty berth than a missing one — the workflow
-// should read as nine phases from the first day, not grow silently.
-const PLANNED = PHASES.filter((p) => p.status === 'planned')
-
 // Route from the URL hash (#/sites, #/viewer, …). A bare URL that carries the
 // viewer's ?site=… query (a shared deep link from before hash routing existed)
 // still lands on the viewer.
@@ -210,6 +204,7 @@ function ResearcherShell() {
       >
         <a
           href="#/"
+          title="Spatial Fingerprinting: A Perceptually Calibrated Metric Framework for the Diagnosis and Targeted Redesign of Public Plazas — Tarek Ahmed. Supervisors: Reinhard König, Martin Bielik."
           className="flex shrink-0 items-center gap-2.5 py-3 outline-none focus-visible:ring-2 focus-visible:ring-primary-wash"
         >
           <BrandMark />
@@ -326,11 +321,6 @@ function ResearcherShell() {
             </Suspense>
           )}
         </Page>
-        {PLANNED.map((p) => (
-          <Page key={p.id} active={route === p.id}>
-            {visited.has(p.id) && <PhasePlaceholder phase={p} />}
-          </Page>
-        ))}
       </div>
     </div>
   )

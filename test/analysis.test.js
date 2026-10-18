@@ -160,7 +160,7 @@ describe('fingerprints — frozen normalisation bounds', () => {
     // Asserts that the attribution is CORRECT, not which site happens to win.
     // Naming specific sites pinned a fact about the dataset rather than about
     // the code, so redefining a metric broke this test while nothing it exists
-    // to protect had changed — as the 2026-08-27 enclosure change showed, when
+    // to protect had changed — as the 2026-08-27 enclosure index change showed, when
     // the peak moved from Rathausmarkt to Naschmarkt purely because the formula
     // did. Recomputing the extremes here keeps the guarantee that matters: a
     // frozen bound always points at the site it actually came from.

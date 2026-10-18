@@ -89,15 +89,15 @@ const SEED = 'matched-view-bank-v1'
 // How many trials the bank holds per stratum.
 //
 // Sized against the instrument, not chosen for roundness. Each participant
-// answers TRIALS_PER_STRATUM (6) per stratum, so with a target of 30–50
-// participants the bank collects 180–300 judgements per stratum however large
-// it is; what the bank size actually decides is how those judgements are SPREAD.
+// answers TRIALS_PER_STRATUM (6) per stratum, so the number of judgements per
+// stratum is set by the number of participants, however large the bank is; what
+// the bank size actually decides is how those judgements are SPREAD.
 // A larger bank covers more of the corpus but leaves each individual trial with
 // one or two answers, which makes the per-trial agreement table unreadable.
 //
 // 54 is three trials per plaza as reference — every one of the 18 plazas still
-// anchors its own trials, while each trial collects roughly three to six
-// independent judgements. That is the balance point between corpus coverage and
+// anchors its own trials, while each trial still collects more than one
+// independent judgement on average. That is the balance point between corpus coverage and
 // per-trial replication; the pooled analyses are unaffected either way.
 const PER_STRATUM = 54
 const PER_SITE = PER_STRATUM / 18

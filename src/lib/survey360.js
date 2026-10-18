@@ -26,7 +26,10 @@ export const TRIPLET_COUNT = 12
 // Tags every stored session. `panoramic_v0` marks the earlier sessions that ran
 // the triplet task alone, before ratings existed — they are real data but have
 // no rating block, which analysis must read as missing rather than absent.
-export const SURVEY_VERSION = 'panoramic_v1'
+// `panoramic_v1` is the 46 sessions rated with the original closed perimeter
+// wording; `panoramic_v2` is every session after the wording changed (see
+// RATING_SCALES below). The stored values mean the same thing in both.
+export const SURVEY_VERSION = 'panoramic_v2'
 export const TASK_TRIPLET = 'triplet_comparison'
 export const TASK_RATING = 'semantic_differential'
 
@@ -140,7 +143,7 @@ export function assembleSurvey(siteIds, participantId, length = TRIPLET_COUNT) {
 // The four bipolar scales, one per geometric metric.
 //
 // Anchors are deliberately plain language. A participant must never meet the
-// words "isovist", "compactness", "closed perimeter" or "enclosure ratio" — naming
+// words "isovist", "compactness", "closed perimeter" or "enclosure index" — naming
 // the construct would teach them what to look for and turn a perceptual report
 // into a guess at the researcher's intent.
 //
@@ -159,11 +162,17 @@ export const RATING_SCALES = [
     low: 'Irregular, stretched-out shape',
     high: 'Compact, regular shape',
   },
+  // Perceived facade continuity. The 46 panoramic_v1 sessions saw "Views
+  // blocked, hidden corners" (1) to "Clear sightlines, nothing hidden" (7). The
+  // new wording keeps the same storage polarity on purpose: unbroken fronts is
+  // the end that corresponds to "views blocked", so it stays value 1, and one
+  // column in the Sheet means one thing for every participant. Reports reflect
+  // it (8 − v), so there 7 = long, unbroken building fronts for everyone.
   {
     id: 'closedPerimeter',
     metric: 'closedPerimeter',
-    low: 'Views blocked, hidden corners',
-    high: 'Clear sightlines, nothing hidden',
+    low: 'Long, unbroken building fronts all around',
+    high: 'Edges broken up, many gaps between buildings',
   },
   {
     id: 'enclosure',

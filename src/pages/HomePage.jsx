@@ -127,8 +127,11 @@ export function HomePage() {
               style={{ animationDelay: '240ms' }}
             >
               <p className="max-w-prose text-sm leading-relaxed text-ink-muted">
-                A Perceptually Validated Metric Framework for the Diagnosis and Targeted Redesign
-                of Public Plazas.
+                Spatial Fingerprinting: A Perceptually Calibrated Metric Framework for the
+                Diagnosis and Targeted Redesign of Public Plazas
+              </p>
+              <p className="mt-1 text-sm text-ink-muted">
+                Tarek Ahmed · supervised by Reinhard König and Martin Bielik
               </p>
               <p className="mt-2 font-mono text-xs text-ink-faint">
                 {studySites.length} European plazas · 4 isovist metrics · panoramic triplet survey ·

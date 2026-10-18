@@ -7,9 +7,10 @@
 
 // Standing eye height, metres.
 //
-// The isovist is a plan-level cast and has no height of its own; 1.6 m is the
-// standing eye height the enclosure metric's vertical angles already assume, so
-// the render stands where the measurement implicitly did.
+// The isovist is a plan-level cast and has no height of its own, so the render
+// stands at a conventional 1.6 m eye height. The enclosure index does not
+// assume this height: its angle is atan(h / d) with h the full building height,
+// measured from ground level.
 export const EYE_HEIGHT_M = 1.6
 
 // The vertical field of view a camera needs in order to show a given HORIZONTAL

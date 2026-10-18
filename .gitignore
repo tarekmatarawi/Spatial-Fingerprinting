@@ -28,3 +28,14 @@ dist-ssr
 .claude/skills/
 .github/hooks/
 .github/skills/
+
+# Local working files: figure trials and thesis exports, never committed
+scratchpad/
+
+# docs/handoff: only the five handoff documents are committed
+docs/handoff/*
+!docs/handoff/01_methods_implementation.md
+!docs/handoff/02_results_data.md
+!docs/handoff/03_survey_protocol.md
+!docs/handoff/04_decision_log.md
+!docs/handoff/05_closed_perimeter.md

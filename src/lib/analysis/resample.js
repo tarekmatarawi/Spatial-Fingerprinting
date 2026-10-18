@@ -15,9 +15,6 @@ import { participantIds } from './exclusions.js'
 export const DEFAULT_RESAMPLES = 1000
 export const DEFAULT_SEED = 20260817
 
-// Index of the enclosure metric within METRICS — H3 is specifically about it.
-export const ENCLOSURE_INDEX = 3
-
 // Groups triplets by participant once, so each draw is an array concat rather
 // than a filter over the whole set.
 function groupByParticipant(triplets) {
@@ -55,7 +52,6 @@ export function bootstrapWeights(triplets, fullFit, options = {}) {
   const rng = mulberry32(seed)
 
   const draws = Array.from({ length: N_METRICS }, () => [])
-  const enclosureLead = []
   let failures = 0
 
   for (let b = 0; b < resamples; b++) {
@@ -74,12 +70,6 @@ export function bootstrapWeights(triplets, fullFit, options = {}) {
 
     const w = normaliseWeights(fit.weights)
     for (let k = 0; k < N_METRICS; k++) draws[k].push(w[k])
-
-    // H3(a): how often does enclosure carry the largest weight, and by how much?
-    // Recorded per draw so the margin gets its own interval rather than just a
-    // yes/no count.
-    const others = w.filter((_, k) => k !== ENCLOSURE_INDEX)
-    enclosureLead.push(w[ENCLOSURE_INDEX] - Math.max(...others))
   }
 
   const perMetric = draws.map((series) => {
@@ -94,21 +84,11 @@ export function bootstrapWeights(triplets, fullFit, options = {}) {
     }
   })
 
-  const leadSorted = enclosureLead.slice().sort((a, b) => a - b)
-
   return {
     resamples,
     seed,
     failures,
     perMetric,
-    enclosureLargestShare: enclosureLead.length
-      ? enclosureLead.filter((d) => d > 0).length / enclosureLead.length
-      : null,
-    enclosureLead: {
-      mean: enclosureLead.reduce((s, v) => s + v, 0) / (enclosureLead.length || 1),
-      lo: percentile(leadSorted, 0.025),
-      hi: percentile(leadSorted, 0.975),
-    },
   }
 }
 

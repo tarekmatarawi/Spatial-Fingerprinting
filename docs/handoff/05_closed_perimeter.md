@@ -58,12 +58,12 @@ The occluding-radial length is the sum of radial depth jumps |dᵢ − dᵢ₊�
 | Weight: area | 0.312 | 0.483 | 0.378 |
 | Weight: compactness | 0.275 | 0.283 | 0.255 |
 | Weight: this metric | **0.207** | **0.000** | 0.199 |
-| Weight: enclosure | 0.206 | 0.233 | 0.167 |
+| Weight: enclosure index | 0.206 | 0.233 | 0.167 |
 | NLL (lower is better) | **543.94** | 555.01 | 549.14 |
 | Leave-one-plaza-out accuracy (chance 33.3%) | **52.6%** | 50.5% | 49.5% |
 | Area-only baseline | 52.2% | 52.2% | 52.2% |
 
-- With the occluding-radial measure, the fit gives the metric **zero weight**: bootstrap interval 0.000004–0.00005 over 500 participant resamples. It correlates +0.70 with area and −0.71 with enclosure across the 18 plazas, so it adds nothing the other three do not already carry. Burgplatz (open to the Rhine) gets the highest value, 1,335 m.
+- With the occluding-radial measure, the fit gives the metric **zero weight**: bootstrap interval 0.000004–0.00005 over 500 participant resamples. It correlates +0.70 with area and −0.71 with enclosure index across the 18 plazas, so it adds nothing the other three do not already carry. Burgplatz (open to the Rhine) gets the highest value, 1,335 m.
 - It correlates only r = 0.27 with closed perimeter. The two rank the plazas differently.
 - Neither variant relates to the participants' ratings (|r| ≤ 0.11).
 - Closed perimeter is the only one of the three that keeps a weight and edges past area alone. The margin is small and not significant (full model beats area-only in 9 of 15 decided folds, sign test p = 0.61).
@@ -155,12 +155,12 @@ All values stored. Sources: `src/data/analysis-panoramic.json`, `src/data/rating
 | Result | Value |
 |---|---|
 | Normalisation bounds (`perceptual_360`, frozen) | 267.22 m (Marktplatz, Heidelberg) to 622.93 m (Hauptwache, Frankfurt) |
-| P5 normalised weight | 0.207 (third of four; enclosure 0.206 is effectively tied) |
+| P5 normalised weight | 0.207 (third of four; enclosure index 0.206 is effectively tied) |
 | Bootstrap 95% interval (1,000 participant resamples) | 0.112–0.289, excludes zero |
-| Leave-one-metric-out cost | 2.02 pp of held-out accuracy, second largest after enclosure (2.34 pp); area 1.87, compactness 0.54 |
+| Leave-one-metric-out cost | 2.02 pp of held-out accuracy, second largest after enclosure index (2.34 pp); area 1.87, compactness 0.54 |
 | Rating convergence | aligned r = +0.22, p (Holm) = 0.37, not significant; reliability 0.77 |
 
-**Reading.** Closed perimeter carries a stable, non-zero weight in how people judge plaza similarity, and removing it costs the model more accuracy than removing area. Its agreement with the facade-continuity rating is weak and not significant. It is the only one of the four metrics that does not converge with its own scale (area 0.75, compactness 0.58, enclosure 0.83).
+**Reading.** Closed perimeter carries a stable, non-zero weight in how people judge plaza similarity, and removing it costs the model more accuracy than removing area. Its agreement with the facade-continuity rating is weak and not significant. It is the only one of the four metrics that does not converge with its own scale (area 0.75, compactness 0.58, enclosure index 0.83).
 
 ---
 
@@ -196,7 +196,7 @@ Closed perimeter is computed from 2D building footprints. The panorama shows wha
 | Phase | Role of closed perimeter | Where it lives |
 |---|---|---|
 | P1 Site register | Not used. Building footprints and heights are the input it is computed from. | `src/data/sites.json` |
-| P2 Viewer + ray-casting engine | Computed live at any clicked point alongside area, compactness and enclosure. Stored for canonical readings in each layer. | `src/lib/isovist.js`; `src/data/results.json` field `closed_perimeter_m` |
+| P2 Viewer + ray-casting engine | Computed live at any clicked point alongside area, compactness and enclosure index. Stored for canonical readings in each layer. | `src/lib/isovist.js`; `src/data/results.json` field `closed_perimeter_m` |
 | P3 Perceptual survey | One of four rating scales (§3). | `src/lib/survey360.js`; `survey-responses-360.json`, scale `closedPerimeter` |
 | P4 Results dashboard | Shown as one of the four fingerprint dimensions and in the rating-validation figures. | dashboard / `FingerprintCharts.jsx` |
 | P5 Weight fitting | One of four dimensions of the weighted distance. Weight 0.207; frozen bounds 267.22–622.93 m. | `src/data/analysis-panoramic.json` |
@@ -211,15 +211,12 @@ In every phase the meaning is the same: **metres of continuous facade visible fr
 
 ## 7. Hypothesis H3
 
-The app and spec state H3 as *"Closed perimeter does not converge with perceived concealment, for definitional rather than implementation reasons"*, read against the concealment reading of the scale. Under the facade-continuity reading (§3), a reformulation is proposed, **for the author and supervisor to confirm**:
+> *H3 — Where a metric does not match its rating scale, the mismatch is systematic and not due to inconsistent ratings.*
 
-> *H3 — Closed perimeter converges only weakly with perceived facade continuity, because it measures an absolute length where people judge the proportion of the edge that is continuous.*
-
-- **Verdict rule, unchanged in form:** supported when the Holm p ≥ 0.05 and split-half reliability ≥ 0.4. At n = 46: p = 0.37, reliability 0.77 → **supported**. Evidence for the "because" clause is §5.1. It is exploratory and must be labelled so.
-- **Test column (spec).** "All four published definitions vs the ratings" becomes "closed perimeter vs the facade-continuity rating; Benedikt's occluding-radial measure as exploratory comparison (§2.4)".
-- `concealmentCorrelations` in `hypotheses.js` (all four metrics correlated against the reversed sightline rating, used by the H3 figure) is built on the concealment reading. It needs reframing as "all four metrics against perceived facade continuity", with signs following §3.3.
-
-The open issue of three hypothesis numberings (spec / app / stored analysis; 03 §3.3, 04 §U3) is unaffected and still open.
+- **Rule** (`src/lib/analysis/hypotheses.js`): every metric that fails H2 sits on a scale with split-half reliability ≥ .40.
+- **Result.** Closed perimeter is the only metric that fails H2: aligned r = +0.22 against perceived facade continuity, Holm p = 0.37. Its scale's split-half reliability is 0.77, so raters agreed with each other and the shortfall belongs to the metric. **Supported.**
+- **The H3 figure** (`FacadeContinuityComparison`, computed by `facadeContinuityCorrelations`) correlates all four metrics against perceived facade continuity, with signs following §3.3: |r| compactness 0.46, area 0.38, closed perimeter 0.22, enclosure index 0.01. Two other metrics track the percept more closely than the one built to measure it.
+- **Why it fails** (absolute length where people judge the continuous proportion of the edge, §5.1) is exploratory and must be labelled so.
 
 ---
 
@@ -232,10 +229,10 @@ The open issue of three hypothesis numberings (spec / app / stored analysis; 03 
 
 ---
 
-## 9. Pending app changes for the facade-continuity reading (not yet made)
+## 9. Wording shown to later participants
 
-For the implementer, not for the thesis.
+From `survey_version` `panoramic_v2` on, the survey shows the facade-continuity wording. It keeps the stored polarity: "Long, unbroken building fronts all around" is value 1, where "Views blocked, hidden corners" was, and "Edges broken up, many gaps between buildings" is value 7. The same end of the scale therefore stores the same number for every participant, new rows join the same Sheet column, and the reflection in §3.3 (v' = 8 − v) applies to all of them. `test/survey360.test.js` pins this. The 46 `panoramic_v1` sessions saw the wording in §3.2, and the methods should say that the item text changed between the two groups.
 
-1. Rating scale: title "Perceived facade continuity" and the new anchors in `RATING_SCALES`, with values reflected on read (v' = 8 − v) and `EXPECTED_SIGN` +1 in `validate-ratings.mjs`. Changing the anchor text alone, without the reflection, would flip the result to −0.22. Anchors shown to any *future* participant must match what is reported.
-2. H3 text, verdict explanation and the concealment figure (§7).
-3. Explanatory copy that describes the scale as running "backwards": the `validate-ratings.mjs` header comment. (The Weights page note and the "Measured against perceived" scatter already use the facade-continuity reading; the scatter plots this scale as 8 − mean rating.)
+`npm run validate:ratings` writes the CURRENT anchors into `rating-validation.json`. Once `panoramic_v2` sessions exist, that record should list both wordings rather than only the new one.
+
+Everything else uses the facade-continuity reading already: the Weights page, the H3 figure, the "Measured against perceived" scatter (which plots this scale as 8 − mean rating) and the `validate-ratings.mjs` comments.

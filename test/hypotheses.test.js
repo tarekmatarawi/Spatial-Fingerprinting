@@ -1,8 +1,7 @@
-// The six hypotheses are the study's headline claims, and their verdicts are
-// derived rather than written down — so the derivation is what has to be
-// pinned. These tests guard the rules, not the current numbers: a rerun with
-// more participants should move the evidence without silently flipping a
-// verdict through a coding slip.
+// The precondition and the five hypotheses are the study's headline claims,
+// and their verdicts are derived rather than written down — so the derivation
+// is what has to be pinned. These tests guard the rules, and pin the verdicts
+// the stored analysis gives, so a coding slip cannot silently flip one.
 
 import { test, describe } from 'node:test'
 import assert from 'node:assert/strict'
@@ -13,7 +12,8 @@ import { fileURLToPath } from 'node:url'
 import {
   buildHypotheses,
   summariseVerdicts,
-  concealmentCorrelations,
+  reliabilityPrecondition,
+  facadeContinuityCorrelations,
   VERDICT,
 } from '../src/lib/analysis/hypotheses.js'
 
@@ -22,6 +22,11 @@ const read = (rel) => JSON.parse(fs.readFileSync(path.join(root, rel), 'utf8'))
 
 const analysis = read('src/data/analysis-panoramic.json')
 const ratings = read('src/data/rating-validation.json')
+
+const withPaired = (paired) => ({
+  ...analysis,
+  crossval: { ...analysis.crossval, paired: { ...analysis.crossval.paired, ...paired } },
+})
 
 describe('hypotheses — derivation from the analysis outputs', () => {
   test('produces exactly five, each with a verdict and evidence', () => {
@@ -39,7 +44,24 @@ describe('hypotheses — derivation from the analysis outputs', () => {
     }
   })
 
-  test('H2 is partly supported when some dimensions converge and some do not', () => {
+  test('the stored analysis gives the reported verdicts', () => {
+    const verdicts = Object.fromEntries(buildHypotheses(analysis, ratings).map((h) => [h.id, h.verdict]))
+    assert.deepEqual(verdicts, {
+      H1: VERDICT.SUPPORTED,
+      H2: VERDICT.PARTLY,
+      H3: VERDICT.SUPPORTED,
+      H4: VERDICT.SUPPORTED,
+      H5: VERDICT.DIRECTIONAL,
+    })
+    assert.equal(reliabilityPrecondition(ratings).passes, true)
+  })
+
+  test('the precondition fails if any one scale falls below .40', () => {
+    const weak = { ...ratings, scales: ratings.scales.map((s, i) => (i === 0 ? { ...s, reliability: 0.39 } : s)) }
+    assert.equal(reliabilityPrecondition(weak).passes, false)
+  })
+
+  test('H2 is partly supported when some metrics match and some do not', () => {
     const hs = buildHypotheses(analysis, ratings)
     const h2 = hs.find((h) => h.id === 'H2')
     const converging = ratings.scales.filter((s) => s.pearson_p_holm < 0.05 && s.pearson_aligned > 0)
@@ -50,39 +72,35 @@ describe('hypotheses — derivation from the analysis outputs', () => {
           ? VERDICT.NOT_SUPPORTED
           : VERDICT.PARTLY
     assert.equal(h2.verdict, expected)
+    assert.match(h2.headline, /^3 of 4 /)
   })
 
-  test('H3 needs BOTH a failed convergence and raters who agreed', () => {
-    // The pairing is the whole point: without the reliability half, a failed
-    // correlation could just mean participants were guessing, which would say
-    // nothing about the metric.
-    const hs = buildHypotheses(analysis, ratings)
-    const cp = ratings.scales.find((s) => s.metric === 'closedPerimeter')
-    const h3 = hs.find((h) => h.id === 'H3')
-    if (cp.pearson_p_holm >= 0.05 && cp.reliability >= 0.4) {
-      assert.equal(h3.verdict, VERDICT.SUPPORTED)
-    } else {
-      assert.equal(h3.verdict, VERDICT.NOT_SUPPORTED)
+  test('H3 needs every mismatching scale to have raters who agreed', () => {
+    // Without the reliability half, a failed correlation could just mean
+    // participants were guessing, which would say nothing about the metric.
+    const stripped = {
+      ...ratings,
+      scales: ratings.scales.map((s) => (s.metric === 'closedPerimeter' ? { ...s, reliability: 0.1 } : s)),
     }
-
-    const stripped = { ...ratings, scales: ratings.scales.map((s) => (s.metric === 'closedPerimeter' ? { ...s, reliability: 0.1 } : s)) }
     const weak = buildHypotheses(analysis, stripped).find((h) => h.id === 'H3')
     assert.equal(weak.verdict, VERDICT.NOT_SUPPORTED, 'unreliable raters must not count as evidence about the metric')
+
+    // A reliability drop on a scale that DOES match is not H3's business.
+    const other = {
+      ...ratings,
+      scales: ratings.scales.map((s) => (s.metric === 'area' ? { ...s, reliability: 0.1 } : s)),
+    }
+    assert.equal(buildHypotheses(analysis, other).find((h) => h.id === 'H3').verdict, VERDICT.SUPPORTED)
   })
 
-  test('H5 reads a genuine ensemble win as the limitation NOT holding', () => {
-    // A significant sign test with a NEGATIVE mean delta means the baseline
-    // beat the full model consistently. Reading only the p-value there would
-    // report a defeat as support.
-    const flipped = {
-      ...analysis,
-      crossval: {
-        ...analysis.crossval,
-        paired: { ...analysis.crossval.paired, signTestP: 0.001, meanDelta: -0.03 },
-      },
-    }
-    const h5 = buildHypotheses(flipped, ratings).find((h) => h.id === 'H5')
-    assert.equal(h5.verdict, VERDICT.SUPPORTED, 'a significant NEGATIVE delta still means the ensemble lost')
+  test('H5 is supported only by a significant sign test with the full model ahead', () => {
+    const verdictOf = (paired) => buildHypotheses(withPaired(paired), ratings).find((h) => h.id === 'H5').verdict
+    assert.equal(verdictOf({ signTestP: 0.001, wins: 14, losses: 1 }), VERDICT.SUPPORTED)
+    // Ahead but not significant: the stored result.
+    assert.equal(verdictOf({ signTestP: 0.6, wins: 9, losses: 6 }), VERDICT.DIRECTIONAL)
+    // A significant test with the BASELINE ahead is a defeat, not support.
+    assert.equal(verdictOf({ signTestP: 0.001, wins: 1, losses: 14 }), VERDICT.NOT_SUPPORTED)
+    assert.equal(verdictOf({ signTestP: 1, wins: 6, losses: 6 }), VERDICT.NOT_SUPPORTED)
   })
 
   test('H4 fails if any bootstrap interval touches zero', () => {
@@ -97,17 +115,39 @@ describe('hypotheses — derivation from the analysis outputs', () => {
     assert.equal(h4.verdict, VERDICT.NOT_SUPPORTED)
   })
 
+  test('no evidence line claims an interval nothing computes', () => {
+    // "spans zero" may appear only where it is derived from a stored interval.
+    const h5 = buildHypotheses(analysis, ratings).find((h) => h.id === 'H5')
+    for (const e of h5.evidence) assert.doesNotMatch(e.value, /spans zero/)
+  })
+
+  test('H5 quotes the area–enclosure index correlation computed from the data', () => {
+    const h5 = buildHypotheses(analysis, ratings).find((h) => h.id === 'H5')
+    assert.match(h5.evidence.find((e) => e.label === 'Why they overlap').value, /r = −0\.64 across the 18 plazas/)
+    // Moving one plaza's value must move the quoted figure: it is derived, not typed.
+    const moved = {
+      ...ratings,
+      scales: ratings.scales.map((s) =>
+        s.metric === 'enclosure'
+          ? { ...s, per_site: s.per_site.map((p, i) => (i === 0 ? { ...p, computed: p.computed + 0.5 } : p)) }
+          : s
+      ),
+    }
+    const shifted = buildHypotheses(analysis, moved).find((h) => h.id === 'H5')
+    assert.doesNotMatch(shifted.evidence.find((e) => e.label === 'Why they overlap').value, /−0\.64/)
+  })
+
   test('the summary counts every hypothesis exactly once', () => {
     const hs = buildHypotheses(analysis, ratings)
     const s = summariseVerdicts(hs)
-    assert.equal(s.supported + s.partly + s.notSupported, s.total)
+    assert.equal(s.supported + s.partly + s.directional + s.notSupported, s.total)
     assert.equal(s.total, hs.length)
   })
 })
 
-describe('hypotheses — the H3 concealment comparison', () => {
+describe('hypotheses — the H3 facade continuity comparison', () => {
   test('ranks all four metrics against the one percept, strongest first', () => {
-    const rows = concealmentCorrelations(ratings)
+    const rows = facadeContinuityCorrelations(ratings)
 
     assert.deepEqual(
       rows.map((r) => r.metric),
@@ -126,20 +166,19 @@ describe('hypotheses — the H3 concealment comparison', () => {
   })
 
   test('closed perimeter matches the value the rating validation already reports', () => {
-    const cp = concealmentCorrelations(ratings).find((r) => r.metric === 'closedPerimeter')
+    const cp = facadeContinuityCorrelations(ratings).find((r) => r.metric === 'closedPerimeter')
     const scale = ratings.scales.find((s) => s.metric === 'closedPerimeter')
-    // Perceived concealment is the reversed closed perimeter rating, so the metric's
-    // correlation with it is exactly the aligned r already in the record — one
-    // number, computed twice, never allowed to differ.
+    // Perceived facade continuity is the reflected closed perimeter rating, so
+    // the metric's correlation with it is exactly the aligned r already in the
+    // record — one number, computed twice, never allowed to differ.
     assert.ok(Math.abs(cp.r - scale.pearson_aligned) < 1e-9)
+    assert.equal(cp.direction, 'more continuous')
   })
 
-  test('the H3 claim is about ranking, and the ranking holds', () => {
-    const rows = concealmentCorrelations(ratings)
+  test('two other metrics track perceived facade continuity more closely', () => {
+    const rows = facadeContinuityCorrelations(ratings)
     const cp = rows.find((r) => r.metric === 'closedPerimeter')
     const better = rows.filter((r) => r.aligned > cp.aligned).map((r) => r.metric)
-    // The finding the figure exists to show: two other metrics track perceived
-    // concealment more closely than the one named for it.
     assert.deepEqual(better, ['compactness', 'area'])
   })
 })

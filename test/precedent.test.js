@@ -98,7 +98,7 @@ describe('height-aware and unflagged agree on the surveyed corpus', () => {
         // Exact equality, not a tolerance. The two casts should be walking the
         // same edge list; a tolerance here would let a real discrepancy hide
         // under it and would turn this from a gate into a reassurance.
-        for (const k of ['area', 'compactness', 'closedPerimeter', 'enclosureRatio']) {
+        for (const k of ['area', 'compactness', 'closedPerimeter', 'enclosureIndex']) {
           assert.equal(a[k], b[k], `${s.id} view ${view.viewNumber}: ${k} differs between modes`)
         }
         checked++
@@ -413,19 +413,19 @@ describe('the P8 evidence summary', () => {
     assert.equal(evidence.judgements, 180)
     assert.equal(evidence.agreement.n, 90)
     assert.equal(evidence.discriminating.n, 90)
-    // Not asserted as fixed values: these move with every batch of responses,
-    // and pinning them here would make collecting data break the test suite.
+    // Not asserted as fixed values: the point of this summary is that it reads
+    // them from the analysis, so the test checks the reading, not the figure.
     assert.ok(evidence.agreement.accuracy > 0.5 && evidence.agreement.accuracy < 1)
     assert.ok(evidence.discriminating.accuracy > 0 && evidence.discriminating.accuracy < 1)
   })
 
   test('does not call the agreement stratum significant on the current sample', () => {
-    // The point of the whole summary. At 15 of ~40 participants the sign test
+    // The point of the whole summary. With 15 participants the sign test
     // is p ≈ 0.15, and a panel headed "closest validated precedent view" must
     // not be quietly asserting otherwise.
     assert.equal(evidence.agreement.significant, evidence.agreement.signP < 0.05)
     assert.equal(evidence.agreement.significant, false)
-    assert.match(evidence.status, /Interim/)
+    assert.match(evidence.status, /not by enough to rule out chance/)
   })
 
   test('reports the sign test alongside the pooled one, not instead of it', () => {

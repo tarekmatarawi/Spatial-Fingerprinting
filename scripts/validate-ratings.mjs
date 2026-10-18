@@ -22,11 +22,12 @@
 //
 // ------------------------------------------------------------------ direction
 //
-// The scales are bipolar and plain-language, and one of them runs BACKWARDS
-// relative to its metric. Closed perimeter is metres of view-blocking edge, so more
-// is more hidden — but the scale's 7 end reads "Clear sightlines, nothing
-// hidden", which is LESS closed perimeter. A raw r of −0.6 there is strong
-// agreement, not disagreement. EXPECTED_SIGN below encodes this once, and the
+// The scales are bipolar and plain-language, and one of them is stored
+// BACKWARDS relative to its metric. Closed perimeter is metres of continuous
+// facade in view, and its scale is reported as perceived facade continuity —
+// but the stored value 1 sits at the continuous-fronts end and 7 at the broken
+// end (docs/handoff/05_closed_perimeter.md §3.3), so 7 means LESS closed
+// perimeter. A raw r of −0.6 there is strong agreement, not disagreement. EXPECTED_SIGN below encodes this once, and the
 // reported `aligned r` is the raw r multiplied by it, so all four numbers mean
 // the same thing: positive is agreement, negative is contradiction.
 //
@@ -65,7 +66,7 @@ const RESPONSES = 'src/data/survey-responses-360.json'
 const EXPECTED_SIGN = {
   area: +1, // "Spacious and open" = large isovist
   compactness: +1, // "Compact, regular shape" = high 4πA/P²
-  closedPerimeter: -1, // "Clear sightlines, nothing hidden" = LOW closed perimeter
+  closedPerimeter: -1, // 7 = "Edges broken up" (v1: "Clear sightlines") = LOW closed perimeter
   enclosure: +1, // "Tall walls, strongly enclosed" = high subtended angle
 }
 
@@ -145,7 +146,7 @@ function fisherCI(r, n, sign = 1) {
 // treats the mean ratings as fixed and asks only how much 18 plazas pin down a
 // correlation; it is blind to the possibility that a different 40 participants
 // would have produced different means. Watching the correlations move as the
-// sample grew from 20 to 30 to 40 showed exactly that: area and enclosure
+// sample grew from 20 to 30 to 40 showed exactly that: area and enclosure index
 // barely shifted, while compactness went 0.23 → 0.12 → 0.52 and closed perimeter
 // −0.53 → −0.49 → −0.18. Both intervals are reported, because they answer
 // different questions and a dimension is only well established when both are
@@ -427,8 +428,8 @@ function main() {
 
   console.log(
     '\n  r and rho are ALIGNED: positive always means the ratings agree with the\n' +
-      '  geometry. Closed perimeter\'s scale runs backwards (its 7 end is "clear\n' +
-      '  sightlines", i.e. LOW closed perimeter), so its raw r is negated to match.\n' +
+      '  geometry. Closed perimeter\'s scale is stored backwards (value 7 is the\n' +
+      '  broken-fronts end, i.e. LOW closed perimeter), so its raw r is negated.\n' +
       '  "ceiling" is split-half reliability — the most any measurement could\n' +
       '  correlate with these ratings, given how much the raters agreed.\n' +
       '  The two intervals answer different questions: (plazas) asks how well 18\n' +

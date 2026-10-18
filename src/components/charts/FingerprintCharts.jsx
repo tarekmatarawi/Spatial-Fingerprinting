@@ -21,7 +21,7 @@ import {
 //   DimensionLoadings     what the two MDS axes are actually made of
 //   ScatterMatrix         all six pairwise relations, plus each distribution
 //   PairedFoldChart       full model against area-only, fold by fold
-//   ConcealmentComparison the H3 result: which metric tracks the percept
+//   FacadeContinuityComparison  the H3 result: which metric tracks facade continuity
 //   ConvergenceScatter    measured value against what people reported
 //   MetricCorrelation     how far the four dimensions are actually independent
 //
@@ -72,7 +72,7 @@ const SHORT_LABEL = {
   area: 'Area',
   compactness: 'Compactness',
   closedPerimeter: 'Closed perimeter',
-  enclosure: 'Enclosure',
+  enclosure: 'Enclosure index',
 }
 
 /* --------------------------------------------------------------- helpers */
@@ -1469,9 +1469,9 @@ export function PairedFoldChart({ crossval, names, selected, pinned, onHover, on
   )
 }
 
-/* --------------------------------------- 6. H3 — the concealment comparison */
+/* ------------------------------- 6. H3 — the facade continuity comparison */
 
-export function ConcealmentComparison({ rows, significanceThreshold = 0.47 }) {
+export function FacadeContinuityComparison({ rows, significanceThreshold = 0.47 }) {
   const W = 760
   const ROW = 26
   const GAP = 22
@@ -1483,23 +1483,23 @@ export function ConcealmentComparison({ rows, significanceThreshold = 0.47 }) {
 
   return (
     <Figure
-      title="H3 — which measured dimension tracks perceived concealment?"
-      filename="h3-perceived-concealment"
-      caption="All four metrics correlated against the same percept: how concealing participants judged each plaza to be. This is the comparison the hypothesis needs — not each metric against its own scale, but every metric against this one scale, so they can be ranked against each other."
-      note="Correlations across the 18 plazas between the metric and the reversed closed perimeter rating (the “clear sightlines, nothing hidden” end becomes low concealment). Bars show strength, |r|; the exact signed value is printed beside each, and the direction is named in the row label. An association is not causal evidence and none is claimed: these are 18 squares, geometry and ratings were collected on the same plazas, and nothing was manipulated."
+      title="H3 — which measured dimension tracks perceived facade continuity?"
+      filename="h3-perceived-facade-continuity"
+      caption="All four metrics correlated against the same percept: how continuous participants judged the building fronts of each plaza to be. This is the comparison the hypothesis needs — not each metric against its own scale, but every metric against this one scale, so they can be ranked against each other."
+      note="Correlations across the 18 plazas between the metric and perceived facade continuity, from 1 “edges broken up, many gaps between buildings” to 7 “long, unbroken building fronts all around”. Bars show strength, |r|; the exact signed value is printed beside each, and the direction is named in the row label. An association is not causal evidence and none is claimed: these are 18 squares, geometry and ratings were collected on the same plazas, and nothing was manipulated."
     >
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className="w-full"
         style={{ minWidth: 560 }}
         role="img"
-        aria-label="Correlation of each metric with perceived concealment, ranked by strength"
+        aria-label="Correlation of each metric with perceived facade continuity, ranked by strength"
       >
         <text x={20} y={24} fontSize={11.5} fill={INK} fontFamily={SANS} fontWeight={600}>
-          Correlation with perceived concealment, strongest first
+          Correlation with perceived facade continuity, strongest first
         </text>
         <text x={20} y={41} fontSize={10.5} fill={MUTED} fontFamily={SANS}>
-          Closed perimeter is not the closest account of perceived concealment.
+          Closed perimeter is not the closest account of perceived facade continuity.
         </text>
 
         {ticksFor(0, MAX, 6).map((t) => (
@@ -1580,7 +1580,7 @@ export function ConcealmentComparison({ rows, significanceThreshold = 0.47 }) {
                 fill={FAINT}
                 fontFamily={MONO}
               >
-                more → felt {row.direction === 'more concealing' ? 'more concealing' : 'more open'}
+                more → felt {row.direction}
               </text>
               {focus && (
                 <rect x={pad.left} y={top - 5} width={plotW} height={ROW + 10} fill={WASH} opacity={0.7} />
@@ -1653,7 +1653,7 @@ export function ConvergenceScatter({ ratings }) {
           return (
             <g key={scale.metric}>
               <text x={ox + pad.left} y={16} fontSize={11} fontWeight={600} fill={INK} fontFamily={SANS}>
-                {scale.label}
+                {METRIC_LABELS[scale.metric] ?? scale.label}
               </text>
               <text x={ox + pad.left} y={28} fontSize={10} fill={strong ? OK : NEG} fontFamily={MONO}>
                 r = {fmt(scale.pearson_aligned, 3)}
@@ -1736,6 +1736,7 @@ export function ConvergenceScatter({ ratings }) {
 export function MetricCorrelation({ siteIds, fingerprints }) {
   const points = useMemo(() => siteIds.map((id) => fingerprints.get(id)), [siteIds, fingerprints])
   const C = useMemo(() => correlationMatrix(points), [points])
+  const areaEnclosure = C[METRICS.indexOf('area')][METRICS.indexOf('enclosure')]
 
   const CELL = 92
   const label = 118
@@ -1757,7 +1758,7 @@ export function MetricCorrelation({ siteIds, fingerprints }) {
       title="How independent are the four dimensions?"
       filename="metric-correlation-matrix"
       caption="Correlations between the metrics themselves across the 18 plazas — the scatterplot matrix above, reduced to one number per pair. Strong values off the diagonal mean two dimensions are partly measuring the same thing, which is what limits how much the ensemble can add over its best single member."
-      note="Area and enclosure at −0.64 is the consequential one: larger squares in this corpus are systematically less enclosed, so knowing one already tells you much about the other. That is a property of European urban form, not of the metrics."
+      note={`Area and enclosure index at ${areaEnclosure < 0 ? '−' : ''}${Math.abs(areaEnclosure).toFixed(2)} is the consequential one: larger squares in this corpus are systematically less enclosed, so knowing one already tells you much about the other. That is a property of European urban form, not of the metrics.`}
     >
       <svg
         viewBox={`0 0 ${W} ${H}`}

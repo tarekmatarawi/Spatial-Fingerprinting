@@ -191,7 +191,7 @@ function main() {
         area: m.area,
         compactness: m.compactness,
         closedPerimeter: m.closedPerimeter,
-        enclosure: m.enclosureRatio,
+        enclosure: m.enclosureIndex,
       }
       const normalised = METRICS.map((k) => {
         const b = bounds[k]

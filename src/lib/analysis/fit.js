@@ -144,13 +144,13 @@ export function fitWeights(triplets, options = {}) {
   }
 }
 
-// The area-only baseline for H2: the same model with the other three metrics
+// The area-only baseline for H5: the same model with the other three metrics
 // held at zero weight, so only isovist area can drive the prediction.
 //
-// H2 states that the four-metric framework predicts perceptual similarity more
-// accurately than isovist area alone, so the comparator has to be exactly that —
-// area, fitted on the same responses under the same procedure, differing from
-// the full model in nothing but which metrics it may use.
+// H5 states that the combined four-metric model outperforms isovist area alone,
+// so the comparator has to be exactly that — area, fitted on the same responses
+// under the same procedure, differing from the full model in nothing but which
+// metrics it may use.
 export const AREA_INDEX = 0
 
 export function fitAreaOnly(triplets, options = {}) {

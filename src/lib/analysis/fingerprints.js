@@ -29,7 +29,7 @@ export const METRIC_LABELS = {
   area: 'Isovist area',
   compactness: 'Compactness',
   closedPerimeter: 'Closed perimeter',
-  enclosure: 'Enclosure',
+  enclosure: 'Enclosure index',
 }
 
 export const METRIC_UNITS = {
@@ -149,7 +149,7 @@ export function normaliseValue(value, bound) {
   return (value - bound.min) / (bound.max - bound.min)
 }
 
-// site_id → [area, compactness, closed perimeter, enclosure] on the 0–1 scale.
+// site_id → [area, compactness, closed perimeter, enclosure index] on the 0–1 scale.
 export function normalisedFingerprints(bySite, bounds) {
   const out = new Map()
   for (const [id, r] of bySite) {

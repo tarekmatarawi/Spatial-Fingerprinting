@@ -1,102 +1,132 @@
 # Spatial Fingerprinting
 
-A research web platform for a master's thesis in urban design. It studies how the *geometry* of public plazas relates to how people *perceive* them:
+**Spatial Fingerprinting: A Perceptually Calibrated Metric Framework for the Diagnosis and Targeted Redesign of Public Plazas**
 
-1. **18 real European plazas** stored as building footprints + heights, viewable as 3D models
-2. **Isovist metrics** — click any point in a plaza to compute isovist area, compactness, closed perimeter, and enclosure ratio from that spot
-3. **Perceptual survey** — participants judge which two of three plazas feel most spatially similar
-4. **Weight fitting** — maximum-likelihood estimation of how much each metric contributes to perceived similarity, with bootstrap CIs, cross-validation, and permutation tests
-5. **Zone typology and design application** — isovist fields sampled across each plaza, clustered into zone types, and used to diagnose and test a real design intervention
+Master's thesis in urban design by **Tarek Ahmed**. Supervisors: **Reinhard König** and **Martin Bielik**.
 
-The full build plan lives in [docs/spec.md](docs/spec.md). Development proceeds in phases with validation gates between them.
+**Live app:** https://tarekmatarawi.github.io/Spatial-Fingerprinting/
+
+This repository is the thesis's research platform. It asks whether four geometric measures, computed from building footprints and heights, capture how people actually perceive public plazas — and, where they do, how that can be used to diagnose a real square and test design changes to it.
+
+## The idea in brief
+
+From any standing point in a plaza, the platform casts sight lines to the surrounding buildings and measures four things about what can be seen:
+
+| Metric | What it measures |
+| --- | --- |
+| **Isovist area** | How much ground is visible from the point |
+| **Compactness** | How regular the visible shape is (4πA / P²) |
+| **Closed perimeter** | Metres of continuous building facade in view |
+| **Enclosure index** | The mean angle the surrounding buildings rise to, as a share of 90° |
+
+Together these four numbers are a plaza's *spatial fingerprint*. A perceptual survey calibrates how much each one matters to people, and the calibrated fingerprint then drives a zone typology and a design diagnostic.
+
+## What the study found
+
+Eighteen European plazas, 46 survey participants, 552 similarity judgements and 2,972 ratings. Every figure below is read from the stored analysis files and shown on the `#/weights` page.
+
+| | Hypothesis | Verdict |
+| --- | --- | --- |
+| Precondition | Each rating scale reaches a split-half reliability of at least .40 | Met |
+| H1 | Weighted distance in the metric space predicts which two of three plazas people judge most similar at a rate above chance | Supported (52.6% vs 33.3% chance) |
+| H2 | Each metric corresponds to observers' own ratings of the matching quality | Partially supported (3 of 4) |
+| H3 | Where a metric does not match its rating scale, the mismatch is systematic and not due to inconsistent ratings | Supported |
+| H4 | The fitted model gives every metric a weight above zero | Supported |
+| H5 | The combined four-metric model outperforms isovist area alone | Not statistically supported, in the predicted direction |
+
+Fitted weights (they sum to 1): isovist area 0.312, compactness 0.275, closed perimeter 0.207, enclosure index 0.206.
 
 ## The nine phases
 
-| | Phase | Route | Status |
-| --- | --- | --- | --- |
-| **P1** | Site Register | `#/sites` | ✅ built — all 18 sites populated |
-| **P2** | Spatial Analysis — 3D Viewer | `#/viewer` | ✅ built — ray-casting engine validated |
-| **P3** | Perceptual Survey — Views | `#/survey` (participants: `?survey`) | ✅ built — collecting responses |
-| **P4** | Survey Results Dashboard | `#/results` | ✅ built |
-| **P5** | Weight Fitting & Hypothesis Testing | `#/weights` | ✅ built — weights fitted, H1–H6 tested |
-| **P6** | Isovist Field Mapping & Zone Typology | `#/field` | ✅ built — 11,580 grid points, k = 5 zones |
-| **P7** | View-Cloud Comparison | `#/cloud-comparison` | ✅ built — 144 views, three distance measures |
-| **P8** | Matched-View Validation Survey | `#/matched-view` (participants: `?matched-view-survey`) | ✅ built — awaiting participants |
-| **P9** | Design Diagnostic & Intervention | `#/diagnose` | to build |
+Each phase is a page in the app. P1–P4 form **Setup**, P5–P8 **Analysis**, and P9 the **Design Tool**.
 
-P1–P4 form **Setup**, P5–P8 **Analysis**, and P9 the **Design Tool** — the grouping used in the app's navigation. The order above is the build order and does not change.
+| | Phase | Route | What it does |
+| --- | --- | --- | --- |
+| **P1** | Site Register | `#/sites` | 23 site records (18 in the study), entered from OpenStreetMap footprints with checked heights |
+| **P2** | Spatial Analysis — 3D Viewer | `#/viewer` | 3D model of each plaza; click to place a viewpoint and read the four metrics live |
+| **P3** | Perceptual Survey — Panoramic | `#/survey` (participants: `?survey`) | Participants pick which two of three plaza panoramas feel most alike, then rate each plaza on four scales |
+| **P4** | Survey Results Dashboard | `#/results` | Response quality and pooled pair coverage |
+| **P5** | Weight Fitting & Hypothesis Testing | `#/weights` | Maximum-likelihood weights with bootstrap intervals, cross-validation, ablation and the hypothesis tests |
+| **P6** | Isovist Field Mapping & Zone Typology | `#/field` | 11,719 grid points across the 18 plazas, clustered into five zone types |
+| **P7** | View-Cloud Comparison | `#/cloud-comparison` | Each plaza as a cloud of eight views (144 in all), compared by centroid, Gaussian and Chamfer distance |
+| **P8** | Matched-View Validation Survey | `#/matched-view` (participants: `?matched-view-survey`) | Do people agree with the view pairs the framework calls similar? Complete: 15 participants, 180 judgements |
+| **P9** | Design Diagnostic & Intervention | `#/diagnose` | Konstablerwache, Frankfurt: diagnose an area against a zone type, draw interventions and watch the zone map change; nine saved scenarios |
 
 ## Two field-of-view layers
 
-Metrics are computed under two conventions that produce **non-interchangeable** values, and keeping them apart is a correctness requirement:
+Metrics are computed under two conventions that give **non-interchangeable** values, and keeping them apart is a correctness rule:
 
-- **Perceptual layer** — 120°, directional. What a person sees facing a direction. Used for survey stimuli, weight fitting, view clouds.
-- **Field layer** — 360°, omnidirectional. An intrinsic property of a location. Used for grid field mapping and zone typology.
+- **360°, all round** — what surrounds a standing point. The panoramic survey is fitted against 360° readings at each plaza's panorama point (`perceptual_360`), and the P6 grid samples 360° readings across every plaza (`field_360`), normalised on the P5 bounds so the fitted weights apply.
+- **120°, directional** — what a person sees facing one way (`perceptual_120`). Used for view clouds, the matched-view survey and the P9 precedent lookup.
 
-Every metric record carries an explicit `fov_mode`, the two layers never share normalisation bounds, and they never appear in the same distance calculation.
+Every metric record carries an explicit `fov_mode`, and 120° and 360° values never share bounds or appear in the same distance calculation.
 
 ## Running locally
+
+You need [Node.js](https://nodejs.org/) 22 or later.
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open the printed URL (usually `http://localhost:5173/Spatial-Fingerprinting/`).
+Open the printed address (usually `http://localhost:5173/Spatial-Fingerprinting/`).
 
-- **P1 Site Register** — enter building footprints (GeoJSON pasted from OpenStreetMap) and heights. Saving writes to `src/data/sites.json` (dev server only).
-- **P2 Spatial Analysis** — orbit/pan/zoom the 3D model, click to place a vantage point, click again to aim it, and read the four metrics live.
-- **P3 Perceptual Survey** — preview the participant survey and copy its shareable link.
-- **P4 Survey Results Dashboard** — response quality and pooled pair coverage, read live from disk while the dev server runs.
-- **P5–P7** — read the frozen analysis files written by the commands below; nothing on these pages refits anything.
-- **P8 Matched-View Validation** — the researcher review at `#/matched-view` previews any trial from the frozen bank and scores incoming responses. Participants use `?matched-view-survey`, a chrome-free two-minute instrument; answers save after every trial to `src/data/matched-view-responses.json` (dev server only).
-
-The save/read endpoints are dev-server middleware only; they do not exist on the deployed static site.
+Saving — new sites, view-cloud markers, P9 scenarios, local survey responses — works only while `npm run dev` is running. The published site is read-only.
 
 ## Commands
 
 ```bash
-npm run dev      # dev server with the data-writing endpoints
-npm run build    # production build
-npm run lint     # oxlint
-npm test         # geometry engine regression + correctness tests
+npm run dev       # development server, with the data-saving endpoints
+npm run build     # production build into dist/
+npm test          # engine, analysis and data-integrity tests (Node's built-in runner)
+npm run lint      # oxlint
 ```
 
-Analysis and data-generation steps, each writing a file the app then only reads:
+Analysis steps. Each writes a file the app then only reads. The P5 weights, the P6 zones and the P8 trial bank are **frozen**: re-running them changes every number downstream, so only do it deliberately.
 
 ```bash
-npm run analyze              # P5 — fit the weights → src/data/analysis-<source>.json
-npm run validate:ratings     # P5 — ratings vs computed metrics → rating-validation.json
-npm run fields               # P6 — 360° grid over every plaza → src/data/fields/
-npm run zones                # P6 — zone typology over the pooled grid → zones.json
-npm run trials:matched-view  # P8 — freeze the trial bank → matched-view-trials.json
-npm run matched-view:selftest# P8 — the gate: recover a planted answer, hold size under the null
+npm run analyze               # P5 weight fit → src/data/analysis-panoramic.json
+npm run validate:ratings      # P5 ratings vs computed metrics → src/data/rating-validation.json
+npm run fields                # P6 360° grid over every plaza → src/data/fields/
+npm run zones                 # P6 zone typology → src/data/zones.json
+npm run trials:matched-view   # P8 trial bank (do not rebuild: it would mark collected sessions stale)
+npm run matched-view:selftest # P8 check: recover a planted answer, hold test size under the null
+npm run validate:presets      # P9 intervention presets behave as documented
+npm run sync:survey           # copy P3 responses from the Google Sheet into src/data/
+npm run recompute:readings    # re-derive stored readings after a deliberate engine change
 ```
 
-`npm test` uses Node's built-in test runner — no test dependencies. It locks the 120° perceptual layer against a golden snapshot of all 18 canonical readings, so the geometry underneath the survey cannot change unnoticed.
+## Survey storage
+
+The P3 survey saves each answer as it is given to a Google Sheet, through the Apps Script in `google-apps-script/Code.gs` (setup: [docs/survey-storage-setup.md](docs/survey-storage-setup.md)). Each participant has one row, updated as they go; new participants are added below the existing ones. `npm run sync:survey` copies the Sheet into `src/data/survey-responses-360.json` for analysis. P8 responses were collected through the development server into `src/data/matched-view-responses.json`.
 
 ## Project structure
 
 ```
 src/
-  data/sites.json            the 23 site records (18 active, 5 excluded)
-  data/results.json          the 18 canonical 120° readings
-  data/survey-responses.json collected survey sessions
-  pages/                     one page per phase station
-  components/                3D scene, isovist overlay, coverage panel
+  pages/              one page per phase
+  components/         3D scene, plans, charts, survey and P9 panels
   lib/
-    phases.jsx               the phase registry — single source of truth for codes, names, groups
-    geo.js                   lat/lng → local metres projection
-    geojson.js               parsing pasted OSM GeoJSON exports
-    isovist.js               the unified ray-casting engine (120° and 360°)
-    site.js                  site projection, active/excluded filtering
-    triplets.js              survey triplet sampling
-    coverage.js              pooled pair coverage
-    session.js               session status and attention-check reading
-test/                        geometry regression tests + golden fixture
-docs/spec.md                 the phased build specification
+    isovist.js        the ray-casting engine and the four metrics
+    analysis/         P5–P8 statistics: fitting, cross-validation, bootstrap, hypotheses
+    zones.js          P6 zone assignment and P9 diagnosis
+    sandbox.js        P9 intervention geometry and field recompute
+    phases.jsx        the phase registry: codes, names, routes
+  data/               sites, readings, survey responses, frozen analysis outputs, scenarios
+scripts/              the analysis and data-generation commands above
+test/                 tests, including a golden snapshot of the engine's canonical readings
+google-apps-script/   survey storage for P3, and the undeployed P8 equivalent
+docs/
+  spec.md             the phased build specification and the record of decisions
+  handoff/            thesis reference: methods, results, survey protocol, decision log
 ```
+
+## Documentation
+
+- [docs/spec.md](docs/spec.md) — what each phase does and why, decision by decision
+- [docs/handoff/](docs/handoff/) — reference for the thesis write-up: methods, verified results, survey protocol, decision log, and the closed perimeter metric
 
 ## Deployment
 
-Pushing to `main` triggers a GitHub Actions workflow that builds the app and publishes it to GitHub Pages (enable once under repo **Settings → Pages → Source: GitHub Actions**).
+Every push to `main` builds the app and publishes it to GitHub Pages through GitHub Actions (`.github/workflows/deploy.yml`).

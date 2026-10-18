@@ -64,9 +64,9 @@ export const MATCHED_VIEW_FOV_MODE = 'perceptual_120'
 // population for fifteen minutes once.
 //
 // The cost is stated rather than hidden: power comes from PARTICIPANTS here,
-// not from trials per person. At 40 participants this collects 240 judgements
-// per stratum, which is ample for the pooled binomial and adequate for the
-// McNemar adjudication if the effect is real, but it leaves the per-participant
+// not from trials per person. The 15 participants gave 90 judgements per
+// stratum, enough for the pooled binomial and the McNemar adjudication, but the
+// short block leaves the per-participant
 // accuracies coarse — six trials can only land on seven values — so the
 // participant-level sign test is the weakest of the three tests reported. One
 // constant changes it if the study later wants more.
